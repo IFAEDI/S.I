@@ -1,0 +1,62 @@
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<meta name="author" content="Benjamin Planche" />
+		<!--[if lt IE 9]>
+		<script src="http://html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<title>AEDI</title>
+		<link rel="stylesheet" type="text/css" href="style_small.css">
+		<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.5.0/jquery.min.js"></script>
+        <script type="text/javascript">
+                $(function() {
+                $(".btmiddle").hover(function() {
+                    $(".second_menu").show();
+					$(".second_menu").hover(function() {
+						$(".second_menu").show();
+					}, function() {
+						$(".second_menu").hide();
+					});			
+				}, function() {
+					$(".second_menu").hide();
+				});	
+            });
+        </script>
+	<body>
+		<header>
+			<div id="main_title">
+				<div id="logo"></div>
+			</div>
+			
+			<nav id="top_menu">
+				<ul>
+					<li><a href="template.html">Accueil</a></li>
+					<li class="btmiddle"><a href="#">Etudiants</a></li>
+					<li><a href="entreprises.html">Entreprises</a></li>
+					<li><a href="contact.html">Contact</a></li>
+				</ul>
+			</nav>
+			
+			<nav class="second_menu">
+				<div id="triangle"></div>
+				<ul>
+					<li>{</li>
+					<li><a href="#">&lt; CV &gt;</a></li>
+					<li><a href="#">&lt; Stage &gt;</a></li>
+					<li><a href="#">&lt; Evénements &gt;</a></li>
+					<li><a href="#">&lt; Simulation d'entretiens &gt;</a></li>
+					<li><a href="#">&lt; Souvenirs &gt;</a></li>
+					<li>}</li>
+				</ul>
+			</nav>
+		</header>
+		<section>
+	
+		</section>
+		<footer>
+			<p id="copyright">
+				AEDI &#169; 2011-12
+			</p>
+		</footer>
+	</body>
+</html>	

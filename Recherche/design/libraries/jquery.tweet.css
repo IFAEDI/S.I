@@ -1,0 +1,52 @@
+	.tweet_list {
+		-webkit-border-radius: 0.5em;
+		-moz-border-radius: 0.5em;
+		border-radius: 0.5em;
+		list-style: none;
+		margin: 0;
+		padding: 0;
+		overflow-y: hidden;
+	}
+	
+		.tweet_list .awesome,
+		.tweet_list .epic {
+			text-transform: uppercase;
+		}
+		
+		.tweet_list li {
+			overflow-y: auto;
+			overflow-x: hidden;
+			padding: 0.5em;
+			list-style-type: none;
+		}
+
+		.tweet_list li {
+			border-radius: 5px;
+			margin: 5px;
+			font-size: 70% ;
+			text-align: justify;
+		}
+		
+		.tweet_list .tweet_even {
+			background-color: white;
+			color: #4774a0;
+		}
+		.tweet_list .tweet_even a {
+			color: #275480;
+		}
+		
+		.tweet_list .tweet_odd {
+			background-color: #4774a0;
+			color: white;
+		}
+		.tweet_list .tweet_odd a {
+			color: #AAAAFF;
+		}
+		
+		.tweet_list .tweet_avatar {
+			padding-right: .5em; float: left;
+		}
+		
+			.tweet_list .tweet_avatar img {
+				vertical-align: middle;
+			}
