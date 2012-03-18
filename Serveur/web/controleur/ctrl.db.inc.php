@@ -2,31 +2,31 @@
 
 /*
  * Utilisation  :
- * DB::Prepare("REPLACE INTO users (jid, lat, lon, last_update, fname, lname) VALUES (:jid, :lat, :lon, CURRENT_TIMESTAMP, :fname, :lname);", $arrayvar);
+ * BD::Prepare("REPLACE INTO users (jid, lat, lon, last_update, fname, lname) VALUES (:jid, :lat, :lon, CURRENT_TIMESTAMP, :fname, :lname);", $arrayvar);
  * Remplace des valeurs de la BDD par les valeur contenu dans $arrayvar (['jid']=>3,['lat']=>56,....)
- * $res = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar);
- * Retournera une ligne sous la forme $res['jid'] ==> value
+ * $resultat = BD::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar);
+ * Retournera une ligne sous la forme $resultat['jid'] ==> value
  * 
  * Pour avoir plusieur lignes il faut faire avant la requete : 
- * $res = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,DB::FETCH_TYPE_ALL);
- * Retournera un tableau de cette forme : $res[0]['jid'] ==> value,$res[1]['jid'] ==> value,$res[2]['jid'] ==> value,....
+ * $resultat = BD::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,BD::RECUPERER_TOUT);
+ * Retournera un tableau de cette forme : $resultat[0]['jid'] ==> value,$resultat[1]['jid'] ==> value,$resultat[2]['jid'] ==> value,....
  * Meme si le retour n'est que d'une seul ligne
  * 
- * Pour $object = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,DB::FETCH_TYPE_ALL);
+ * Pour $object = BD::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,BD::RECUPERER_TOUT);
  * cela retourne une instance de l'objet dans lequel on est (depend de votre class) : Attention les noms des attribut de la classe doivent correspondre aux noms de colonnes de la BDD
  * 
  * Le systeme peut aussi gerer les requete préparées : 
- * $object = DB::CallStoredProc('select_favoritesRecipes_byIdMember', array($_id), DB::FETCH_TYPE_ALL, __CLASS__);
+ * $object = BD::CallStoredProc('select_favoritesRecipes_byIdMember', array($_id), BD::RECUPERER_TOUT, __CLASS__);
  * Execute la requete stocké "select_favoritesRecipes_byIdMember"
  */
 
 
 require_once(dirname(__FILE__) . '/ctrl.config.inc.php');
 
-class DB {
+class BD {
 
-    const FECTH_TYPE_ROW = 0;
-    const FETCH_TYPE_ALL = 1;
+    const RECUPERER_UNE_LIGNE = 0;
+    const RECUPERER_TOUT = 1;
 
     private $connection;
     private static $partageInstance;
@@ -35,9 +35,9 @@ class DB {
         global $CONFIG;
 
         try {
-            $this->connection = new PDO('mysql:host=' . $CONFIG['db']['host'] . ';port=' . $CONFIG['db']['port'] . ';dbname=' . $CONFIG['db']['dbname'], $CONFIG['db']['username'], $CONFIG['db']['password'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+            $this->connection = new PDO('mysql:host=' . $CONFIG['bd']['hote'] . ';port=' . $CONFIG['bd']['port'] . ';dbname=' . $CONFIG['bd']['bdnom'], $CONFIG['bd']['nom_utilisateur'], $CONFIG['bd']['mot_de_passe'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
         } catch (Exception $e) {
-            echo "DB : Incorrect parameters";
+            echo "BD : parametres incorrects";
         }
     }
 
@@ -51,40 +51,40 @@ class DB {
     }
 
     //Appelle des procedures stockées
-    public static function &AppellerProcedureStocke($_nomProcedure, $_params, $_type_recuperation, $_nom_classe = NULL, $_option_recuperation = NULL) {
-        $bind_params = '';
+    public static function &AppellerProcedureStocke($_nomProcedure, $_parametres, $_type_recuperation, $_nom_classe = NULL, $_option_recuperation = NULL) {
+        $assigner_parametres = '';
 
-        foreach ($_params as $value) {
-            $bind_params .= '?, ';
+        foreach ($_parametres as $valeur) {
+            $assigner_parametres .= '?, ';
         }
 
-        $bind_params = trim($bind_params, ', ');
+        $assigner_parametres = trim($assigner_parametres, ', ');
 
         if ($_nom_classe != NULL && class_exists($_nom_classe))
-            return self::Prepare("CALL $_nomProcedure($bind_params)", $_params, $_type_recuperation, PDO::FETCH_CLASS, $_nom_classe);
+            return self::Prepare("CALL $_nomProcedure($assigner_parametres)", $_parametres, $_type_recuperation, PDO::FETCH_CLASS, $_nom_classe);
         else if ($_option_recuperation != NULL)
-            return self::Prepare("CALL $_nomProcedure($bind_params)", $_params, $_type_recuperation, $_option_recuperation, $_nom_classe);
+            return self::Prepare("CALL $_nomProcedure($assigner_parametres)", $_parametres, $_type_recuperation, $_option_recuperation, $_nom_classe);
         else
-            return self::Prepare("CALL $_nomProcedure($bind_params)", $_params, $_type_recuperation);
+            return self::Prepare("CALL $_nomProcedure($assigner_parametres)", $_parametres, $_type_recuperation);
     }
 
     //Envoi d'une requête préparée
-    public static function &Prepare($_requete, $_params, $_type_recuperation = self::FECTH_TYPE_ROW, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
+    public static function &Prepare($_requete, $_parametres, $_type_recuperation = self::RECUPERER_UNE_LIGNE, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
         $stmt = self::GetConnection()->prepare($_requete);
-        $res = NULL;
+        $resultat = NULL;
         try {
-            if ($stmt != false && $stmt->execute($_params) != false) {
-                if ($_type_recuperation == self::FECTH_TYPE_ROW) {
+            if ($stmt != false && $stmt->execute($_parametres) != false) {
+                if ($_type_recuperation == self::RECUPERER_UNE_LIGNE) {
                     if ($_option_recuperation == NULL)
-                        $res = $stmt->fetch($_parametre_recuperation);
+                        $resultat = $stmt->fetch($_parametre_recuperation);
                     else if ($_parametre_recuperation == PDO::FETCH_CLASS)
-                        $res = $stmt->fetchObject($_option_recuperation);
+                        $resultat = $stmt->fetchObject($_option_recuperation);
                 }
                 else {
                     if ($_option_recuperation == NULL)
-                        $res = $stmt->fetchAll($_parametre_recuperation);
+                        $resultat = $stmt->fetchAll($_parametre_recuperation);
                     else
-                        $res = $stmt->fetchAll($_parametre_recuperation, $_option_recuperation);
+                        $resultat = $stmt->fetchAll($_parametre_recuperation, $_option_recuperation);
                 }
             }
         } catch (Exception $e) {
@@ -92,7 +92,7 @@ class DB {
             error_log('Numero : ' . $e->getCode());
         }
 
-        return $res;
+        return $resultat;
     }
 
     public static function MontrerErreur() {
@@ -100,7 +100,7 @@ class DB {
     }
 
     public function __clone() {
-        trigger_error('DB : Cloner cet objet est interdit', E_USER_ERROR);
+        trigger_error('BD : Cloner cet objet est interdit', E_USER_ERROR);
     }
 
 }

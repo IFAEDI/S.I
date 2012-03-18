@@ -3,11 +3,11 @@
 global $CONFIG;
 $CONFIG = array(
     'db' => array(
-        'host' => 'localhost',
+        'hote' => 'localhost',
         'port' => 3306,
-        'dbname' => 'aedi',
-        'username' => 'TODO',
-        'password' => 'TODO',
+        'bdnom' => 'aedi',
+        'nom_utilisateur' => 'TODO',
+        'mot_de_passe' => 'TODO',
     ),
 );
 ?>
