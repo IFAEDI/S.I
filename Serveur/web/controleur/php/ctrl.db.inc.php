@@ -1,5 +1,26 @@
 <?php
 
+/*
+ * Utilisation  :
+ * DB::Prepare("REPLACE INTO users (jid, lat, lon, last_update, fname, lname) VALUES (:jid, :lat, :lon, CURRENT_TIMESTAMP, :fname, :lname);", $arrayvar);
+ * Remplace des valeurs de la BDD par les valeur contenu dans $arrayvar (['jid']=>3,['lat']=>56,....)
+ * $res = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar);
+ * Retournera une ligne sous la forme $res['jid'] ==> value
+ * 
+ * Pour avoir plusieur lignes il faut faire avant la requete : 
+ * $res = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,DB::FETCH_TYPE_ALL);
+ * Retournera un tableau de cette forme : $res[0]['jid'] ==> value,$res[1]['jid'] ==> value,$res[2]['jid'] ==> value,....
+ * Meme si le retour n'est que d'une seul ligne
+ * 
+ * Pour $object = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,DB::FETCH_TYPE_ALL);
+ * cela retourne une instance de l'objet dans lequel on est (depend de votre class) : Attention les noms des attribut de la classe doivent correspondre aux noms de colonnes de la BDD
+ * 
+ * Le systeme peut aussi gerer les requete préparées : 
+ * $object = DB::CallStoredProc('select_favoritesRecipes_byIdMember', array($_id), DB::FETCH_TYPE_ALL, __CLASS__);
+ * Execute la requete stocké "select_favoritesRecipes_byIdMember"
+ */
+
+
 require_once(dirname(__FILE__) . '/ctrl.config.inc.php');
 
 class DB {
@@ -83,28 +104,6 @@ class DB {
     }
 
 }
-
-/*
-Utilisation  : 
- * DB::Prepare("REPLACE INTO users (jid, lat, lon, last_update, fname, lname) VALUES (:jid, :lat, :lon, CURRENT_TIMESTAMP, :fname, :lname);", $arrayvar);
- * Remplace des valeurs de la BDD par les valeur contenu dans $arrayvar (['jid']=>3,['lat']=>56,....)
- * $res = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar);
- * Retournera une ligne sous la forme $res['jid'] ==> value
- * 
- * Pour avoir plusieur lignes il faut faire avant la requete : 
- * $res = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,DB::FETCH_TYPE_ALL);
- * Retournera un tableau de cette forme : $res[0]['jid'] ==> value,$res[1]['jid'] ==> value,$res[2]['jid'] ==> value,....
- * Meme si le retour n'est que d'une seul ligne
- * 
- * Pour $object = DB::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,DB::FETCH_TYPE_ALL);
- * cela retourne une instance de l'objet dans lequel on est (depend de votre class) : Attention les noms des attribut de la classe doivent correspondre aux noms de colonnes de la BDD
- * 
- * Le systeme peut aussi gerer les requete préparées : 
- * $object = DB::CallStoredProc('select_favoritesRecipes_byIdMember', array($_id), DB::FETCH_TYPE_ALL, __CLASS__);
- * Execute la requete stocké "select_favoritesRecipes_byIdMember"
-
-
-*/
 ?>
 
 
