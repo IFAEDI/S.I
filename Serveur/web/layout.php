@@ -23,9 +23,11 @@ global $nom_page;
             <li>
                 <a href="#"><i class="icon-home"></i></a> <span class="divider">/</span>
             </li>
+            <?php if($nom_module != '') {?>
             <li>
                 <a href="# <?php echo $lien_module ?>" ><?php echo $nom_module ?></a> <span class="divider">/</span>
             </li>
+            <?php } ?>
             <li class="active">Page <?php echo $nom_page ?></li>
         </ul>
         <div class="container">
