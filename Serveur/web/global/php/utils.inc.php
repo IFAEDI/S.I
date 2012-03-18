@@ -6,23 +6,39 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
     $type = trim(strtolower($_type));
 
     if ($type == 'php') {
-        $path = dirname(__FILE__) . "/../../$module/$nom_fichier.$type";
+        if ($module == '' || $module == 'controleur') {
+            $path = dirname(__FILE__) . "/../../$nom_fichier.$type";
+        } else {
+            $path = dirname(__FILE__) . "/../../php/$module/$nom_fichier.$type";
+        }
+
         if (file_exists($path)) {
             require_once($path);
             return;
         }
     } else if ($type == 'css') {
-        $path = dirname(__FILE__) . "/../../$module/css/$nom_fichier.$type";
-        if (file_exists($path)) {
-            echo  "<style type=\"text/css\">";
-            echo "@import \"$module/css/$nom_fichier.$type\";";
+        if ($module == '' || $module == 'controleur') {
+            $path = "$module/$nom_fichier.$type";
+        } else {
+            $path = "$module/css/$nom_fichier.$type";
+        }
+
+        if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
+            echo "<style type=\"text/css\">";
+            echo "@import \"$path\";";
             echo "</style>";
             return;
         }
     } else if ($type == 'js') {
-        $path = dirname(__FILE__) . "/../../$module/js/$nom_fichier.$type";
-        if (file_exists($path)) {
-            echo "<script type=\"text/javascript\" src=\"$module/js/$nom_fichier.$type\"></script>";
+        if ($module == '' || $module == 'controleur') {
+            $path = "$module/$nom_fichier.$type";
+        } else {
+            $path = "$module/js/$nom_fichier.$type";
+        }
+
+
+        if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
+            echo "<script type=\"text/javascript\" src=\"$path\"></script>";
             return;
         }
     }
