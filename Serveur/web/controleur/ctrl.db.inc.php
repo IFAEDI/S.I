@@ -29,7 +29,7 @@ class DB {
     const FETCH_TYPE_ALL = 1;
 
     private $connection;
-    private static $sharedInstance;
+    private static $partageInstance;
 
     private function __construct() {
         global $CONFIG;
@@ -42,16 +42,16 @@ class DB {
     }
 
     //Retourne une connection à la BDD   
-    public static function GetConnection() {
-        if (!isset(self::$sharedInstance)) {
-            self::$sharedInstance = new self();
+    public static function ObtenirConnection() {
+        if (!isset(self::$partageInstance)) {
+            self::$partageInstance = new self();
         }
 
-        return self::$sharedInstance->connection;
+        return self::$partageInstance->connection;
     }
 
     //Appelle des procedures stockées
-    public static function &CallStoredProc($_procName, $_params, $_fetch_type, $_className = NULL, $_fetch_opt = NULL) {
+    public static function &AppellerProcedureStocke($_nomProcedure, $_params, $_type_recuperation, $_nom_classe = NULL, $_option_recuperation = NULL) {
         $bind_params = '';
 
         foreach ($_params as $value) {
@@ -60,31 +60,31 @@ class DB {
 
         $bind_params = trim($bind_params, ', ');
 
-        if ($_className != NULL && class_exists($_className))
-            return self::Prepare("CALL $_procName($bind_params)", $_params, $_fetch_type, PDO::FETCH_CLASS, $_className);
-        else if ($_fetch_opt != NULL)
-            return self::Prepare("CALL $_procName($bind_params)", $_params, $_fetch_type, $_fetch_opt, $_className);
+        if ($_nom_classe != NULL && class_exists($_nom_classe))
+            return self::Prepare("CALL $_nomProcedure($bind_params)", $_params, $_type_recuperation, PDO::FETCH_CLASS, $_nom_classe);
+        else if ($_option_recuperation != NULL)
+            return self::Prepare("CALL $_nomProcedure($bind_params)", $_params, $_type_recuperation, $_option_recuperation, $_nom_classe);
         else
-            return self::Prepare("CALL $_procName($bind_params)", $_params, $_fetch_type);
+            return self::Prepare("CALL $_nomProcedure($bind_params)", $_params, $_type_recuperation);
     }
 
     //Envoi d'une requête préparée
-    public static function &Prepare($_query, $_params, $_fetchType = self::FECTH_TYPE_ROW, $_fetch_param = PDO::FETCH_ASSOC, $_fetch_opt = NULL) {
-        $stmt = self::GetConnection()->prepare($_query);
+    public static function &Prepare($_requete, $_params, $_type_recuperation = self::FECTH_TYPE_ROW, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
+        $stmt = self::GetConnection()->prepare($_requete);
         $res = NULL;
         try {
             if ($stmt != false && $stmt->execute($_params) != false) {
-                if ($_fetchType == self::FECTH_TYPE_ROW) {
-                    if ($_fetch_opt == NULL)
-                        $res = $stmt->fetch($_fetch_param);
-                    else if ($_fetch_param == PDO::FETCH_CLASS)
-                        $res = $stmt->fetchObject($_fetch_opt);
+                if ($_type_recuperation == self::FECTH_TYPE_ROW) {
+                    if ($_option_recuperation == NULL)
+                        $res = $stmt->fetch($_parametre_recuperation);
+                    else if ($_parametre_recuperation == PDO::FETCH_CLASS)
+                        $res = $stmt->fetchObject($_option_recuperation);
                 }
                 else {
-                    if ($_fetch_opt == NULL)
-                        $res = $stmt->fetchAll($_fetch_param);
+                    if ($_option_recuperation == NULL)
+                        $res = $stmt->fetchAll($_parametre_recuperation);
                     else
-                        $res = $stmt->fetchAll($_fetch_param, $_fetch_opt);
+                        $res = $stmt->fetchAll($_parametre_recuperation, $_option_recuperation);
                 }
             }
         } catch (Exception $e) {
@@ -95,12 +95,12 @@ class DB {
         return $res;
     }
 
-    public static function ShowErrors() {
+    public static function MontrerErreur() {
         print_r(self::GetConnection()->errorInfo());
     }
 
     public function __clone() {
-        trigger_error('DB : Cloning this object is not permitted', E_USER_ERROR);
+        trigger_error('DB : Cloner cet objet est interdit', E_USER_ERROR);
     }
 
 }
