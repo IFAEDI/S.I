@@ -70,21 +70,21 @@ class BD {
 
     //Envoi d'une requête préparée
     public static function &Prepare($_requete, $_parametres, $_type_recuperation = self::RECUPERER_UNE_LIGNE, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
-        $stmt = self::GetConnection()->prepare($_requete);
+        $enregistrement = self::GetConnection()->prepare($_requete);
         $resultat = NULL;
         try {
-            if ($stmt != false && $stmt->execute($_parametres) != false) {
+            if ($enregistrement != false && $enregistrement->execute($_parametres) != false) {
                 if ($_type_recuperation == self::RECUPERER_UNE_LIGNE) {
                     if ($_option_recuperation == NULL)
-                        $resultat = $stmt->fetch($_parametre_recuperation);
+                        $resultat = $enregistrement->fetch($_parametre_recuperation);
                     else if ($_parametre_recuperation == PDO::FETCH_CLASS)
-                        $resultat = $stmt->fetchObject($_option_recuperation);
+                        $resultat = $enregistrement->fetchObject($_option_recuperation);
                 }
                 else {
                     if ($_option_recuperation == NULL)
-                        $resultat = $stmt->fetchAll($_parametre_recuperation);
+                        $resultat = $enregistrement->fetchAll($_parametre_recuperation);
                     else
-                        $resultat = $stmt->fetchAll($_parametre_recuperation, $_option_recuperation);
+                        $resultat = $enregistrement->fetchAll($_parametre_recuperation, $_option_recuperation);
                 }
             }
         } catch (Exception $e) {
