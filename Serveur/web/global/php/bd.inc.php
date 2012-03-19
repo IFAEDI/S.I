@@ -12,7 +12,7 @@
  * Retournera un tableau de cette forme : $resultat[0]['jid'] ==> value,$resultat[1]['jid'] ==> value,$resultat[2]['jid'] ==> value,....
  * Meme si le retour n'est que d'une seul ligne
  * 
- * Pour $object = BD::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,BD::RECUPERER_TOUT);
+ * Pour $object = BD::Prepare("SELECT jid FROM users WHERE jid = :jid", $arrayvar,BD::RECUPERER_TOUT,PDO::FETCH_CLASS,__CLASS__);
  * cela retourne une instance de l'objet dans lequel on est (depend de votre class) : Attention les noms des attribut de la classe doivent correspondre aux noms de colonnes de la BDD
  * 
  * Le systeme peut aussi gerer les requete préparées : 
@@ -38,11 +38,13 @@ class BD {
             $this->connection = new PDO('mysql:host=' . $CONFIG['bd']['hote'] . ';port=' . $CONFIG['bd']['port'] . ';dbname=' . $CONFIG['bd']['bdnom'], $CONFIG['bd']['nom_utilisateur'], $CONFIG['bd']['mot_de_passe'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
         } catch (Exception $e) {
             echo "BD : parametres incorrects";
+            echo 'Erreur : ' . $e->getMessage() . '<br>';
+            echo 'Numero : ' . $e->getCode();
         }
     }
 
     //Retourne une connection à la BDD   
-    public static function ObtenirConnection() {
+    public static function GetConnection() {
         if (!isset(self::$partageInstance)) {
             self::$partageInstance = new self();
         }

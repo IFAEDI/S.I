@@ -7,11 +7,13 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
     $nom_fichier = trim(strtolower($_nom_fichier));
     $type = trim(strtolower($_type));
 
+  
+    
     if ($type == 'php') {
         if ($module == '' || $module == 'controleur') {
             $path = dirname(__FILE__) . "/../../$nom_fichier.$type";
         } else {
-            $path = dirname(__FILE__) . "/../../php/$module/$nom_fichier.$type";
+            $path = dirname(__FILE__) . "/../../$module/php/$nom_fichier.$type";
         }
 
         if (file_exists($path)) {
@@ -43,6 +45,13 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
             return;
         }
     }
+    
+    
+    echo "<br>Fichier non trouvé :  $path<br>";
+    echo "Parametres :<br>";
+    echo "Module : $module<br>";
+    echo "Nom du fichier : $nom_fichier<br>";
+    echo "Type : $type<br>";
 }
 
 ?>

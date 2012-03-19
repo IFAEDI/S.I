@@ -2,7 +2,7 @@
 
 global $CONFIG;
 $CONFIG = array(
-    'db' => array(
+    'bd' => array(
         'hote' => 'localhost',
         'port' => 3306,
         'bdnom' => 'aedi',
