@@ -1,10 +1,10 @@
-<div class="row" style="margin-top: 20px;">
+ï»¿<div class="row" style="margin-top: 20px;">
 	<div class="span4 columns">
 		<div>
 			<p style="float:left; margin-right: 10px;"><img src="global/img/logo_aedi.png" width="120px" alt="AEDI"></p>
-			<p style="text-align:justify;">Depuis sa création, l'<span class="hero_motcle">Association</span> des <span class="hero_motcle">Etudiants</span> du <span class="hero_motcle">Département Informatique</span> de l'INSA-Lyon travaille à faire de ce monde un endroit meilleur, où les rires et les chants se mêlent à la fringrance de la Nature sublimée.</p>
-			<p style="text-align:justify;">Cette passion qui nous pousse sans cesse à redéfinir nos lendemains provient d'un épanouissement de nos êtres, transcendés par l'Absolu incandescent d'une révélation non pas brutale, mais apportée doucement, tendrement, telle la caresse d'un pinceau appliqué sur nos âmes.</p>
-			<p style="text-align:justify;">Ce secret, qui fait vibrer nos corps et résonner nos coeurs, est à la fois tabou et à la portée de tous. En nous depuis les tendres et lointaines années de l'innnocence, ravivé par les encouragements et la patience appliquée de nos précepteurs versés aux arcanes de la Science ultime, ce don peut se résumer en un terme profane : <strong>le Pipôt</strong>.
+			<p style="text-align:justify;">Depuis sa crÃ©ation, l'<span class="hero_motcle">Association</span> des <span class="hero_motcle">Etudiants</span> du <span class="hero_motcle">DÃ©partement Informatique</span> de l'INSA-Lyon travaille Ã  faire de ce monde un endroit meilleur, oÃ¹ les rires et les chants se mÃªlent Ã  la fringrance de la Nature sublimÃ©e.</p>
+			<p style="text-align:justify;">Cette passion qui nous pousse sans cesse Ã  redÃ©finir nos lendemains provient d'un Ã©panouissement de nos Ãªtres, transcendÃ©s par l'Absolu incandescent d'une rÃ©vÃ©lation non pas brutale, mais apportÃ©e doucement, tendrement, telle la caresse d'un pinceau appliquÃ© sur nos Ã¢mes.</p>
+			<p style="text-align:justify;">Ce secret, qui fait vibrer nos corps et rÃ©sonner nos coeurs, est Ã  la fois tabou et Ã  la portÃ©e de tous. En nous depuis les tendres et lointaines annÃ©es de l'innnocence, ravivÃ© par les encouragements et la patience appliquÃ©e de nos prÃ©cepteurs versÃ©s aux arcanes de la Science ultime, ce don peut se rÃ©sumer en un terme profane : <strong>le PipÃ´t</strong>.
 			</p>
 			<p style="text-align:right;">
 				<a class="btn btn-primary btn-large">En savoir plus</a>
@@ -25,21 +25,21 @@
 		   <div class="item active">
 			<img src="http://www.tumblr.com/photo/1280/bonjourlesifs/17649987909/1/tumblr_lzcbv0p6lX1qbvwm2" width="770px" alt="Conférence AEDI">
 			<div class="carousel-caption">
-			  <h4>A mettre - Une diapo bien cool d'un super événement</h4>
-			  <p>On présente ici un événement bien sympa. Ce sera la 1ere image vue sur le site.</p>
+			  <h4>A mettre - Une diapo bien cool d'un super Ã©vÃ©nement</h4>
+			  <p>On prÃ©sente ici un Ã©vÃ©nement bien sympa. Ce sera la 1ere image vue sur le site.</p>
 			</div>
 		  </div>
 		  <div class="item">
 			<img src="http://www.tumblr.com/photo/1280/bonjourlesifs/17813187081/1/tumblr_lzcc8zUaz51qbvwm2" width="770px" alt="Equipe AEDI">
 			<div class="carousel-caption">
-			  <h4>A mettre - Une image d'un événement professionnel</h4>
-			  <p>Pour montrer qu'on a aussi la classe dans un costard, et attirer les entreprises capitalistes. (faudra bien des images de mêmes dimensions, sinon on a ce bug)</p>
+			  <h4>A mettre - Une image d'un Ã©vÃ©nement professionnel</h4>
+			  <p>Pour montrer qu'on a aussi la classe dans un costard, et attirer les entreprises capitalistes. (faudra bien des images de mÃªmes dimensions, sinon on a ce bug)</p>
 			</div>
 		  </div>
 		  <div class="item">
 			<img src="http://www.tumblr.com/photo/1280/bonjourlesifs/10800337619/1/tumblr_ls6yl1PbAi1qbvwm2" width="770px" alt="Equipe AEDI">
 			<div class="carousel-caption">
-			  <h4>A mettre - Une photo de l'équipe</h4>
+			  <h4>A mettre - Une photo de l'Ã©quipe</h4>
 			  <p>Pour montrer qu'on est jeunes, beaux, dynamiques, dignes de confiance, ...</p>
 			</div>
 		  </div>
@@ -54,7 +54,7 @@
 			<img src="http://www.tumblr.com/photo/1280/bonjourlesifs/1334089485/1/tumblr_la9rwiB8n51qbvwm2" width="770px" alt="Equipe AEDI">
 			<div class="carousel-caption">
 			  <h4>A mettre optionnel - Diverses diapos cools</h4>
-			  <p>Si on a des images sympas qui trainent par ci par là ... Une ou deux de plus pourraient être cool.</p>
+			  <p>Si on a des images sympas qui trainent par ci par lÃ  ... Une ou deux de plus pourraient Ãªtre cool.</p>
 			</div>
 		  </div>
 		</div>
