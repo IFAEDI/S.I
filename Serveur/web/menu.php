@@ -6,7 +6,7 @@
 		<span class="icon-bar"></span>
 		<span class="icon-bar"></span>
 	  </a>
-	  <a class="brand" href="./index.php"><img src="global/img/logo_bin.png" alt="AEDI" height="20px" width="18px"/> AEDI</a>
+	  <a class="brand" href="./index.php"><img src="commun/img/logo_bin.png" alt="AEDI" height="20px" width="18px"/> AEDI</a>
 	  <div class="nav-collapse">
 		<ul class="nav">
 			<li class="">
