@@ -12,6 +12,12 @@ $CONFIG = array(
 );
 
 
-global $salt;
-$salt = "mHlAponNPd";
+global $SALT;
+$SALT = "mHlAponNPd";
+
+global $THEME;
+$THEME = array(
+    '0' => 'Defaut',
+    '1' => 'Bleu',
+);
 ?>

@@ -1,7 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/base.inc.php';
-inclure_fichier('global', 'bd.inc', 'php');
+inclure_fichier('commun', 'bd.inc', 'php');
 
 class Utilisateur {
 
@@ -23,11 +23,6 @@ class Utilisateur {
     //****************  Fonctions  ******************//
     public function __construct() {
         
-    }
-
-    public function estConnecte() {
-        //TODO
-        return true;
     }
 
     public function estEtudiant() {

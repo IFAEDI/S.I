@@ -56,6 +56,21 @@
 		<form class="navbar-search pull-left" action="">
 			<input type="text" class="search-query span2" placeholder="Recherche">
 		</form>
+		
+                <script>
+                    //Fonction permettant de changer le theme par le numéro
+                    // du theme passé en paramètre
+                    function change_theme(theme){
+                        $.ajax({ // fonction permettant de faire de l'ajax
+                            type: "POST", // methode de transmission des données au fichier php
+                            url: "index.php", // url du fichier php
+                            data: {theme : theme},
+                            success: function(retour){ // si l'appel a bien fonctionné
+                                location.reload() ; 
+                            }
+                        });
+                    } 
+                </script>
 
 		<ul class="nav pull-right">
 			<li class=""><a href="#">Se connecter</a></li>
