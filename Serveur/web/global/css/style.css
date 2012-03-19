@@ -12,3 +12,19 @@ body {
     font-size: 0.8em;
     text-align: right;
 }
+
+.hero_motcle {
+	font-weight: bold;
+	font-size: 1.2em;
+	color: #049cdb;
+}
+
+#network {
+	margin-top: 30px;
+}
+
+#network li {
+	list-style: none;
+	display: inline-block;
+	margin: 11px;
+}
