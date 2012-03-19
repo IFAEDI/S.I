@@ -86,6 +86,10 @@ function Utilisateur_connecter($groupe) {
             }
             return false;
         }
+        if ($groupe == ""){
+            return true;
+        }
+        return false;
     }
     return false;
 }

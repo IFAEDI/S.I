@@ -3,16 +3,29 @@ global $titre_page;
 global $nom_module;
 global $lien_module;
 global $nom_page;
+global $theme;
 ?>
 
 <html>
     <head>
         <meta charset="utf-8" />
         <?php
-            inclure_fichier('global', 'bootstrap.min', 'css');
-            inclure_fichier('global', 'bootstrap-responsive.min', 'css');
-            inclure_fichier('global', 'style', 'css');
-            inclure_fichier('global', 'jquery.min', 'js');
+        //Application du numéro de thème choisi par l'utilisateur
+        if ($theme == 1) {
+            inclure_fichier('commun', 'bootstrap.min', 'css');
+            inclure_fichier('commun', 'bootstrap-responsive.min', 'css');
+            inclure_fichier('commun', 'style', 'css');
+            inclure_fichier('commun', 'ui-lightness/jquery-ui', 'css');
+        }else{
+            //Si le numero est invalide application du thème par defaut
+            inclure_fichier('commun', 'bootstrap.min', 'css');
+            inclure_fichier('commun', 'bootstrap-responsive.min', 'css');
+            inclure_fichier('commun', 'style', 'css');
+            inclure_fichier('commun', 'ui-lightness/jquery-ui', 'css');
+        }
+        
+        
+        inclure_fichier('commun', 'jquery.min', 'js');
         ?>
         <title>AEDI - <?php echo $titre_page ?></title>
     </head>
@@ -21,12 +34,12 @@ global $nom_page;
         <?php inclure_fichier('', 'menu', 'php'); ?>
         <ul class="breadcrumb" style="margin-top: 0px;">
             <li>
-                <a href="#"><i class="icon-home"></i></a> <span class="divider">/</span>
+                <a href="index.php?page=accueil"><i class="icon-home"></i></a> <span class="divider">/</span>
             </li>
-            <?php if($nom_module != '') {?>
-            <li>
-                <a href="<?php echo $lien_module ?>" ><?php echo $nom_module ?></a> <span class="divider">/</span>
-            </li>
+            <?php if ($nom_module != '') { ?>
+                <li>
+                    <a href="<?php echo $lien_module ?>" ><?php echo $nom_module ?></a> <span class="divider">/</span>
+                </li>
             <?php } ?>
             <li class="active">Page <?php echo $nom_page ?></li>
         </ul>
@@ -36,6 +49,9 @@ global $nom_page;
             </div>
             <p id="footer">&copy; AEDI - 2012</p>
         </div>
-        <?php inclure_fichier('global', 'bootstrap.min', 'js'); ?>
+        <?php
+        inclure_fichier('commun', 'jquery-ui.min', 'js');
+        inclure_fichier('commun', 'bootstrap.min', 'js');
+        ?>
     </body>
 </html>

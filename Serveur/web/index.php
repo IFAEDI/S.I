@@ -1,21 +1,32 @@
 <?php
-require_once dirname(__FILE__) . '/global/php/base.inc.php';
+require_once dirname(__FILE__) . '/commun/php/base.inc.php';
+session_start();
+//Definition du theme
+if (isset($_POST['theme']) && is_numeric($_POST['theme'])){
+    $_SESSION['theme'] = $_POST['theme'];
+}
+
+if (isset($_SESSION['theme'])) {
+    $theme = $_SESSION['theme'];
+}else{
+    $theme = 0;
+}
+
 
 /************************Tant que la classe utilisateur n'est pas fini************/
-session_start();
+
 $_SESSION['utilisateur'] = new Utilisateur();
 $_SESSION['utilisateur'] = Utilisateur::GetUtilisateur(0);
-
  /********************************************************************************/
 
 
 
 if (!isset($_GET['page'])){
-     header("location: index.php?page=home");
+     header("location: index.php?page=accueil");
 }
 
 
-if ($_GET['page'] == 'home') {
+if ($_GET['page'] == 'accueil') {
     $titre_page = 'Accueil';
     $lien_module = '';
     $nom_module = '';
@@ -33,4 +44,5 @@ if ($_GET['page'] == 'home') {
 }
 
 inclure_fichier('', 'layout', 'php');
+
 ?>
