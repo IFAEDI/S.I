@@ -10,4 +10,8 @@ $CONFIG = array(
         'mot_de_passe' => 'TODO',
     ),
 );
+
+
+global $salt;
+$salt = "mHlAponNPd";
 ?>
