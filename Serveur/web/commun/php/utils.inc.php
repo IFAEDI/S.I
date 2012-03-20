@@ -26,9 +26,11 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
     $type = trim(strtolower($_type));
 
     if ($type == 'php') {
-        if ($module == '' || $module == 'controleur') {
+        if ($module == '') {
             $path = dirname(__FILE__) . "/../../$nom_fichier.$type";
-        } else {
+        } elseif ($module == 'controleur'){
+            $path = dirname(__FILE__) . "/../../$module/$nom_fichier.$type";
+        }else{
             $path = dirname(__FILE__) . "/../../$module/php/$nom_fichier.$type";
         }
 
@@ -37,7 +39,7 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
             return;
         }
     } else if ($type == 'css') {
-        if ($module == '' || $module == 'controleur') {
+        if ($module == '') {
             $path = "$module/$nom_fichier.$type";
         } else {
             $path = "$module/css/$nom_fichier.$type";
@@ -50,7 +52,7 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
             return;
         }
     } else if ($type == 'js') {
-        if ($module == '' || $module == 'controleur') {
+        if ($module == '') {
             $path = "/$module/$nom_fichier.$type";
         } else {
             $path = "/$module/js/$nom_fichier.$type";

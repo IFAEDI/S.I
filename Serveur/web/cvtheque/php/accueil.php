@@ -4,7 +4,13 @@ if (!Utilisateur_connecter('etudiant')) {
     die;
 }
 
+inclure_fichier('controleur', 'etudiant.class', 'php');
 
+$etudiant = new Etudiant();
+$etudiant = Etudiant::GetEtudiant(1);
+if ($etudiant != null) {
+    
+}
 
 ?>
 
@@ -50,5 +56,4 @@ if (!Utilisateur_connecter('etudiant')) {
 
 <?php
 inclure_fichier('cvtheque', 'accueil', 'js');
-
 ?>
