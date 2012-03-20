@@ -20,7 +20,7 @@ function Racine_site() {
 //Fonction qui gere l'inclusion de fichiers
 function inclure_fichier($_module, $_nom_fichier, $_type) {
     $racine = Racine_site();
-    
+
     $module = trim(strtolower($_module));
     $nom_fichier = trim(strtolower($_nom_fichier));
     $type = trim(strtolower($_type));
@@ -71,27 +71,27 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
 
 //Fonction permettant de verifier que l'utilisateur est connecté et qu'il 
 //appartient bien au groupe demandé
-//$groupe = [etudiant,entreprise]
-function Utilisateur_connecter($groupe) {
+//$groupe = [etudiant,entreprise,'']
+function Utilisateur_connecter($_groupe) {
     if ($_SESSION['utilisateur'] != null) {
-        if ($groupe == "etudiant") {
-            if ($_SESSION['utilisateur']->estEtudiant()) {
-                return true;
-            }
-            return false;
+        if ($_groupe == "etudiant") {
+            return $_SESSION['utilisateur']->estEtudiant();
         }
-        if ($groupe == "entreprise") {
-            if ($_SESSION['utilisateur']->estEntreprise()) {
-                return true;
-            }
-            return false;
+        if ($_groupe == "entreprise") {
+            return $_SESSION['utilisateur']->estEntreprise();
         }
-        if ($groupe == ""){
+        if ($_groupe == "") {
             return true;
         }
         return false;
     }
     return false;
+}
+
+//Fonction de protection contre les attaques xss
+//à utiliser avant chaque inclusion de texte que l'utilisateur a tapé
+function protection_xss($_chaine) {
+    return utf8_encode(htmlentities(utf8_decode($_chaine)));
 }
 
 ?>

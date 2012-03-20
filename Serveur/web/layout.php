@@ -54,6 +54,7 @@ global $theme;
         <?php
         inclure_fichier('commun', 'jquery-ui.min', 'js');
         inclure_fichier('commun', 'bootstrap.min', 'js');
+        inclure_fichier('commun', 'utils', 'js');
         ?>
     </body>
 </html>
