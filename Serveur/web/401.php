@@ -1,3 +1,3 @@
 <div class="alert alert-error">
-  Vous n'etez pas autorisé à accéder à cette zone du site   
+  Désolé, vous n'êtes pas autorisé(e) à accéder à cette zone du site. 
 </div>
