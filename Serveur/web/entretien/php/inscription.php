@@ -97,14 +97,7 @@ if (!Utilisateur_connecter('entreprise')) {
 	</fieldset>
   </form>
 
-<!-- datePicker required styles -->
-<link rel="stylesheet" type="text/css" media="screen" href="styles/datePicker.css">
-
-<!-- required plugins -->
-<script type="text/javascript" src="scripts/date.js"></script>
 <!--[if lt IE 7]><script type="text/javascript" src="scripts/jquery.bgiframe.min.js"></script><![endif]-->
-<!-- jquery.datePicker.js -->
-<script type="text/javascript" src="scripts/jquery.datePicker.js"></script>
 
 <script type="text/javascript" charset="utf-8">
 
@@ -117,5 +110,8 @@ if (!Utilisateur_connecter('entreprise')) {
 
 <?php
 inclure_fichier('entretien', 'inscription', 'js');
+inclure_fichier('entretien', 'jquery.datePicker', 'js');
+inclure_fichier('entretien', 'date', 'js');
+inclure_fichier('entretien', 'datePicker', 'css');
 
 ?>
