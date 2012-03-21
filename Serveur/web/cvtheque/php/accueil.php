@@ -5,7 +5,7 @@ if (!Utilisateur_connecter('etudiant')) {
     die;
 }
 
-inclure_fichier('controleur', 'cv.class', 'php');
+inclure_fichier('controleur', 'etudiant.class', 'php');
 
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID(1);

@@ -27,6 +27,10 @@ class Etudiant {
     private $PHOTO_ETUDIANT;
     private $ID_CV;
     private $cv;
+    private $diplome;
+    private $formation;
+    private $langue;
+    private $xp;
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet Etudiant par l'ID de l'étudiant
@@ -121,10 +125,37 @@ class Etudiant {
 
     public function getCV() {
         if ($this->cv == NULL) {
-            $this->cv == new CV();
-            $this->cv == CV::GetCVByID($this->ID_CV);
+            $this->cv = CV::GetCVByID($this->ID_CV);
         }
         return $this->cv;
+    }
+
+    public function getDiplome() {
+        if ($this->diplome == NULL) {
+            $this->diplome = CV_Diplome::GetDiplomeByIdCV($this->ID_CV);
+        }
+        return $this->diplome;
+    }
+
+    public function getFormation() {
+        if ($this->formation == NULL) {
+            $this->formation = CV_Formation::GetFormationByIdCV($this->ID_CV);
+        }
+        return $this->formation;
+    }
+
+    public function getLangue() {
+        if ($this->langue == NULL) {
+            $this->langue = CV_Langue::GetLangueByIdCV($this->ID_CV);
+        }
+        return $this->langue;
+    }
+
+    public function getXP() {
+        if ($this->xp == NULL) {
+            $this->xp = CV_XP::GetCVXPByIdCV($this->ID_CV);
+        }
+        return $this->xp;
     }
 
 }

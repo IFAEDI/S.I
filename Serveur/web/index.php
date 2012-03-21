@@ -20,6 +20,8 @@ $_SESSION['utilisateur'] = new Utilisateur();
 $_SESSION['utilisateur'] = Utilisateur::GetUtilisateur(0);
 /* * ***************************************************************************** */
 
+//Inclusion d'utils des le debut de la page d'index car necessaire pour la cvtheque
+
 
 
 if (!isset($_GET['page'])) {

@@ -1,13 +1,37 @@
+
+//Création d'une boite de selection
+//_id_select : id desisré pour la boite de selection
+//_id_option : option selectionné pour la boite de selection (-1 si aucune voulu)
+//_data : donnée voulu pour la boite de selection sous la forme _data[0][id] = 1,_data[0][label] = test
+function Create_Select(_id_select,_id_option,_data){
+    select = '<select id="'+_id_select+'">';
+    for(var i = 0; i < _data.length;i++)
+    {
+        if (_id_option != -1 && _id_option == _data[i]['id']){
+            select +='<option value="'+_data[i]['id']+'" SELECTED>'+_data[i]['label']+'</option>';
+        }else{
+            select +='<option value="'+_data[i]['id']+'">'+_data[i]['label']+'</option>';
+        }
+            
+    }
+    select += '</select>';
+    return select;
+}
+
+
+
+
+
+
+
+
 function stripslashes(txt){
-   
-   
     while(true){
         pos = txt.indexOf("$");  
         if(pos==-1) break;
         else{
             txt = txt.substring(0,pos)+" "+txt.substring(pos+4,txt.length);
         }
-  
     }
    
     while(true){
@@ -16,7 +40,6 @@ function stripslashes(txt){
         else{
             txt = txt.substring(0,pos)+" "+txt.substring(pos+1,txt.length);
         }
-  
     }
     return txt;
 }

@@ -27,6 +27,7 @@ global $theme;
         
         
         inclure_fichier('commun', 'jquery.min', 'js');
+        inclure_fichier('commun', 'utils', 'js');
         ?>
         <title>AEDI - <?php echo $titre_page ?></title>
     </head>
@@ -54,7 +55,6 @@ global $theme;
         <?php
         inclure_fichier('commun', 'jquery-ui.min', 'js');
         inclure_fichier('commun', 'bootstrap.min', 'js');
-        inclure_fichier('commun', 'utils', 'js');
         ?>
     </body>
 </html>

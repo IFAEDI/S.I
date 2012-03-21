@@ -1,5 +1,31 @@
 <?php
 
+//Fonction qui prends une array de se type : 
+//Array ( [0] => Array ( [ID_LANGUE] => 1 [LIBELLE_LANGUE] => Français ) [1] => Array ( [ID_LANGUE] => 2 [LIBELLE_LANGUE] => Anglais )
+//et la transforme en : 
+//Array ( [0] => Array ( [id] => 1 [label] => Français ) [1] => Array ( [id] => 2 [label] => Anglais )
+function Adaptation_tableau($_array) {
+    $return_array = array();
+    $i = 0;
+    foreach ($_array as $array_value) {
+        $return_array[$i] = array();
+        $id = true;
+        foreach ($array_value as $value) {
+            if ($id) {
+                $return_array[$i]['id'] = $value;
+                $id = false;
+            } else {
+                $return_array[$i]['label'] = $value;
+                $id = true;
+            }
+        }
+        $i++;
+    }
+    return $return_array;
+}
+
+
+
 function Racine_site() {
     $all_dir = explode("/", $_SERVER['PHP_SELF']);
     $nbrel = count($all_dir) - 1;
@@ -59,7 +85,7 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
         }
 
         if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
-            echo "<script type=\"text/javascript\" src=\"/$racine$path\"></script>";
+            echo "<script type=\"text/javascript\" src=\"$path\"></script>";
             return;
         }
     }

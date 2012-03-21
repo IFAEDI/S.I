@@ -19,7 +19,7 @@ class CV_Formation {
     //recuperation de l'objet CV par l'ID du CV
     public static function GetFormationByIdCV($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM CV_FORMATION WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM CV_FORMATION WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
