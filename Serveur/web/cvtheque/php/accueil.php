@@ -19,8 +19,8 @@ $etudiant = Etudiant::GetEtudiant(1);
 
 if ($etudiant == null) {
     echo "Oooooooh mais tu n'as pas de CV comme c'est dommage<br/>";
-    echo "<a class=\"btn\">Creer mon CV</a><br/>";
+    echo "<a class=\"btn\" href=\"index.php?page=edit_cv\">Creer mon CV</a><br/>";
 } else {
-    echo "<br/><a class=\"btn\" href=\"index.php?page=cv\">Editer mon CV</a><br/>";
+    echo "<br/><a class=\"btn\" href=\"index.php?page=edit_cv\">Editer mon CV</a><br/>";
 }
 ?>

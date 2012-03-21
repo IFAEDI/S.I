@@ -1,8 +1,9 @@
 <?php
+
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
-class Etudiant {
+class CV {
 
     //****************  Attributs  ******************//
     private $ID_ETUDIANT;
@@ -27,11 +28,16 @@ class Etudiant {
     private $ID_CV;
 
     //****************  Fonctions statiques  ******************//
-    public static function GetEtudiant($_id) {
+    //recuperation de l'objet CV par l'ID de l'étudiant
+    public static function GetCVByEtudiantID($_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
+    }
+
+    public static function GetListePermis() {
+        return BD::Prepare('SELECT * FROM PERMIS', '', BD::RECUPERER_TOUT);
     }
 
     //****************  Fonctions  ******************//
@@ -90,20 +96,12 @@ class Etudiant {
         return $this->NATIONALITE_ETUDIANT;
     }
 
-    public function getMarital() {
-        if ($this->marital == NULL) {
-            $marital = BD::Prepare('SELECT libelle_marital FROM STATUT_MARITAL WHERE id_marital = :id', array('id' => $this->ID_MARITAL), BD::RECUPERER_UNE_LIGNE);
-            $this->marital = $marital['libelle_marital'];
-        }
-        return $this->marital;
+    public function getIDMarital() {
+        return $this->ID_MARITAL;
     }
 
-    public function getPermis() {
-        if ($this->permis == NULL) {
-            $permis = BD::Prepare('SELECT libelle_permis FROM PERMIS WHERE id_permis = :id', array('id' => $this->ID_PERMIS), BD::RECUPERER_UNE_LIGNE);
-            $this->permis = $permis['libelle_permis'];
-        }
-        return $this->permis;
+    public function getIDPermis() {
+        return $this->ID_PERMIS;
     }
 
     public function getPhotos() {
@@ -115,4 +113,5 @@ class Etudiant {
     }
 
 }
+
 ?>

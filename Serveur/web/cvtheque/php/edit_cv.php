@@ -4,10 +4,12 @@ if (!Utilisateur_connecter('etudiant')) {
     die;
 }
 
-inclure_fichier('controleur', 'etudiant.class', 'php');
+inclure_fichier('controleur', 'cv.class', 'php');
 
-$etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiant(1);
+$CV = new CV();
+$etudiant = CV::GetEtudiant(1);
+
+$liste_permis = 
 ?>
 
 
@@ -61,10 +63,6 @@ $etudiant = Etudiant::GetEtudiant(1);
 
 
 
-
-
-
-
 <?php
-inclure_fichier('cvtheque', 'cv', 'js');
+inclure_fichier('cvtheque', 'edit_cv', 'js');
 ?>
