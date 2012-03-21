@@ -1,28 +1,29 @@
 <?php
+
 require_once dirname(__FILE__) . '/commun/php/base.inc.php';
 session_start();
 //Definition du theme
-if (isset($_POST['theme']) && is_numeric($_POST['theme'])){
+if (isset($_POST['theme']) && is_numeric($_POST['theme'])) {
     $_SESSION['theme'] = $_POST['theme'];
 }
 
 if (isset($_SESSION['theme'])) {
     $theme = $_SESSION['theme'];
-}else{
+} else {
     $theme = 0;
 }
 
 
-/************************Tant que la classe utilisateur n'est pas fini************/
+/* * **********************Tant que la classe utilisateur n'est pas fini*********** */
 
 $_SESSION['utilisateur'] = new Utilisateur();
 $_SESSION['utilisateur'] = Utilisateur::GetUtilisateur(0);
- /********************************************************************************/
+/* * ***************************************************************************** */
 
 
 
-if (!isset($_GET['page'])){
-     header("location: index.php?page=accueil");
+if (!isset($_GET['page'])) {
+    header("location: index.php?page=accueil");
 }
 
 
@@ -36,6 +37,11 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'accueil';
+} elseif ($_GET['page'] == 'edit_cv') {
+    $titre_page = 'Edition CV';
+    $lien_module = 'index.php?page=accueil_cv';
+    $nom_module = 'cvtheque';
+    $nom_page = 'edit_cv';
 } elseif ($_GET['page'] == 'inscription') {
     $titre_page = 'Inscription Entretien';
     $lien_module = 'index.php?page=inscription';
@@ -49,5 +55,4 @@ if ($_GET['page'] == 'accueil') {
 }
 
 inclure_fichier('', 'layout', 'php');
-
 ?>

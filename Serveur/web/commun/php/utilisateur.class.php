@@ -15,7 +15,7 @@ class Utilisateur {
     //****************  Fonctions statiques  ******************//
     public static function GetUtilisateur($_id) {
         if (is_numeric($_id)) {
-            return /*0; */ BD::Prepare('SELECT * FROM Utilisateur WHERE id = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE,PDO::FETCH_CLASS,__CLASS__);
+            return /* 0; */ BD::Prepare('SELECT * FROM Utilisateur WHERE id = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
