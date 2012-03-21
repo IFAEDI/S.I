@@ -23,8 +23,8 @@ $liste_statut_marital = Etudiant::GetListeStatutMarital();
 $liste_langue = CV_Langue::GetListeLangue();
 $liste_niveau = CV_Langue::GetListeNiveau();
 $liste_certif = CV_Langue::GetListeCertif();
-        
-        
+
+
 //Passage des données pour les boites de sélection au js
 echo '<script> var liste_langue=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_langue)) . '\');</script>';
 echo '<script> var liste_niveau=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_niveau)) . '\');</script>';
@@ -171,6 +171,11 @@ $ville = $etudiant->getVille();
     <div class="group">
         <h3><a href="#">Langues</a></h3>
         <div id="div_Langues">
+            <div id="div_nouvelle_langue">    
+            </div>
+
+            <div id="div_ancienne_langue">    
+            </div>
 
         </div>
     </div>
@@ -189,14 +194,9 @@ inclure_fichier('cvtheque', 'edit_cv', 'js');
 
 echo '<script>';
 
-foreach ($liste_langue_etudiant as $langue_etudiant){
-    echo 'Ajouter_Langue('.$langue_etudiant->getIdLAngue().','.$langue_etudiant->getIdNiveau().','.$langue_etudiant->getIdCertif().','.$langue_etudiant->getScoreCertif().');';
+foreach ($liste_langue_etudiant as $langue_etudiant) {
+    echo 'Ajouter_Langue(' . $langue_etudiant->getIdLAngue() . ',' . $langue_etudiant->getIdNiveau() . ',' . $langue_etudiant->getIdCertif() . ',' . $langue_etudiant->getScoreCertif() . ');';
 }
 
 echo '</script>';
-
-
-
-
-
 ?>
