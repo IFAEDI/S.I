@@ -40,7 +40,7 @@
 
 					<li class="nav-header"><i class="icon-star"></i> Evénements</li>
 					<li><a href="#">Rencontres IF</a></li>
-					<li><a href="#">Simulations d'entretiens</a></li>
+					<li><a href="index.php?page=inscription">Simulations d'entretiens</a></li>
 					<li><a href="#">Stages</a></li>	
 				</ul>
 			</li>
