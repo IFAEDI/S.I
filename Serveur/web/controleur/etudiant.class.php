@@ -3,7 +3,9 @@
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
-class CV {
+inclure_fichier('controleur', 'cv.class', 'php');
+
+class Etudiant {
 
     //****************  Attributs  ******************//
     private $ID_ETUDIANT;
@@ -21,23 +23,28 @@ class CV {
     private $ville_naissance;
     private $NATIONALITE_ETUDIANT;
     private $ID_MARITAL;
-    private $marital;
     private $ID_PERMIS;
-    private $permis;
     private $PHOTO_ETUDIANT;
     private $ID_CV;
+    private $cv;
 
     //****************  Fonctions statiques  ******************//
-    //recuperation de l'objet CV par l'ID de l'étudiant
-    public static function GetCVByEtudiantID($_id) {
+    //recuperation de l'objet Etudiant par l'ID de l'étudiant
+    public static function GetEtudiantByID($_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
 
+    //Recupération de la liste des permis possible
     public static function GetListePermis() {
-        return BD::Prepare('SELECT * FROM PERMIS', '', BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM PERMIS', array(), BD::RECUPERER_TOUT);
+    }
+
+    //Recupération de la liste statuts maritals possible
+    public static function GetListeStatutMarital() {
+        return BD::Prepare('SELECT * FROM STATUT_MARITAL', array(), BD::RECUPERER_TOUT);
     }
 
     //****************  Fonctions  ******************//
@@ -58,12 +65,12 @@ class CV {
         return $this->SEXE_ETUDIANT;
     }
 
-    public function getAdresse() {
-        $adresse = $this->ADRESSE1_ETUDIANT;
-        if ($this->ADRESSE2_ETUDIANT != '') {
-            $adresse.=' - ' . $this->ADRESSE2_ETUDIANT;
-        }
-        return $adresse;
+    public function getAdresse1() {
+        return $this->ADRESSE1_ETUDIANT;
+    }
+
+    public function getAdresse2() {
+        return $this->ADRESSE2_ETUDIANT;
     }
 
     public function getVille() {
@@ -96,11 +103,11 @@ class CV {
         return $this->NATIONALITE_ETUDIANT;
     }
 
-    public function getIDMarital() {
+    public function getIdMarital() {
         return $this->ID_MARITAL;
     }
 
-    public function getIDPermis() {
+    public function getIdPermis() {
         return $this->ID_PERMIS;
     }
 
@@ -110,6 +117,14 @@ class CV {
 
     public function getIdCV() {
         return $this->ID_CV;
+    }
+
+    public function getCV() {
+        if ($this->cv == NULL) {
+            $this->cv == new CV();
+            $this->cv == CV::GetCVByID($this->ID_CV);
+        }
+        return $this->cv;
     }
 
 }

@@ -5,10 +5,10 @@ if (!Utilisateur_connecter('etudiant')) {
     die;
 }
 
-inclure_fichier('controleur', 'etudiant.class', 'php');
+inclure_fichier('controleur', 'cv.class', 'php');
 
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiant(1);
+$etudiant = Etudiant::GetEtudiantByID(1);
 ?>
 
 <h1>Bienvenue sur la page d'accueil de la CVthèque</h1><br/><br/>
