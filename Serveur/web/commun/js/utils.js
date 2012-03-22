@@ -3,7 +3,7 @@
 //_id_select : id desisré pour la boite de selection
 //_id_option : option selectionné pour la boite de selection (-1 si aucune voulu)
 //_data : donnée voulu pour la boite de selection sous la forme _data[0][id] = 1,_data[0][label] = test
-function Create_Select(_id_select,_id_option,_data){
+function Creer_Select(_id_select,_id_option,_data){
     select = '<select id="'+_id_select+'">';
     for(var i = 0; i < _data.length;i++)
     {

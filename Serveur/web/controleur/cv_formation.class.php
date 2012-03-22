@@ -13,7 +13,9 @@ class CV_Formation {
     private $ID_VILLE;
     private $ANNEE_FORMATION;
     private $ID_CV;
-    private $ville;
+    private $nom_ville;
+    private $cp_ville;
+    private $pays_ville;
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet CV par l'ID du CV
@@ -50,11 +52,25 @@ class CV_Formation {
         return $this->INSTITUT;
     }
 
-    public function getVille() {
-        if ($this->ville == NULL) {
-            $this->ville = BD::Prepare('SELECT * FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
+    public function getNomVille() {
+        if ($this->nom_ville == NULL) {
+            $this->nom_ville = BD::Prepare('SELECT LIBELLE_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
         }
-        return $this->ville;
+        return $this->nom_ville['LIBELLE_VILLE'];
+    }
+
+    public function getCPVille() {
+        if ($this->cp_ville == NULL) {
+            $this->cp_ville = BD::Prepare('SELECT CP_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
+        }
+        return $this->cp_ville['CP_VILLE'];
+    }
+
+    public function getPaysVille() {
+        if ($this->pays_ville == NULL) {
+            $this->pays_ville = BD::Prepare('SELECT PAYS_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
+        }
+        return $this->pays_ville['PAYS_VILLE'];
     }
 
 }
