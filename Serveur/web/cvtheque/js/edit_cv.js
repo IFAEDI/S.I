@@ -459,8 +459,12 @@ function Sauvegarder(){
         }
     }
     
-
+    liste_experience_json = liste_experience.serializeJSON();
+    liste_diplome_json = liste_diplome.serializeJSON();
+    liste_formation_json = liste_formation.serializeJSON();
+    liste_langue_json = liste_langue.serializeJSON();
     
+    alert(liste_langue_json);
 }
 
 //Fonction qui verifie un champs et le met en erreur si il le faut
