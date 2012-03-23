@@ -4,9 +4,10 @@
 /* (int) */var nb_xp = 0;
 /* (int) */var nb_formation = 0;
 /* (int) */var nb_diplome = 0;
-
-
-
+var annuler_diplome = new Array();
+var annuler_formation = new Array();
+var annuler_xp = new Array();
+var annuler_langue = new Array();
 
 //****************  Fonction executée directement après la fin de chargement de la page  ******************//
 $(document).ready(function() {
@@ -24,15 +25,13 @@ $(document).ready(function() {
     langue += '</div><hr>';
     $('#div_nouvelle_langue').append(langue);
     
-    $('#sel_nouvelle_certif').change(function(j) {
-        return function() {
-            if (this.options[this.selectedIndex].value == 1){
-                $('#score_nouvelle').attr('disabled', true);
-            }else{
-                $('#score_nouvelle').prop('disabled', false);
-            }
-        };
-    }(nb_langue));
+    $('#sel_nouvelle_certif').change(function() {
+        if (this.options[this.selectedIndex].value == 1){
+            $('#score_nouvelle').attr('disabled', true);
+        }else{
+            $('#score_nouvelle').prop('disabled', false);
+        }
+    });
 
     //Ajout des champs pour ajouter une nouvelle expérience
     /* (str) */var xp = "";
@@ -125,11 +124,28 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
     diplome += '<input type="text" id="annee_diplome'+nb_diplome+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px;">';
     diplome += '<input type="text" id="institut_diplome'+nb_diplome+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px;">';
     diplome += '<input type="text" id="ville_diplome'+nb_diplome+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
-    diplome += '<a href="javascript:$(\'#diplome'+nb_diplome+'\').remove()" class="icon-remove" style="margin-left : 20px;"></a>';
+    diplome += '<a href="javascript:Supprimer_Diplome('+nb_diplome+');" class="icon-remove" style="margin-left : 20px;"></a>';
     diplome += '</div>';
     diplome += '</div>';
     $('#div_ancien_Diplome').append(diplome);
     nb_diplome++;
+}
+
+//fonction permetant la suppression d'un diplome
+function Supprimer_Diplome(_id_diplome){
+    annuler_diplome['libelle'] = $('#libelle_diplome'+_id_diplome).val();
+    annuler_diplome['id_mention'] = $('#sel_mention_diplome'+_id_diplome).val();
+    annuler_diplome['annee'] = $('#annee_diplome'+_id_diplome).val();
+    annuler_diplome['institut'] = $('#institut_diplome'+_id_diplome).val();
+    annuler_diplome['ville'] = $('#ville_diplome'+_id_diplome).val();
+    $('#btn_annuler_diplome').show();
+    $('#diplome'+_id_diplome).remove();
+}
+
+//Fonction permetant un retour en arriere en cas d'erreur
+function Annuler_diplome(){
+    Ajouter_Diplome(annuler_diplome['annee'],annuler_diplome['id_mention'],annuler_diplome['libelle'],annuler_diplome['institut'],annuler_diplome['ville']);
+    $('#btn_annuler_diplome').hide();
 }
 
 //fonction permetant l'ajout d'une formation
@@ -151,7 +167,7 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
     formation += '<input type="text" id="annee_formation'+nb_formation+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px;">';
     formation += '<input type="text" id="institut_formation'+nb_formation+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px;">';
     formation += '<input type="text" id="ville_formation'+nb_formation+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
-    formation += '<a href="javascript:$(\'#formation'+nb_formation+'\').remove()" class="icon-remove" style="margin-left : 20px;"></a>';
+    formation += '<a href="javascript:Supprimer_formation('+nb_formation+');" class="icon-remove" style="margin-left : 20px;"></a>';
     formation += '</div>';
     formation += '</div>';
     $('#div_ancienne_Formation').append(formation);
@@ -162,11 +178,23 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
     nb_formation++;
 }
 
-//fonction permetant la suppression d'une langue
-function Supprimer_Formation(_id_formation){
+//fonction permetant la suppression d'une formation
+function Supprimer_formation(_id_formation){
+    annuler_formation['debut'] = $('#debut_formation'+_id_formation).val();
+    annuler_formation['fin'] = $('#fin_formation'+_id_formation).val();
+    annuler_formation['institut'] = $('#institut_formation'+_id_formation).val();
+    annuler_formation['ville'] = $('#ville_formation'+_id_formation).val();
+    annuler_formation['annee'] = $('#annee_formation'+_id_formation).val();
+    $('#btn_annuler_formation').show();
     $('#formation'+_id_formation).remove();
 }
 
+
+//Fonction permetant un retour en arriere en cas d'erreur
+function Annuler_formation(){
+    Ajouter_Formation(annuler_formation['debut'],annuler_formation['fin'],annuler_formation['institut'],annuler_formation['ville'],annuler_formation['ville']);
+    $('#btn_annuler_formation').hide();
+}
 
 
 //fonction permetant l'ajout d'une langue
@@ -191,7 +219,7 @@ function Ajouter_Langue(_id_langue_etudiant,_id_niveau,_id_certif,_score_certif)
         langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px;">';
     }
    
-    langue += '<a href="javascript:$(\'#langue'+nb_langue+'\').remove()" class="icon-remove" style="margin-left : 20px;"></a>';
+    langue += '<a href="javascript:Supprimer_langue('+nb_langue+');" class="icon-remove" style="margin-left : 20px;"></a>';
     langue += '</div>';
     langue += '</div>';
     $('#div_ancienne_langue').append(langue);
@@ -207,6 +235,23 @@ function Ajouter_Langue(_id_langue_etudiant,_id_niveau,_id_certif,_score_certif)
     }(nb_langue));
     
     nb_langue++;
+}
+
+//fonction permetant la suppression d'une langue
+function Supprimer_langue(_id_langue){
+    annuler_langue['id_langue'] = $('#sel_langue'+_id_langue).val();
+    annuler_langue['id_niveau'] = $('#sel_niveau'+_id_langue).val();
+    annuler_langue['id_certif'] = $('#sel_certif'+_id_langue).val();
+    annuler_langue['score_certif'] = $('#score'+_id_langue).val();
+    $('#btn_annuler_langue').show();
+    $('#langue'+_id_langue).remove();
+}
+
+
+//Fonction permetant un retour en arriere en cas d'erreur
+function Annuler_langue(){
+    Ajouter_Langue(annuler_langue['id_langue'],annuler_langue['id_niveau'],annuler_langue['id_certif'],annuler_langue['score_certif']);
+    $('#btn_annuler_langue').hide();
 }
 
 
@@ -229,7 +274,7 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 300px;"></td>';
     xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 150px;"></td>';
     xp += '<td><input type="text" id="ville_xp'+nb_xp+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;"></td>';
-    xp += '<td><a href="javascript:$(\'#xp'+nb_xp+'\').remove()" class="icon-remove" style="margin-left : 20px;"></a></td>';
+    xp += '<td><a href="javascript:Supprimer_XP('+nb_xp+');" class="icon-remove" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
     xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 660px;" placeholder="Descirption">'+_desc+'</textarea></td>';
     xp += '</tr></table></div>';
@@ -240,6 +285,26 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     
     nb_xp++;
 }
+
+//fonction permetant la suppression d'une langue
+function Supprimer_XP(_id_xp){
+    annuler_xp['debut'] = $('#debut_xp'+_id_xp).val();
+    annuler_xp['fin'] = $('#fin_xp'+_id_xp).val();
+    annuler_xp['titre'] = $('#titre_xp'+_id_xp).val();
+    annuler_xp['desc'] = $('#titre_xp'+_id_xp).val();
+    annuler_xp['entreprise'] = $('#entreprise_xp'+_id_xp).val();
+    annuler_xp['ville'] = $('#ville_xp'+_id_xp).val();
+    $('#btn_annuler_xp').show();
+    $('#xp'+_id_xp).remove();
+}
+
+
+//Fonction permetant un retour en arriere en cas d'erreur
+function Annuler_XP(){
+    Ajouter_XP(annuler_xp['debut'],annuler_xp['fin'],annuler_xp['titre'],annuler_xp['desc'],annuler_xp['entreprise'],annuler_xp['ville']);
+    $('#btn_annuler_xp').hide();
+}
+
 
 
 //Sauvegarde du CV
@@ -452,9 +517,8 @@ function Sauvegarder(){
             id_niveau = $('#sel_niveau'+i);
             id_certif = $('#sel_certif'+i);
             score = $('#score'+i);
-            
-            
-            if (!VerifierChamp(score,true,true,true) && id_certif.val()!=1){
+
+            if (id_certif.val()!=1 && !VerifierChamp(score,true,true,true)){
                 Afficher_erreur("[Langue] Le score de la langue est incorrect");
                 return;
             }  

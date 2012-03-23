@@ -197,6 +197,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
     <div class="group">
         <h3><a href="#">Expériences professionnelles</a></h3>
         <div id="div_XP">
+            <a id="btn_annuler_xp" class="btn" href="javascript:Annuler_XP();" style="display: none;position: absolute; left: 90%;">Annuler</a>
             <div id="div_nouvelle_XP"></div>
             <div id="div_ancienne_XP"></div>
         </div>
@@ -204,6 +205,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
     <div class="group">
         <h3><a href="#">Diplome(s)</a></h3>
         <div id="div_Formation">
+            <a id="btn_annuler_diplome" class="btn" href="javascript:Annuler_diplome();" style="display: none;position: absolute; left: 90%;">Annuler</a>
             <div id="div_nouveau_Diplome"></div>
             <div id="div_ancien_Diplome"></div>
         </div>
@@ -211,6 +213,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
     <div class="group">
         <h3><a href="#">Formation</a></h3>
         <div id="div_Formation">
+            <a id="btn_annuler_formation" class="btn" href="javascript:Annuler_formation();" style="display: none;position: absolute; left: 90%;">Annuler</a>
             <div id="div_nouvelle_Formation"></div>
             <div id="div_ancienne_Formation"></div>
         </div>
@@ -218,6 +221,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
     <div class="group">
         <h3><a href="#">Langues</a></h3>
         <div id="div_Langues">
+            <a id="btn_annuler_langue" class="btn" href="javascript:Annuler_langue();" style="display: none;position: absolute; left: 90%;">Annuler</a>
             <div id="div_nouvelle_langue"></div>
             <div id="div_ancienne_langue"></div>
         </div>
