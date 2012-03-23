@@ -87,6 +87,22 @@ $(document).ready(function() {
     //Ajout du date picker pour la date d'anniversaire
     $("#anniv_etudiant").datepicker();
 
+    //Autocompletion du cp et du pays de la ville
+    $("#ville_etudiant").blur(function(){
+        nom_ville = $("#ville_etudiant");
+        cp = $("#cp_etudiant");
+        pays = $("#pays_etudiant");
+        Autocompletion_ville(nom_ville,cp,pays);
+    });
+    
+    //Autocompletion du cp et du pays de la ville
+    $("#ville_naissance_etudiant").blur(function(){
+        nom_ville = $("#ville_naissance_etudiant");
+        cp = $("#cp_naissance_etudiant");
+        pays = $("#pays_naissance_etudiant");
+        Autocompletion_ville(nom_ville,cp,pays);
+    });
+
 
     //Accordeon triable pour les differentes partie du CV
     $( "#accordion" )
@@ -558,6 +574,8 @@ function Sauvegarder(){
     mobilite_etudiant = $("#sel_mobilite");
     anniv_etudiant = $("#anniv_etudiant");
     titre_cv = $("#titre_cv");
+    mots_clef = $("#mots_clef");
+    annee = $("#sel_annee_etude");
     
     
     
@@ -583,6 +601,8 @@ function Sauvegarder(){
         loisir_etudiant : loisir_etudiant.val(),
         mobilite_etudiant : mobilite_etudiant.val(),
         titre_cv : titre_cv.val(),
+        mots_clef : mots_clef.val(),
+        annee : annee.val(),
         liste_experience : liste_experience_json,
         liste_diplome : liste_diplome_json,
         liste_formation : liste_formation_json,
@@ -649,4 +669,22 @@ function verifMail(champ){
         return false;
     }
     return true;
+}
+
+function Autocompletion_ville(_nom_ville,_cp,_pays){
+    $.post("/cvtheque/ajax/cv.cible.php?action=autocomplete_ville", {
+        nom_ville : _nom_ville.val()
+        
+    },function success(retour){
+        retour = $.trim(retour)
+        if (retour != "false"){
+            ville = $.parseJSON(retour);
+            if (ville['CP_VILLE'] != ""){
+                _cp.val(ville['CP_VILLE']);
+            }
+            if (ville['PAYS_VILLE'] != ""){
+                _pays.val(ville['PAYS_VILLE']);
+            }
+        }
+    });
 }

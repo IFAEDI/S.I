@@ -16,6 +16,8 @@ class CV {
     private $ID_MOBILITE;
     private $LOISIRS_CV;
     private $AGREEMENT;
+    private $ANNEE;
+    private $MOTS_CLEF;
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet CV par l'ID du CV
@@ -37,20 +39,24 @@ class CV {
         return BD::Prepare('SELECT * FROM MOBILITE', array(), BD::RECUPERER_TOUT);
     }
 
-    public static function UpdateCV($_id, $_titre_cv, $_id_mobilite, $_loisir) {
+    public static function UpdateCV($_id, $_titre_cv, $_id_mobilite, $_loisir, $_mots_clef,$_annee) {
         if ($_id > 0 && is_numeric($_id)) {
             $info_cv = array(
                 'id' => $_id,
                 'titre_cv' => $_titre_cv,
                 'id_mobilite' => $_id_mobilite,
                 'loisir' => $_loisir,
+                'mots_clef' => $_mots_clef,
+                'annee' => $_annee,
             );
 
             //Si l'etudiant à déjà un CV
             BD::Prepare('UPDATE CV SET 
                     TITRE_CV = :titre_cv,
                     ID_MOBILITE = :id_mobilite,
-                    LOISIRS_CV = :loisir
+                    LOISIRS_CV = :loisir,
+                    MOTS_CLEF = :mots_clef,
+                    ANNEE = :annee
                     WHERE ID_CV = :id', $info_cv);
             return $_id;
         } else {
@@ -59,13 +65,17 @@ class CV {
                 'id_mobilite' => $_id_mobilite,
                 'loisir' => $_loisir,
                 'agreement' => "0",
+                'mots_clef' => $_mots_clef,
+                'annee' => $_annee,
             );
 
             BD::Prepare('INSERT INTO CV SET 
                     TITRE_CV = :titre_cv,
                     ID_MOBILITE = :id_mobilite,
                     LOISIRS_CV = :loisir,
-                    AGREEMENT = :agreement'
+                    AGREEMENT = :agreement,
+                    MOTS_CLEF = :mots_clef,
+                    ANNEE = :annee'
                     , $info_cv);
 
             $id_cv = BD::GetConnection()->lastInsertId();
@@ -106,6 +116,14 @@ class CV {
 
     public function getAgreement() {
         return $this->AGREEMENT;
+    }
+
+    public function getAnnee() {
+        return $this->ANNEE;
+    }
+
+    public function getMotsClef() {
+        return $this->MOTS_CLEF;
     }
 
 }

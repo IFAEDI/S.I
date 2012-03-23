@@ -31,6 +31,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     $loisir_etudiant = $_POST['loisir_etudiant'];
     $mobilite_etudiant = $_POST['mobilite_etudiant'];
     $titre_cv = $_POST['titre_cv'];
+    $mots_clef = $_POST['mots_clef'];
+    $annee = $_POST['annee'];
     $liste_experience = json_decode($_POST['liste_experience']);
     $liste_diplome = json_decode($_POST['liste_diplome']);
     $liste_formation = json_decode($_POST['liste_formation']);
@@ -162,7 +164,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     }
 
     //On met a jour/Ajoute le CV
-    $id_cv = CV::UpdateCV($etudiant->getIdCV(), $titre_cv, $mobilite_etudiant, $loisir_etudiant, '1');
+    $id_cv = CV::UpdateCV($etudiant->getIdCV(), $titre_cv, $mobilite_etudiant, $loisir_etudiant, $mots_clef,$annee);
 
     //On met à jour/Ajoute les informations etudiante
     Etudiant::UpdateEtudiant($_SESSION['utilisateur']->getId(), $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $ville_naissance_etudiant, $cp_naissance_etudiant, $pays_naissance_etudiant, $nationalite_etudiant, $statut_marital_etudiant, $permis_etudiant);
@@ -243,8 +245,18 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_cv') {
     
     $id_cv = $etudiant->getIdCV();
     Etudiant::SupprimerCV($_SESSION['utilisateur']->getId(), $id_cv);
-    
-    
+
     echo "1";
+}
+
+
+//Autocompletion de la ville si celle-ci est connue
+if (isset($_GET['action']) && $_GET['action'] == 'autocomplete_ville') {
+    if (!Utilisateur_connecter('etudiant')) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php'); 
+    echo json_encode(Etudiant::GetVilleByName($_POST['nom_ville']));
+
 }
 ?>

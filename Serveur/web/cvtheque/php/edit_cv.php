@@ -68,8 +68,8 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info"></td><td style="text-align: right;">
-    <a href="javascript:Sauvegarder();" class="btn">Sauvegarder</a>
-    </td></tr></table>
+                <a href="javascript:Sauvegarder();" class="btn">Sauvegarder</a>
+            </td></tr></table>
 </div>
 
 <div id="accordion"  class="form-horizontal" style="min-height: 500px;">
@@ -77,6 +77,24 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
         <h3><a href="#">Informations personnelles</a></h3>
         <div>
             <legend>Informations personnelles décrivant votre état civil</legend>
+            <span style="position: absolute; left: 86%;top :10px;">Année d'étude : 
+                <select id="sel_annee_etude" style="width: 50px;">
+                    <?php
+                    for ($i = 3; $i < 6; $i++) {
+                        if ($cv->getAnnee() == $i) {
+                            echo "<option value='$i' selected>$i</option>";
+                        } else {
+                            echo "<option value='$i'>$i</option>";
+                        }
+                    }
+                    if ($cv->getAnnee() == 0) {
+                        echo "<option value='0' selected>+</option>";
+                    } else {
+                        echo "<option value='0'>+</option>";
+                    }
+                    ?>
+                </select>
+            </span>
 
             <div class="control-group">
                 <label class="control-label">Nom et prenom*</label>
@@ -97,15 +115,15 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
                 <label class="control-label">Permis</label>
                 <div class="controls">
                     <select id="sel_permis" name="sel_permis">
-                        <?php
-                        foreach ($liste_permis as $permis) {
-                            if ($permis['ID_PERMIS'] == $etudiant->getIdPermis()) {
-                                echo "<option value='" . $permis['ID_PERMIS'] . "' SELECTED>" . $permis['LIBELLE_PERMIS'] . "</option> ";
-                            } else {
-                                echo "<option value='" . $permis['ID_PERMIS'] . "'>" . $permis['LIBELLE_PERMIS'] . "</option> ";
-                            }
-                        }
-                        ?>
+<?php
+foreach ($liste_permis as $permis) {
+    if ($permis['ID_PERMIS'] == $etudiant->getIdPermis()) {
+        echo "<option value='" . $permis['ID_PERMIS'] . "' SELECTED>" . $permis['LIBELLE_PERMIS'] . "</option> ";
+    } else {
+        echo "<option value='" . $permis['ID_PERMIS'] . "'>" . $permis['LIBELLE_PERMIS'] . "</option> ";
+    }
+}
+?>
                     </select>
                 </div>
             </div>
@@ -114,15 +132,15 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
                 <label class="control-label">Statut Marital</label>
                 <div class="controls">
                     <select id="sel_statut_marital" >
-                        <?php
-                        foreach ($liste_statut_marital as $statut_marital) {
-                            if ($statut_marital['ID_MARITAL'] == $etudiant->getIdMarital()) {
-                                echo "<option value='" . $statut_marital['ID_MARITAL'] . "' SELECTED>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
-                            } else {
-                                echo "<option value='" . $statut_marital['ID_MARITAL'] . "'>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
-                            }
-                        }
-                        ?>
+<?php
+foreach ($liste_statut_marital as $statut_marital) {
+    if ($statut_marital['ID_MARITAL'] == $etudiant->getIdMarital()) {
+        echo "<option value='" . $statut_marital['ID_MARITAL'] . "' SELECTED>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
+    } else {
+        echo "<option value='" . $statut_marital['ID_MARITAL'] . "'>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
+    }
+}
+?>
                     </select>
                 </div>
             </div>
@@ -131,15 +149,15 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
                 <label class="control-label">Sexe</label>
                 <div class="controls">
                     <select id="sel_sexe">
-                        <?php
-                        if ($etudiant->getSexe() == 0) {
-                            echo "<option value='0' SELECTED>Homme</option> ";
-                            echo "<option value='1' >Femme</option> ";
-                        } else {
-                            echo "<option value='0' >Homme</option> ";
-                            echo "<option value='1' SELECTED>Femme</option> ";
-                        }
-                        ?>
+<?php
+if ($etudiant->getSexe() == 0) {
+    echo "<option value='0' SELECTED>Homme</option> ";
+    echo "<option value='1' >Femme</option> ";
+} else {
+    echo "<option value='0' >Homme</option> ";
+    echo "<option value='1' SELECTED>Femme</option> ";
+}
+?>
                     </select>
                 </div>
             </div>
@@ -247,18 +265,26 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
                 <label class="control-label">Mobilité</label>
                 <div class="controls">
                     <select id="sel_mobilite" >
-                        <?php
-                        foreach ($liste_mobilite as $mobilite) {
-                            if ($mobilite['ID_MOBILITE'] == $cv->getIDMobilite()) {
-                                echo "<option value='" . $mobilite['ID_MOBILITE'] . "' SELECTED>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
-                            } else {
-                                echo "<option value='" . $mobilite['ID_MOBILITE'] . "'>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
-                            }
-                        }
-                        ?>
+<?php
+foreach ($liste_mobilite as $mobilite) {
+    if ($mobilite['ID_MOBILITE'] == $cv->getIDMobilite()) {
+        echo "<option value='" . $mobilite['ID_MOBILITE'] . "' SELECTED>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
+    } else {
+        echo "<option value='" . $mobilite['ID_MOBILITE'] . "'>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
+    }
+}
+?>
                     </select>
                 </div>
             </div>
+
+            <div class="control-group">
+                <label class="control-label">Mots Clef lors de la recherche d'un CV</label>
+                <div class="controls">
+                    <input type="text" id="mots_clef" class="span3" placeholder="Mots Clef" value="<?php echo $cv->getMotsClef() ?>">
+                </div>
+            </div>
+
 
         </div>
     </div>

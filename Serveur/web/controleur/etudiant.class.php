@@ -161,9 +161,6 @@ class Etudiant {
         if ($ville['ID_VILLE'] > 0) {
             return $ville['ID_VILLE'];
         } else {
-
-
-
             BD::Prepare('INSERT INTO VILLE SET LIBELLE_VILLE = :nom, CP_VILLE = :code_postal, PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays, 'code_postal' => $_code_postal));
             $id_ville = BD::GetConnection()->lastInsertId();
             if ($id_ville > 0) {
@@ -173,6 +170,10 @@ class Etudiant {
                 return;
             }
         }
+    }
+
+    public static function GetVilleByName($_nom) {
+        return BD::Prepare('SELECT * FROM VILLE WHERE LIBELLE_VILLE = :nom', array('nom' => $_nom));
     }
 
     //Recupération de la liste des permis possible
