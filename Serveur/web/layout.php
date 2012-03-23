@@ -49,7 +49,7 @@ global $theme;
         <?php } ?>
 
         <div class="container">
-            <div class="module">
+            <div class="module">   
                 <?php inclure_fichier($nom_module, $nom_page, 'php'); ?>
             </div>
             <p id="footer">&copy; AEDI - 2012</p>

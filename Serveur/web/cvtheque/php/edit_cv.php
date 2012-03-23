@@ -32,7 +32,7 @@ echo '<script> var liste_niveau=$.parseJSON(\'' . json_encode(Adaptation_tableau
 echo '<script> var liste_certif=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_certif)) . '\');</script>';
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
 ?> 
-<div class="alert alert-error" hidden id="div_erreur"></div>
+<div class="alert alert-error" id="div_erreur" style="display: none;"></div>
 <div id="accordion"  class="form-horizontal" style="min-height: 500px;">
     <div class="group">
         <h3><a href="#">Informations personnelles</a></h3>
