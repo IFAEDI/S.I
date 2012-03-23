@@ -19,13 +19,48 @@ class CV_Formation {
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet CV par l'ID du CV
-    public static function GetFormationByIdCV($_id) {
-        if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM CV_FORMATION WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+    public static function GetFormationByIdCV($_id_cv) {
+        if (is_numeric($_id_cv)) {
+            return BD::Prepare('SELECT * FROM CV_FORMATION WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
 
+    public static function AjouterFormation($_debut_formation,$_fin_formation,$_institut,$_ville,$_cp,$_pays, $_annee_formation,$_id_cv) { 
+        if ($_id_cv > 0 && is_numeric($_id_cv)) {
+            $id_ville = Etudiant::GetVilleOrAdd($_ville, $_cp, $_pays);
+            
+            $info_formation = array(
+                'id_cv' => $_id_cv,
+                'debut_formation' => $_debut_formation,
+                'fin_formation' => $_fin_formation,
+                'institut' => $_institut,
+                'annee_formation' => $_annee_formation,
+                'id_ville' => $id_ville,
+            );
+
+            BD::Prepare('INSERT INTO CV_FORMATION SET 
+                    DEBUT_FORMATION = :debut_formation,
+                    FIN_FORMATION = :fin_formation,
+                    INSTITUT = :institut,
+                    ID_VILLE = :id_ville, 
+                    ANNEE_FORMATION = :annee_formation,
+                    ID_CV = :id_cv', $info_formation);
+        } else {
+            echo "Erreur 6 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+    
+    public static function SupprimerFormationByIdCV($_id_cv) {
+        if ($_id_cv > 0 && is_numeric($_id_cv)) {
+            BD::Prepare('DELETE FROM CV_FORMATION WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+        } else {
+            echo "Erreur 7 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+    
     //****************  Fonctions  ******************//
     //****************  Getters & Setters  ******************//
     public function getId() {

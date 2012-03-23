@@ -30,6 +30,41 @@ class CV_Diplome {
     public static function GetListeMention() {
         return BD::Prepare('SELECT * FROM MENTION', array(), BD::RECUPERER_TOUT);
     }
+    
+      public static function AjouterDiplome($_annee_diplome,$_id_mention,$_libelle_diplome,$_institut,$_ville,$_cp,$_pays,$_id_cv) { 
+        if ($_id_cv > 0 && is_numeric($_id_cv)) {
+            $id_ville = Etudiant::GetVilleOrAdd($_ville, $_cp, $_pays);
+            
+            $info_diplome = array(
+                'id_cv' => $_id_cv,
+                'annee_diplome' => $_annee_diplome,
+                'id_mention' => $_id_mention,
+                'libelle_diplome' => $_libelle_diplome,
+                'institut' => $_institut,
+                'id_ville' => $id_ville,
+            );
+
+            BD::Prepare('INSERT INTO CV_DIPLOME SET 
+                    ANNEE_DIPLOME = :annee_diplome,
+                    ID_MENTION = :id_mention,
+                    LIBELLE_DIPLOME = :libelle_diplome,
+                    INSTITUT = :institut, 
+                    ID_VILLE = :id_ville,
+                    ID_CV = :id_cv', $info_diplome);
+        } else {
+            echo "Erreur 8 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+    
+    public static function SupprimerDiplomeByIdCV($_id_cv) {
+        if ($_id_cv > 0 && is_numeric($_id_cv)) {
+            BD::Prepare('DELETE FROM CV_DIPLOME WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+        } else {
+            echo "Erreur 9 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
 
     //****************  Fonctions  ******************//
     //****************  Getters & Setters  ******************//

@@ -18,11 +18,21 @@ $(document).ready(function() {
     langue += Creer_Select('sel_nouvelle_langue',-1,liste_langue);
     langue += Creer_Select('sel_nouvelle_niveau',-1,liste_niveau);
     langue += Creer_Select('sel_nouvelle_certif',-1,liste_certif);
-    langue += '<input type="text" id="score_nouvelle" class="span3" placeholder="Score" style="width : 80px;">';
+    langue += '<input type="text" id="score_nouvelle" class="span3" placeholder="Score" style="width : 80px;" disabled>';
     langue += '<a href="javascript:Ajouter_Langue(\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
     langue += '</div>';
     langue += '</div><hr>';
     $('#div_nouvelle_langue').append(langue);
+    
+    $('#sel_nouvelle_certif').change(function(j) {
+        return function() {
+            if (this.options[this.selectedIndex].value == 1){
+                $('#score_nouvelle').attr('disabled', true);
+            }else{
+                $('#score_nouvelle').prop('disabled', false);
+            }
+        };
+    }(nb_langue));
 
     //Ajout des champs pour ajouter une nouvelle expérience
     /* (str) */var xp = "";
@@ -75,6 +85,10 @@ $(document).ready(function() {
     diplome += '</div><hr>';
     $('#div_nouveau_Diplome').append(diplome);
 
+    //Ajout du date picker pour la date d'anniversaire
+    $("#anniv_etudiant").datepicker();
+
+
     //Accordeon triable pour les differentes partie du CV
     $( "#accordion" )
     .accordion({
@@ -120,12 +134,9 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
 
 //fonction permetant l'ajout d'une formation
 function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
-    var debut = _debut.substring(0,2)+"/"+_debut.substring(2,4)+"/"+_debut.substring(4,8);
-    var fin = _fin.substring(0,2)+"/"+_fin.substring(2,4)+"/"+_fin.substring(4,8);
-    
     if (_debut == '' && _fin == '' && _institut=='' && _ville == '' && _annee == ''){
-        debut = $("#debut_nouvelle_formation").val();
-        fin = $("#fin_nouvelle_formation").val();
+        _debut = $("#debut_nouvelle_formation").val();
+        _fin = $("#fin_nouvelle_formation").val();
         _institut = $("#institut_nouvelle_formation").val();
         _ville = $("#ville_nouvelle_formation").val();
         _annee = $("#annee_nouvelle_formation").val();
@@ -135,8 +146,8 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
     formation += '<div class="control-group" id="formation'+nb_formation+'">';
     formation += '<label class="control-label">Formation</label>';
     formation += '<div class="controls">';
-    formation += '<input type="text" id="debut_formation'+nb_formation+'" class="span3" placeholder="Début" value="'+debut+'" style="width : 80px;">';
-    formation += '<input type="text" id="fin_formation'+nb_formation+'" class="span3" placeholder="Fin" value="'+fin+'" style="width : 80px;">';
+    formation += '<input type="text" id="debut_formation'+nb_formation+'" class="span3" placeholder="Début" value="'+_debut+'" style="width : 80px;">';
+    formation += '<input type="text" id="fin_formation'+nb_formation+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px;">';
     formation += '<input type="text" id="annee_formation'+nb_formation+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px;">';
     formation += '<input type="text" id="institut_formation'+nb_formation+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px;">';
     formation += '<input type="text" id="ville_formation'+nb_formation+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
@@ -174,23 +185,36 @@ function Ajouter_Langue(_id_langue_etudiant,_id_niveau,_id_certif,_score_certif)
     langue += Creer_Select('sel_langue'+nb_langue,_id_langue_etudiant,liste_langue);
     langue += Creer_Select('sel_niveau'+nb_langue,_id_niveau,liste_niveau);
     langue += Creer_Select('sel_certif'+nb_langue,_id_certif,liste_certif);
-    langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px;">';
+    if (_id_certif == '1'){
+        langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px;" disabled>';
+    }else{
+        langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px;">';
+    }
+   
     langue += '<a href="javascript:$(\'#langue'+nb_langue+'\').remove()" class="icon-remove" style="margin-left : 20px;"></a>';
     langue += '</div>';
     langue += '</div>';
     $('#div_ancienne_langue').append(langue);
+    
+    $('#sel_certif'+nb_langue).change(function(j) {
+        return function() {
+            if (this.options[this.selectedIndex].value == 1){
+                $('#score'+j).attr('disabled', true);
+            }else{
+                $('#score'+j).prop('disabled', false);
+            }
+        };
+    }(nb_langue));
+    
     nb_langue++;
 }
 
 
 //fonction permetant l'ajout d'une experience
 function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){ 
-    var debut = _debut.substring(0,2)+"/"+_debut.substring(2,4)+"/"+_debut.substring(4,8);
-    var fin = _fin.substring(0,2)+"/"+_fin.substring(2,4)+"/"+_fin.substring(4,8);
-    
     if (_debut == '' && _fin == '' && _titre=='' && _desc == '' && _entreprise == '' && _ville == '' ){
-        debut = $("#debut_nouvelle_xp").val();
-        fin = $("#fin_nouvelle_xp").val();
+        _debut = $("#debut_nouvelle_xp").val();
+        _fin = $("#fin_nouvelle_xp").val();
         _titre = $("#titre_nouvelle_xp").val();
         _desc = $("#desc_nouvelle_xp").val();
         _entreprise = $("#entreprise_nouvelle_xp").val();
@@ -200,8 +224,8 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     /* (str) */var xp = "";
     xp += '<div id="xp'+nb_xp+'" class="control-group">';
     xp += '<table cellpadding="8" style="text-align : center;"><tr>';
-    xp += '<td><input type="text" id="debut_xp'+nb_xp+'" class="span3" placeholder="Debut" value="'+debut+'" style="width : 80px;"></td>';
-    xp += '<td><input type="text" id="fin_xp'+nb_xp+'" class="span3" placeholder="Fin" value="'+fin+'" style="width : 80px;>"</td>';
+    xp += '<td><input type="text" id="debut_xp'+nb_xp+'" class="span3" placeholder="Debut" value="'+_debut+'" style="width : 80px;"></td>';
+    xp += '<td><input type="text" id="fin_xp'+nb_xp+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px;>"</td>';
     xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 300px;"></td>';
     xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 150px;"></td>';
     xp += '<td><input type="text" id="ville_xp'+nb_xp+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;"></td>';
@@ -219,9 +243,7 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
 
 
 //Sauvegarde du CV
-function Sauvegarder(){
-    
-    
+function Sauvegarder(){    
     //On verifie d'abord tout les champs
 
     //Champs de la partie Informations personnelles
@@ -248,10 +270,10 @@ function Sauvegarder(){
         return;
     }
     
-    if (!VerifierChamp(telephone_etudiant,true,true,true)){
+    /*if (!VerifierChamp(telephone_etudiant,true,true,true)){
         Afficher_erreur("[Informations personnelles] Le téléphone est incorrect");
         return;
-    }
+    }*/
     
     if (!VerifierChamp(adresse1_etudiant,false,false,false)){
         Afficher_erreur("[Informations personnelles] L'adresse 1 est incorrect");
@@ -273,10 +295,10 @@ function Sauvegarder(){
         return;
     }
     
-    if (!VerifierChamp(nationalite_etudiant,false,false,false)){
+    /*if (!VerifierChamp(nationalite_etudiant,false,false,false)){
         Afficher_erreur("[Informations personnelles] La nationnalité est incorrect");
         return;
-    }
+    }*/
     
     if (!VerifierChamp(ville_naissance_etudiant,false,false,false)){
         Afficher_erreur("[Informations personnelles] La ville de naissance est incorrect");
@@ -304,7 +326,7 @@ function Sauvegarder(){
     }
  
     //Champs de la partie Expériences professionnelles (on en profite pour tout mettre dans un tableau)
-    var liste_experience = new Array;
+    var liste_experience_etudiant = new Array();
     j = 0;
     for (i=0;i<nb_xp;i++){
         if ($('#xp'+i).length > 0){
@@ -312,6 +334,7 @@ function Sauvegarder(){
             fin_xp = $('#fin_xp'+i);
             titre_xp = $('#titre_xp'+i);
             entreprise_xp = $('#entreprise_xp'+i);
+            desc_xp = $('#desc_xp'+i);
             ville_xp = $('#ville_xp'+i);
 
             if (titre_xp.val() != ''){
@@ -347,18 +370,13 @@ function Sauvegarder(){
                 return;
             }
             
-            liste_experience[j] = new Array;
-            liste_experience[j]['debut'] = debut_xp.val();
-            liste_experience[j]['fin'] = fin_xp.val();
-            liste_experience[j]['titre'] = titre_xp.val();
-            liste_experience[j]['entreprise'] = entreprise_xp.val();
-            liste_experience[j]['ville'] = ville_xp.val();
+            liste_experience_etudiant[j] = new Array(debut_xp.val(),fin_xp.val(),titre_xp.val(),desc_xp.val(),entreprise_xp.val(),ville_xp.val());
             j++;
         }
     }
     
     //Champs de la partie Diplome(s) (on en profite pour tout mettre dans un tableau)
-    var liste_diplome = new Array;
+    var liste_diplome_etudiant = new Array();
     j = 0;
     for (i=0;i<nb_diplome;i++){
         if ($('#diplome'+i).length > 0){
@@ -388,18 +406,13 @@ function Sauvegarder(){
                 return;
             }
           
-            liste_diplome[j] = new Array;
-            liste_diplome[j]['libelle'] = libelle_diplome.val();
-            liste_diplome[j]['id_mention'] = id_mention_diplome.val();
-            liste_diplome[j]['annee'] = annee_diplome.val();
-            liste_diplome[j]['institut'] = institut_diplome.val();
-            liste_diplome[j]['ville'] = ville_diplome.val();
+            liste_diplome_etudiant[j] = new Array(annee_diplome.val(),id_mention_diplome.val(),libelle_diplome.val(),institut_diplome.val(),ville_diplome.val());
             j++;
         }
     }
     
     //Champs de la partie Formation (on en profite pour tout mettre dans un tableau)
-    var liste_formation = new Array;
+    var liste_formation_etudiant = new Array();
     j = 0;
     for (i=0;i<nb_formation;i++){
         if ($('#formation'+i).length > 0){   
@@ -424,19 +437,14 @@ function Sauvegarder(){
                 return;
             }  
           
-            liste_formation[j] = new Array;
-            liste_formation[j]['debut'] = debut_formation.val();
-            liste_formation[j]['fin'] = fin_formation.val();
-            liste_formation[j]['annee'] = annee_formation.val();
-            liste_formation[j]['institut'] = institut_formation.val();
-            liste_formation[j]['ville'] = ville_formation.val();
+            liste_formation_etudiant[j] = new Array(debut_formation.val(),fin_formation.val(),institut_formation.val(),ville_formation.val(),annee_formation.val());
             j++;
         }
     }
     
     
     //Champs de la partie Langue (on en profite pour tout mettre dans un tableau)
-    var liste_langue = new Array;
+    var liste_langue_etudiant = new Array();
     j = 0;
     for (i=0;i<nb_langue;i++){
         if ($('#langue'+i).length > 0){   
@@ -444,27 +452,89 @@ function Sauvegarder(){
             id_niveau = $('#sel_niveau'+i);
             id_certif = $('#sel_certif'+i);
             score = $('#score'+i);
-
-            if (!VerifierChamp(score,true,true,true)){
+            
+            
+            if (!VerifierChamp(score,true,true,true) && id_certif.val()!=1){
                 Afficher_erreur("[Langue] Le score de la langue est incorrect");
                 return;
             }  
+            
+            for(k=0;k<liste_certif.length;k++){
+                
+                if (liste_certif[k]['id'] == id_certif.val()){
+                    if (parseInt(score.val())>parseInt(liste_certif[k]['score_max'])){
+                        score.parent().parent().removeClass('success');
+                        score.parent().parent().addClass('error');
+                        Afficher_erreur("[Langue] Le score de la langue est incorrect <= "+liste_certif[k]['score_max']);
+                        return;
+                    }
+                }
+            }
+
           
-            liste_langue[j] = new Array;
-            liste_langue[j]['id_langue'] = id_langue.val();
-            liste_langue[j]['id_niveau'] = id_niveau.val();
-            liste_langue[j]['id_certif'] = id_certif.val();
-            liste_langue[j]['score'] = score.val();
+            liste_langue_etudiant[j] = new Array(id_langue.val(),id_niveau.val(),id_certif.val(),score.val());
             j++;
         }
     }
+
+
+    //On transforme les array en json pour les passer au php
+    liste_experience_json = JSON.stringify(liste_experience_etudiant);
+    liste_diplome_json = JSON.stringify(liste_diplome_etudiant);
+    liste_formation_json = JSON.stringify(liste_formation_etudiant);
+    liste_langue_json = JSON.stringify(liste_langue_etudiant);
     
-    liste_experience_json = liste_experience.serializeJSON();
-    liste_diplome_json = liste_diplome.serializeJSON();
-    liste_formation_json = liste_formation.serializeJSON();
-    liste_langue_json = liste_langue.serializeJSON();
     
-    alert(liste_langue_json);
+    //On récupere les champs qui reste et qui n'ont pas à etre verifiés
+    adresse2_etudiant = $("#adresse2_etudiant");
+    statut_marital_etudiant = $("#sel_statut_marital");
+    permis_etudiant = $("#sel_permis");
+    sexe_etudiant = $("#sel_sexe");
+    loisir_etudiant = $("#loisir_etudiant");
+    mobilite_etudiant = $("#sel_mobilite");
+    anniv_etudiant = $("#anniv_etudiant");
+    titre_cv = $("#titre_cv");
+    
+    
+    
+    $.post("/cvtheque/ajax/cv.cible.php?action=edit_cv", {
+        id_etudiant : id_etudiant,
+        nom_etudiant : nom_etudiant.val(),
+        prenom_etudiant : prenom_etudiant.val(),
+        telephone_etudiant : telephone_etudiant.val(),
+        adresse1_etudiant : adresse1_etudiant.val(),
+        ville_etudiant : ville_etudiant.val(),
+        cp_etudiant : cp_etudiant.val(),
+        pays_etudiant : pays_etudiant.val(),
+        anniv_etudiant : anniv_etudiant.val(),
+        nationalite_etudiant : nationalite_etudiant.val(),
+        ville_naissance_etudiant : ville_naissance_etudiant.val(),
+        cp_naissance_etudiant : cp_naissance_etudiant.val(),
+        pays_naissance_etudiant : pays_naissance_etudiant.val(),
+        mail_etudiant : mail_etudiant.val(),
+        adresse2_etudiant : adresse2_etudiant.val(),
+        statut_marital_etudiant : statut_marital_etudiant.val(),
+        permis_etudiant : permis_etudiant.val(),
+        sexe_etudiant : sexe_etudiant.val(),
+        loisir_etudiant : loisir_etudiant.val(),
+        mobilite_etudiant : mobilite_etudiant.val(),
+        titre_cv : titre_cv.val(),
+        liste_experience : liste_experience_json,
+        liste_diplome : liste_diplome_json,
+        liste_formation : liste_formation_json,
+        liste_langue : liste_langue_json
+        
+    },function success(retour){
+        retour = $.trim(retour)
+        if (retour == "1"){
+            div_info = $("#div_info");
+            $("#text_info").text("La sauvegarde c'est bien passé");
+            div_info.addClass("alert-success");
+            div_info.removeClass("alert-error");            
+        }else{
+            Afficher_erreur(retour);
+        }
+    });
 }
 
 //Fonction qui verifie un champs et le met en erreur si il le faut
@@ -500,12 +570,10 @@ function VerifierChamp(_element,_est_un_nombre,_positif,_positif_strict){
 
 //Fonction permettant d'afficher des details sur l'erreur
 function Afficher_erreur(erreur){
-    div_erreur = $("#div_erreur");
-    div_erreur.text(erreur);
-    
-    if (!div_erreur.is(':visible')) {
-        div_erreur.show('blind');
-    }
+    div_info = $("#div_info");
+    $("#text_info").text(erreur);
+    div_info.removeClass("alert-success");
+    div_info.addClass("alert-error");
     return;
 }
 

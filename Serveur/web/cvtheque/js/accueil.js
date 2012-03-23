@@ -1,15 +1,47 @@
-$(document).ready(function() {
-    $( "#accordion" )
-    .accordion({
-        header: "> div > h3"
-    })
-    .sortable({
-        axis: "y",
-        handle: "h3",
-        stop: function( event, ui ) {
-            // IE doesn't register the blur when sorting
-            // so trigger focusout handlers to remove .ui-state-focus
-            ui.item.children( "h3" ).triggerHandler( "focusout" );
+
+//Fonction qui change l'état de diffusion du CV
+function Diffusion(_etat){
+    $.post("/cvtheque/ajax/cv.cible.php?action=diffusion_cv", {
+        etat : _etat
+    },function success(retour){
+        retour = $.trim(retour)
+        if (retour != 1){
+            Afficher_erreur(retour);
+        }else{
+            location.reload(); 
         }
     });
-});
+}
+
+
+function Supprimer_CV(){
+    $.post("/cvtheque/ajax/cv.cible.php?action=supprimer_cv", {
+
+    },function success(retour){
+        retour = $.trim(retour)
+        if (retour != 1){
+            Afficher_erreur(retour);
+        }else{
+            $('#mod_supression').modal('hide');
+            location.reload(); 
+        }
+    });
+}
+
+
+
+
+
+
+
+
+
+//Fonction permettant d'afficher les erreurs
+function Afficher_erreur(erreur){
+    div_erreur = $("#div_erreur");
+    div_erreur.text(erreur);
+    if (!div_erreur.is(':visible')) {
+        div_erreur.show('blind');
+    }
+    return;
+}

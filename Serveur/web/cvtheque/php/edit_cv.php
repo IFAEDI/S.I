@@ -9,12 +9,34 @@ inclure_fichier('controleur', 'etudiant.class', 'php');
 
 //Récuperation complete du CV de l'étudiant
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID(1);
+$etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
+
+
+if ($etudiant == NULL) {
+    $etudiant = new Etudiant();
+}
+
 $cv = $etudiant->getCV();
 $liste_diplome_etudiant = $etudiant->getDiplome();
 $liste_langue_etudiant = $etudiant->getLangue();
 $liste_formation_etudiant = $etudiant->getFormation();
 $liste_XP = $etudiant->getXP();
+
+if ($cv == NULL) {
+    $cv = new CV();
+}
+if ($liste_diplome_etudiant == NULL) {
+    $liste_diplome_etudiant = new CV_Diplome();
+}
+if ($liste_langue_etudiant == NULL) {
+    $liste_langue_etudiant = new CV_Langue();
+}
+if ($liste_formation_etudiant == NULL) {
+    $liste_formation_etudiant = new CV_Formation();
+}
+if ($liste_XP == NULL) {
+    $liste_XP = new CV_XP();
+}
 
 
 //Récupération des données pour les differente boite de sélection
@@ -29,10 +51,27 @@ $liste_mention = CV_Diplome::GetListeMention();
 //Passage des données pour les boites de sélection au js
 echo '<script> var liste_langue=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_langue)) . '\');</script>';
 echo '<script> var liste_niveau=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_niveau)) . '\');</script>';
-echo '<script> var liste_certif=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_certif)) . '\');</script>';
+
+//Mise en forme de la liste des certifications pour conserver les score max possible
+$temp = Array();
+for ($i = 0; $i < count($liste_certif); $i++) {
+    $temp[$i] = Array();
+    $temp[$i]['id'] = $liste_certif[$i]['ID_CERTIF'];
+    $temp[$i]['label'] = $liste_certif[$i]['LIBELLE_CERTIF'];
+    $temp[$i]['score_max'] = $liste_certif[$i]['MAX_SCORE_CERTIF'];
+}
+$liste_certif = $temp;
+
+echo '<script> var liste_certif=$.parseJSON(\'' . json_encode($liste_certif) . '\');</script>';
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
+echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</script>';
 ?> 
-<div class="alert alert-error" id="div_erreur" style="display: none;"></div>
+<div class="alert " id="div_info">
+    <table style="width: 100%;"><tr><td id="text_info"></td><td style="text-align: right;">
+    <a href="javascript:Sauvegarder();" class="btn">Sauvegarder</a>
+    </td></tr></table>
+</div>
+
 <div id="accordion"  class="form-horizontal" style="min-height: 500px;">
     <div class="group">
         <h3><a href="#">Informations personnelles</a></h3>
@@ -40,7 +79,7 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
             <legend>Informations personnelles décrivant votre état civil</legend>
 
             <div class="control-group">
-                <label class="control-label">Nom et prenom</label>
+                <label class="control-label">Nom et prenom*</label>
                 <div class="controls">
                     <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $etudiant->getNom(); ?>">
                     <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $etudiant->getPrenom(); ?>">
@@ -106,7 +145,7 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
             </div>
 
             <div class="control-group">
-                <label class="control-label">Adresse</label>
+                <label class="control-label">Adresse*</label>
                 <div class="controls">
                     <input type="text" id="adresse1_etudiant" class="span3" placeholder="Adresse 1" value="<?php echo $etudiant->getAdresse1(); ?>">
                     <input type="text" id="adresse2_etudiant" class="span3" placeholder="Adresse 2" value="<?php echo $etudiant->getAdresse2(); ?>">
@@ -114,10 +153,10 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
             </div>
 
             <div class="control-group">
-                <label class="control-label">Ville</label>
+                <label class="control-label">Ville*</label>
                 <div class="controls">
                     <input type="text" id="ville_etudiant" class="span3" placeholder="Ville" value="<?php echo $etudiant->getNomVille(); ?>">
-                    <input type="text" id="cp_etudiant" class="span3" placeholder="Code Postal" value="<?php echo $etudiant->getCPVille(); ?>" style="width : 50px;">
+                    <input type="text" id="cp_etudiant" class="span3" placeholder="CP" value="<?php echo $etudiant->getCPVille(); ?>" style="width : 50px;">
                     <input type="text" id="pays_etudiant" class="span3" placeholder="Pays" value="<?php echo $etudiant->getPaysVille(); ?>">
                 </div>
             </div>
@@ -130,16 +169,23 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
             </div>
 
             <div class="control-group">
-                <label class="control-label">Ville de naissance</label>
+                <label class="control-label">Date de naissance*</label>
+                <div class="controls">
+                    <input type="text" id="anniv_etudiant" class="span3" placeholder="Date de naissance" value="<?php echo $etudiant->getAnniv(); ?>">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <label class="control-label">Ville de naissance*</label>
                 <div class="controls">
                     <input type="text" id="ville_naissance_etudiant" class="span3" placeholder="Ville de naissance" value="<?php echo $etudiant->getNomVilleNaissance(); ?>">
-                    <input type="text" id="cp_naissance_etudiant" class="span3" placeholder="Code Postal de naissance" value="<?php echo $etudiant->getCPVilleNaissance(); ?>" style="width : 50px;">
+                    <input type="text" id="cp_naissance_etudiant" class="span3" placeholder="CP" value="<?php echo $etudiant->getCPVilleNaissance(); ?>" style="width : 50px;">
                     <input type="text" id="pays_naissance_etudiant" class="span3" placeholder="Pays de naissance" value="<?php echo $etudiant->getPaysVilleNaissance(); ?>">
                 </div>
             </div>
 
             <div class="control-group">
-                <label class="control-label" for="email">Mail</label>
+                <label class="control-label" for="email">Mail*</label>
                 <div class="controls">
                     <div class="input-prepend">
                         <span class="add-on">@</span><input type="text" id="mail_etudiant" class="span3" placeholder="Adresse Mail" value="<?php echo $etudiant->getMail(); ?>">
@@ -180,16 +226,23 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
         <h3><a href="#">Autres</a></h3>
         <div id="div_Autres">
             <div class="control-group">
+                <label class="control-label">Titre du CV</label>
+                <div class="controls">
+                    <input type="text" id="titre_cv" class="span3" placeholder="Titre du CV" value="<?php echo $cv->getTitre() ?>">
+                </div>
+            </div>
+
+            <div class="control-group">
                 <label class="control-label">Loisir(s)</label>
                 <div class="controls">
-                    <input type="text" id="nationalite_etudiant" class="span3" placeholder="Loisir(s)" value="<?php echo $cv->getLoisir() ?>">
+                    <input type="text" id="loisir_etudiant" class="span3" placeholder="Loisir(s)" value="<?php echo $cv->getLoisir() ?>">
                 </div>
             </div>
 
             <div class="control-group">
                 <label class="control-label">Mobilité</label>
                 <div class="controls">
-                    <select id="sel_statut_marital" >
+                    <select id="sel_mobilite" >
                         <?php
                         foreach ($liste_mobilite as $mobilite) {
                             if ($mobilite['ID_MOBILITE'] == $cv->getIDMobilite()) {
@@ -207,15 +260,7 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
     </div>
 </div>
 
-<div class="control-group">
-    <div class="controls ">
-        <label class="checkbox">
-            <input type="checkbox" id="agreement" value="1">
-            Accepter que mon CV soit diffusé
-            <a href="javascript:Sauvegarder();" class="btn">Sauvegarder</a>
-        </label>
-    </div>
-</div>
+
 
 <?php
 inclure_fichier('cvtheque', 'edit_cv', 'js');

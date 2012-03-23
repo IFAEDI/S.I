@@ -116,7 +116,6 @@ class BD {
                 }
             }
         } catch (Exception $e) {
-
             error_log('Erreur : ' . $e->getMessage() . '\n');
             error_log('Numero : ' . $e->getCode());
         }

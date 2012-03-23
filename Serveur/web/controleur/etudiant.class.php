@@ -45,6 +45,136 @@ class Etudiant {
         return NULL;
     }
 
+    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_ville_naissance, $_cp_naissance, $_pays_naissance, $_nationalite, $_id_marital, $_id_permis) {
+
+        if (is_numeric($_id)) {
+            $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
+            $id_ville_naissance = self::GetVilleOrAdd($_ville_naissance, $_cp_naissance, $_pays_naissance);
+
+            $id_cv = BD::Prepare('SELECT ID_ETUDIANT FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
+
+            if ($id_cv['ID_ETUDIANT'] > 0) {
+                $info_etudiant = array(
+                    'id' => $_id,
+                    'nom' => $_nom,
+                    'prenom' => $_prenom,
+                    'sexe' => $_sexe,
+                    'adresse1' => $_adresse1,
+                    'adresse2' => $_adresse2,
+                    'id_ville' => $id_ville,
+                    'telephone' => $_telephone,
+                    'mail' => $_mail,
+                    'anniv' => $_anniv,
+                    'id_ville_naissance' => $id_ville_naissance,
+                    'nationalite' => $_nationalite,
+                    'id_marital' => $_id_marital,
+                    'id_permis' => $_id_permis,
+                );
+                //Si l'etudiant à déjà un CV
+                BD::Prepare('UPDATE ETUDIANT SET 
+                    NOM_ETUDIANT = :nom,
+                    PRENOM_ETUDIANT = :prenom,
+                    SEXE_ETUDIANT = :sexe,
+                    ADRESSE1_ETUDIANT = :adresse1,
+                    ADRESSE2_ETUDIANT = :adresse2,
+                    ID_VILLE = :id_ville,
+                    TEL_ETUDIANT = :telephone,
+                    MAIL_ETUDIANT = :mail,
+                    ANNIV_ETUDIANT = :anniv,
+                    ID_VILLE_NAISSANCE = :id_ville_naissance,
+                    NATIONALITE_ETUDIANT = :nationalite,
+                    ID_MARITAL = :id_marital,
+                    ID_PERMIS = :id_permis
+                    WHERE ID_ETUDIANT = :id', $info_etudiant);
+            } else {
+                $info_etudiant = array(
+                    'id' => $_id,
+                    'nom' => $_nom,
+                    'prenom' => $_prenom,
+                    'sexe' => $_sexe,
+                    'adresse1' => $_adresse1,
+                    'adresse2' => $_adresse2,
+                    'id_ville' => $id_ville,
+                    'telephone' => $_telephone,
+                    'mail' => $_mail,
+                    'anniv' => $_anniv,
+                    'id_ville_naissance' => $id_ville_naissance,
+                    'nationalite' => $_nationalite,
+                    'id_marital' => $_id_marital,
+                    'id_permis' => $_id_permis,
+                    'id_cv' => $_id_cv,
+                );
+
+                BD::Prepare('INSERT INTO ETUDIANT SET
+                    ID_ETUDIANT = :id,                    
+                    NOM_ETUDIANT = :nom,
+                    PRENOM_ETUDIANT = :prenom,
+                    SEXE_ETUDIANT = :sexe,
+                    ADRESSE1_ETUDIANT = :adresse1,
+                    ADRESSE2_ETUDIANT = :adresse2,
+                    ID_VILLE = :id_ville,
+                    TEL_ETUDIANT = :telephone,
+                    MAIL_ETUDIANT = :mail,
+                    ANNIV_ETUDIANT = :anniv,
+                    ID_VILLE_NAISSANCE = :id_ville_naissance,
+                    NATIONALITE_ETUDIANT = :nationalite,
+                    ID_MARITAL = :id_marital,
+                    ID_PERMIS = :id_permis,
+                    ID_CV = :id_cv'
+                        , $info_etudiant);
+            }
+        }
+        return NULL;
+    }
+
+    //Recupération de la liste des permis possible
+    public static function SupprimerCV($_id_etudiant, $_id_cv) {
+        if (is_numeric($_id_etudiant) && is_numeric($_id_cv)) {
+            CV_Langue::SupprimerLangueByIdCV($_id_cv);
+            CV_Formation::SupprimerFormationByIdCV($_id_cv);
+            CV_Diplome::SupprimerDiplomeByIdCV($_id_cv);
+            CV_XP::SupprimerXPByIdCV($_id_cv);
+            CV::SupprimerCVByID($_id_cv);
+            BD::Prepare('DELETE FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id_etudiant));
+            return;
+        } else {
+            echo "Erreur 20 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+
+    //****************  Fonctions  ******************//
+    //Renvoi l'id de la ville correspondante ou si elle n'existe pas l'ajoute
+    public function GetVilleOrAdd($_nom, $_code_postal, $_pays) {
+        $_nom = strtoupper($_nom);
+
+        if ($_code_postal == '' && $_pays == '') {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom', array('nom' => $_nom));
+        } elseif ($_code_postal == '') {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom AND PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays));
+        } elseif ($_pays == '') {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom AND CP_VILLE = :code_postal', array('nom' => $_nom, 'code_postal' => $_code_postal));
+        } else {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom AND CP_VILLE = :code_postal AND PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays, 'code_postal' => $_code_postal));
+        }
+
+        if ($ville['ID_VILLE'] > 0) {
+            return $ville['ID_VILLE'];
+        } else {
+
+
+
+            BD::Prepare('INSERT INTO VILLE SET LIBELLE_VILLE = :nom, CP_VILLE = :code_postal, PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays, 'code_postal' => $_code_postal));
+            $id_ville = BD::GetConnection()->lastInsertId();
+            if ($id_ville > 0) {
+                return $id_ville;
+            } else {
+                echo "Erreur 3 veuillez contacter l'administrateur du site";
+                return;
+            }
+        }
+    }
+
     //Recupération de la liste des permis possible
     public static function GetListePermis() {
         return BD::Prepare('SELECT * FROM PERMIS', array(), BD::RECUPERER_TOUT);
@@ -55,7 +185,6 @@ class Etudiant {
         return BD::Prepare('SELECT * FROM STATUT_MARITAL', array(), BD::RECUPERER_TOUT);
     }
 
-    //****************  Fonctions  ******************//
     //****************  Getters & Setters  ******************//
     public function getId() {
         return $this->ID_ETUDIANT;

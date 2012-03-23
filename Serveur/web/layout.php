@@ -29,6 +29,7 @@ global $theme;
         inclure_fichier('commun', 'jquery-ui.min', 'js');
         inclure_fichier('commun', 'bootstrap.min', 'js');
         inclure_fichier('commun', 'datepicker.fr', 'js');
+        inclure_fichier('commun', 'json2', 'js');
         inclure_fichier('commun', 'utils', 'js');
         ?>
         <title>AEDI - <?php echo $titre_page ?></title>

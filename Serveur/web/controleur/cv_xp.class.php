@@ -26,6 +26,44 @@ class CV_XP {
         }
         return NULL;
     }
+    
+     public static function AjouterXP($_debut_xp,$_fin_xp,$_titre_xp,$_desc_xp,$_entreprise,$_ville,$_cp,$_pays,$_id_cv) { 
+        if ($_id_cv > 0 && is_numeric($_id_cv)) {
+            $id_ville = Etudiant::GetVilleOrAdd($_ville, $_cp, $_pays);
+            
+            $info_XP = array(
+                'id_cv' => $_id_cv,
+                'debut_xp' => $_debut_xp,
+                'fin_xp' => $_fin_xp,
+                'titre_xp' => $_titre_xp,
+                'desc_xp' => $_desc_xp,
+                'entreprise' => $_entreprise,
+                'id_ville' => $id_ville,
+            );
+
+            BD::Prepare('INSERT INTO CV_XP SET 
+                    DEBUT_XP = :debut_xp,
+                    FIN_XP = :fin_xp,
+                    TITRE_XP = :titre_xp,
+                    DESC_XP = :desc_xp, 
+                    ENTREPRISE = :entreprise,
+                    ID_VILLE = :id_ville,
+                    ID_CV = :id_cv', $info_XP);
+        } else {
+            echo "Erreur 10 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+    
+    public static function SupprimerXPByIdCV($_id_cv) {
+        if ($_id_cv > 0 && is_numeric($_id_cv)) {
+            BD::Prepare('DELETE FROM CV_XP WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+        } else {
+            echo "Erreur 11 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+    
 
     //****************  Fonctions  ******************//
     //****************  Getters & Setters  ******************//
