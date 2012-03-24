@@ -1,0 +1,12 @@
+.liste_entreprises {
+	height: 500px;
+	overflow: scroll;
+}
+
+.desc_entreprise table .first{
+	width: 20px;
+}
+
+.entreprise:hover{
+	cursor: pointer;
+}
