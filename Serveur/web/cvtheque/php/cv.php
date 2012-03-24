@@ -171,8 +171,9 @@ if ($liste_XP == NULL) {
                                 echo '</div>';
                             }
                             ?>
+                            <br/><br/><br/><br/><br/>
                         </div><!--// .yui-gf -->
-
+                        
                         <div class="yui-gf last">
                             <div class="yui-u first">
                                 <h2>Loisir(s)</h2>
