@@ -23,6 +23,7 @@ class Etudiant {
     private $ANNIV_ETUDIANT;
     private $NATIONALITE_ETUDIANT;
     private $ID_MARITAL;
+    private $LIBELLE_MARITAL;
     private $ID_PERMIS;
     private $LIBELLE_PERMIS;
     private $PHOTO_ETUDIANT;
@@ -37,7 +38,11 @@ class Etudiant {
     //recuperation de l'objet Etudiant par l'ID de l'étudiant
     public static function GetEtudiantByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS WHERE id_etudiant = :id AND PERMIS.ID_PERMIS = ETUDIANT.ID_PERMIS', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS, STATUT_MARITAL 
+                WHERE id_etudiant = :id 
+                AND PERMIS.ID_PERMIS = ETUDIANT.ID_PERMIS 
+                AND STATUT_MARITAL.ID_MARITAL=ETUDIANT.ID_MARITAL'
+                            , array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -224,8 +229,6 @@ class Etudiant {
         return $this->pays_ville['PAYS_VILLE'];
     }
 
-  
-
     public function getTel() {
         return $this->TEL_ETUDIANT;
     }
@@ -245,6 +248,10 @@ class Etudiant {
     public function getIdMarital() {
         return $this->ID_MARITAL;
     }
+    
+    public function getNomMarital() {
+        return $this->LIBELLE_MARITAL;
+    }
 
     public function getIdPermis() {
         return $this->ID_PERMIS;
@@ -253,9 +260,7 @@ class Etudiant {
     public function getNomPermis() {
         return $this->LIBELLE_PERMIS;
     }
-    
-    
-    
+
     public function getPhotos() {
         return $this->PHOTO_ETUDIANT;
     }

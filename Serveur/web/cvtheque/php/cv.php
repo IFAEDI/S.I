@@ -59,15 +59,15 @@ if ($liste_XP == NULL) {
 
                     <div class="yui-u">
                         <div class="contact-info">
-                            <h3 style="line-height: 24px;"><a href="mailto:<?php echo $etudiant->getMail(); ?>"><?php echo $etudiant->getMail(); ?></a></h3>
-                            <h3 style="line-height: 24px;"><?php echo $etudiant->getTel(); ?></h3>
+                            <h3 style="line-height: 23px;"><a href="mailto:<?php echo $etudiant->getMail(); ?>"><?php echo $etudiant->getMail(); ?></a></h3>
+                            <h3 style="line-height: 23px;"><?php echo $etudiant->getTel(); ?></h3>
                             <h3 style="line-height: 16px;"><?php echo $etudiant->getAdresse1(); ?></h3>
                             <?php
                             if ($etudiant->getAdresse2() != '') {
                                 echo '<h3 style="line-height: 16px;">' . $etudiant->getAdresse2() . '</h3>';
                             }
                             ?>
-                            <h3 style="line-height: 24px;"><?php echo $etudiant->getCPVille() . ' ' . $etudiant->getNomVille() . ' ' . $etudiant->getPaysVille(); ?></h3>
+                            <h3 style="line-height: 23px;"><?php echo $etudiant->getCPVille() . ' ' . $etudiant->getNomVille() . ' ' . $etudiant->getPaysVille(); ?></h3>
                             <?php
                             if ($etudiant->getSexe() == 0) {
                                 $ne = "Né le ";
@@ -75,16 +75,16 @@ if ($liste_XP == NULL) {
                                 $ne = "Née le ";
                             }
                             ?>
-                            <h3 style="line-height: 24px;"><?php echo $ne.$etudiant->getAnniv(); ?></h3>
+                            <h3 style="line-height: 23px;"><?php echo $ne.$etudiant->getAnniv(); ?></h3>
                             <?php
                             if ($cv->getIDMobilite() > 2) {
-                                echo '<h3 style="line-height: 24px;">Mobilité ' . $cv->getNomMobilite() . '</h3>';
+                                echo '<h3 style="line-height: 23px;">Mobilité ' . $cv->getNomMobilite() . '</h3>';
                             }
                             if ($etudiant->getIdPermis() < 3) {
-                                echo '<h3 style="line-height: 24px;">' . $etudiant->getNomPermis() . '</h3>';
+                                echo '<h3 style="line-height: 23px;">' . $etudiant->getNomPermis() . '</h3>';
                             }
                             ?>
-
+                            <h3 style="line-height: 23px;"><?php echo $etudiant->getNomMarital(); ?></h3>
                         </div><!--// .contact-info -->
                     </div>
                 </div><!--// .yui-gc -->

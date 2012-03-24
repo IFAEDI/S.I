@@ -582,7 +582,7 @@ function Sauvegarder(){
         retour = $.trim(retour)
         if (retour == "1"){
             div_info = $("#div_info");
-            $("#text_info").text("La sauvegarde c'est bien passé");
+            $("#text_info").text("La sauvegarde c'est bien passée");
             div_info.addClass("alert-success");
             div_info.removeClass("alert-error");            
         }else{
