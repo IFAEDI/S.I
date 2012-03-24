@@ -18,12 +18,13 @@ class CV {
     private $AGREEMENT;
     private $ANNEE;
     private $MOTS_CLEF;
+    private $LIBELLE_MOBILITE;
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet CV par l'ID du CV
     public static function GetCVByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM CV WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM CV, MOBILITE WHERE ID_CV = :id AND MOBILITE.ID_MOBILITE = CV.ID_MOBILITE', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -108,6 +109,10 @@ class CV {
 
     public function getIDMobilite() {
         return $this->ID_MOBILITE;
+    }
+    
+    public function getNomMobilite() {
+        return $this->LIBELLE_MOBILITE;
     }
 
     public function getLoisir() {
