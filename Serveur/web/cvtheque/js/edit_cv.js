@@ -123,6 +123,17 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
         _institut = $("#institut_nouveau_diplome").val();
         _ville = $("#ville_nouveau_diplome").val();
     }
+    
+    if (_annee == '' || _libelle == '' || _institut=='' || _ville == '' || isNaN(_annee)){
+        Afficher_erreur("[Diplome(s)] Les champs suivants sont obligatoire : Nom du diplome, Annee (nombre), Institut et Ville");
+        return;
+    }
+    
+    $("#annee_nouveau_diplome").val('');
+    $("#sel_mention_nouveau_diplome").val('1');
+    $("#libelle_diplome").val('');
+    $("#institut_nouveau_diplome").val('');
+    $("#ville_nouveau_diplome").val('');
 
     /* (str) */var diplome = "";
     diplome += '<div class="control-group" id="diplome'+nb_diplome+'">';
@@ -166,6 +177,17 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
         _ville = $("#ville_nouvelle_formation").val();
         _annee = $("#annee_nouvelle_formation").val();
     }
+    
+    if (_debut == '' || _fin == '' || _institut=='' || _ville == '' ){
+        Afficher_erreur("[Formation(s)] Les champs suivants sont obligatoire : Debut, Fin, Institut et Ville");
+        return;
+    }
+    
+    $("#debut_nouvelle_formation").val('');
+    $("#fin_nouvelle_formation").val('');
+    $("#institut_nouvelle_formation").val('');
+    $("#ville_nouvelle_formation").val('');
+    $("#annee_nouvelle_formation").val('');
 
     /* (str) */var formation = "";
     formation += '<div class="control-group" id="formation'+nb_formation+'">';
@@ -214,6 +236,11 @@ function Ajouter_Langue(_id_langue_etudiant,_id_niveau,_id_certif,_score_certif)
         _id_certif = $("#sel_nouvelle_certif").val();
         _score_certif = $("#score_nouvelle").val();
     }
+    
+    $("#sel_nouvelle_langue").val('1');
+    $("#sel_nouvelle_niveau").val('1');
+    $("#sel_nouvelle_certif").val('1');
+    $("#score_nouvelle").val('');
 
     /* (str) */var langue = "";
     langue += '<div class="control-group" id="langue'+nb_langue+'">';
@@ -276,6 +303,21 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
         _entreprise = $("#entreprise_nouvelle_xp").val();
         _ville = $("#ville_nouvelle_xp").val();
     }
+    
+    if (_debut == '' || _fin == '' || _titre=='' || _entreprise == '' || _ville == '' ){
+        Afficher_erreur("[Expériences professionnelles] Les champs suivants sont obligatoire : Debut, Fin, Titre, Entreprise et Ville");
+        return;
+    }
+    
+    $("#debut_nouvelle_xp").val('');
+    $("#fin_nouvelle_xp").val('');
+    $("#titre_nouvelle_xp").val('');
+    $("#desc_nouvelle_xp").val('');
+    $("#entreprise_nouvelle_xp").val('');
+    $("#ville_nouvelle_xp").val('');
+    
+    _desc = _desc.replace(/<br\/>/g,"\n");
+    _desc = _desc.replace(/<br>/g,"\n");
 
     /* (str) */var xp = "";
     xp += '<div id="xp'+nb_xp+'" class="control-group">';

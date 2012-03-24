@@ -22,7 +22,10 @@ class CV_Diplome {
     //recuperation de l'objet CV par l'ID du CV
     public static function GetDiplomeByIdCV($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM CV_DIPLOME, MENTION WHERE ID_CV = :id AND MENTION.ID_MENTION = CV_DIPLOME.ID_MENTION', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM CV_DIPLOME, MENTION 
+                WHERE ID_CV = :id 
+                AND MENTION.ID_MENTION = CV_DIPLOME.ID_MENTION 
+                ORDER BY ANNEE_DIPLOME DESC', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -31,11 +34,11 @@ class CV_Diplome {
     public static function GetListeMention() {
         return BD::Prepare('SELECT * FROM MENTION', array(), BD::RECUPERER_TOUT);
     }
-    
-      public static function AjouterDiplome($_annee_diplome,$_id_mention,$_libelle_diplome,$_institut,$_ville,$_cp,$_pays,$_id_cv) { 
+
+    public static function AjouterDiplome($_annee_diplome, $_id_mention, $_libelle_diplome, $_institut, $_ville, $_cp, $_pays, $_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             $id_ville = Etudiant::GetVilleOrAdd($_ville, $_cp, $_pays);
-            
+
             $info_diplome = array(
                 'id_cv' => $_id_cv,
                 'annee_diplome' => $_annee_diplome,
@@ -57,7 +60,7 @@ class CV_Diplome {
             return;
         }
     }
-    
+
     public static function SupprimerDiplomeByIdCV($_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             BD::Prepare('DELETE FROM CV_DIPLOME WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
@@ -84,7 +87,7 @@ class CV_Diplome {
     public function getIdMention() {
         return $this->ID_MENTION;
     }
-    
+
     public function getNomMention() {
         return $this->LIBELLE_MENTION;
     }

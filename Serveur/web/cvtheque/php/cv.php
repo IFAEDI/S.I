@@ -114,7 +114,7 @@ if ($liste_XP == NULL) {
                                     echo '<h3 style="font-style:italic;line-height: 38px;">' . $XP->getEntreprise() . ' (' . $XP->getNomVille() . ')</h2>';
                                     echo '<h2 style="font-size : 110%; width : 505px; line-height: 18px;"><strong>' . $XP->getTitre() . '</strong></h2>';
                                     echo '<h4>' . $XP->getDebut() . '-' . $XP->getFin() . '</h4>';
-                                    echo '<p style="font-family: Georgia;">' . $XP->getDescription() . '</p>';
+                                    echo '<p style="font-family: Georgia;">' . nl2br($XP->getDescription()) . '</p>';
                                     echo '</div>';
                                 }
                                 ?>                            

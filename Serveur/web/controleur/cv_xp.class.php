@@ -22,15 +22,32 @@ class CV_XP {
     //recuperation de l'objet CV par l'ID du CV
     public static function GetCVXPByIdCV($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM CV_XP WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+            $liste_xp = BD::Prepare('SELECT * FROM CV_XP WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+            $i = null;
+            $j = null;
+            $temp = null;
+            $n = count($liste_xp);
+
+            for ($i = 0; $i < ($n - 1); $i++) {
+                for ($j = ($i + 1); $j < $n; $j++) {
+                    if (CV_XP::Comparaison_Date($liste_xp[$j]->getDebut(), $liste_xp[$i]->getDebut())) {
+                        //echo "tableau " . $j . " < tableau " . $i . "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;" . $ptab[$j] . " < " . $ptab[$i] . "<br />";
+                        $temp = $liste_xp[$i];
+                        $liste_xp[$i] = $liste_xp[$j];
+                        $liste_xp[$j] = $temp;
+                    }
+                }
+            }
+
+            return $liste_xp;
         }
         return NULL;
     }
-    
-     public static function AjouterXP($_debut_xp,$_fin_xp,$_titre_xp,$_desc_xp,$_entreprise,$_ville,$_cp,$_pays,$_id_cv) { 
+
+    public static function AjouterXP($_debut_xp, $_fin_xp, $_titre_xp, $_desc_xp, $_entreprise, $_ville, $_cp, $_pays, $_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             $id_ville = Etudiant::GetVilleOrAdd($_ville, $_cp, $_pays);
-            
+
             $info_XP = array(
                 'id_cv' => $_id_cv,
                 'debut_xp' => $_debut_xp,
@@ -54,7 +71,7 @@ class CV_XP {
             return;
         }
     }
-    
+
     public static function SupprimerXPByIdCV($_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             BD::Prepare('DELETE FROM CV_XP WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
@@ -63,9 +80,23 @@ class CV_XP {
             return;
         }
     }
-    
 
     //****************  Fonctions  ******************//
+    public static function Comparaison_Date($_date1, $_date2) {
+        $date1 = explode("/", $_date1);
+        $date2 = explode("/", $_date2);
+
+        $taille_date1 = count($date1);
+        $taille_date2 = count($date2);
+
+        for ($i = 1; $i < max($taille_date1, $taille_date2); $i++) {
+            if($date1[$taille_date1-$i]>$date2[$taille_date2-$i]){
+                return true;
+            }
+        }
+        return false;
+    }
+
     //****************  Getters & Setters  ******************//
     public function getId() {
         return $this->ID_CVXP;

@@ -67,7 +67,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
         die;
     }
 
-  
+
     $Syntaxe = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#';
     if (preg_match($Syntaxe, $mail_etudiant) == false) {
         echo "Erreur : Le format de l'adresse mail n'est pas valide";
@@ -141,7 +141,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     }
 
     //On met a jour/Ajoute le CV
-    $id_cv = CV::UpdateCV($etudiant->getIdCV(), $titre_cv, $mobilite_etudiant, $loisir_etudiant, $mots_clef,$annee);
+    $id_cv = CV::UpdateCV($etudiant->getIdCV(), $titre_cv, $mobilite_etudiant, $loisir_etudiant, $mots_clef, $annee);
 
     //On met à jour/Ajoute les informations etudiante
     Etudiant::UpdateEtudiant($_SESSION['utilisateur']->getId(), $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
@@ -191,16 +191,16 @@ if (isset($_GET['action']) && $_GET['action'] == 'diffusion_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    
+
     $etat = $_POST['etat'];
 
     $etudiant = new Etudiant();
     $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
     if ($etudiant == NULL) {
-       echo "Erreur 18 veuillez contacter l'administrateur";
-       die;
+        echo "Erreur 18 veuillez contacter l'administrateur";
+        die;
     }
-    
+
     $cv = $etudiant->getCV();
     $cv->ChangeDiffusion($etat);
     echo "1";
@@ -216,10 +216,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_cv') {
     $etudiant = new Etudiant();
     $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
     if ($etudiant == NULL) {
-       echo "Erreur 19 veuillez contacter l'administrateur";
-       die;
+        echo "Erreur 19 veuillez contacter l'administrateur";
+        die;
     }
-    
+
     $id_cv = $etudiant->getIdCV();
     Etudiant::SupprimerCV($_SESSION['utilisateur']->getId(), $id_cv);
 
@@ -232,8 +232,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'autocomplete_ville') {
     if (!Utilisateur_connecter('etudiant')) {
         die;
     }
-    inclure_fichier('controleur', 'etudiant.class', 'php'); 
+    inclure_fichier('controleur', 'etudiant.class', 'php');
     echo json_encode(Etudiant::GetVilleByName($_POST['nom_ville']));
-
 }
 ?>

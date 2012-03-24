@@ -44,7 +44,7 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
                                         </td>
                                         <td style='text-align : right;'>
                                                 <a class='btn btn-danger' data-toggle='modal' href='#mod_supression' style='margin-right : 10px;'>Supprimer mon CV</a>
-                                                <a class='btn btn-primary' href=\"index.php?page=edit_cv\">Editer mon CV</a>
+                                                <a class='btn btn-primary' href="index.php?page=edit_cv">Editer mon CV</a>
                                         </td>
                                 </tr>   
                                 </table>

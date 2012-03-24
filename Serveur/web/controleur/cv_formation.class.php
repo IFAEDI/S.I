@@ -21,7 +21,7 @@ class CV_Formation {
     //recuperation de l'objet CV par l'ID du CV
     public static function GetFormationByIdCV($_id_cv) {
         if (is_numeric($_id_cv)) {
-            return BD::Prepare('SELECT * FROM CV_FORMATION WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM CV_FORMATION WHERE ID_CV = :id_cv ORDER BY DEBUT_FORMATION DESC', array('id_cv' => $_id_cv), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }

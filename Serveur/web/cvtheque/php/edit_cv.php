@@ -68,7 +68,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info"></td><td style="text-align: right;">
-                <a href="javascript:Sauvegarder();" class="btn">Sauvegarder</a>
+                <a href="javascript:Sauvegarder();" class="btn btn-primary">Sauvegarder</a>
             </td></tr></table>
 </div>
 
@@ -286,7 +286,7 @@ foreach ($liste_langue_etudiant as $langue_etudiant) {
 }
 
 foreach ($liste_XP as $XP) {
-    echo 'Ajouter_XP("' . $XP->getDebut() . '","' . $XP->getFin() . '","' . $XP->getTitre() . '","' . $XP->getDescription() . '","' . $XP->getEntreprise() . '","' . $XP->getNomVille() . '");';
+    echo 'Ajouter_XP("' . $XP->getDebut() . '","' . $XP->getFin() . '","' . $XP->getTitre() . '","' . preg_replace('`(\\r\\n|\\n|\\r)`', '<br/>',$XP->getDescription()) . '","' . $XP->getEntreprise() . '","' . $XP->getNomVille() . '");';
 }
 
 foreach ($liste_formation_etudiant as $formation_etudiant) {
