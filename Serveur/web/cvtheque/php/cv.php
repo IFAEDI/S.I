@@ -54,7 +54,7 @@ if ($liste_XP == NULL) {
                 <div class="yui-gc">
                     <div class="yui-u first">
                         <h1><?php echo $etudiant->getPrenom() . ' ' . $etudiant->getNom(); ?></h1>
-                        <h2><?php echo $cv->getTitre();?></h2>
+                        <h2><?php echo $cv->getTitre(); ?></h2>
                     </div>
 
                     <div class="yui-u">
@@ -62,22 +62,29 @@ if ($liste_XP == NULL) {
                             <h3 style="line-height: 24px;"><a href="mailto:<?php echo $etudiant->getMail(); ?>"><?php echo $etudiant->getMail(); ?></a></h3>
                             <h3 style="line-height: 24px;"><?php echo $etudiant->getTel(); ?></h3>
                             <h3 style="line-height: 16px;"><?php echo $etudiant->getAdresse1(); ?></h3>
-                            <?php 
-                                if ($etudiant->getAdresse2() != ''){
-                                    echo '<h3 style="line-height: 16px;">'.$etudiant->getAdresse2().'</h3>';
-                                }
+                            <?php
+                            if ($etudiant->getAdresse2() != '') {
+                                echo '<h3 style="line-height: 16px;">' . $etudiant->getAdresse2() . '</h3>';
+                            }
                             ?>
                             <h3 style="line-height: 24px;"><?php echo $etudiant->getCPVille() . ' ' . $etudiant->getNomVille() . ' ' . $etudiant->getPaysVille(); ?></h3>
-                            <h3 style="line-height: 24px;">Née le <?php echo $etudiant->getAnniv(); ?></h3>
-                            <?php 
-                                if ($cv->getIDMobilite()>2){
-                                    echo '<h3 style="line-height: 24px;">Mobilité '.$cv->getNomMobilite().'</h3>';
-                                }
-                                if($etudiant->getIdPermis()<3){
-                                     echo '<h3 style="line-height: 24px;">'.$etudiant->getNomPermis().'</h3>'; 
-                                }
+                            <?php
+                            if ($etudiant->getSexe() == 0) {
+                                $ne = "Né le ";
+                            } else {
+                                $ne = "Née le ";
+                            }
                             ?>
-                            
+                            <h3 style="line-height: 24px;"><?php echo $ne.$etudiant->getAnniv(); ?></h3>
+                            <?php
+                            if ($cv->getIDMobilite() > 2) {
+                                echo '<h3 style="line-height: 24px;">Mobilité ' . $cv->getNomMobilite() . '</h3>';
+                            }
+                            if ($etudiant->getIdPermis() < 3) {
+                                echo '<h3 style="line-height: 24px;">' . $etudiant->getNomPermis() . '</h3>';
+                            }
+                            ?>
+
                         </div><!--// .contact-info -->
                     </div>
                 </div><!--// .yui-gc -->
@@ -121,9 +128,9 @@ if ($liste_XP == NULL) {
                             <?php
                             foreach ($liste_diplome_etudiant as $diplome_etudiant) {
                                 echo '<div class="yui-u">';
-                                echo '<h3>' . $diplome_etudiant->getAnnee() . ' ' . $diplome_etudiant->getLibelle() .'</h3>';
-                                if ($diplome_etudiant->getIdMention() != 1){
-                                   echo ' mention '. $diplome_etudiant->getNomMention();
+                                echo '<h3>' . $diplome_etudiant->getAnnee() . ' ' . $diplome_etudiant->getLibelle() . '</h3>';
+                                if ($diplome_etudiant->getIdMention() != 1) {
+                                    echo ' mention ' . $diplome_etudiant->getNomMention();
                                 }
                                 echo '</h3>';
                                 echo '<h4>' . $diplome_etudiant->getInstitut() . ' ' . $diplome_etudiant->getNomVille() . '</h4>';
@@ -172,7 +179,7 @@ if ($liste_XP == NULL) {
                             </div>
                             <?php
                             echo '<div class="yui-u">';
-                            echo '<h3>'.$cv->getLoisir().'</h3>';
+                            echo '<h3>' . $cv->getLoisir() . '</h3>';
                             echo '</div>';
                             ?>
                         </div><!--// .yui-gf -->
