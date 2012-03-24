@@ -21,7 +21,6 @@ class Etudiant {
     private $TEL_ETUDIANT;
     private $MAIL_ETUDIANT;
     private $ANNIV_ETUDIANT;
-    private $NATIONALITE_ETUDIANT;
     private $ID_MARITAL;
     private $LIBELLE_MARITAL;
     private $ID_PERMIS;
@@ -47,7 +46,7 @@ class Etudiant {
         return NULL;
     }
 
-    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_nationalite, $_id_marital, $_id_permis) {
+    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_id_marital, $_id_permis) {
 
         if (is_numeric($_id)) {
             $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
@@ -66,7 +65,6 @@ class Etudiant {
                     'telephone' => $_telephone,
                     'mail' => $_mail,
                     'anniv' => $_anniv,
-                    'nationalite' => $_nationalite,
                     'id_marital' => $_id_marital,
                     'id_permis' => $_id_permis,
                 );
@@ -81,7 +79,6 @@ class Etudiant {
                     TEL_ETUDIANT = :telephone,
                     MAIL_ETUDIANT = :mail,
                     ANNIV_ETUDIANT = :anniv,
-                    NATIONALITE_ETUDIANT = :nationalite,
                     ID_MARITAL = :id_marital,
                     ID_PERMIS = :id_permis
                     WHERE ID_ETUDIANT = :id', $info_etudiant);
@@ -97,7 +94,6 @@ class Etudiant {
                     'telephone' => $_telephone,
                     'mail' => $_mail,
                     'anniv' => $_anniv,
-                    'nationalite' => $_nationalite,
                     'id_marital' => $_id_marital,
                     'id_permis' => $_id_permis,
                     'id_cv' => $_id_cv,
@@ -114,7 +110,6 @@ class Etudiant {
                     TEL_ETUDIANT = :telephone,
                     MAIL_ETUDIANT = :mail,
                     ANNIV_ETUDIANT = :anniv,
-                    NATIONALITE_ETUDIANT = :nationalite,
                     ID_MARITAL = :id_marital,
                     ID_PERMIS = :id_permis,
                     ID_CV = :id_cv'
@@ -239,10 +234,6 @@ class Etudiant {
 
     public function getAnniv() {
         return $this->ANNIV_ETUDIANT;
-    }
-
-    public function getNationalite() {
-        return $this->NATIONALITE_ETUDIANT;
     }
 
     public function getIdMarital() {

@@ -178,14 +178,7 @@ if ($etudiant->getSexe() == 0) {
                     <input type="text" id="pays_etudiant" class="span3" placeholder="Pays" value="<?php echo $etudiant->getPaysVille(); ?>">
                 </div>
             </div>
-
-            <div class="control-group">
-                <label class="control-label">Nationalité</label>
-                <div class="controls">
-                    <input type="text" id="nationalite_etudiant" class="span3" placeholder="Nationalité" value="<?php echo $etudiant->getNationalite(); ?>">
-                </div>
-            </div>
-
+      
             <div class="control-group">
                 <label class="control-label">Date de naissance*</label>
                 <div class="controls">

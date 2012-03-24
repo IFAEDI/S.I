@@ -19,7 +19,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     $cp_etudiant = $_POST['cp_etudiant'];
     $pays_etudiant = $_POST['pays_etudiant'];
     $anniv_etudiant = $_POST['anniv_etudiant'];
-    $nationalite_etudiant = $_POST['nationalite_etudiant'];
     $mail_etudiant = $_POST['mail_etudiant'];
     $adresse2_etudiant = $_POST['adresse2_etudiant'];
     $statut_marital_etudiant = $_POST['statut_marital_etudiant'];
@@ -68,11 +67,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
         die;
     }
 
-    if ($nationalite_etudiant == '') {
-        echo "Erreur : la nationalite étudiante ne peut être vide";
-        die;
-    }
-
+  
     $Syntaxe = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#';
     if (preg_match($Syntaxe, $mail_etudiant) == false) {
         echo "Erreur : Le format de l'adresse mail n'est pas valide";
@@ -149,7 +144,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     $id_cv = CV::UpdateCV($etudiant->getIdCV(), $titre_cv, $mobilite_etudiant, $loisir_etudiant, $mots_clef,$annee);
 
     //On met à jour/Ajoute les informations etudiante
-    Etudiant::UpdateEtudiant($_SESSION['utilisateur']->getId(), $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $nationalite_etudiant, $statut_marital_etudiant, $permis_etudiant);
+    Etudiant::UpdateEtudiant($_SESSION['utilisateur']->getId(), $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
 
     //On supprime toutes les langues du cv
     CV_Langue::SupprimerLangueByIdCV($id_cv);
