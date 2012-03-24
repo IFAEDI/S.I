@@ -192,16 +192,7 @@ if ($etudiant->getSexe() == 0) {
                     <input type="text" id="anniv_etudiant" class="span3" placeholder="Date de naissance" value="<?php echo $etudiant->getAnniv(); ?>">
                 </div>
             </div>
-
-            <div class="control-group">
-                <label class="control-label">Ville de naissance*</label>
-                <div class="controls">
-                    <input type="text" id="ville_naissance_etudiant" class="span3" placeholder="Ville de naissance" value="<?php echo $etudiant->getNomVilleNaissance(); ?>">
-                    <input type="text" id="cp_naissance_etudiant" class="span3" placeholder="CP" value="<?php echo $etudiant->getCPVilleNaissance(); ?>" style="width : 50px;">
-                    <input type="text" id="pays_naissance_etudiant" class="span3" placeholder="Pays de naissance" value="<?php echo $etudiant->getPaysVilleNaissance(); ?>">
-                </div>
-            </div>
-
+            
             <div class="control-group">
                 <label class="control-label" for="email">Mail*</label>
                 <div class="controls">

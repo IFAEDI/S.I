@@ -21,13 +21,10 @@ class Etudiant {
     private $TEL_ETUDIANT;
     private $MAIL_ETUDIANT;
     private $ANNIV_ETUDIANT;
-    private $ID_VILLE_NAISSANCE;
-    private $nom_ville_naissance;
-    private $cp_ville_naissance;
-    private $pays_ville_naissance;
     private $NATIONALITE_ETUDIANT;
     private $ID_MARITAL;
     private $ID_PERMIS;
+    private $LIBELLE_PERMIS;
     private $PHOTO_ETUDIANT;
     private $ID_CV;
     private $cv;
@@ -40,16 +37,15 @@ class Etudiant {
     //recuperation de l'objet Etudiant par l'ID de l'étudiant
     public static function GetEtudiantByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS WHERE id_etudiant = :id AND PERMIS.ID_PERMIS = ETUDIANT.ID_PERMIS', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
 
-    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_ville_naissance, $_cp_naissance, $_pays_naissance, $_nationalite, $_id_marital, $_id_permis) {
+    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_nationalite, $_id_marital, $_id_permis) {
 
         if (is_numeric($_id)) {
             $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
-            $id_ville_naissance = self::GetVilleOrAdd($_ville_naissance, $_cp_naissance, $_pays_naissance);
 
             $id_cv = BD::Prepare('SELECT ID_ETUDIANT FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
 
@@ -65,7 +61,6 @@ class Etudiant {
                     'telephone' => $_telephone,
                     'mail' => $_mail,
                     'anniv' => $_anniv,
-                    'id_ville_naissance' => $id_ville_naissance,
                     'nationalite' => $_nationalite,
                     'id_marital' => $_id_marital,
                     'id_permis' => $_id_permis,
@@ -81,7 +76,6 @@ class Etudiant {
                     TEL_ETUDIANT = :telephone,
                     MAIL_ETUDIANT = :mail,
                     ANNIV_ETUDIANT = :anniv,
-                    ID_VILLE_NAISSANCE = :id_ville_naissance,
                     NATIONALITE_ETUDIANT = :nationalite,
                     ID_MARITAL = :id_marital,
                     ID_PERMIS = :id_permis
@@ -98,7 +92,6 @@ class Etudiant {
                     'telephone' => $_telephone,
                     'mail' => $_mail,
                     'anniv' => $_anniv,
-                    'id_ville_naissance' => $id_ville_naissance,
                     'nationalite' => $_nationalite,
                     'id_marital' => $_id_marital,
                     'id_permis' => $_id_permis,
@@ -116,7 +109,6 @@ class Etudiant {
                     TEL_ETUDIANT = :telephone,
                     MAIL_ETUDIANT = :mail,
                     ANNIV_ETUDIANT = :anniv,
-                    ID_VILLE_NAISSANCE = :id_ville_naissance,
                     NATIONALITE_ETUDIANT = :nationalite,
                     ID_MARITAL = :id_marital,
                     ID_PERMIS = :id_permis,
@@ -232,26 +224,7 @@ class Etudiant {
         return $this->pays_ville['PAYS_VILLE'];
     }
 
-    public function getNomVilleNaissance() {
-        if ($this->nom_ville_naissance == NULL) {
-            $this->nom_ville_naissance = BD::Prepare('SELECT LIBELLE_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE_NAISSANCE), BD::RECUPERER_UNE_LIGNE);
-        }
-        return $this->nom_ville_naissance['LIBELLE_VILLE'];
-    }
-
-    public function getCPVilleNaissance() {
-        if ($this->cp_ville_naissance == NULL) {
-            $this->cp_ville_naissance = BD::Prepare('SELECT CP_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE_NAISSANCE), BD::RECUPERER_UNE_LIGNE);
-        }
-        return $this->cp_ville_naissance['CP_VILLE'];
-    }
-
-    public function getPaysVilleNaissance() {
-        if ($this->pays_ville_naissance == NULL) {
-            $this->pays_ville_naissance = BD::Prepare('SELECT PAYS_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE_NAISSANCE), BD::RECUPERER_UNE_LIGNE);
-        }
-        return $this->pays_ville_naissance['PAYS_VILLE'];
-    }
+  
 
     public function getTel() {
         return $this->TEL_ETUDIANT;
@@ -277,6 +250,12 @@ class Etudiant {
         return $this->ID_PERMIS;
     }
 
+    public function getNomPermis() {
+        return $this->LIBELLE_PERMIS;
+    }
+    
+    
+    
     public function getPhotos() {
         return $this->PHOTO_ETUDIANT;
     }

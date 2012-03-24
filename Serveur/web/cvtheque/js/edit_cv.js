@@ -95,15 +95,6 @@ $(document).ready(function() {
         Autocompletion_ville(nom_ville,cp,pays);
     });
     
-    //Autocompletion du cp et du pays de la ville
-    $("#ville_naissance_etudiant").blur(function(){
-        nom_ville = $("#ville_naissance_etudiant");
-        cp = $("#cp_naissance_etudiant");
-        pays = $("#pays_naissance_etudiant");
-        Autocompletion_ville(nom_ville,cp,pays);
-    });
-
-
     //Accordeon triable pour les differentes partie du CV
     $( "#accordion" )
     .accordion({
@@ -351,10 +342,7 @@ function Sauvegarder(){
         return;
     }
     
-    /*if (!VerifierChamp(telephone_etudiant,true,true,true)){
-        Afficher_erreur("[Informations personnelles] Le téléphone est incorrect");
-        return;
-    }*/
+  
     
     if (!VerifierChamp(adresse1_etudiant,false,false,false)){
         Afficher_erreur("[Informations personnelles] L'adresse 1 est incorrect");
@@ -380,21 +368,6 @@ function Sauvegarder(){
         Afficher_erreur("[Informations personnelles] La nationnalité est incorrect");
         return;
     }*/
-    
-    if (!VerifierChamp(ville_naissance_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] La ville de naissance est incorrect");
-        return;
-    }
-    
-    if (!VerifierChamp(cp_naissance_etudiant,true,true,true)){
-        Afficher_erreur("[Informations personnelles] Le code postale de naissance est incorrect");
-        return;
-    }
-    
-    if (!VerifierChamp(pays_naissance_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le pays de naissance est incorrect");
-        return;
-    }
     
     if(verifMail(mail_etudiant)){
         mail_etudiant.parent().parent().parent().removeClass('error');
@@ -590,9 +563,6 @@ function Sauvegarder(){
         pays_etudiant : pays_etudiant.val(),
         anniv_etudiant : anniv_etudiant.val(),
         nationalite_etudiant : nationalite_etudiant.val(),
-        ville_naissance_etudiant : ville_naissance_etudiant.val(),
-        cp_naissance_etudiant : cp_naissance_etudiant.val(),
-        pays_naissance_etudiant : pays_naissance_etudiant.val(),
         mail_etudiant : mail_etudiant.val(),
         adresse2_etudiant : adresse2_etudiant.val(),
         statut_marital_etudiant : statut_marital_etudiant.val(),
