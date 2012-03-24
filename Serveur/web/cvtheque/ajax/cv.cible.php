@@ -41,12 +41,6 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
         die;
     }
 
-    if ($telephone_etudiant == '' || !is_numeric($telephone_etudiant)) {
-        echo "Erreur : le prenom étudiant ne peut être vide";
-        die;
-    }
-
-
     if ($ville_etudiant == '') {
         echo "Erreur : la ville étudiant ne peut être vide";
         die;
@@ -234,5 +228,33 @@ if (isset($_GET['action']) && $_GET['action'] == 'autocomplete_ville') {
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
     echo json_encode(Etudiant::GetVilleByName($_POST['nom_ville']));
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
+    if (!Utilisateur_connecter('entreprise')) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs']));
+}
+
+
+if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
+    if (!Utilisateur_connecter('entreprise')) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    Etudiant::MettreEnFavoris($_POST['id_etudiant'], $_SESSION['utilisateur']->getId(), 0);
+    echo "1";
+}
+
+
+if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
+    if (!Utilisateur_connecter('entreprise')) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    Etudiant::MettreEnFavoris($_POST['id_etudiant'], $_SESSION['utilisateur']->getId(), 1);
+    echo "1";
 }
 ?>

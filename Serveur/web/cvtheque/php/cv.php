@@ -1,6 +1,9 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 
 <?php
+require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+session_start();
+
 if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
     $id_etudiant = $_GET['id_etudiant'];
 } elseif (Utilisateur_connecter('etudiant')) {
@@ -76,7 +79,7 @@ if ($liste_XP == NULL) {
                                 $ne = "Née le ";
                             }
                             ?>
-                            <h3 style="line-height: 23px;"><?php echo $ne.$etudiant->getAnniv(); ?></h3>
+                            <h3 style="line-height: 23px;"><?php echo $ne . $etudiant->getAnniv(); ?></h3>
                             <?php
                             if ($cv->getIDMobilite() > 2) {
                                 echo '<h3 style="line-height: 23px;">Mobilité ' . $cv->getNomMobilite() . '</h3>';
@@ -94,98 +97,110 @@ if ($liste_XP == NULL) {
             <div id="bd">
                 <div id="yui-main">
                     <div class="yui-b">
-                        <div class="yui-gf">
 
-                            <div class="yui-u first">
-                                <h2>Expérience(s)</h2>
-                            </div><!--// .yui-u -->
 
-                            <div class="yui-u">
-                                <?php
-                                $nb_xp = count($liste_XP);
-                                for ($i = 0; $i < $nb_xp; $i++) {
-                                    $XP = $liste_XP[$i];
-                                    if ($i != ($nb_xp - 1)) {
-                                        echo '<div class="job">';
-                                    } else {
-                                        echo '<div class="job last">';
+                        <?php if (count($liste_XP) > 0) { ?>  
+                            <div class="yui-gf">
+                                <div class="yui-u first">
+                                    <h2>Expérience(s)</h2>
+                                </div><!--// .yui-u -->
+
+                                <div class="yui-u">
+                                    <?php
+                                    $nb_xp = count($liste_XP);
+                                    for ($i = 0; $i < $nb_xp; $i++) {
+                                        $XP = $liste_XP[$i];
+                                        if ($i != ($nb_xp - 1)) {
+                                            echo '<div class="job">';
+                                        } else {
+                                            echo '<div class="job last">';
+                                        }
+
+                                        echo '<h3 style="font-style:italic;line-height: 38px;">' . $XP->getEntreprise() . ' (' . $XP->getNomVille() . ')</h2>';
+                                        echo '<h2 style="font-size : 110%; width : 505px; line-height: 18px;"><strong>' . $XP->getTitre() . '</strong></h2>';
+                                        echo '<h4>' . $XP->getDebut() . '-' . $XP->getFin() . '</h4>';
+                                        echo '<p style="font-family: Georgia;">' . nl2br($XP->getDescription()) . '</p>';
+                                        echo '</div>';
                                     }
+                                    ?>                            
+                                </div><!--// .yui-u -->
+                            </div><!--// .yui-gf -->
+                        <?php } ?>
 
-                                    echo '<h3 style="font-style:italic;line-height: 38px;">' . $XP->getEntreprise() . ' (' . $XP->getNomVille() . ')</h2>';
-                                    echo '<h2 style="font-size : 110%; width : 505px; line-height: 18px;"><strong>' . $XP->getTitre() . '</strong></h2>';
-                                    echo '<h4>' . $XP->getDebut() . '-' . $XP->getFin() . '</h4>';
-                                    echo '<p style="font-family: Georgia;">' . nl2br($XP->getDescription()) . '</p>';
+
+                        <?php if (count($liste_diplome_etudiant) > 0) { ?>       
+                            <div class="yui-gf last">
+                                <div class="yui-u first">
+                                    <h2>Diplôme(s)</h2>
+                                </div>
+                                <?php
+                                foreach ($liste_diplome_etudiant as $diplome_etudiant) {
+                                    echo '<div class="yui-u">';
+                                    echo '<h3>' . $diplome_etudiant->getAnnee() . ' ' . $diplome_etudiant->getLibelle() . '</h3>';
+                                    if ($diplome_etudiant->getIdMention() != 1) {
+                                        echo ' mention ' . $diplome_etudiant->getNomMention();
+                                    }
+                                    echo '</h3>';
+                                    echo '<h4>' . $diplome_etudiant->getInstitut() . ' ' . $diplome_etudiant->getNomVille() . '</h4>';
                                     echo '</div>';
                                 }
-                                ?>                            
-                            </div><!--// .yui-u -->
-                        </div><!--// .yui-gf -->
+                                ?>
+                            </div><!--// .yui-gf -->
+                        <?php } ?>
 
+                        <?php if (count($liste_formation_etudiant) > 0) { ?> 
+                            <div class="yui-gf last">
+                                <div class="yui-u first">
+                                    <h2>Formation</h2>
+                                </div>
 
-                        <div class="yui-gf last">
-                            <div class="yui-u first">
-                                <h2>Diplôme(s)</h2>
-                            </div>
-                            <?php
-                            foreach ($liste_diplome_etudiant as $diplome_etudiant) {
-                                echo '<div class="yui-u">';
-                                echo '<h3>' . $diplome_etudiant->getAnnee() . ' ' . $diplome_etudiant->getLibelle() . '</h3>';
-                                if ($diplome_etudiant->getIdMention() != 1) {
-                                    echo ' mention ' . $diplome_etudiant->getNomMention();
+                                <?php
+                                foreach ($liste_formation_etudiant as $formation_etudiant) {
+                                    echo '<div class="yui-u">';
+                                    echo '<h3>' . $formation_etudiant->getDebut() . ' ' . $formation_etudiant->getFin() . ' - ' . $formation_etudiant->getInstitut() . ' - ' . $formation_etudiant->getNomVille() . '</h3>';
+                                    echo '<h4>' . $formation_etudiant->getAnnee() . '</h4><br>';
+                                    echo '</div>';
                                 }
-                                echo '</h3>';
-                                echo '<h4>' . $diplome_etudiant->getInstitut() . ' ' . $diplome_etudiant->getNomVille() . '</h4>';
-                                echo '</div>';
-                            }
-                            ?>
-                        </div><!--// .yui-gf -->
+                                ?>
+                            </div><!--// .yui-gf -->
+                        <?php } ?>
 
-                        <div class="yui-gf last">
-                            <div class="yui-u first">
-                                <h2>Formation</h2>
-                            </div>
 
-                            <?php
-                            foreach ($liste_formation_etudiant as $formation_etudiant) {
-                                echo '<div class="yui-u">';
-                                echo '<h3>' . $formation_etudiant->getDebut() . ' ' . $formation_etudiant->getFin() . ' - ' . $formation_etudiant->getInstitut() . ' - ' . $formation_etudiant->getNomVille() . '</h3>';
-                                echo '<h4>' . $formation_etudiant->getAnnee() . '</h4><br>';
-                                echo '</div>';
-                            }
-                            ?>
-                        </div><!--// .yui-gf -->
-                        <div class="yui-gf ">
-                            <div class="yui-u first">
-                                <h2>Langue(s)</h2>
-                            </div>
-                            <?php
-                            foreach ($liste_langue_etudiant as $langue_etudiant) {
-                                echo '<div class="yui-u">';
-                                echo '<h3><strong>' . $langue_etudiant->getNomLangue() . '</strong> ' . $langue_etudiant->getNomNiveau();
-                                if ($langue_etudiant->getIdCertif() != 1) {
-                                    echo ' ' . $langue_etudiant->getNomCertif();
-                                    if ($langue_etudiant->getMaxScoreCertif() != NULL && $langue_etudiant->getScoreCertif() != '') {
-                                        echo ' ' . $langue_etudiant->getScoreCertif() . '/' . $langue_etudiant->getMaxScoreCertif();
+                        <?php if (count($liste_langue_etudiant) > 0) { ?> 
+                            <div class="yui-gf ">
+                                <div class="yui-u first">
+                                    <h2>Langue(s)</h2>
+                                </div>
+                                <?php
+                                foreach ($liste_langue_etudiant as $langue_etudiant) {
+                                    echo '<div class="yui-u">';
+                                    echo '<h3><strong>' . $langue_etudiant->getNomLangue() . '</strong> ' . $langue_etudiant->getNomNiveau();
+                                    if ($langue_etudiant->getIdCertif() != 1) {
+                                        echo ' ' . $langue_etudiant->getNomCertif();
+                                        if ($langue_etudiant->getMaxScoreCertif() != NULL && $langue_etudiant->getScoreCertif() != '') {
+                                            echo ' ' . $langue_etudiant->getScoreCertif() . '/' . $langue_etudiant->getMaxScoreCertif();
+                                        }
                                     }
+                                    echo '</h3>';
+                                    echo '</div>';
                                 }
-                                echo '</h3>';
-                                echo '</div>';
-                            }
-                            ?>
-                            <br/><br/><br/><br/><br/>
-                        </div><!--// .yui-gf -->
-                        
-                        <div class="yui-gf last">
-                            <div class="yui-u first">
-                                <h2>Loisir(s)</h2>
-                            </div>
-                            <?php
-                            echo '<div class="yui-u">';
-                            echo '<h3>' . $cv->getLoisir() . '</h3>';
-                            echo '</div>';
-                            ?>
-                        </div><!--// .yui-gf -->
+                                ?>
+                                <br/><br/><br/><br/><br/>
+                            </div><!--// .yui-gf -->
+                        <?php } ?>
 
+                        <?php if ($cv->getLoisir() != '') { ?> 
+                            <div class="yui-gf last">
+                                <div class="yui-u first">
+                                    <h2>Loisir(s)</h2>
+                                </div>
+                                <?php
+                                echo '<div class="yui-u">';
+                                echo '<h3>' . $cv->getLoisir() . '</h3>';
+                                echo '</div>';
+                                ?>
+                            </div><!--// .yui-gf -->
+                        <?php } ?>
 
                     </div><!--// .yui-b -->
                 </div><!--// yui-main -->

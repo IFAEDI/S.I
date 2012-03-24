@@ -46,8 +46,52 @@ class Etudiant {
         return NULL;
     }
 
-    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_id_marital, $_id_permis) {
+    public static function RechercherCVEtudiant($_annee, $_mots_clef) {
+        if (is_numeric($_annee) && $_mots_clef != '') {
+            if ($_annee == -1) {
+                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
+                WHERE CV.ANNEE = :annee
+                AND ETUDIANT.ID_CV = CV.ID_CV
+                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT
+                AND MATCH MOTS_CLEF AGAINST (:mots_clef IN NATURAL LANGUAGE MODE) as score FROM CV HAVING score > 0 ORDER BY score DESC
+                HAVING FAVORIS > 0 '
+                                , array('annee' => $_annee, 'mots_clef' => $_mots_clef), BD::RECUPERER_TOUT);
+            } else {
+                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
+                WHERE CV.ANNEE = :annee
+                AND ETUDIANT.ID_CV = CV.ID_CV
+                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT
+                AND MATCH MOTS_CLEF AGAINST (:mots_clef IN NATURAL LANGUAGE MODE) as score FROM CV HAVING score > 0 ORDER BY score DESC'
+                                , array('annee' => $_annee, 'mots_clef' => $_mots_clef), BD::RECUPERER_TOUT);
+            }
+        } else if (is_numeric($_annee)) {
+            if ($_annee == -1) {
+                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
+                WHERE ETUDIANT.ID_CV = CV.ID_CV
+                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT
+                HAVING FAVORIS > 0 '
+                                , array('annee' => $_annee), BD::RECUPERER_TOUT);
+            } else {
+                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
+                WHERE CV.ANNEE = :annee
+                AND ETUDIANT.ID_CV = CV.ID_CV
+                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT'
+                                , array('annee' => $_annee), BD::RECUPERER_TOUT);
+            }
+        } else if ($_mots_clef != '') {
+            return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
+                MATCH MOTS_CLEF AGAINST (:mots_clef IN NATURAL LANGUAGE MODE) as score FROM CV HAVING score > 0 ORDER BY score DESC
+                WHERE ETUDIANT.ID_CV = CV.ID_CV
+                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT'
+                            , array('mots_clef' => $_mots_clef), BD::RECUPERER_TOUT);
+        } else {
+            return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS
+                WHERE ETUDIANT_FAVORIS.ID_ETUDIANT = ETUDIANT.ID_ETUDIANT'
+                            , array(), BD::RECUPERER_TOUT);
+        }
+    }
 
+    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_id_marital, $_id_permis) {
         if (is_numeric($_id)) {
             $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
 
@@ -131,6 +175,20 @@ class Etudiant {
             return;
         } else {
             echo "Erreur 20 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+
+    public static function MettreEnFavoris($_id_etudiant, $_id_entreprise, $_etat) {
+        if (is_numeric($_id_etudiant) && is_numeric($_id_entreprise) && is_numeric($_etat)) {
+            if ($_etat == 0) {
+                BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE ID_ETUDIANT = :id_etudiant AND ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+            } else {
+                BD::Prepare('INSERT INTO ETUDIANT_FAVORIS SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+            }
+            return;
+        } else {
+            echo "Erreur 42 veuillez contacter l'administrateur du site";
             return;
         }
     }
@@ -239,7 +297,7 @@ class Etudiant {
     public function getIdMarital() {
         return $this->ID_MARITAL;
     }
-    
+
     public function getNomMarital() {
         return $this->LIBELLE_MARITAL;
     }

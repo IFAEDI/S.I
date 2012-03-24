@@ -34,7 +34,7 @@
 				<ul class="dropdown-menu">
 					<li class="nav-header"><i class="icon-search"></i> Informations</li>
 					<li><a href="#">Nos offres</a></li>
-					<li><a href="#">XXXX</a></li>
+					<li><a href="index.php?page=cvtheque">CVtheque</a></li>
 
 					<li class="divider"></li>
 
