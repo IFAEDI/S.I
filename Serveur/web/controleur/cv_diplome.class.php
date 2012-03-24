@@ -16,12 +16,13 @@ class CV_Diplome {
     private $nom_ville;
     private $cp_ville;
     private $pays_ville;
+    private $LIBELLE_MENTION;
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet CV par l'ID du CV
     public static function GetDiplomeByIdCV($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM CV_DIPLOME WHERE ID_CV = :id', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM CV_DIPLOME, MENTION WHERE ID_CV = :id AND MENTION.ID_MENTION = CV_DIPLOME.ID_MENTION', array('id' => $_id), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -82,6 +83,10 @@ class CV_Diplome {
 
     public function getIdMention() {
         return $this->ID_MENTION;
+    }
+    
+    public function getNomMention() {
+        return $this->LIBELLE_MENTION;
     }
 
     public function getLibelle() {

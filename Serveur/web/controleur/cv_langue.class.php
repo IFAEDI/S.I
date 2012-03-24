@@ -12,12 +12,21 @@ class CV_Langue {
     private $ID_CERTIF;
     private $SCORE_CERTIF;
     private $ID_CV;
+    private $LIBELLE_LANGUE;
+    private $LIBELLE_NIVEAU;
+    private $LIBELLE_CERTIF;
+    private $MAX_SCORE_CERTIF;
 
 //****************  Fonctions statiques  ******************//
 //recuperation de l'objet CV par l'ID du CV
     public static function GetLangueByIdCV($_id_cv) {
         if (is_numeric($_id_cv)) {
-            return BD::Prepare('SELECT * FROM CV_LANGUE WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM CV_LANGUE, LANGUE, CERTIF_LNG, NIVEAU_LANGUE 
+                WHERE ID_CV = :id_cv 
+                AND LANGUE.ID_LANGUE = CV_LANGUE.ID_LANGUE 
+                AND CERTIF_LNG.ID_CERTIF = CV_LANGUE.ID_CERTIF
+                AND NIVEAU_LANGUE.ID_NIVEAU = CV_LANGUE.ID_NIVEAU'
+                            , array('id_cv' => $_id_cv), BD::RECUPERER_TOUT, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -41,7 +50,7 @@ class CV_Langue {
         if (is_numeric($_id_certif)) {
             $score_max = BD::Prepare('SELECT MAX_SCORE_CERTIF FROM CERTIF_LNG WHERE ID_CERTIF = :id_certif', array('id_certif' => $_id_certif), BD::RECUPERER_UNE_LIGNE);
             return $score_max['MAX_SCORE_CERTIF'];
-        }else{
+        } else {
             echo "Erreur 12 veuillez contacter l'administrateur du site";
             return;
         }
@@ -93,12 +102,28 @@ class CV_Langue {
         return $this->ID_LANGUE;
     }
 
+    public function getNomLangue() {
+        return $this->LIBELLE_LANGUE;
+    }
+
     public function getIdNiveau() {
         return $this->ID_NIVEAU;
     }
 
+    public function getNomNiveau() {
+        return $this->LIBELLE_NIVEAU;
+    }
+
     public function getIdCertif() {
         return $this->ID_CERTIF;
+    }
+
+    public function getNomCertif() {
+        return $this->LIBELLE_CERTIF;
+    }
+    
+     public function getMaxScoreCertif() {
+        return $this->MAX_SCORE_CERTIF;
     }
 
     public function getScoreCertif() {
