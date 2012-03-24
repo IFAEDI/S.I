@@ -12,6 +12,7 @@ if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
 
 inclure_fichier('cvtheque', 'cv', 'css');
 
+inclure_fichier('controleur', 'etudiant.class', 'php');
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 

@@ -56,7 +56,6 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 <div >
   <?php
   inclure_fichier("cvtheque", "cv", "php");
-  
   ?>
 
 </div>

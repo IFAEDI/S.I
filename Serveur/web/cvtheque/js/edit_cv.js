@@ -17,9 +17,11 @@ $(document).ready(function() {
     langue += '<label class="control-label">Nouvelle langue</label>';
     langue += '<div class="controls">';
     langue += Creer_Select('sel_nouvelle_langue',-1,liste_langue);
+    langue +='<span style="width : 5px;"> </span>';
     langue += Creer_Select('sel_nouvelle_niveau',-1,liste_niveau);
+    langue +='<span style="width : 5px;"> </span>';
     langue += Creer_Select('sel_nouvelle_certif',-1,liste_certif);
-    langue += '<input type="text" id="score_nouvelle" class="span3" placeholder="Score" style="width : 80px;" disabled>';
+    langue += '<input type="text" id="score_nouvelle" class="span3" placeholder="Score" style="width : 80px; margin-left: 5px;" disabled>';
     langue += '<a href="javascript:Ajouter_Langue(\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
     langue += '</div>';
     langue += '</div><hr>';
@@ -38,13 +40,13 @@ $(document).ready(function() {
     xp += '<div id="nouvelle_xp">';
     xp += '<table cellpadding="8" style="text-align : center;"><tr>';
     xp += '<td><input type="text" id="debut_nouvelle_xp" class="span3" placeholder="Debut" style="width : 80px;"></td>';
-    xp += '<td><input type="text" id="fin_nouvelle_xp" class="span3" placeholder="Fin" style="width : 80px;>"</td>';
+    xp += '<td><input type="text" id="fin_nouvelle_xp" class="span3" placeholder="Fin" style="width : 80px;"</td>';
     xp += '<td><input type="text" id="titre_nouvelle_xp" class="span3" placeholder="Titre" style="width : 300px;"></td>';
-    xp += '<td><input type="text" id="entreprise_nouvelle_xp" class="span3" placeholder="Entreprise" style="width : 150px;"></td>';
+    xp += '<td><input type="text" id="entreprise_nouvelle_xp" class="span3" placeholder="Entreprise" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_nouvelle_xp" class="span3" placeholder="Ville" style="width : 150px;"></td>';
     xp += '<td><a href="javascript:Ajouter_XP(\'\',\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
-    xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 660px;" placeholder="Descirption"></textarea></td>';  
+    xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 710px;" placeholder="Descirption"></textarea></td>';  
     xp += '</tr></table></div><hr>';
     $('#div_nouvelle_XP').append(xp);
     $( "#debut_nouvelle_xp").datepicker();
@@ -55,10 +57,10 @@ $(document).ready(function() {
     formation += '<div class="control-group" id="nouvelle_formation'+nb_formation+'">';
     formation += '<label class="control-label">Formation</label>';
     formation += '<div class="controls">';
-    formation += '<input type="text" id="debut_nouvelle_formation" class="span3" placeholder="Début"  style="width : 80px;">';
-    formation += '<input type="text" id="fin_nouvelle_formation" class="span3" placeholder="Fin"  style="width : 80px;">';
-    formation += '<input type="text" id="annee_nouvelle_formation" class="span3" placeholder="Année"  style="width : 80px;">';
-    formation += '<input type="text" id="institut_nouvelle_formation" class="span3" placeholder="Institut"  style="width : 80px;">';
+    formation += '<input type="text" id="debut_nouvelle_formation" class="span3" placeholder="Début"  style="width : 80px; margin-right: 5px;">';
+    formation += '<input type="text" id="fin_nouvelle_formation" class="span3" placeholder="Fin"  style="width : 80px; margin-right: 5px;">';
+    formation += '<input type="text" id="annee_nouvelle_formation" class="span3" placeholder="Année et description"  style="width : 400px; margin-right: 5px;">';
+    formation += '<input type="text" id="institut_nouvelle_formation" class="span3" placeholder="Institut"  style="width : 80px; margin-right: 5px;">';
     formation += '<input type="text" id="ville_nouvelle_formation" class="span3" placeholder="Ville" style="width : 150px;">';
     formation += '<a href="javascript:Ajouter_Formation(\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
     formation += '</div>';
@@ -74,10 +76,10 @@ $(document).ready(function() {
     diplome += '<div class="control-group" id="nouveau_diplome">';
     diplome += '<label class="control-label">Formation</label>';
     diplome += '<div class="controls">';
-    diplome += '<input type="text" id="libelle_diplome" class="span3" placeholder="Nom du diplome"  style="width : 120px;">';
+    diplome += '<input type="text" id="libelle_diplome" class="span3" placeholder="Nom du diplome"  style="width : 120px; margin-right: 5px;">';
     diplome += Creer_Select('sel_mention_nouveau_diplome',-1,liste_mention);
-    diplome += '<input type="text" id="annee_nouveau_diplome" class="span3" placeholder="Année"  style="width : 80px;">';
-    diplome += '<input type="text" id="institut_nouveau_diplome" class="span3" placeholder="Institut"  style="width : 80px;">';
+    diplome += '<input type="text" id="annee_nouveau_diplome" class="span3" placeholder="Année"  style="width : 80px; margin: 5px;">';
+    diplome += '<input type="text" id="institut_nouveau_diplome" class="span3" placeholder="Institut"  style="width : 80px; margin-right: 5px;">';
     diplome += '<input type="text" id="ville_nouveau_diplome" class="span3" placeholder="Ville"  style="width : 150px;">';
     diplome += '<a href="javascript:Ajouter_Diplome(\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
     diplome += '</div>';
@@ -126,10 +128,10 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
     diplome += '<div class="control-group" id="diplome'+nb_diplome+'">';
     diplome += '<label class="control-label">Formation</label>';
     diplome += '<div class="controls">';
-    diplome += '<input type="text" id="libelle_diplome'+nb_diplome+'" class="span3" placeholder="Nom du diplome" value="'+_libelle+'" style="width : 120px;">';
+    diplome += '<input type="text" id="libelle_diplome'+nb_diplome+'" class="span3" placeholder="Nom du diplome" value="'+_libelle+'" style="width : 120px; margin-right: 5px;">';
     diplome += Creer_Select('sel_mention_diplome'+nb_diplome,_id_mention,liste_mention);
-    diplome += '<input type="text" id="annee_diplome'+nb_diplome+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px;">';
-    diplome += '<input type="text" id="institut_diplome'+nb_diplome+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px;">';
+    diplome += '<input type="text" id="annee_diplome'+nb_diplome+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px; margin: 5px;">';
+    diplome += '<input type="text" id="institut_diplome'+nb_diplome+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px; margin-right: 5px;">';
     diplome += '<input type="text" id="ville_diplome'+nb_diplome+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
     diplome += '<a href="javascript:Supprimer_Diplome('+nb_diplome+');" class="icon-remove" style="margin-left : 20px;"></a>';
     diplome += '</div>';
@@ -169,10 +171,10 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
     formation += '<div class="control-group" id="formation'+nb_formation+'">';
     formation += '<label class="control-label">Formation</label>';
     formation += '<div class="controls">';
-    formation += '<input type="text" id="debut_formation'+nb_formation+'" class="span3" placeholder="Début" value="'+_debut+'" style="width : 80px;">';
-    formation += '<input type="text" id="fin_formation'+nb_formation+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px;">';
-    formation += '<input type="text" id="annee_formation'+nb_formation+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px;">';
-    formation += '<input type="text" id="institut_formation'+nb_formation+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px;">';
+    formation += '<input type="text" id="debut_formation'+nb_formation+'" class="span3" placeholder="Début" value="'+_debut+'" style="width : 80px; margin-right: 5px;">';
+    formation += '<input type="text" id="fin_formation'+nb_formation+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px; margin-right: 5px;">';
+    formation += '<input type="text" id="annee_formation'+nb_formation+'" class="span3" placeholder="Année et description" value="'+_annee+'" style="width : 400px; margin-right: 5px;">';
+    formation += '<input type="text" id="institut_formation'+nb_formation+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 80px; margin-right: 5px;">';
     formation += '<input type="text" id="ville_formation'+nb_formation+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
     formation += '<a href="javascript:Supprimer_formation('+nb_formation+');" class="icon-remove" style="margin-left : 20px;"></a>';
     formation += '</div>';
@@ -218,12 +220,14 @@ function Ajouter_Langue(_id_langue_etudiant,_id_niveau,_id_certif,_score_certif)
     langue += '<label class="control-label">Langue</label>';
     langue += '<div class="controls">';
     langue += Creer_Select('sel_langue'+nb_langue,_id_langue_etudiant,liste_langue);
+    langue +='<span style="width : 5px;"> </span>';
     langue += Creer_Select('sel_niveau'+nb_langue,_id_niveau,liste_niveau);
+    langue +='<span style="width : 5px;"> </span>';
     langue += Creer_Select('sel_certif'+nb_langue,_id_certif,liste_certif);
     if (_id_certif == '1'){
-        langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px;" disabled>';
+        langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px; margin-left: 5px;" disabled>';
     }else{
-        langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px;">';
+        langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px; margin-left: 5px;">';
     }
    
     langue += '<a href="javascript:Supprimer_langue('+nb_langue+');" class="icon-remove" style="margin-left : 20px;"></a>';
@@ -279,11 +283,11 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     xp += '<td><input type="text" id="debut_xp'+nb_xp+'" class="span3" placeholder="Debut" value="'+_debut+'" style="width : 80px;"></td>';
     xp += '<td><input type="text" id="fin_xp'+nb_xp+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px;>"</td>';
     xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 300px;"></td>';
-    xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 150px;"></td>';
+    xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_xp'+nb_xp+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;"></td>';
     xp += '<td><a href="javascript:Supprimer_XP('+nb_xp+');" class="icon-remove" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
-    xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 660px;" placeholder="Descirption">'+_desc+'</textarea></td>';
+    xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 710px;" placeholder="Descirption">'+_desc+'</textarea></td>';
     xp += '</tr></table></div>';
     $('#div_ancienne_XP').append(xp);
    
@@ -572,7 +576,8 @@ function Sauvegarder(){
         retour = $.trim(retour)
         if (retour == "1"){
             div_info = $("#div_info");
-            $("#text_info").text("La sauvegarde c'est bien passée");
+            $("#text_info").empty();
+            $("#text_info").append("La sauvegarde c'est bien passée <a href='index.php?page=accueil_cv'>Voir le resultat</a>");
             div_info.addClass("alert-success");
             div_info.removeClass("alert-error");            
         }else{
@@ -615,6 +620,7 @@ function VerifierChamp(_element,_est_un_nombre,_positif,_positif_strict){
 //Fonction permettant d'afficher des details sur l'erreur
 function Afficher_erreur(erreur){
     div_info = $("#div_info");
+    $("#text_info").empty();
     $("#text_info").text(erreur);
     div_info.removeClass("alert-success");
     div_info.addClass("alert-error");
