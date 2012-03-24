@@ -326,10 +326,6 @@ function Sauvegarder(){
     ville_etudiant = $("#ville_etudiant");
     cp_etudiant = $("#cp_etudiant");
     pays_etudiant = $("#pays_etudiant");
-    nationalite_etudiant = $("#nationalite_etudiant");
-    ville_naissance_etudiant = $("#ville_naissance_etudiant");
-    cp_naissance_etudiant = $("#cp_naissance_etudiant");
-    pays_naissance_etudiant = $("#pays_naissance_etudiant");
     mail_etudiant = $("#mail_etudiant");
 
     if (!VerifierChamp(nom_etudiant,false,false,false)){
@@ -363,12 +359,7 @@ function Sauvegarder(){
         Afficher_erreur("[Informations personnelles] Le pays est incorrect");
         return;
     }
-    
-    /*if (!VerifierChamp(nationalite_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] La nationnalité est incorrect");
-        return;
-    }*/
-    
+
     if(verifMail(mail_etudiant)){
         mail_etudiant.parent().parent().parent().removeClass('error');
         mail_etudiant.parent().parent().parent().addClass('success');
@@ -562,7 +553,6 @@ function Sauvegarder(){
         cp_etudiant : cp_etudiant.val(),
         pays_etudiant : pays_etudiant.val(),
         anniv_etudiant : anniv_etudiant.val(),
-        nationalite_etudiant : nationalite_etudiant.val(),
         mail_etudiant : mail_etudiant.val(),
         adresse2_etudiant : adresse2_etudiant.val(),
         statut_marital_etudiant : statut_marital_etudiant.val(),

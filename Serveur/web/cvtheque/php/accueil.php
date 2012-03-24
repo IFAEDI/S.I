@@ -36,11 +36,11 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 		<?php
 	    } else {
 		?>
-			<div class="alert alert-error">
+			<div class="alert alert-error" style="padding: 20px;">
                                 <table style="width : 100%;">
                                 <tr>
                                         <td>
-                                                <span>Ton CV n'est toujours pas diffusé : <a href='javascript:Diffusion(0);'>Autoriser sa diffusion</a></span>
+                                                <span>Ton CV n'est toujours pas diffusé : <a href='javascript:Diffusion(1);'>Autoriser sa diffusion</a></span>
                                         </td>
                                         <td style='text-align : right;'>
                                                 <a class='btn btn-danger' data-toggle='modal' href='#mod_supression' style='margin-right : 10px;'>Supprimer mon CV</a>
