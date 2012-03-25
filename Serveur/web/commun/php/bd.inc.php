@@ -31,44 +31,40 @@ class BD {
     private $connection;
     private static $partageInstance;
 
+    /**
+     * Constructeur : initialisation de la connexion à la BD MySQL via PDO
+     */
+    private function __construct() {
+        global $CONFIG;
 
-	/**
-	* Constructeur : initialisation de la connexion à la BD MySQL via PDO
-	*/
-	private function __construct() {
-		global $CONFIG;
+        /* Initialisation */
+        $this->connection = null;
 
-		/* Initialisation */
-		$this->connection = null;
+        try {
 
-		try {
+            $this->connection = new PDO('mysql:host=' . $CONFIG['bd']['hote'] . ';port=' . $CONFIG['bd']['port'] . ';dbname=' . $CONFIG['bd']['bdnom'], $CONFIG['bd']['nom_utilisateur'], $CONFIG['bd']['mot_de_passe'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+        } catch (Exception $e) {
 
-			$this->connection = new PDO('mysql:host=' . $CONFIG['bd']['hote'] . ';port=' . $CONFIG['bd']['port'] . ';dbname=' . $CONFIG['bd']['bdnom'], $CONFIG['bd']['nom_utilisateur'], $CONFIG['bd']['mot_de_passe'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+            echo "BD : parametres incorrects<br/>";
+            echo 'Erreur : ' . $e->getMessage() . '<br/>';
+            echo 'Numero : ' . $e->getCode() . '<br/>';
 
-		} catch (Exception $e) {
+            /* Failed, donc $this->connection == null */
+        }
+    }
 
-			echo "BD : parametres incorrects<br/>";
-			echo 'Erreur : ' . $e->getMessage() . '<br/>';
-			echo 'Numero : ' . $e->getCode(). '<br/>';
+    /**
+     * Retourne l'unique connexion à la BDD (singleton)
+     * /!\ Peut retourner NULL si l'initialisation a foiré !
+     */
+    public static function GetConnection() {
 
-			/* Failed, donc $this->connection == null */
-		}
-	}
+        /* Si l'objet n'est pas instancié, on résoud ce problème */
+        if (!isset(self::$partageInstance))
+            self::$partageInstance = new self();
 
-
-	/**
-	* Retourne l'unique connexion à la BDD (singleton)
-	* /!\ Peut retourner NULL si l'initialisation a foiré !
-	*/
-	public static function GetConnection() {
-
-		/* Si l'objet n'est pas instancié, on résoud ce problème */
-		if (!isset(self::$partageInstance))
-			self::$partageInstance = new self();
-
-		return self::$partageInstance->connection;
-	}
-
+        return self::$partageInstance->connection;
+    }
 
     //Appelle des procedures stockées
     public static function &AppellerProcedureStocke($_nomProcedure, $_parametres, $_type_recuperation, $_nom_classe = NULL, $_option_recuperation = NULL) {
@@ -92,11 +88,11 @@ class BD {
     public static function &Prepare($_requete, $_parametres, $_type_recuperation = self::RECUPERER_UNE_LIGNE, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
 
         $resultat = NULL;
-	$enregistrement = NULL;
+        $enregistrement = NULL;
 
-	/* Si l'initialisation a foiré, on évite de faire foirer en cascade ! */
-	if( self::GetConnection() == NULL )
-		return $resultat;
+        /* Si l'initialisation a foiré, on évite de faire foirer en cascade ! */
+        if (self::GetConnection() == NULL)
+            return $resultat;
 
         $enregistrement = self::GetConnection()->prepare($_requete);
 
@@ -120,7 +116,6 @@ class BD {
                 }
             }
         } catch (Exception $e) {
-
             error_log('Erreur : ' . $e->getMessage() . '\n');
             error_log('Numero : ' . $e->getCode());
         }
@@ -129,12 +124,11 @@ class BD {
     }
 
     public static function MontrerErreur() {
-	
-	if( self::GetConnection() == NULL )
-	{
-		echo "L'initialisation de la connexion a échoué.";
-		return;
-	}
+
+        if (self::GetConnection() == NULL) {
+            echo "L'initialisation de la connexion a échoué.";
+            return;
+        }
 
         print_r(self::GetConnection()->errorInfo());
     }

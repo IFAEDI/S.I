@@ -1,6 +1,9 @@
 <?php
+
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
+
+inclure_fichier('controleur', 'cv.class', 'php');
 
 class Etudiant {
 
@@ -12,29 +15,246 @@ class Etudiant {
     private $ADRESSE1_ETUDIANT;
     private $ADRESSE2_ETUDIANT;
     private $ID_VILLE;
-    private $ville;
+    private $nom_ville;
+    private $cp_ville;
+    private $pays_ville;
     private $TEL_ETUDIANT;
     private $MAIL_ETUDIANT;
     private $ANNIV_ETUDIANT;
-    private $ID_VILLE_NAISSANCE;
-    private $ville_naissance;
-    private $NATIONALITE_ETUDIANT;
     private $ID_MARITAL;
-    private $marital;
+    private $LIBELLE_MARITAL;
     private $ID_PERMIS;
-    private $permis;
+    private $LIBELLE_PERMIS;
     private $PHOTO_ETUDIANT;
     private $ID_CV;
+    private $cv;
+    private $diplome;
+    private $formation;
+    private $langue;
+    private $xp;
 
     //****************  Fonctions statiques  ******************//
-    public static function GetEtudiant($_id) {
+    //recuperation de l'objet Etudiant par l'ID de l'étudiant
+    public static function GetEtudiantByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS, STATUT_MARITAL 
+                WHERE id_etudiant = :id 
+                AND PERMIS.ID_PERMIS = ETUDIANT.ID_PERMIS 
+                AND STATUT_MARITAL.ID_MARITAL=ETUDIANT.ID_MARITAL'
+                            , array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
 
+    public static function GetNbSuivi($_id) {
+        if (is_numeric($_id)) {
+            $nb_suivi = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT_FAVORIS
+                WHERE ID_ETUDIANT = :id'
+                            , array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
+            return $nb_suivi['COUNT(*)'];
+        }
+        return NULL;
+    }
+
+    public static function RechercherCVEtudiant($_annee, $_mots_clef, $_id_entreprise) {
+        if (is_numeric($_id_entreprise)) {
+            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT,  PRENOM_ETUDIANT, 
+                        IF(ETUDIANT_FAVORIS.id_entreprise = #id_entreprise, 1, 0) as favoris, 
+                        IF(NEW_UPDATE_CV.id_entreprise = #id_entreprise, etat, 0) as etat
+                        FROM CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_etudiant) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_etudiant)) USING (id_cv)
+                        WHERE CV.AGREEMENT = 1
+                        #WHERE
+                        ORDER BY etat ASC, RAND()";
+            $requete = str_replace('#id_entreprise', $_id_entreprise, $requete);
+            $where = '';
+            if (is_numeric($_annee) && $_mots_clef != '') {
+                if ($_annee != -1) {
+                    $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef') AND CV.ANNEE = $_annee";
+                } else {
+                    $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef') HAVING(favoris = 1)";
+                }
+            } else if (is_numeric($_annee)) {
+                if ($_annee != -1) {
+                    $where = " AND CV.ANNEE = $_annee";
+                } else {
+                    $where = " HAVING(favoris = 1)";
+                }
+            } else if ($_mots_clef != '') {
+                $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef')";
+            }
+            $requete = str_replace('#WHERE', $where, $requete);
+             return BD::Prepare($requete, array(), BD::RECUPERER_TOUT);    
+           
+        } else {
+            echo "Erreur 43 veuillez contacter l'administrateur système";
+            return NULL;
+        }
+    }
+
+    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_id_marital, $_id_permis) {
+        if (is_numeric($_id)) {
+            $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
+
+            $id_cv = BD::Prepare('SELECT ID_ETUDIANT FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
+
+            if ($id_cv['ID_ETUDIANT'] > 0) {
+                $info_etudiant = array(
+                    'id' => $_id,
+                    'nom' => $_nom,
+                    'prenom' => $_prenom,
+                    'sexe' => $_sexe,
+                    'adresse1' => $_adresse1,
+                    'adresse2' => $_adresse2,
+                    'id_ville' => $id_ville,
+                    'telephone' => $_telephone,
+                    'mail' => $_mail,
+                    'anniv' => $_anniv,
+                    'id_marital' => $_id_marital,
+                    'id_permis' => $_id_permis,
+                );
+                //Si l'etudiant à déjà un CV
+                BD::Prepare('UPDATE ETUDIANT SET 
+                    NOM_ETUDIANT = :nom,
+                    PRENOM_ETUDIANT = :prenom,
+                    SEXE_ETUDIANT = :sexe,
+                    ADRESSE1_ETUDIANT = :adresse1,
+                    ADRESSE2_ETUDIANT = :adresse2,
+                    ID_VILLE = :id_ville,
+                    TEL_ETUDIANT = :telephone,
+                    MAIL_ETUDIANT = :mail,
+                    ANNIV_ETUDIANT = :anniv,
+                    ID_MARITAL = :id_marital,
+                    ID_PERMIS = :id_permis
+                    WHERE ID_ETUDIANT = :id', $info_etudiant);
+            } else {
+                $info_etudiant = array(
+                    'id' => $_id,
+                    'nom' => $_nom,
+                    'prenom' => $_prenom,
+                    'sexe' => $_sexe,
+                    'adresse1' => $_adresse1,
+                    'adresse2' => $_adresse2,
+                    'id_ville' => $id_ville,
+                    'telephone' => $_telephone,
+                    'mail' => $_mail,
+                    'anniv' => $_anniv,
+                    'id_marital' => $_id_marital,
+                    'id_permis' => $_id_permis,
+                    'id_cv' => $_id_cv,
+                );
+
+                BD::Prepare('INSERT INTO ETUDIANT SET
+                    ID_ETUDIANT = :id,                    
+                    NOM_ETUDIANT = :nom,
+                    PRENOM_ETUDIANT = :prenom,
+                    SEXE_ETUDIANT = :sexe,
+                    ADRESSE1_ETUDIANT = :adresse1,
+                    ADRESSE2_ETUDIANT = :adresse2,
+                    ID_VILLE = :id_ville,
+                    TEL_ETUDIANT = :telephone,
+                    MAIL_ETUDIANT = :mail,
+                    ANNIV_ETUDIANT = :anniv,
+                    ID_MARITAL = :id_marital,
+                    ID_PERMIS = :id_permis,
+                    ID_CV = :id_cv'
+                        , $info_etudiant);
+            }
+        }
+        return NULL;
+    }
+
+    //Recupération de la liste des permis possible
+    public static function SupprimerCV($_id_etudiant, $_id_cv) {
+        if (is_numeric($_id_etudiant) && is_numeric($_id_cv)) {
+            CV_Langue::SupprimerLangueByIdCV($_id_cv);
+            CV_Formation::SupprimerFormationByIdCV($_id_cv);
+            CV_Diplome::SupprimerDiplomeByIdCV($_id_cv);
+            CV_XP::SupprimerXPByIdCV($_id_cv);
+            CV::SupprimerCVByID($_id_cv);
+            BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE id_etudiant = :id', array('id' => $_id_etudiant));
+            BD::Prepare('DELETE FROM NEW_UPDATE_CV WHERE id_etudiant = :id', array('id' => $_id_etudiant));
+            BD::Prepare('DELETE FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id_etudiant));
+            return;
+        } else {
+            echo "Erreur 20 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+
+    public static function MettreEnVu($_id_etudiant, $_id_entreprise, $_etat) {
+        if (is_numeric($_id_etudiant) && is_numeric($_etat)) {
+            if ($_etat == 2 && is_numeric($_id_entreprise)) {
+                BD::Prepare('REPLACE INTO NEW_UPDATE_CV SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise, ETAT = 2', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+            } elseif ($_etat == 1) {
+                BD::Prepare('UPDATE NEW_UPDATE_CV SET ETAT = 1 WHERE ID_ETUDIANT = :id_etudiant', array('id_etudiant' => $_id_etudiant));
+            } else {
+                echo "Erreur 56 veuillez contacter l'administrateur du site";
+                return;
+            }
+            return;
+        } else {
+            echo "Erreur 47 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+
+    public static function MettreEnFavoris($_id_etudiant, $_id_entreprise, $_etat) {
+        if (is_numeric($_id_etudiant) && is_numeric($_id_entreprise) && is_numeric($_etat)) {
+            if ($_etat == 0) {
+                BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE ID_ETUDIANT = :id_etudiant AND ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+            } else {
+                BD::Prepare('INSERT INTO ETUDIANT_FAVORIS SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+            }
+            return;
+        } else {
+            echo "Erreur 42 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+
     //****************  Fonctions  ******************//
+    //Renvoi l'id de la ville correspondante ou si elle n'existe pas l'ajoute
+    public function GetVilleOrAdd($_nom, $_code_postal, $_pays) {
+        $_nom = strtoupper($_nom);
+
+        if ($_code_postal == '' && $_pays == '') {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom', array('nom' => $_nom));
+        } elseif ($_code_postal == '') {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom AND PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays));
+        } elseif ($_pays == '') {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom AND CP_VILLE = :code_postal', array('nom' => $_nom, 'code_postal' => $_code_postal));
+        } else {
+            $ville = BD::Prepare('SELECT ID_VILLE FROM VILLE WHERE LIBELLE_VILLE = :nom AND CP_VILLE = :code_postal AND PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays, 'code_postal' => $_code_postal));
+        }
+
+        if ($ville['ID_VILLE'] > 0) {
+            return $ville['ID_VILLE'];
+        } else {
+            BD::Prepare('INSERT INTO VILLE SET LIBELLE_VILLE = :nom, CP_VILLE = :code_postal, PAYS_VILLE = :pays', array('nom' => $_nom, 'pays' => $_pays, 'code_postal' => $_code_postal));
+            $id_ville = BD::GetConnection()->lastInsertId();
+            if ($id_ville > 0) {
+                return $id_ville;
+            } else {
+                echo "Erreur 3 veuillez contacter l'administrateur du site";
+                return;
+            }
+        }
+    }
+
+    public static function GetVilleByName($_nom) {
+        return BD::Prepare('SELECT * FROM VILLE WHERE LIBELLE_VILLE = :nom', array('nom' => $_nom));
+    }
+
+    //Recupération de la liste des permis possible
+    public static function GetListePermis() {
+        return BD::Prepare('SELECT * FROM PERMIS', array(), BD::RECUPERER_TOUT);
+    }
+
+    //Recupération de la liste statuts maritals possible
+    public static function GetListeStatutMarital() {
+        return BD::Prepare('SELECT * FROM STATUT_MARITAL', array(), BD::RECUPERER_TOUT);
+    }
+
     //****************  Getters & Setters  ******************//
     public function getId() {
         return $this->ID_ETUDIANT;
@@ -52,26 +272,33 @@ class Etudiant {
         return $this->SEXE_ETUDIANT;
     }
 
-    public function getAdresse() {
-        $adresse = $this->ADRESSE1_ETUDIANT;
-        if ($this->ADRESSE2_ETUDIANT != '') {
-            $adresse.=' - ' . $this->ADRESSE2_ETUDIANT;
-        }
-        return $adresse;
+    public function getAdresse1() {
+        return $this->ADRESSE1_ETUDIANT;
     }
 
-    public function getVille() {
-        if ($this->ville == NULL) {
-            $this->ville = BD::Prepare('SELECT * FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
-        }
-        return $this->ville;
+    public function getAdresse2() {
+        return $this->ADRESSE2_ETUDIANT;
     }
 
-    public function getVilleNaissance() {
-        if ($this->ville_naissance == NULL) {
-            $this->ville_naissance = BD::Prepare('SELECT * FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE_NAISSANCE), BD::RECUPERER_UNE_LIGNE);
+    public function getNomVille() {
+        if ($this->nom_ville == NULL) {
+            $this->nom_ville = BD::Prepare('SELECT LIBELLE_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
         }
-        return $this->ville_naissance;
+        return $this->nom_ville['LIBELLE_VILLE'];
+    }
+
+    public function getCPVille() {
+        if ($this->cp_ville == NULL) {
+            $this->cp_ville = BD::Prepare('SELECT CP_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
+        }
+        return $this->cp_ville['CP_VILLE'];
+    }
+
+    public function getPaysVille() {
+        if ($this->pays_ville == NULL) {
+            $this->pays_ville = BD::Prepare('SELECT PAYS_VILLE FROM VILLE WHERE id_ville = :id', array('id' => $this->ID_VILLE), BD::RECUPERER_UNE_LIGNE);
+        }
+        return $this->pays_ville['PAYS_VILLE'];
     }
 
     public function getTel() {
@@ -86,24 +313,20 @@ class Etudiant {
         return $this->ANNIV_ETUDIANT;
     }
 
-    public function getNationalite() {
-        return $this->NATIONALITE_ETUDIANT;
+    public function getIdMarital() {
+        return $this->ID_MARITAL;
     }
 
-    public function getMarital() {
-        if ($this->marital == NULL) {
-            $marital = BD::Prepare('SELECT libelle_marital FROM STATUT_MARITAL WHERE id_marital = :id', array('id' => $this->ID_MARITAL), BD::RECUPERER_UNE_LIGNE);
-            $this->marital = $marital['libelle_marital'];
-        }
-        return $this->marital;
+    public function getNomMarital() {
+        return $this->LIBELLE_MARITAL;
     }
 
-    public function getPermis() {
-        if ($this->permis == NULL) {
-            $permis = BD::Prepare('SELECT libelle_permis FROM PERMIS WHERE id_permis = :id', array('id' => $this->ID_PERMIS), BD::RECUPERER_UNE_LIGNE);
-            $this->permis = $permis['libelle_permis'];
-        }
-        return $this->permis;
+    public function getIdPermis() {
+        return $this->ID_PERMIS;
+    }
+
+    public function getNomPermis() {
+        return $this->LIBELLE_PERMIS;
     }
 
     public function getPhotos() {
@@ -114,5 +337,41 @@ class Etudiant {
         return $this->ID_CV;
     }
 
+    public function getCV() {
+        if ($this->cv == NULL) {
+            $this->cv = CV::GetCVByID($this->ID_CV);
+        }
+        return $this->cv;
+    }
+
+    public function getDiplome() {
+        if ($this->diplome == NULL) {
+            $this->diplome = CV_Diplome::GetDiplomeByIdCV($this->ID_CV);
+        }
+        return $this->diplome;
+    }
+
+    public function getFormation() {
+        if ($this->formation == NULL) {
+            $this->formation = CV_Formation::GetFormationByIdCV($this->ID_CV);
+        }
+        return $this->formation;
+    }
+
+    public function getLangue() {
+        if ($this->langue == NULL) {
+            $this->langue = CV_Langue::GetLangueByIdCV($this->ID_CV);
+        }
+        return $this->langue;
+    }
+
+    public function getXP() {
+        if ($this->xp == NULL) {
+            $this->xp = CV_XP::GetCVXPByIdCV($this->ID_CV);
+        }
+        return $this->xp;
+    }
+
 }
+
 ?>

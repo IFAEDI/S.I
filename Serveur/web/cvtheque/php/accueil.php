@@ -5,55 +5,83 @@ if (!Utilisateur_connecter('etudiant')) {
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
+inclure_fichier('cvtheque', 'accueil', 'js');
 
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiant(1);
-if ($etudiant != null) {
-    
-}
-
+$etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 ?>
+<div class="alert alert-error" id="div_erreur" style="display: none;"></div>
 
+ 
 
+<?php if ($etudiant == null) { ?>
+    <div class='alert alert-error'>Oooooooh mais tu n'as pas de CV comme c'est dommage : 
+        <a class="btn btn-success" href="index.php?page=edit_cv">Creer mon CV</a></div>
+    <?php
+} else {
+    $cv = $etudiant->getCV();
+    if ($cv->getAgreement() == 1) {
+        ?>
+        <div class="alert alert-success" style="padding: 20px;">
+            <table style="width : 100%;">
+                <tr>
+                    <td>
+                        <span>Ton CV est actuellement diffusé : <a href="javascript:Diffusion(0);">Arrêter sa diffusion</a></span><br/>
+                        <?php
+                        $nb_entreprise_suivi = Etudiant::GetNbSuivi($_SESSION['utilisateur']->getId());
+                        if ($nb_entreprise_suivi > 0) {
+                            ?> 
+                            <span>Ton CV est actuellement suivi par <?php echo $nb_entreprise_suivi ?> entreprise(s)</span>
+                        <?php } ?>
+                    </td>
+                    <td style="text-align : right;">
+                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
+                        <a class="btn btn-danger" data-toggle="modal" href="#mod_supression" style="margin-right : 10px;">Supprimer mon CV</a>
+                        <a class="btn btn-primary" href="index.php?page=edit_cv">Editer mon CV</a>
+                    </td>
+                </tr>
+            </table>
+        </div>
+        <?php
+    } else {
+        ?>
+        <div class="alert alert-error" style="padding: 20px;">
+            <table style="width : 100%;">
+                <tr>
+                    <td>
+                        <span>Ton CV n'est toujours pas diffusé : <a href='javascript:Diffusion(1);'>Autoriser sa diffusion</a></span>
+                    </td>
+                    <td style='text-align : right;'>
+                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
+                        <a class='btn btn-danger' data-toggle='modal' href='#mod_supression' style='margin-right : 10px;'>Supprimer mon CV</a>
+                        <a class='btn btn-primary' href="index.php?page=edit_cv">Editer mon CV</a>
+                    </td>
+                </tr>   
+            </table>
+        </div>
+        <?php
+    }
+}
+?>
+<div >
+    <?php
+    if ($etudiant != null) {
+        inclure_fichier("cvtheque", "cv", "php");
+    }
+    ?>
 
-<div id="accordion">
-    <div class="group">
-        <h3><a href="#">Section 1</a></h3>
-        <div>
-            <p>Mauris mauris ante, blandit et, ultrices a, suscipit eget, quam. Integer ut neque. Vivamus nisi metus, molestie vel, gravida in, condimentum sit amet, nunc. Nam a nibh. Donec suscipit eros. Nam mi. Proin viverra leo ut odio. Curabitur malesuada. Vestibulum a velit eu ante scelerisque vulputate.</p>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Section 2</a></h3>
-        <div>
-            <p>Sed non urna. Donec et ante. Phasellus eu ligula. Vestibulum sit amet purus. Vivamus hendrerit, dolor at aliquet laoreet, mauris turpis porttitor velit, faucibus interdum tellus libero ac justo. Vivamus non quam. In suscipit faucibus urna. </p>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Section 3</a></h3>
-        <div>
-            <p>Nam enim risus, molestie et, porta ac, aliquam ac, risus. Quisque lobortis. Phasellus pellentesque purus in massa. Aenean in pede. Phasellus ac libero ac tellus pellentesque semper. Sed ac felis. Sed commodo, magna quis lacinia ornare, quam ante aliquam nisi, eu iaculis leo purus venenatis dui. </p>
-            <ul>
-                <li>List item one</li>
-                <li>List item two</li>
-                <li>List item three</li>
-            </ul>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Section 4</a></h3>
-        <div>
-            <p>Cras dictum. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia Curae; Aenean lacinia mauris vel est. </p><p>Suspendisse eu nisl. Nullam ut libero. Integer dignissim consequat lectus. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. </p>
-        </div>
-    </div>
 </div>
 
-
-
-
-
-
-
-<?php
-inclure_fichier('cvtheque', 'accueil', 'js');
-?>
+<div id="mod_supression" class="modal hide fade">
+    <div class="modal-header">
+        <a class="close" data-dismiss="modal" >&times;</a>
+        <h3>Confirmation</h3>
+    </div>
+    <div class="modal-body">
+        Etes-vous sûr de vouloir supprimer votre CV?
+    </div>
+    <div class="modal-footer">
+        <a href="#" class="btn" data-dismiss="modal" >Non</a>
+        <a href="javascript:Supprimer_CV();" class="btn btn-primary">Oui</a>
+    </div>
+</div>

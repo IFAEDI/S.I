@@ -1,6 +1,5 @@
 body {
-    padding-top: 60px;
-    padding-bottom: 40px;
+    padding-top: 25px;
 }
 
 #footer
@@ -27,4 +26,9 @@ body {
 	list-style: none;
 	display: inline-block;
 	margin: 11px;
+}
+.comment{
+	font-size:0.9em; 
+	color:grey; 
+	font-style:italic;
 }
