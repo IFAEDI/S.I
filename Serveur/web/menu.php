@@ -94,12 +94,27 @@
 	        	<p><a id="cas_login" href="#" class="btn btn-primary" ><i class="icon-user icon-white"></i> Authentification par le CAS INSA</a></p>
 		</div>
 		<div style="width: 49%; display: inline-block; border-left: 1px dotted #E0E0E0;">
-			<label for="username">Utilisateur :</label>
-			<input type="text" name="username" />
-			<label for="password">Mot de passe :</label>
-			<input type="password" name="password" />
+
+		<form id="login_form">
+			<div id="error" class="alert alert-error hide" style="padding-right: 10px;" > </div>
+
+			<fieldset>
+				 <div class="control-group">
+			                <label class="control-label" for="username">Utilisateur</label>
+			                <div class="controls">
+			                 <input class="input-medium" style="margin: 0px;" id="username" type="text" />
+			                </div>
+			          </div>
+				 <div class="control-group">
+			                <label class="control-label" for="password">Mot de passe</label>
+			                <div class="controls">
+			                <input class="input-medium" style="margin: 0px;" id="password" type="password" />
+			                </div>
+			          </div>
+			</fieldset>
 
 			<p><a id="regular_login" href="#" class="btn btn-primary">S'authentifier</a></p>
+		</form>
 		</div>
     </div>
     <div class="modal-footer" style="text-align: center;">

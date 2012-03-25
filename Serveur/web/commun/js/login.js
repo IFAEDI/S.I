@@ -22,5 +22,44 @@ function cas_login() {
 
 function regular_login() {
 	
-	alert( "TODO : Check des identifiants" );
+	/* Vérification que les champs sont bien remplis */
+	var username = $( "#login_form #username" ).val();
+	var password = $( "#login_form #password" ).val();
+
+	$( "#login_form #username" ).parent().parent().removeClass( "error" );
+	$( "#login_form #password" ).parent().parent().removeClass( "error" );
+
+	if( password.length == 0 || username.length == 0 ) {
+		if( username.length == 0 ) {
+			$( "#login_form #username" ).parent().parent().addClass( "error" );
+		}
+
+		if ( password.length == 0 ) {
+			$( "#login_form #password" ).parent().parent().addClass( "error" );
+		}
+
+		$( "#login_form #error" ).html( "Merci de remplir les champs ci-dessous." );
+		$( "#login_form #error" ).slideDown();
+
+		return;
+	}
+
+
+	/* Envoie des données */
+	$.ajax( {
+		type: "GET",
+		dataType: "json",
+		url: "commun/ajax/login.cible.php",
+		data: { action : "regular_auth", username: username, password: password }, 
+		success: function( msg ) {
+
+			alert( msg.code + ' - ' + msg.mesg );
+			
+		},
+		error: function() {
+
+			alert( 'ERROR : TODO' );
+		}
+	
+	} );
 }
