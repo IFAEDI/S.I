@@ -17,7 +17,7 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Etudiants <b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li class="nav-header"><i class="icon-road"></i> Espace Pro.</li>
-					<li><a href="#">Simulations d'entretiens</a></li>
+					<li><a href="index.php?page=entretienEtudiant">Simulations d'entretiens</a></li>
 					<li><a href="index.php?page=stages">Stages</a></li>
 					<li><a href="index.php?page=accueil_cv">CV</a></li>
 

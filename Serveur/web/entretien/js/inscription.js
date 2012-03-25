@@ -91,7 +91,25 @@ function valider(){
 /*---------------------------------------------------------------------------------
 					PARTIE AJAX
 ---------------------------------------------------------------------------------*/
-	
-	
+
+	$("#formInscription").submit( function() {	// à la soumission du formulaire						 
+		$.ajax({ // fonction permettant de faire de l'ajax
+		   type: "POST", // methode de transmission des données au fichier php
+		   url: "entretien/ajax/inscription_post.php", // url du fichier php
+		   data: {prenom : prenom}, // données à transmettre
+		   success: function(msg){ // si l'appel a bien fonctionné
+				if(msg=="1") // si la connexion en php a fonctionnée
+				{
+					alert("coucou");
+					// on désactive l'affichage du formulaire et on affiche un message de bienvenue à la place
+				}
+				else // si la connexion en php n'a pas fonctionnée
+				{
+					alert("plop");
+					// on affiche un message d'erreur dans le span prévu à cet effet
+				}
+		   }
+		});	// permet de rester sur la même page à la soumission du formulaire
+	});
 	
 	
