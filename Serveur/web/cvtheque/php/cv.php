@@ -14,7 +14,7 @@ if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
     die();
 }
 
-inclure_fichier('cvtheque', 'cv', 'css');
+//inclure_fichier('cvtheque', 'cv', 'css');
 
 
 $etudiant = new Etudiant();
@@ -47,9 +47,11 @@ if ($liste_XP == NULL) {
     $liste_XP = new CV_XP();
 }
 ?>
+<link rel="stylesheet" media="screen"  type="text/css" href="/cvtheque/css/cv_screen.css"/>
+<link rel="stylesheet" media="print" type="text/css" href="/cvtheque/css/cv_print.css"/>
 
-<title><?php echo Protection_XSS($etudiant->getPrenom()) . ' ' . Protection_XSS($etudiant->getNom()); ?> | | <?php echo Protection_XSS($etudiant->getMail()); ?></title>
-
+<!DOCTYPE html>
+<meta charset="utf-8" />
 
 <div id="body">
     <div id="doc2" class="yui-t7">
@@ -117,7 +119,7 @@ if ($liste_XP == NULL) {
                                             echo '<div class="job last">';
                                         }
 
-                                        echo '<h3 style="font-style:italic;line-height: 38px;">' . Protection_XSS($XP->getEntreprise()) . ' (' . Protection_XSS($XP->getNomVille()) . ')</h2>';
+                                        echo '<h3 style="font-style:italic;line-height: 38px;">' . Protection_XSS($XP->getEntreprise()) . ' (' . Protection_XSS($XP->getNomVille()) . ')</h3>';
                                         echo '<h2 style="font-size : 110%; width : 505px; line-height: 18px;"><strong>' . Protection_XSS($XP->getTitre()) . '</strong></h2>';
                                         echo '<h4>' . Protection_XSS($XP->getDebut()) . '-' . Protection_XSS($XP->getFin()) . '</h4>';
                                         echo '<p style="font-family: Georgia;">' . nl2br(Protection_XSS($XP->getDescription())) . '</p>';
@@ -137,7 +139,7 @@ if ($liste_XP == NULL) {
                                 <?php
                                 foreach ($liste_diplome_etudiant as $diplome_etudiant) {
                                     echo '<div class="yui-u">';
-                                    echo '<h3>' . Protection_XSS($diplome_etudiant->getAnnee()) . ' ' . Protection_XSS($diplome_etudiant->getLibelle()) . '</h3>';
+                                    echo '<h3>' . Protection_XSS($diplome_etudiant->getAnnee()) . ' ' . Protection_XSS($diplome_etudiant->getLibelle());
                                     if ($diplome_etudiant->getIdMention() != 1) {
                                         echo ' mention ' . Protection_XSS($diplome_etudiant->getNomMention());
                                     }
