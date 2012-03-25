@@ -17,7 +17,6 @@
 			<li><a href="#" target="_blank" title="Google+"><img src="commun/img/networks/s_google+.png" alt="Google+"/></a></li>
 			<li><a href="#" target="_blank" title="Twitter"><img src="commun/img/networks/s_twitter.png" alt="Twitter"/></a></li>
 		</ul>
-	</ul>
 	</div>
 	<div class="span8 columns">
 	  <div id="myCarousel" class="carousel slide">
