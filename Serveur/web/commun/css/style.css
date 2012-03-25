@@ -27,3 +27,8 @@ body {
 	display: inline-block;
 	margin: 11px;
 }
+.comment{
+	font-size:0.9em; 
+	color:grey; 
+	font-style:italic;
+}
