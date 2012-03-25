@@ -59,7 +59,11 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=rifs';
     $nom_module = 'rifs';
     $nom_page = 'rifs';
-
+} elseif ($_GET['page'] ==  'stages') {
+    $titre_page = "Recherche de Stages";
+    $lien_module = 'index.php?page=stages';
+    $nom_module = 'stages';
+    $nom_page = 'stages';
 } else {
     $titre_page = '404';
     $lien_module = '';
