@@ -79,9 +79,9 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
         }
     } else if ($type == 'js') {
         if ($module == '') {
-            $path = "/$module/$nom_fichier.$type";
+            $path = "$module/$nom_fichier.$type";
         } else {
-            $path = "/$module/js/$nom_fichier.$type";
+            $path = "$module/js/$nom_fichier.$type";
         }
 
         if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
