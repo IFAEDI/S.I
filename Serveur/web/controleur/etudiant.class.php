@@ -46,48 +46,48 @@ class Etudiant {
         return NULL;
     }
 
-    public static function RechercherCVEtudiant($_annee, $_mots_clef) {
-        if (is_numeric($_annee) && $_mots_clef != '') {
-            if ($_annee == -1) {
-                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
-                WHERE CV.ANNEE = :annee
-                AND ETUDIANT.ID_CV = CV.ID_CV
-                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT
-                AND MATCH MOTS_CLEF AGAINST (:mots_clef IN NATURAL LANGUAGE MODE) as score FROM CV HAVING score > 0 ORDER BY score DESC
-                HAVING FAVORIS > 0 '
-                                , array('annee' => $_annee, 'mots_clef' => $_mots_clef), BD::RECUPERER_TOUT);
-            } else {
-                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
-                WHERE CV.ANNEE = :annee
-                AND ETUDIANT.ID_CV = CV.ID_CV
-                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT
-                AND MATCH MOTS_CLEF AGAINST (:mots_clef IN NATURAL LANGUAGE MODE) as score FROM CV HAVING score > 0 ORDER BY score DESC'
-                                , array('annee' => $_annee, 'mots_clef' => $_mots_clef), BD::RECUPERER_TOUT);
+    public static function GetNbSuivi($_id) {
+        if (is_numeric($_id)) {
+            $nb_suivi = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT_FAVORIS
+                WHERE ID_ETUDIANT = :id'
+                            , array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
+            return $nb_suivi['COUNT(*)'];
+        }
+        return NULL;
+    }
+
+    public static function RechercherCVEtudiant($_annee, $_mots_clef, $_id_entreprise) {
+        if (is_numeric($_id_entreprise)) {
+            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT,  PRENOM_ETUDIANT, 
+                        IF(ETUDIANT_FAVORIS.id_entreprise = #id_entreprise, 1, 0) as favoris, 
+                        IF(NEW_UPDATE_CV.id_entreprise = #id_entreprise, etat, 0) as etat
+                        FROM CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_etudiant) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_etudiant)) USING (id_cv)
+                        WHERE CV.AGREEMENT = 1
+                        #WHERE
+                        ORDER BY etat ASC, RAND()";
+            $requete = str_replace('#id_entreprise', $_id_entreprise, $requete);
+            $where = '';
+            if (is_numeric($_annee) && $_mots_clef != '') {
+                if ($_annee != -1) {
+                    $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef') AND CV.ANNEE = $_annee";
+                } else {
+                    $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef') HAVING(favoris = 1)";
+                }
+            } else if (is_numeric($_annee)) {
+                if ($_annee != -1) {
+                    $where = " AND CV.ANNEE = $_annee";
+                } else {
+                    $where = " HAVING(favoris = 1)";
+                }
+            } else if ($_mots_clef != '') {
+                $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef')";
             }
-        } else if (is_numeric($_annee)) {
-            if ($_annee == -1) {
-                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
-                WHERE ETUDIANT.ID_CV = CV.ID_CV
-                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT
-                HAVING FAVORIS > 0 '
-                                , array('annee' => $_annee), BD::RECUPERER_TOUT);
-            } else {
-                return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
-                WHERE CV.ANNEE = :annee
-                AND ETUDIANT.ID_CV = CV.ID_CV
-                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT'
-                                , array('annee' => $_annee), BD::RECUPERER_TOUT);
-            }
-        } else if ($_mots_clef != '') {
-            return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS, CV
-                MATCH MOTS_CLEF AGAINST (:mots_clef IN NATURAL LANGUAGE MODE) as score FROM CV HAVING score > 0 ORDER BY score DESC
-                WHERE ETUDIANT.ID_CV = CV.ID_CV
-                AND ETUDIANT.ID_ETUDIANT = ETUDIANT_FAVORIS.ID_ETUDIANT'
-                            , array('mots_clef' => $_mots_clef), BD::RECUPERER_TOUT);
+            $requete = str_replace('#WHERE', $where, $requete);
+             return BD::Prepare($requete, array(), BD::RECUPERER_TOUT);    
+           
         } else {
-            return BD::Prepare('SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT, PRENOM_ETUDIANT, COUNT( ID_ENTREPRISE ) as FAVORIS FROM ETUDIANT, ETUDIANT_FAVORIS
-                WHERE ETUDIANT_FAVORIS.ID_ETUDIANT = ETUDIANT.ID_ETUDIANT'
-                            , array(), BD::RECUPERER_TOUT);
+            echo "Erreur 43 veuillez contacter l'administrateur système";
+            return NULL;
         }
     }
 
@@ -171,10 +171,29 @@ class Etudiant {
             CV_Diplome::SupprimerDiplomeByIdCV($_id_cv);
             CV_XP::SupprimerXPByIdCV($_id_cv);
             CV::SupprimerCVByID($_id_cv);
+            BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE id_etudiant = :id', array('id' => $_id_etudiant));
+            BD::Prepare('DELETE FROM NEW_UPDATE_CV WHERE id_etudiant = :id', array('id' => $_id_etudiant));
             BD::Prepare('DELETE FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id_etudiant));
             return;
         } else {
             echo "Erreur 20 veuillez contacter l'administrateur du site";
+            return;
+        }
+    }
+
+    public static function MettreEnVu($_id_etudiant, $_id_entreprise, $_etat) {
+        if (is_numeric($_id_etudiant) && is_numeric($_etat)) {
+            if ($_etat == 2 && is_numeric($_id_entreprise)) {
+                BD::Prepare('REPLACE INTO NEW_UPDATE_CV SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise, ETAT = 2', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+            } elseif ($_etat == 1) {
+                BD::Prepare('UPDATE NEW_UPDATE_CV SET ETAT = 1 WHERE ID_ETUDIANT = :id_etudiant', array('id_etudiant' => $_id_etudiant));
+            } else {
+                echo "Erreur 56 veuillez contacter l'administrateur du site";
+                return;
+            }
+            return;
+        } else {
+            echo "Erreur 47 veuillez contacter l'administrateur du site";
             return;
         }
     }

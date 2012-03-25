@@ -118,7 +118,7 @@ function Utilisateur_connecter($_groupe) {
 
 //Fonction de protection contre les attaques xss
 //à utiliser avant chaque inclusion de texte que l'utilisateur a tapé
-function protection_xss($_chaine) {
+function Protection_XSS($_chaine) {
     return utf8_encode(htmlentities(utf8_decode($_chaine)));
 }
 
