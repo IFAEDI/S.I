@@ -49,6 +49,11 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'cvtheque';
+} elseif ($_GET['page'] == 'annuaire') {
+    $titre_page = 'Annuaire';
+    $lien_module = 'index.php?page=annuaire';
+    $nom_module = 'annuaire';
+    $nom_page = 'annuaire';
 } elseif ($_GET['page'] == 'inscription') {
     $titre_page = 'Inscription Entretien';
     $lien_module = 'index.php?page=inscription';
