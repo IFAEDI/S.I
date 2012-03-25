@@ -24,7 +24,13 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
             <table style="width : 100%;">
                 <tr>
                     <td>
-                        <span>Ton CV est actuellement diffusé : <a href="javascript:Diffusion(0);">Arrêter sa diffusion</a></span>
+                        <span>Ton CV est actuellement diffusé : <a href="javascript:Diffusion(0);">Arrêter sa diffusion</a></span><br/>
+                        <?php
+                        $nb_entreprise_suivi = Etudiant::GetNbSuivi($_SESSION['utilisateur']->getId());
+                        if ($nb_entreprise_suivi > 0) {
+                            ?> 
+                            <span>Ton CV est actuellement suivi par <?php echo $nb_entreprise_suivi ?> entreprise(s)</span>
+                        <?php } ?>
                     </td>
                     <td style="text-align : right;">
                         <a class="btn btn-danger" data-toggle="modal" href="#mod_supression" style="margin-right : 10px;">Supprimer mon CV</a>

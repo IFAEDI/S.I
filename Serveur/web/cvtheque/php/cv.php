@@ -3,9 +3,10 @@
 <?php
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 session_start();
-
+inclure_fichier('controleur', 'etudiant.class', 'php');
 if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
     $id_etudiant = $_GET['id_etudiant'];
+    Etudiant::MettreEnVu($id_etudiant, $_SESSION['utilisateur']->getId(), 2);
 } elseif (Utilisateur_connecter('etudiant')) {
     $id_etudiant = $_SESSION['utilisateur']->getId();
 } else {
@@ -15,7 +16,7 @@ if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
 
 inclure_fichier('cvtheque', 'cv', 'css');
 
-inclure_fichier('controleur', 'etudiant.class', 'php');
+
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 
@@ -47,7 +48,7 @@ if ($liste_XP == NULL) {
 }
 ?>
 
-<title><?php echo $etudiant->getPrenom() . ' ' . $etudiant->getNom(); ?> | | <?php echo $etudiant->getMail(); ?></title>
+<title><?php echo Protection_XSS($etudiant->getPrenom()) . ' ' . Protection_XSS($etudiant->getNom()); ?> | | <?php echo Protection_XSS($etudiant->getMail()); ?></title>
 
 
 <div id="body">
@@ -57,21 +58,21 @@ if ($liste_XP == NULL) {
             <div id="hd">
                 <div class="yui-gc">
                     <div class="yui-u first">
-                        <h1><?php echo $etudiant->getPrenom() . ' ' . $etudiant->getNom(); ?></h1>
+                        <h1><?php echo Protection_XSS($etudiant->getPrenom()) . ' ' . Protection_XSS($etudiant->getNom()); ?></h1>
                         <h2><?php echo $cv->getTitre(); ?></h2>
                     </div>
 
                     <div class="yui-u">
                         <div class="contact-info">
-                            <h3 style="line-height: 23px;"><a href="mailto:<?php echo $etudiant->getMail(); ?>"><?php echo $etudiant->getMail(); ?></a></h3>
-                            <h3 style="line-height: 23px;"><?php echo $etudiant->getTel(); ?></h3>
-                            <h3 style="line-height: 16px;"><?php echo $etudiant->getAdresse1(); ?></h3>
+                            <h3 style="line-height: 23px;"><a href="mailto:<?php echo Protection_XSS($etudiant->getMail()); ?>"><?php echo Protection_XSS($etudiant->getMail()); ?></a></h3>
+                            <h3 style="line-height: 23px;"><?php echo Protection_XSS($etudiant->getTel()); ?></h3>
+                            <h3 style="line-height: 16px;"><?php echo Protection_XSS($etudiant->getAdresse1()); ?></h3>
                             <?php
                             if ($etudiant->getAdresse2() != '') {
-                                echo '<h3 style="line-height: 16px;">' . $etudiant->getAdresse2() . '</h3>';
+                                echo '<h3 style="line-height: 16px;">' . Protection_XSS($etudiant->getAdresse2()) . '</h3>';
                             }
                             ?>
-                            <h3 style="line-height: 23px;"><?php echo $etudiant->getCPVille() . ' ' . $etudiant->getNomVille() . ' ' . $etudiant->getPaysVille(); ?></h3>
+                            <h3 style="line-height: 23px;"><?php echo Protection_XSS($etudiant->getCPVille()) . ' ' . Protection_XSS($etudiant->getNomVille()) . ' ' . Protection_XSS($etudiant->getPaysVille()); ?></h3>
                             <?php
                             if ($etudiant->getSexe() == 0) {
                                 $ne = "Né le ";
@@ -79,16 +80,16 @@ if ($liste_XP == NULL) {
                                 $ne = "Née le ";
                             }
                             ?>
-                            <h3 style="line-height: 23px;"><?php echo $ne . $etudiant->getAnniv(); ?></h3>
+                            <h3 style="line-height: 23px;"><?php echo $ne . Protection_XSS($etudiant->getAnniv()); ?></h3>
                             <?php
                             if ($cv->getIDMobilite() > 2) {
-                                echo '<h3 style="line-height: 23px;">Mobilité ' . $cv->getNomMobilite() . '</h3>';
+                                echo '<h3 style="line-height: 23px;">Mobilité ' . Protection_XSS($cv->getNomMobilite()) . '</h3>';
                             }
                             if ($etudiant->getIdPermis() < 3) {
-                                echo '<h3 style="line-height: 23px;">' . $etudiant->getNomPermis() . '</h3>';
+                                echo '<h3 style="line-height: 23px;">' . Protection_XSS($etudiant->getNomPermis()) . '</h3>';
                             }
                             ?>
-                            <h3 style="line-height: 23px;"><?php echo $etudiant->getNomMarital(); ?></h3>
+                            <h3 style="line-height: 23px;"><?php echo Protection_XSS($etudiant->getNomMarital()); ?></h3>
                         </div><!--// .contact-info -->
                     </div>
                 </div><!--// .yui-gc -->
@@ -116,10 +117,10 @@ if ($liste_XP == NULL) {
                                             echo '<div class="job last">';
                                         }
 
-                                        echo '<h3 style="font-style:italic;line-height: 38px;">' . $XP->getEntreprise() . ' (' . $XP->getNomVille() . ')</h2>';
-                                        echo '<h2 style="font-size : 110%; width : 505px; line-height: 18px;"><strong>' . $XP->getTitre() . '</strong></h2>';
-                                        echo '<h4>' . $XP->getDebut() . '-' . $XP->getFin() . '</h4>';
-                                        echo '<p style="font-family: Georgia;">' . nl2br($XP->getDescription()) . '</p>';
+                                        echo '<h3 style="font-style:italic;line-height: 38px;">' . Protection_XSS($XP->getEntreprise()) . ' (' . Protection_XSS($XP->getNomVille()) . ')</h2>';
+                                        echo '<h2 style="font-size : 110%; width : 505px; line-height: 18px;"><strong>' . Protection_XSS($XP->getTitre()) . '</strong></h2>';
+                                        echo '<h4>' . Protection_XSS($XP->getDebut()) . '-' . Protection_XSS($XP->getFin()) . '</h4>';
+                                        echo '<p style="font-family: Georgia;">' . nl2br(Protection_XSS($XP->getDescription())) . '</p>';
                                         echo '</div>';
                                     }
                                     ?>                            
@@ -136,12 +137,12 @@ if ($liste_XP == NULL) {
                                 <?php
                                 foreach ($liste_diplome_etudiant as $diplome_etudiant) {
                                     echo '<div class="yui-u">';
-                                    echo '<h3>' . $diplome_etudiant->getAnnee() . ' ' . $diplome_etudiant->getLibelle() . '</h3>';
+                                    echo '<h3>' . Protection_XSS($diplome_etudiant->getAnnee()) . ' ' . Protection_XSS($diplome_etudiant->getLibelle()) . '</h3>';
                                     if ($diplome_etudiant->getIdMention() != 1) {
-                                        echo ' mention ' . $diplome_etudiant->getNomMention();
+                                        echo ' mention ' . Protection_XSS($diplome_etudiant->getNomMention());
                                     }
                                     echo '</h3>';
-                                    echo '<h4>' . $diplome_etudiant->getInstitut() . ' ' . $diplome_etudiant->getNomVille() . '</h4>';
+                                    echo '<h4>' . Protection_XSS($diplome_etudiant->getInstitut()) . ' ' . Protection_XSS($diplome_etudiant->getNomVille()) . '</h4>';
                                     echo '</div>';
                                 }
                                 ?>
@@ -157,8 +158,8 @@ if ($liste_XP == NULL) {
                                 <?php
                                 foreach ($liste_formation_etudiant as $formation_etudiant) {
                                     echo '<div class="yui-u">';
-                                    echo '<h3>' . $formation_etudiant->getDebut() . ' ' . $formation_etudiant->getFin() . ' - ' . $formation_etudiant->getInstitut() . ' - ' . $formation_etudiant->getNomVille() . '</h3>';
-                                    echo '<h4>' . $formation_etudiant->getAnnee() . '</h4><br>';
+                                    echo '<h3>' . Protection_XSS($formation_etudiant->getDebut()) . ' ' . Protection_XSS($formation_etudiant->getFin()) . ' - ' . Protection_XSS($formation_etudiant->getInstitut()) . ' - ' . Protection_XSS($formation_etudiant->getNomVille()) . '</h3>';
+                                    echo '<h4>' . Protection_XSS($formation_etudiant->getAnnee()) . '</h4><br>';
                                     echo '</div>';
                                 }
                                 ?>
@@ -174,11 +175,11 @@ if ($liste_XP == NULL) {
                                 <?php
                                 foreach ($liste_langue_etudiant as $langue_etudiant) {
                                     echo '<div class="yui-u">';
-                                    echo '<h3><strong>' . $langue_etudiant->getNomLangue() . '</strong> ' . $langue_etudiant->getNomNiveau();
+                                    echo '<h3><strong>' . Protection_XSS($langue_etudiant->getNomLangue()) . '</strong> ' . Protection_XSS($langue_etudiant->getNomNiveau());
                                     if ($langue_etudiant->getIdCertif() != 1) {
-                                        echo ' ' . $langue_etudiant->getNomCertif();
+                                        echo ' ' . Protection_XSS($langue_etudiant->getNomCertif());
                                         if ($langue_etudiant->getMaxScoreCertif() != NULL && $langue_etudiant->getScoreCertif() != '') {
-                                            echo ' ' . $langue_etudiant->getScoreCertif() . '/' . $langue_etudiant->getMaxScoreCertif();
+                                            echo ' ' . Protection_XSS($langue_etudiant->getScoreCertif()) . '/' . Protection_XSS($langue_etudiant->getMaxScoreCertif());
                                         }
                                     }
                                     echo '</h3>';
@@ -196,7 +197,7 @@ if ($liste_XP == NULL) {
                                 </div>
                                 <?php
                                 echo '<div class="yui-u">';
-                                echo '<h3>' . $cv->getLoisir() . '</h3>';
+                                echo '<h3>' . Protection_XSS($cv->getLoisir()) . '</h3>';
                                 echo '</div>';
                                 ?>
                             </div><!--// .yui-gf -->
@@ -209,7 +210,7 @@ if ($liste_XP == NULL) {
 
 
             <div id="ft">
-                <p><?php echo $etudiant->getPrenom() . ' ' . $etudiant->getNom(); ?> &mdash; <a href="mailto:<?php echo $etudiant->getMail(); ?>"><?php echo $etudiant->getMail(); ?></a> &mdash; <?php echo $etudiant->getTel(); ?></p>
+                <p><?php echo Protection_XSS($etudiant->getPrenom()) . ' ' . Protection_XSS($etudiant->getNom()); ?> &mdash; <a href="mailto:<?php echo Protection_XSS($etudiant->getMail()); ?>"><?php echo Protection_XSS($etudiant->getMail()); ?></a> &mdash; <?php echo Protection_XSS($etudiant->getTel()); ?></p>
             </div><!--// footer -->
 
         </div><!-- // inner -->

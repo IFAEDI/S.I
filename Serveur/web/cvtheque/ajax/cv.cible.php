@@ -172,7 +172,10 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
         CV_XP::AjouterXP($experience[0], $experience[1], $experience[2], $experience[3], $experience[4], $experience[5], $_cp, $_pays, $id_cv);
     }
 
-
+    //On indique que le CV vient d'etre mis a jour (s'il vient d'etre creer rien ne se passe)
+    Etudiant::MettreEnVu($_SESSION['utilisateur']->getId(), '', 1);
+            
+            
     echo "1";
 }
 
@@ -235,7 +238,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs']));
+    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs'],$_SESSION['utilisateur']->getId()));
 }
 
 
