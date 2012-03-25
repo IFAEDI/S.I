@@ -1,6 +1,6 @@
 <div class=row-fluid>
 	<div class="span12">
-		<div id="presentationRif"
+		<div id="presentationRif">
 			<h1>Présentation</h1>
 			<p>
 				Les "Rencontres IF" (ou "RIFs") sont une manifestation propre au Département Informatique de l'INSA de Lyon. Elles permettent, le temps d'une journée, d'élaborer un lien privilégié entre les entreprises et les étudiants.<br />Fort de son succès depuis plus de <strong>10 ans</strong> cet évènement se renouvelle chaque année en recherchant toujours plus de qualité dans sa prestation.
@@ -62,8 +62,8 @@
 
 		<!-- Formulaire pour l'inscription au RIFs -->
 		<form class="form-horizontal" onsubmit="return valider()" name="formInscription" method="post">
-			<fieldset>
-				<legend>Formulaire d'inscription</legend>
+			<legend><h1>Formulaire d'inscription</h1></legend>
+			<fieldset id="infoEntreprise">
 				<div class="control-group" id="control_nomEntreprise">
 					<label class="control-label" for="nomEntreprise">Nom de l'entreprise</label>
 					<div class="controls">
@@ -74,19 +74,122 @@
 					<div class="span4">
 						<label class="control-label" for="nomResponsable">Nom du responsable</label>
 						<div class="controls">
-							<input class="input-large" type="text" id="nomResponsable" placeholder="Nom du responsable..." />
+							<input class="input-large" type="text" id="nomResponsable" placeholder="Nom du responsable..." required />
 						</div>
 					</div>
 
 					<div class="span6">
 						<label class="control-label" for="telephone">Tél</label>
 						<div class="controls">
-							<input class="input-medium" type="text" id="telephone" placeholder="N° de tél..." />
+							<input class="input-medium" type="tel" id="telephone" placeholder="N° de tél..." />
 						</div>
 				</div>
-				
-				
 			</fieldset>
+			<fieldset id="infoGenerale">
+				<legend>Informations Générales</legend>
+				<div class=row-fluid>
+					<div class="control-group span4" id="control_nbPersonne">
+						<label class="control-label" for="nbPersonne">Nombre de personnes présentes</label>
+						<div class="controls">
+							<input class="input-medium" type="number" min="1" max="8" value="1" step="1" id="nbPersonne" placeholder="Nom de l'entreprise..." />
+						</div>
+					</div>
+					<div class="control-group span8" id="control_intervenant">
+						<label class="control-label">Nom - Prénom</label>
+						<div class="controls">
+							<input class="input-medium span" type="text" id="nom_1" placeholder="Nom" />
+							<input class="input-medium span" type="text" id="prenom_1" placeholder="Prénom" />
+						</div>
+					</div>
+				</div>
+				<div class="control-group" id="control_momentPresence">
+					<label class="control-label">Présence</label>
+					<div class="controls">
+						<label class="radio inline">
+							<input id="momentPresence_matin" type="radio" value="matin" name="momentPresence" />
+							Matin
+						</label>
+						<label class="radio inline">
+							<input id="momentPresence_apresMidi" type="radio" value="apresMidi" name="momentPresence" />
+							Après-Midi
+						</label>
+						<label class="radio inline">
+							<input id="momentPresence_journee" type="radio" checked="" value="journee" name="momentPresence" />
+							Journée entière
+						</label>
+					</div>
+				</div>
+				<div class="control-group" id="control_momentPresence">
+					<label class="control-label">Présence</label>
+					<div class="controls">
+						<label class="radio inline">
+							<input id="restaurant_non" type="radio" checked="" value="non" name="restaurant" />
+							Non
+						</label>
+						<label class="radio inline">
+							<input id="restaurant_oui" type="radio" value="oui" name="restaurant" />
+							Oui - Nombre de personnes :
+							<input class="input-medium" type="number" min="1" max="8" value="1" step="1" id="nbPers_restaurant" disabled />
+						</label>
+					</div>
+				</div>
+				<div class="control-group" id="control_taxeApprentissage">
+					<label class="control-label">Paiement de la taxe d'apprentissage à l'INSA</label>
+					<div class="controls">
+						<label class="radio inline">
+							<input id="TA_non" type="radio" checked="" value="non" name="TA" />
+							Non
+						</label>
+						<label class="radio inline">
+							<input id="TA_oui" type="radio" value="oui" name="TA" />
+							Oui
+						</label>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset id="infoTechnique">
+				<legend>Informations Techniques</legend>
+				<div class="control-group row-fluid">
+					<div class="span8">
+						<label class="control-label" for="infoMatosTechnique">Description du matériel apporté</label>
+						<div class="controls">
+							<textarea class="input-xxlarge" rows="3" id="infoMatosTechnique">
+							</textarea>
+						</div>
+					</div>
+					<div class="span4">
+						<label class="control-label" for="infoNbPrise">Nombre de prises électriques nécessaires</label>
+						<div class="controls">
+							<input class="input-medium" type="number" min="0" max="20" value="0" step="1" id="infoNbPrise" />
+						</div>
+					</div>
+				</div>
+			</fieldset>
+			<fieldset id="infoComplementaire">
+				<legend>Informations Complémentaires</legend>
+				<div class="control-group" id="control_attente">
+					<label>Quelles sont vos attentes concernant votre participation aux rencontres IF?</label>
+					<div class="controls">
+						<textarea class="input-xxlarge" rows="3" id="attente">
+						</textarea>
+					</div>
+				</div>
+				<div class="control-group" id="control_descEntreprise">
+					<label>Description de votre entreprise <em>(description qui apparaîtra sur la broche de l'évènement)</em></label>
+					<div class="controls">
+						<textarea class="input-xxlarge" rows="3" id="description">
+						</textarea>
+					</div>
+				</div>
+				<div class="control-group" id="control_autre">
+					<label>Autres (commentaires, remarques, ...)</label>
+					<div class="controls">
+						<textarea class="input-xxlarge" rows="3" id="autre">
+						</textarea>
+					</div>
+				</div>
+			</fieldset>
+			<button class="btn btn-large offset9">Envoyer</button>
 		</form>
 	</div>
 </div>
