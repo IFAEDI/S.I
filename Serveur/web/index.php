@@ -64,7 +64,13 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=inscription';
     $nom_module = 'entretien';
     $nom_page = 'inscription';
-	$titre_module = 'X';
+	$titre_module = 'Entreprises';
+} elseif ($_GET['page'] == 'entretienEtudiant') {
+    $titre_page = 'Entretien';
+    $lien_module = 'index.php?page=entretienEtudiant';
+    $nom_module = 'entretien';
+    $nom_page = 'entretienEtudiant';
+	$titre_module = 'Etudiants';
 } elseif ($_GET['page'] == 'rifs') {
     $titre_page = 'Rencontres IF';
     $lien_module = 'index.php?page=rifs';

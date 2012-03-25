@@ -1,14 +1,12 @@
 <?php
-if (!Utilisateur_connecter('entreprise')) {
+/*if (!Utilisateur_connecter('entreprise')) {
     inclure_fichier('', '401', 'php');
     die;
 }
-
-
-
+*/
 ?>
 
-<form class="form-horizontal" onsubmit="return valider()" name="formInscription" action="entretien.php" method="post">
+<form class="form-horizontal" onsubmit="return valider()" name="formInscription" action="#" method="post">
 	<fieldset>
 	  <legend>Formulaire d'inscription</legend>
 	  <!-- Partie relative au contact -->
