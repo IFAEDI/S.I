@@ -12,6 +12,8 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 ?>
 <div class="alert alert-error" id="div_erreur" style="display: none;"></div>
 
+ 
+
 <?php if ($etudiant == null) { ?>
     <div class='alert alert-error'>Oooooooh mais tu n'as pas de CV comme c'est dommage : 
         <a class="btn btn-success" href="index.php?page=edit_cv">Creer mon CV</a></div>
@@ -33,6 +35,7 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
                         <?php } ?>
                     </td>
                     <td style="text-align : right;">
+                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
                         <a class="btn btn-danger" data-toggle="modal" href="#mod_supression" style="margin-right : 10px;">Supprimer mon CV</a>
                         <a class="btn btn-primary" href="index.php?page=edit_cv">Editer mon CV</a>
                     </td>
@@ -49,6 +52,7 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
                         <span>Ton CV n'est toujours pas diffusé : <a href='javascript:Diffusion(1);'>Autoriser sa diffusion</a></span>
                     </td>
                     <td style='text-align : right;'>
+                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
                         <a class='btn btn-danger' data-toggle='modal' href='#mod_supression' style='margin-right : 10px;'>Supprimer mon CV</a>
                         <a class='btn btn-primary' href="index.php?page=edit_cv">Editer mon CV</a>
                     </td>
