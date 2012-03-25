@@ -10,6 +10,7 @@ inclure_fichier('commun', 'requete.inc', 'php'); // Ajouter dans base.inc ?
  * Auteur : benjamin.bouvier@gmail.com (2011/2012)
  */
 class Stages {
+
 	/**
 	 * Recherche des stages appropriés selon les paramètres donnés.
 	 *
@@ -22,7 +23,7 @@ class Stages {
 	 */
 
 	// TODO ajouter domaine ?
-	public static function rechercher($mots_cles, $annee, $duree,
+	static function rechercher($mots_cles, $annee, $duree,
 				$lieu, $entreprise) {
 
 		$requete = new Requete("SELECT * FROM Stage");
@@ -51,16 +52,6 @@ class Stages {
 
 		return $requete->lire();
 	}
-};
-
-
-// Tests à la va-vite pour l'instant... 
-$resultats = Stages::rechercher(array('code'), NULL, NULL, NULL, NULL);
-
-$count = count($resultats);
-echo "<p>$count résultats trouvés.</p>";
-for ($i = 0; $i < $count; $i++) {
-	echo 'Titre : ' . $resultats[$i]->titre . '<br/>';
 }
 
 ?>
