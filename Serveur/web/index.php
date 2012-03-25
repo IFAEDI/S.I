@@ -41,6 +41,11 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=inscription';
     $nom_module = 'entretien';
     $nom_page = 'inscription';
+} elseif ($_GET['page'] == 'entretienEtudiant') {
+    $titre_page = 'Entretien';
+    $lien_module = 'index.php?page=entretienEtudiant';
+    $nom_module = 'entretien';
+    $nom_page = 'entretienEtudiant';
 } else {
     $titre_page = '404';
     $lien_module = '';

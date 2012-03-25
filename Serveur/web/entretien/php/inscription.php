@@ -4,11 +4,9 @@ if (!Utilisateur_connecter('entreprise')) {
     die;
 }
 
-
-
 ?>
 
-<form class="form-horizontal" onsubmit="return valider()" name="formInscription" action="entretien.php" method="post">
+<form class="form-horizontal" onsubmit="return valider()" name="formInscription" action="#" method="post">
 	<fieldset>
 	  <legend>Formulaire d'inscription</legend>
 	  <!-- Partie relative au contact -->
