@@ -1,5 +1,6 @@
 <?php
 
-echo "Hello, world!";
+inclure_fichier('stages', 'controleur', 'php');
+
 
 ?>
