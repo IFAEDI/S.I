@@ -53,6 +53,9 @@ global $theme;
         <?php } ?>
 
         <div class="container">
+			<div class="titre">
+				<?php echo $titre_page ?>
+			</div>
             <div class="module">   
                 <?php inclure_fichier($nom_module, $nom_page, 'php'); ?>
             </div>

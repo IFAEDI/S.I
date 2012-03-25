@@ -2,6 +2,12 @@ body {
     padding-top: 25px;
 }
 
+.titre {
+	text-align:center;
+	font-size:40px;
+	font-weight:bold;
+}
+
 #footer
 {
     border-top: solid 1px grey;
