@@ -33,38 +33,54 @@ if ($_GET['page'] == 'accueil') {
     $titre_page = 'Accueil';
     $lien_module = '';
     $nom_module = '';
+	$titre_module = '';
     $nom_page = 'Accueil';
 } elseif ($_GET['page'] == 'accueil_cv') {
     $titre_page = 'Accueil CV';
     $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'accueil';
+	$titre_module = 'Etudiants';
 } elseif ($_GET['page'] == 'edit_cv') {
     $titre_page = 'Edition CV';
     $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'edit_cv';
+	$titre_module = 'Etudiants';
 }elseif ($_GET['page'] == 'cvtheque') {
     $titre_page = 'CV';
     $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'cvtheque';
+	$titre_module = 'Entreprises';
+} elseif ($_GET['page'] == 'annuaire') {
+    $titre_page = 'Annuaire';
+    $lien_module = 'index.php?page=annuaire';
+    $nom_module = 'annuaire';
+    $nom_page = 'annuaire';
+	$titre_module = 'AEDI';
 } elseif ($_GET['page'] == 'inscription') {
     $titre_page = 'Inscription Entretien';
     $lien_module = 'index.php?page=inscription';
     $nom_module = 'entretien';
     $nom_page = 'inscription';
+	$titre_module = 'X';
 } elseif ($_GET['page'] == 'rifs') {
     $titre_page = 'Rencontres IF';
     $lien_module = 'index.php?page=rifs';
     $nom_module = 'rifs';
     $nom_page = 'rifs';
-
+} elseif ($_GET['page'] ==  'stages') {
+    $titre_page = "Recherche de Stages";
+    $lien_module = 'index.php?page=stages';
+    $nom_module = 'stages';
+    $nom_page = 'stages';
 } else {
     $titre_page = '404';
     $lien_module = '';
     $nom_module = '';
     $nom_page = '404';
+	$titre_module = '';
 }
 
 inclure_fichier('', 'layout', 'php');

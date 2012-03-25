@@ -2,6 +2,7 @@
 global $titre_page;
 global $nom_module;
 global $lien_module;
+global $titre_module;
 global $nom_page;
 global $theme;
 ?>
@@ -45,9 +46,9 @@ global $theme;
                     <a href="index.php?page=accueil"><i class="icon-home"></i></a> <span class="divider">/</span>
                 </li>
                 <li>
-                    <a href="<?php echo $lien_module ?>" ><?php echo $nom_module ?></a> <span class="divider">/</span>
+                    <a href="<?php echo $lien_module ?>" ><?php echo $titre_module ?></a> <span class="divider">/</span>
                 </li>
-                <li class="active"><?php echo $nom_page ?></li>
+                <li class="active"><?php echo $titre_page ?></li>
             </ul>
         <?php } ?>
 

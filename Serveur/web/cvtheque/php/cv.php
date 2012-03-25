@@ -1,5 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-
 <?php
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 session_start();
@@ -14,12 +12,8 @@ if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
     die();
 }
 
-//inclure_fichier('cvtheque', 'cv', 'css');
-
-
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
-
 
 if ($etudiant == NULL) {
     $etudiant = new Etudiant();
@@ -47,13 +41,12 @@ if ($liste_XP == NULL) {
     $liste_XP = new CV_XP();
 }
 ?>
+<meta charset="utf-8" />
 <link rel="stylesheet" media="screen"  type="text/css" href="/cvtheque/css/cv_screen.css"/>
 <link rel="stylesheet" media="print" type="text/css" href="/cvtheque/css/cv_print.css"/>
 
-<!DOCTYPE html>
-<meta charset="utf-8" />
 
-<div id="body">
+<div id="cv">
     <div id="doc2" class="yui-t7">
         <div id="inner">
 
@@ -100,14 +93,11 @@ if ($liste_XP == NULL) {
             <div id="bd">
                 <div id="yui-main">
                     <div class="yui-b">
-
-
                         <?php if (count($liste_XP) > 0) { ?>  
                             <div class="yui-gf">
                                 <div class="yui-u first">
                                     <h2>Expérience(s)</h2>
                                 </div><!--// .yui-u -->
-
                                 <div class="yui-u">
                                     <?php
                                     $nb_xp = count($liste_XP);
@@ -129,7 +119,6 @@ if ($liste_XP == NULL) {
                                 </div><!--// .yui-u -->
                             </div><!--// .yui-gf -->
                         <?php } ?>
-
 
                         <?php if (count($liste_diplome_etudiant) > 0) { ?>       
                             <div class="yui-gf last">
@@ -168,7 +157,6 @@ if ($liste_XP == NULL) {
                             </div><!--// .yui-gf -->
                         <?php } ?>
 
-
                         <?php if (count($liste_langue_etudiant) > 0) { ?> 
                             <div class="yui-gf ">
                                 <div class="yui-u first">
@@ -204,20 +192,13 @@ if ($liste_XP == NULL) {
                                 ?>
                             </div><!--// .yui-gf -->
                         <?php } ?>
-
                     </div><!--// .yui-b -->
                 </div><!--// yui-main -->
             </div><!--// bd -->
 
-
-
             <div id="ft">
                 <p><?php echo Protection_XSS($etudiant->getPrenom()) . ' ' . Protection_XSS($etudiant->getNom()); ?> &mdash; <a href="mailto:<?php echo Protection_XSS($etudiant->getMail()); ?>"><?php echo Protection_XSS($etudiant->getMail()); ?></a> &mdash; <?php echo Protection_XSS($etudiant->getTel()); ?></p>
             </div><!--// footer -->
-
         </div><!-- // inner -->
-
-
     </div><!--// doc -->
-
 </div>
