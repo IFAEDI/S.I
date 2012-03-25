@@ -41,11 +41,10 @@ if ($liste_XP == NULL) {
     $liste_XP = new CV_XP();
 }
 ?>
+<meta charset="utf-8" />
 <link rel="stylesheet" media="screen"  type="text/css" href="/cvtheque/css/cv_screen.css"/>
 <link rel="stylesheet" media="print" type="text/css" href="/cvtheque/css/cv_print.css"/>
 
-<!DOCTYPE html>
-<meta charset="utf-8" />
 
 <div id="cv">
     <div id="doc2" class="yui-t7">
@@ -120,7 +119,7 @@ if ($liste_XP == NULL) {
                                 </div><!--// .yui-u -->
                             </div><!--// .yui-gf -->
                         <?php } ?>
-                            
+
                         <?php if (count($liste_diplome_etudiant) > 0) { ?>       
                             <div class="yui-gf last">
                                 <div class="yui-u first">
@@ -140,7 +139,7 @@ if ($liste_XP == NULL) {
                                 ?>
                             </div><!--// .yui-gf -->
                         <?php } ?>
-                            
+
                         <?php if (count($liste_formation_etudiant) > 0) { ?> 
                             <div class="yui-gf last">
                                 <div class="yui-u first">
@@ -200,10 +199,6 @@ if ($liste_XP == NULL) {
             <div id="ft">
                 <p><?php echo Protection_XSS($etudiant->getPrenom()) . ' ' . Protection_XSS($etudiant->getNom()); ?> &mdash; <a href="mailto:<?php echo Protection_XSS($etudiant->getMail()); ?>"><?php echo Protection_XSS($etudiant->getMail()); ?></a> &mdash; <?php echo Protection_XSS($etudiant->getTel()); ?></p>
             </div><!--// footer -->
-
         </div><!-- // inner -->
-
-
     </div><!--// doc -->
-
 </div>
