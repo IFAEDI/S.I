@@ -31,6 +31,8 @@ global $theme;
         inclure_fichier('commun', 'datepicker.fr', 'js');
         inclure_fichier('commun', 'json2', 'js');
         inclure_fichier('commun', 'utils', 'js');
+
+	inclure_fichier('commun', 'login', 'js');
         ?>
         <title>AEDI - <?php echo $titre_page ?></title>
     </head>
@@ -38,7 +40,7 @@ global $theme;
     <body>
         <?php inclure_fichier('', 'menu', 'php'); ?>
         <?php if ($nom_module != '') { ?>
-            <ul class="breadcrumb" style="margin-top: 0px;">
+            <ul class="breadcrumb" >
                 <li>
                     <a href="index.php?page=accueil"><i class="icon-home"></i></a> <span class="divider">/</span>
                 </li>
@@ -55,5 +57,6 @@ global $theme;
             </div>
             <p id="footer">&copy; AEDI - 2012</p>
         </div>
+
     </body>
 </html>

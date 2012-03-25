@@ -73,7 +73,7 @@
                 </script>
 
 		<ul class="nav pull-right">
-			<li class=""><a href="#">Se connecter</a></li>
+			<li class=""><a data-toggle="modal" href="#login_dialog"><i class="icon-user icon-white"></i> Se connecter</a></li>
 			<li class="divider-vertical"></li>
 		</ul>
 		  
@@ -81,3 +81,29 @@
 	</div>
   </div>
 </div>
+
+
+<div id="login_dialog" class="modal hide fade">
+   <div class="modal-header">
+        <a class="close" data-dismiss="modal" >&times;</a>
+        <h3>Authentification</h3>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+
+		<div style="width: 49%; display: inline-block; margin-top: 60px; vertical-align: top;">
+	        	<p><a id="cas_login" href="#" class="btn btn-primary" ><i class="icon-user icon-white"></i> Authentification par le CAS INSA</a></p>
+		</div>
+		<div style="width: 49%; display: inline-block; border-left: 1px dotted #E0E0E0;">
+			<label for="username">Utilisateur :</label>
+			<input type="text" name="username" />
+			<label for="password">Mot de passe :</label>
+			<input type="password" name="password" />
+
+			<p><a id="regular_login" href="#" class="btn btn-primary">S'authentifier</a></p>
+		</div>
+    </div>
+    <div class="modal-footer" style="text-align: center;">
+		<a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
+    </div>
+</div>
+
