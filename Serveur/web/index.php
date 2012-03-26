@@ -76,6 +76,11 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=rifs';
     $nom_module = 'rifs';
     $nom_page = 'rifs';
+} elseif ($_GET['page'] == 'inscriptionRIFs') {
+    $titre_page = 'Inscription aux Rencontres IF';
+    $lien_module = 'index.php?page=inscriptionRIFs';
+    $nom_module = 'rifs';
+    $nom_page = 'inscription';
 } elseif ($_GET['page'] ==  'stages') {
     $titre_page = "Recherche de Stages";
     $lien_module = 'index.php?page=stages';

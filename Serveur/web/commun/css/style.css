@@ -6,6 +6,7 @@ body {
 	text-align:center;
 	font-size:40px;
 	font-weight:bold;
+	margin-bottom:30px;
 }
 
 #footer
@@ -16,6 +17,11 @@ body {
     padding: 2px;
     font-size: 0.8em;
     text-align: right;
+}
+
+.centre
+{
+	text-align:center;
 }
 
 .hero_motcle {
