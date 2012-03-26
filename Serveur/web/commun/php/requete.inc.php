@@ -134,7 +134,6 @@ class Requete {
 	public function lire() {
 		$this->requete .= $this->clauseWhere;
 
-		echo '<p>Requête : ' . $this->requete . '</p>'; // FIXME Debug!!
 		return BD::Prepare($this->requete, 
 					$this->attributs,
 					BD::RECUPERER_TOUT,

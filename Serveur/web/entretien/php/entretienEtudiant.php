@@ -18,32 +18,36 @@
             <table class="table table-striped">
 			<thead>
 			  <tr>
-				<th>Horaire</th>
+				<th>Debut</th>
+				<th>Fin</th>	
 				<th>Etat</th>
 				<th></th>
 			  </tr>
 			</thead>
 			<tbody>
 			  <tr>
-				<td>13h30 - 14h</td>
+				<td>14h00</td>
+				<td>14h45</td>
 				<td>Disponible</td>
 				<td>
-				<a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<a class="reservation btn btn-inverse" entreprise="Altran" heureDeb="14h00" heureFin="14h45" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a>
 				</td>
 			  </tr>
 			  <tr>
-				<td>14h30 - 15h</td>
+				<td>14h45</td>
+				<td>15h30</td>
 				<td>Reserve</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
 			  <tr>
-				<td>15h30 - 16h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Disponible</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
@@ -63,30 +67,34 @@
             <table class="table table-striped">
 			<thead>
 			  <tr>
-				<th>Horaire</th>
+				<th>Debut</th>
+				<th>Fin</th>
 				<th>Etat</th>
 				<th></th>
 			  </tr>
 			</thead>
 			<tbody>
 			  <tr>
-				<td>13h30 - 14h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Disponible</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
 			  <tr>
-				<td>14h30 - 15h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Reserve</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
 			  <tr>
-				<td>15h30 - 16h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Disponible</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
@@ -106,30 +114,34 @@
             <table class="table table-striped">
 			<thead>
 			  <tr>
-				<th>Horaire</th>
+				<th>Debut</th>
+				<th>Fin</th>
 				<th>Etat</th>
 				<th></th>
 			  </tr>
 			</thead>
 			<tbody>
 			  <tr>
-				<td>13h30 - 14h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Disponible</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
 			  <tr>
-				<td>14h30 - 15h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Reserve</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
 			  <tr>
-				<td>15h30 - 16h</td>
+				<td>15h30</td>
+				<td>16h15</td>
 				<td>Disponible</td>
-				<td><a class="actuator btn btn-inverse" data-toggle="modal" href="#myModal">
+				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
 				S'inscrire
 				</a></td>
 			  </tr>
@@ -146,7 +158,10 @@
 	<h3>Entretien</h3>
 	</div>
 	<div class="modal-body">
-	   <form class="form-horizontal" method="post" action="reserverCreneau">
+	   <form class="form-horizontal" name="formReservation" method="post" >
+			<input type="hidden" name="heureDeb"/>
+			<input type="hidden" name="heureFin"/>
+			<input type="hidden" name="entreprise"/>
 			<p>Etes-vous sur de vouloir vous inscrire a cette session ?</p>
 			<div class="modal-footer">
 			<input type="submit" class="btn btn-primary" value="Valider"/>
@@ -157,6 +172,13 @@
 </div>
 
 <script type="text/javascript" charset="utf-8">
+
+// Permet de retrouver le créneau concerne
+$(".reservation").click(function() {
+		document.formReservation.heureDeb.value = $(this).attr("heureDeb");
+		document.formReservation.heureFin.value = $(this).attr("heureFin");
+		document.formReservation.entreprise.value = $(this).attr("entreprise");
+});
 
 </script>
 
