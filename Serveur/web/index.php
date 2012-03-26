@@ -1,8 +1,22 @@
 <?php
 
 require_once dirname(__FILE__) . '/commun/php/base.inc.php';
-session_start();
-//Definition du theme
+
+inclure_fichier( 'commun', 'authentification.class', 'php' );
+
+$authentification = new Authentification();
+
+/* Si on reçoit une demande de login pour le CAS */
+if( isset( $_POST['action'] ) && $_POST['action'] == "login_cas" ) {
+
+	$authentification->authentificationCAS();
+	echo $_SESSION[Authentification::S_AUTH_METHOD]."\n";
+}
+
+if( $authentification->isAuthentifie() ) echo "caca";
+
+
+/* Définition du theme */
 if (isset($_POST['theme']) && is_numeric($_POST['theme'])) {
     $_SESSION['theme'] = $_POST['theme'];
 }
