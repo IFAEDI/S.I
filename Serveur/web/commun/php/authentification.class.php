@@ -22,7 +22,13 @@ class Authentification {
 	/* La même mais pour les indices de session */
 	const S_AUTH_METHOD	= 'AUTH_METHOD';
 	const S_IS_USER_AUTH	= 'IS_USER_AUTH';
+	const S_USER_OBJ	= 'USER_OBJ';
 
+	/* Code d'erreur */
+	const ERR_OK		= 0;
+	const ERR_ID_INVALIDE   = 1;
+	const ERR_AMBIGUITE     = 2;
+	const ERR_BD		= 3;
 
 
 	/* Constructeur */
@@ -47,14 +53,34 @@ class Authentification {
 	* Force l'authentification normale avec le couple login/passwd
 	* $utilisateur : chaîne de caractère contenant l'utilisateur
 	* $mdp : mot de passe codé en SHA1
-	* @return True si l'auth a réussi, false sinon
+	* @return ERR_OK si l'auth a réussi, ERR_ID_INVALIDE si les identifiants sont incorrectes, ERR_AMBIGUITE s'il y a plusieurs tuples identiques en base
 	*/
 	public function authentificationNormale( $utilisateur, $mdp ) {
 
-		/* Requête à la base de données pour essayer de trouver l'utilisateur */
-		$_SESSION[self::$S_AUTH_METHOD] = self::AUTH_NORMAL;
+		$_SESSION[self::S_AUTH_METHOD] = self::AUTH_NORMAL;
 
-		return false;
+		/* Requête à la base de données pour essayer de trouver l'utilisateur */
+		$result = BD::Prepare( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd', 
+			array( 'login' => $utilisateur, 'passwd' => $mdp ) );
+
+
+		BD::MontrerErreur();
+
+		/* On regarde que l'on a bien un objet et on fait la vérification */
+		if( $result != null ) {
+			return self::ERR_BD;
+		}
+
+
+		print_r( $result );
+			
+
+		if( $result['CPT'] == 1 )
+			return self::ERR_OK;
+		else if( $result['CPT'] > 1 )
+			return self::ERR_AMBIGUITE;
+
+		return self::ERR_ID_INVALIDE;
 	}
 
 	/**
@@ -81,6 +107,7 @@ class Authentification {
 		return false;
 	}
 
+
 	/**
 	* Force la déconnexion de l'utilisateur
 	*/
@@ -88,9 +115,10 @@ class Authentification {
 
 		/* On bascule le flag à faux */
 		$_SESSION[self::S_IS_USER_AUTH] = false;
+		$_SESSION[self::S_USER_OBJ]	= null;
 
 		/* On demande à CAS de déconnecter l'utilisateur */
-		if( $_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
+		if( @$_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
 		        phpCAS::logoutWithUrl(  ); /* A améliorer */
 		}
 		else {
@@ -98,9 +126,16 @@ class Authentification {
 		}
 	}
 
+
+	/**
+	* Retourne l'objet utilisateur correspondant à l'utilisateur actuel ou null, s'il n'existe pas.
+	*/
 	public function getUtilisateur() {
-		/* Retourne le nom d'utilisateur */
-		// $login = phpCAS::getUser();
+
+		if( @$_SESSION[self::S_IS_USER_AUTH] == true )
+			return $_SESSION[self::S_USER_OBJ];
+
+		return null;
 	}
 
 };
