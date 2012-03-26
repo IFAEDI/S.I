@@ -18,17 +18,6 @@
 				<option value="5">5ème année (PFE)</option>
 			</select>
 		<br/>
-		<label for="duree">Duree:</label>
-			<select id="duree">
-				<option value="">Toutes durées</option>
-				<?php // Afficher les douze mois à la suite
-				for($i = 1; $i < 12; $i++) {
-					echo '<option value="' . $i . '">' . $i . ' mois</option>';
-				}
-				?>
-				<option value="12">12 mois et plus</option>
-			</select>
-		<br/>
 		<label for="lieu">Lieu:</label><input type="text" id="lieu" /><br />
 		<label for="entreprise">Entreprise:</label><input type="text" id="entreprise" /><br />
 		<input type="submit" value="Rechercher" id="submit_recherche" /><br />

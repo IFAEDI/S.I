@@ -44,9 +44,14 @@ if (verifierPresent('annee')) {
 	$annee = $_POST['annee'];
 }
 
+/*
+ * TODO Durée non encore prise en compte.
+ */
+/*
 if (verifierPresent('duree')) {
 	$duree = $_POST['duree'];
 }
+ */
 
 if (verifierPresent('lieu')) {
 	$lieu = $_POST['lieu'];
@@ -65,7 +70,8 @@ $resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu,
 /*
  * Renvoyer le JSON
  */
-$json['statut'] = ($resultats != NULL) ? 'ok' : 'error';
+$json['code'] = ($resultats != NULL) ? 'ok' : 'error';
+// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
 $json['msg'] = $resultats;
 echo json_encode($json);
 

@@ -30,11 +30,14 @@ function afficherResultats(json) {
 			'</strong></li>' +
 			'<li><strong>Description</strong> : ' + resultat.description
 		       	+ '</li>' +
-			'<li><strong>Durée</strong> : ' + resultat.duree +
-		       	' mois.</li>' +
+			'<li><strong>Contact</strong> : ' + resultat.contact +
+		       	'.</li>' +
 			'<li><strong>Lieu</strong> : ' + resultat.lieu + '</li> ' +
 			'<li><strong>Entreprise</strong> : ' + resultat.entreprise
 		       	+ '</li>' +
+			'<li><strong>Document</strong> : <a href="' +
+			'https://intranet-if.insa-lyon.fr/stages/descriptif/' +
+		       	resultat.lien_fichier + '">cliquez ici</a></li>' +
 			'</ul></details></div></li>';	
 	}
 	$('#resultats').html(affichage);
@@ -50,7 +53,6 @@ $('document').ready(function() {
 	$('#form_stages').submit(function() {
 		var obj = {
 			mots_cles: $('#mots_cles').val(),
-			duree: $('#duree').val(),
 			lieu: $('#lieu').val(),
 			entreprise: $('#entreprise').val(),
 			annee: $('#annee').val()
