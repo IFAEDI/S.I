@@ -9,11 +9,6 @@ body {
 	margin-bottom:30px;
 }
 
-p:first-letter
-{
-	padding-left:20px;
-}
-
 #footer
 {
     border-top: solid 1px grey;
