@@ -1,23 +1,31 @@
 <div class=row-fluid>
 	<div class="span12">
-		<div id="presentationRif">
-			<h1>Présentation</h1>
-			<p>
-				Les "Rencontres IF" (ou "RIFs") sont une manifestation propre au Département Informatique de l'INSA de Lyon. Elles permettent, le temps d'une journée, d'élaborer un lien privilégié entre les entreprises et les étudiants.<br />Fort de son succès depuis plus de <strong>10 ans</strong> cet évènement se renouvelle chaque année en recherchant toujours plus de qualité dans sa prestation.
-			</p>
-			<div id="conceptRif">
-				<h2>Concept</h2>
+		<div class="row-fluid">
+			<div id="presentationRif" class="span6">
+				<h1>Présentation</h1>
 				<p>
-					Une <strong>vingtaine d'entreprises</strong> est invitée au sein du département afin de venir à la <strong>rencontre des étudiants</strong>. Celles-ci y sont accueillies par une équipe composée exclusivement d'étudiants, et la journée, banalisée pour l'évènement, permettra à chacun de venir se renseigner, poser des questions, prendre des contacts, ...<br /> En fin de matinée, l'équipe organisatrice et les intervenants de chaque entreprise seront conviés à un déjeuner de manière à ponctuer l'évènement par une pause conviviale.
+					Les "Rencontres IF" (ou "RIFs") sont une manifestation propre au Département Informatique de l'INSA de Lyon. Elles permettent, le temps d'une journée, d'élaborer un lien privilégié entre les entreprises et les étudiants.
 				</p>
 				<p>
-				Les Rencontres IF sont aussi une occasion idéale pour les étudiants de <strong>trouver un stage ou un éventuel futur premier emploi</strong>. Il est ainsi conseillé aux entreprises de préparer, si elles le désirent, plusieurs propositions adaptées aux différentes promotions.
+					Fort de son succès depuis plus de <strong>10 ans</strong> cet évènement se renouvelle chaque année en recherchant toujours plus de qualité dans sa prestation.
 				</p>
-				<p>
-				Encore une fois, l'objectif de ce type d'évènement est évidemment d'entretenir de <strong>bonnes relations entre les étudiants et leur futur employeur.</strong>
-				</p>
+				<div id="conceptRif">
+					<h2>Concept</h2>
+					<p>
+						Une <strong>vingtaine d'entreprises</strong> est invitée au sein du département afin de venir à la <strong>rencontre des étudiants</strong>. Celles-ci y sont accueillies par une équipe composée exclusivement d'étudiants, et la journée, banalisée pour l'évènement, permettra à chacun de venir se renseigner, poser des questions, prendre des contacts, ...<br /> En fin de matinée, l'équipe organisatrice et les intervenants de chaque entreprise seront conviés à un déjeuner de manière à ponctuer l'évènement par une pause conviviale.
+					</p>
+					<p>
+					Les Rencontres IF sont aussi une occasion idéale pour les étudiants de <strong>trouver un stage ou un éventuel futur premier emploi</strong>. Il est ainsi conseillé aux entreprises de préparer, si elles le désirent, plusieurs propositions adaptées aux différentes promotions.
+					</p>
+					<p>
+					Encore une fois, l'objectif de ce type d'évènement est évidemment d'entretenir de <strong>bonnes relations entre les étudiants et leur futur employeur.</strong>
+					</p>
+				</div>
 			</div>
-		</div>
+			<div class="span6">
+				<img src="http://i3.kym-cdn.com/photos/images/newsfeed/000/210/370/celebrity-pictures-nicolas-cage-stoic-crazy.jpg" />
+			</div>
+		</div>		
 		<div id="infoRif">
 			<h1>Informations</h1>
 			<div class="Date">
