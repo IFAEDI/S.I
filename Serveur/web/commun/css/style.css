@@ -1,8 +1,13 @@
+/* ---------- GLOBAL ---------- */
+
 body {
     padding-top: 25px;
 }
 
-.titre {
+
+/* ---------- MODULE RIF ---------- */
+
+#rif .titre {
 	text-align:center;
 	font-size:40px;
 	font-weight:bold;
@@ -12,12 +17,12 @@ body {
 	color: rgb(83, 83, 83);
 }
 
-p:first-letter
+#rif p:first-letter
 {
 	padding-left:20px;
 }
 
-#footer
+#rif #footer
 {
     border-top: solid 1px grey;
     margin: 0px;
@@ -27,27 +32,27 @@ p:first-letter
     text-align: right;
 }
 
-.centre
+#rif .centre
 {
 	text-align:center;
 }
 
-.hero_motcle {
+#rif .hero_motcle {
 	font-weight: bold;
 	font-size: 1.2em;
 	color: #049cdb;
 }
 
-#network {
+#rif #network {
 	margin-top: 30px;
 }
 
-#network li {
+#rif #network li {
 	list-style: none;
 	display: inline-block;
 	margin: 11px;
 }
-.comment{
+#rif .comment{
 	font-size:0.9em; 
 	color:grey; 
 	font-style:italic;
