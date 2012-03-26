@@ -4,6 +4,7 @@
  * les informations concernant le stage.
  */
 function afficherResultats(json) {
+
 	if (json.code === 'error') {
 		$('#information').text('Impossible de récupérer le résultat ' +
 				'suite à une erreur côté serveur. Merci de ' +
@@ -14,20 +15,28 @@ function afficherResultats(json) {
 
 	var affichage = '';
 	var resultats = json.msg;
-
 	if(!resultats || resultats.length === 0) {
 		$('#information').text('Aucun résultat n\'a été trouvé.');
 		$('#resultats').html('');
 		return;
 	}
 
+	$('#information').text('');
 	for (var i = 0; i < resultats.length; ++i) {
 		var resultat = resultats[i];
 		affichage += '<li><div class="info">' +
 			'<details><summary>' + resultat.titre + '</summary>' +
-			'<p>' + resultat.description + '</p></details></div></li>';	
+			'<ul><li>Stage de <strong>' + resultat.annee + 'ème année' +
+			'</strong></li>' +
+			'<li><strong>Description</strong> : ' + resultat.description
+		       	+ '</li>' +
+			'<li><strong>Durée</strong> : ' + resultat.duree +
+		       	' mois.</li>' +
+			'<li><strong>Lieu</strong> : ' + resultat.lieu + '</li> ' +
+			'<li><strong>Entreprise</strong> : ' + resultat.entreprise
+		       	+ '</li>' +
+			'</ul></details></div></li>';	
 	}
-
 	$('#resultats').html(affichage);
 }
 

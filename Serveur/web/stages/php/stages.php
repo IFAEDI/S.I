@@ -1,4 +1,10 @@
+<?php
+	inclure_fichier('stages', 'stages', 'css');
+?>
+
 <script src='/stages/js/stages.js'></script>
+
+<div id="stages">
 
 <div id="menu">
 <h5>Recherche</h5>
@@ -25,7 +31,7 @@
 		<br/>
 		<label for="lieu">Lieu:</label><input type="text" id="lieu" /><br />
 		<label for="entreprise">Entreprise:</label><input type="text" id="entreprise" /><br />
-		<input type="submit" value="Rechercher" /><br />
+		<input type="submit" value="Rechercher" id="submit_recherche" /><br />
 		</form>
 </div>
 
@@ -35,5 +41,7 @@
 
 <ol id="resultats">
 </ol>
+
+</div>
 
 </div>

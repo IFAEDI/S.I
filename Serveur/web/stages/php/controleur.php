@@ -17,23 +17,24 @@ class Stages {
 	 * $mots_cles : tableau contenant les mots clés sous forme de
 	 * chaînes (une case du tableau par mot clé)
 	 * $annee : valeur parmi 3, 4 ou 5
-	 * $duree : chaîne ('1 mois', '1 an',...) // TODO définir clairement 
+	 * $duree : valeur comprise entre 1 et 12 inclus (12 peut indiquer
+	 * 	plus de 12 mois, le cas échéant). 
 	 * $lieu : chaîne
 	 * $entreprise : chaîne
 	 */
 
-	// TODO ajouter domaine ?
 	static function rechercher($mots_cles, $annee, $duree,
 				$lieu, $entreprise) {
 
-		$requete = new Requete("SELECT * FROM Stage");
+		$requete = new Requete("SELECT titre, annee, description, " .
+		"duree, lieu, entreprise FROM Stage");
 
 		if ( isset($annee) ) {
 			$requete->ajouterConditionEgale('annee', $annee);	
 		}
 
 		if ( isset($duree) ) {
-			$requete->ajouterConditionComme('duree', $duree);
+			$requete->ajouterConditionEgale('duree', $duree);
 		}
 
 		if ( isset($lieu) ) {
