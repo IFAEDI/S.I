@@ -65,6 +65,9 @@ $resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu,
 /*
  * Renvoyer le JSON
  */
-echo json_encode($resultats);
+$json['statut'] = ($resultats != NULL) ? 'ok' : 'error';
+$json['msg'] = $resultats;
+echo json_encode($json);
+
 
 ?>

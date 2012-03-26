@@ -3,21 +3,29 @@
  * Pour chaque résultat présent, un item de liste est inséré avec
  * les informations concernant le stage.
  */
-function afficherResultats(resultats) {
-	var affichage = '';
-
-	if (resultats !== null)
-	{
-		for (var i = 0; i < resultats.length; ++i) {
-			var resultat = resultats[i];
-			affichage += '<li><div class="info">' +
-				'<details><summary>' + resultat.titre + '</summary>' +
-				'<p>' + resultat.description + '</p></details></div></li>';	
-		}
+function afficherResultats(json) {
+	if (json.code === 'error') {
+		$('#information').text('Impossible de récupérer le résultat ' +
+				'suite à une erreur côté serveur. Merci de ' +
+				'réessayer ou de contacter un administrateur.');
+		$('#resultats').html('');
+		return;
 	}
 
+	var affichage = '';
+	var resultats = json.msg;
+
 	if(!resultats || resultats.length === 0) {
-		affichage = '<li>Aucun résultat n\'a été trouvé.</li>';
+		$('#information').text('Aucun résultat n\'a été trouvé.');
+		$('#resultats').html('');
+		return;
+	}
+
+	for (var i = 0; i < resultats.length; ++i) {
+		var resultat = resultats[i];
+		affichage += '<li><div class="info">' +
+			'<details><summary>' + resultat.titre + '</summary>' +
+			'<p>' + resultat.description + '</p></details></div></li>';	
 	}
 
 	$('#resultats').html(affichage);
@@ -30,7 +38,7 @@ $('document').ready(function() {
 	 * 1) Récupérer les valeurs des champs
 	 * 2) Appeler le script ajax
 	 */
-	$('#envoyer').click(function() {
+	$('#form_stages').submit(function() {
 		var obj = {
 			mots_cles: $('#mots_cles').val(),
 			duree: $('#duree').val(),
@@ -42,6 +50,9 @@ $('document').ready(function() {
 		$.post('/stages/ajax/cible.php', obj, function(d,t,j) {
 			afficherResultats(JSON.parse(d));	
 		});
+
+		return false; // évite que l'évènement soit propagé, ie
+			      // que le formulaire essaie d'atteindre l'action.
 	});
 
 });
