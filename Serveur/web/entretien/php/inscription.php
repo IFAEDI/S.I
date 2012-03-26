@@ -6,7 +6,7 @@
 */
 ?>
 
-<form class="form-horizontal" onsubmit="return valider()" name="formInscription" action="#" method="post">
+<form class="form-horizontal" onsubmit="return valider()" id="formInscription" action="#" method="post">
 	<fieldset>
 	  <legend>Formulaire d'inscription</legend>
 	  <!-- Partie relative au contact -->

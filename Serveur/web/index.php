@@ -34,7 +34,7 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = '';
     $nom_module = '';
 	$titre_module = '';
-    $nom_page = 'Accueil';
+    $nom_page = 'accueil';
 } elseif ($_GET['page'] == 'accueil_cv') {
     $titre_page = 'Accueil CV';
     $lien_module = 'index.php?page=accueil_cv';

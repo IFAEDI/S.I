@@ -53,7 +53,7 @@ global $theme;
         <?php } ?>
 
         <div class="container">
-			<div class="titre">
+			<div class="titre" style="margin-top: 20px;">
 				<?php echo $titre_page ?>
 			</div>
             <div class="module">   
