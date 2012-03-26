@@ -4,17 +4,21 @@ require_once dirname(__FILE__) . '/commun/php/base.inc.php';
 
 inclure_fichier( 'commun', 'authentification.class', 'php' );
 
+/************************************* AUTHENTIFICATION ***********************************/
+
 $authentification = new Authentification();
 
-/* Si on reçoit une demande de login pour le CAS */
-if( isset( $_POST['action'] ) && $_POST['action'] == "login_cas" ) {
-
-	$authentification->authentificationCAS();
-	echo $_SESSION[Authentification::S_AUTH_METHOD]."\n";
+/* Si on reçoit une demande pour le CAS */
+if( isset( $_POST['action'] ) ) {
+	if( $_POST['action'] == "login_cas" ) {
+		$authentification->authentificationCAS();
+	}
+	else if( $_POST['action'] == "logout" ) {
+		$authentification->forcerDeconnexion();
+	}
 }
 
-if( $authentification->isAuthentifie() ) echo "caca";
-
+/******************************************* THEME ****************************************/
 
 /* Définition du theme */
 if (isset($_POST['theme']) && is_numeric($_POST['theme'])) {
