@@ -1,4 +1,4 @@
-﻿<div class="row" style="margin-top: 20px;">
+﻿<div id="accueil" class="row" style="margin-top: 20px;">
 	<div class="span4 columns">
 		<div>
 			<p style="float:left; margin-right: 10px;"><img src="commun/img/logo_aedi.png" width="120px" alt="AEDI"></p>

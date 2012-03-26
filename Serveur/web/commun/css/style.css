@@ -17,12 +17,7 @@ body {
 	color: rgb(83, 83, 83);
 }
 
-#rif p:first-letter
-{
-	padding-left:20px;
-}
-
-#rif #footer
+#layout .footer
 {
     border-top: solid 1px grey;
     margin: 0px;
@@ -32,26 +27,32 @@ body {
     text-align: right;
 }
 
-#rif .centre
-{
-	text-align:center;
-}
-
-#rif .hero_motcle {
+#accueil .hero_motcle {
 	font-weight: bold;
 	font-size: 1.2em;
 	color: #049cdb;
 }
 
-#rif #network {
+#accueil #network {
 	margin-top: 30px;
 }
 
-#rif #network li {
+#accueil #network li {
 	list-style: none;
 	display: inline-block;
 	margin: 11px;
 }
+
+#rif p:first-letter
+{
+	padding-left:20px;
+}
+
+#rif .centre
+{
+	text-align:center;
+}
+
 #rif .comment{
 	font-size:0.9em; 
 	color:grey; 
