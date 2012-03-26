@@ -47,9 +47,9 @@ function Racine_site() {
 function inclure_fichier($_module, $_nom_fichier, $_type) {
     $racine = Racine_site();
 
-    $module = trim(strtolower($_module));
-    $nom_fichier = trim(strtolower($_nom_fichier));
-    $type = trim(strtolower($_type));
+    $module = trim( $_module );
+    $nom_fichier = trim( $_nom_fichier );
+    $type = trim( $_type );
 
     if ($type == 'php') {
         if ($module == '') {
