@@ -54,7 +54,7 @@ global $theme;
 
         <div class="container">
 			<div class="titre" style="margin-top: 20px;">
-				<?php echo $titre_page ?>
+				&hearts; <?php echo $titre_page ?> &hearts;
 			</div>
             <div class="module">   
                 <?php inclure_fichier($nom_module, $nom_page, 'php'); ?>
