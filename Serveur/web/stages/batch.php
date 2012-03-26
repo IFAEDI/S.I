@@ -5,8 +5,14 @@ require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 // Chemin vers le dump du département au format CSV.
 $chemin = "./data.csv";
 
+// Spécifie la taille maximale d'un titre. Au delà de cette taille, le
+// titre est tronqué et le titre total va dans la description.
 $limite_taille_titre = 40; // caractères
+
+// Suppression de toutes les lignes déjà présentes en BDD.
+// TODO améliorer ça ?
 $connexion = BD::GetConnection();
+BD::Prepare('DELETE FROM Stage', NULL);
 
 // On compte d'abord le nombre de lignes pour être sûr de ne pas en oublier.
 $nombre_lignes_total = 0;
@@ -17,6 +23,7 @@ if ($fichier = file($chemin)) {
 	die();
 }
 
+// Traitement CSV en lui même.
 if ($fichier = fopen($chemin, 'r')) {
 	$num = 0; // numéro de ligne du fichier
 	$numStage = 0; // nombre de stages ajoutés
@@ -73,6 +80,7 @@ if ($fichier = fopen($chemin, 'r')) {
 		$num++;
 	}
     echo "Au total, $numStage lignes ont été correctement insérées.";
+    fclose($fichier);
 } else {
 	echo "Impossible d'ouvrir le fichier $chemin"; 
 }
