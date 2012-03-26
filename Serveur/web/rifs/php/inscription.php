@@ -1,5 +1,5 @@
 <!-- Formulaire pour l'inscription au RIFs -->
-<form class="form-horizontal" onsubmit="return valider()" name="formInscription" action="#" method="post">
+<form class="form-horizontal" onsubmit="return valider()" id="formInscriptionRif" name="formInscription" method="post">
 	<legend><h1>Formulaire d'inscription</h1></legend>
 	<fieldset id="infoEntreprise">
 		<legend>Informations sur l'entreprise</legend>
@@ -71,19 +71,11 @@
 	<fieldset id="infoGenerale">
 		<legend>Informations Générales</legend>
 		<span class="comment"><em>* : Champ obligatoire</em></span>
-		<div class=row-fluid>
-			<div class="control-group span4" id="control_nbPersonne">
-				<label class="control-label" for="nbPersonne">Nombre de personnes présentes *</label>
-				<div class="controls">
-					<input class="input-medium" type="number" min="1" max="8" value="1" step="1" id="nbPersonne" placeholder="Nom de l'entreprise..." />
-				</div>
-			</div>
-			<div class="control-group span8" id="control_intervenant">
-				<label class="control-label">Nom - Prénom</label>
-				<div class="controls">
-					<input class="input-medium span" type="text" id="nom_1" placeholder="Nom" />
-					<input class="input-medium span" type="text" id="prenom_1" placeholder="Prénom" />
-				</div>
+		<div class="control-group" id="control_intervenant">
+			<label class="control-label">Nom - Prénom</label>
+			<div class="controls">
+				<input class="input-medium span" type="text" id="nom_1" placeholder="Nom" />
+				<input class="input-medium span" type="text" id="prenom_1" placeholder="Prénom" />
 			</div>
 		</div>
 		<div class="control-group" id="control_momentPresence">
