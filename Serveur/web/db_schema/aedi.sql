@@ -350,24 +350,25 @@ CREATE TABLE IF NOT EXISTS `Stage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `titre` varchar(200) NOT NULL,
   `annee` int(1) NOT NULL,
-  `description` text NOT NULL,
+  `description` text,
   `mots_cles` varchar(100) DEFAULT NULL,
+  `domaine` varchar(100) DEFAULT NULL,
   `lien_fichier` varchar(200) DEFAULT NULL,
   `lieu` varchar(50) NOT NULL,
-  `duree` int(2) NOT NULL,
+  `duree` int(2) DEFAULT NULL,
   `entreprise` varchar(100) NOT NULL,
-  `mail_contact` varchar(150) NOT NULL,
+  `contact` varchar(150) NOT NULL,
   `id_entreprise` int(10) unsigned DEFAULT NULL,
   `id_contact` int(10) unsigned DEFAULT NULL,
   PRIMARY KEY (`id`),
   FULLTEXT KEY `recherche_mots_cles` (`titre`,`description`,`mots_cles`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=744 ;
 
 --
 -- Contenu de la table `Stage`
 --
 
-INSERT INTO `Stage` (`id`, `titre`, `annee`, `description`, `mots_cles`, `domaine`, `lien_fichier`, `lieu`, `duree`, `entreprise`, `mail_contact`, `id_entreprise`, `id_contact`) VALUES
+INSERT INTO `Stage` (`id`, `titre`, `annee`, `description`, `mots_cles`, `domaine`, `lien_fichier`, `lieu`, `duree`, `entreprise`, `contact`, `id_entreprise`, `id_contact`) VALUES
 (1, 'Stage Corporate SAP', 4, 'Pour intégrer la mutualisation budget les managers décident de solutionner les opportunités stratégie.', 'pipo conseil consulting erp', 'ERP', NULL, 'Paris', 6, 'Expersolusness', 'example@domain.org', NULL, NULL),
 (2, 'Codage d''un outil de test', 3, 'Superbe stage de codage d''un outil de test pour quelque chose d''important, développement en Visual Basic.', 'code maçon ouvrier plombier', 'Outil de test', NULL, 'La Bégude de Mazenc (dans la drôme)', 3, 'Microgiciel', 'boss@microgiciel.fr', NULL, NULL),
 (3, 'Recherche de valeur dans la qualité du système d''informations', 5, 'PFE trèèèèèèèèèès intéressant.', 'pipo qualité aubry', 'Qualité', NULL, 'Mbabane, Zwaziland', 6, 'MétaPipo', 'direction.generale.zwaziland@metapipo.com', NULL, NULL);
