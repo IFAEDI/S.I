@@ -5,6 +5,7 @@ global $lien_module;
 global $titre_module;
 global $nom_page;
 global $theme;
+global $authentification;
 ?>
 
 <!DOCTYPE html>
