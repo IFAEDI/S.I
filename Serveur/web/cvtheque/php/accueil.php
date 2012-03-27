@@ -1,4 +1,10 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
 if (!Utilisateur_connecter('etudiant')) {
     inclure_fichier('', '401', 'php');
     die;
@@ -16,7 +22,7 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 
 <?php if ($etudiant == null) { ?>
     <div class='alert alert-error'>Oooooooh mais tu n'as pas de CV comme c'est dommage : 
-        <a class="btn btn-success" href="index.php?page=edit_cv">Creer mon CV</a></div>
+        <a class="btn btn-success" href="index.php?page=edit_cv">Créer mon CV</a></div>
     <?php
 } else {
     $cv = $etudiant->getCV();

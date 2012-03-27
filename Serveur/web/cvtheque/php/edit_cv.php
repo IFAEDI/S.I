@@ -1,4 +1,10 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
 if (!Utilisateur_connecter('etudiant')) {
     inclure_fichier('', '401', 'php');
     die;
@@ -21,6 +27,7 @@ $liste_diplome_etudiant = $etudiant->getDiplome();
 $liste_langue_etudiant = $etudiant->getLangue();
 $liste_formation_etudiant = $etudiant->getFormation();
 $liste_XP = $etudiant->getXP();
+$liste_competence = $etudiant->getCompetence();
 
 if ($cv == NULL) {
     $cv = new CV();
@@ -36,6 +43,9 @@ if ($liste_formation_etudiant == NULL) {
 }
 if ($liste_XP == NULL) {
     $liste_XP = new CV_XP();
+}
+if ($liste_competence == NULL) {
+    $liste_competence = new CV_Competence();
 }
 
 
@@ -67,12 +77,14 @@ echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tablea
 echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</script>';
 ?> 
 <div class="alert " id="div_info">
-    <table style="width: 100%;"><tr><td id="text_info"></td><td style="text-align: right;">
+    <table style="width: 100%;"><tr><td id="text_info">  
+            </td>
+            <td style="text-align: right;">
                 <a href="javascript:Sauvegarder();" class="btn btn-primary">Sauvegarder</a>
             </td></tr></table>
 </div>
 
-<div id="accordion"  class="form-horizontal" style="min-height: 500px;">
+<div id="accordion"  class="form-horizontal" style="height: 680px; margin-bottom: 100px;">
     <div class="group">
         <h3><a href="#">Informations personnelles</a></h3>
         <div>
@@ -97,7 +109,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
             </span>
 
             <div class="control-group">
-                <label class="control-label">Nom et prenom*</label>
+                <label class="control-label">Nom et prénom*</label>
                 <div class="controls">
                     <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $etudiant->getNom(); ?>">
                     <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $etudiant->getPrenom(); ?>">
@@ -204,8 +216,16 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
             <div id="div_ancienne_XP"></div>
         </div>
     </div>
+    <div class="group" >
+        <h3><a href="#">Compétences</a></h3>
+        <div id="div_competence">
+            <a id="btn_annuler_competence" class="btn" href="javascript:Annuler_competence();" style="display: none;position: absolute; left: 90%;">Annuler</a>
+            <div id="div_nouvelle_competence"></div>
+            <div id="div_ancienne_competence"></div>
+        </div>
+    </div>
     <div class="group">
-        <h3><a href="#">Diplome(s)</a></h3>
+        <h3><a href="#">Diplôme(s)</a></h3>
         <div id="div_Formation">
             <a id="btn_annuler_diplome" class="btn" href="javascript:Annuler_diplome();" style="display: none;position: absolute; left: 90%;">Annuler</a>
             <div id="div_nouveau_Diplome"></div>
@@ -268,13 +288,9 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
                     <input type="text" id="mots_clef" class="span3" placeholder="Mots Clef" value="<?php echo $cv->getMotsClef() ?>">
                 </div>
             </div>
-
-
         </div>
     </div>
 </div>
-
-
 
 <?php
 inclure_fichier('cvtheque', 'edit_cv', 'js');
@@ -295,6 +311,10 @@ foreach ($liste_formation_etudiant as $formation_etudiant) {
 
 foreach ($liste_diplome_etudiant as $diplome_etudiant) {
     echo 'Ajouter_Diplome("' . $diplome_etudiant->getAnnee() . '","' . $diplome_etudiant->getIdMention() . '","' . $diplome_etudiant->getLibelle() . '","' . $diplome_etudiant->getInstitut() . '","' . $diplome_etudiant->getNomVille() . '");';
+}
+
+foreach ($liste_competence as $competence_etudiant) {
+    echo 'Ajouter_Competence("' . $competence_etudiant->getNomCompetence() . '");';
 }
 
 echo '</script>';

@@ -1,6 +1,7 @@
 <?php
-
 /*
+ * @author Loïc Gevrey
+ 
  * Utilisation  :
  * BD::Prepare("REPLACE INTO users (jid, lat, lon, last_update, fname, lname) VALUES (:jid, :lat, :lon, CURRENT_TIMESTAMP, :fname, :lname);", $arrayvar);
  * Remplace des valeurs de la BDD par les valeur contenu dans $arrayvar (['jid']=>3,['lat']=>56,....)

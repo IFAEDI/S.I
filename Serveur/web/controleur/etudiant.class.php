@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
@@ -32,6 +38,7 @@ class Etudiant {
     private $formation;
     private $langue;
     private $xp;
+    private $competence;
 
     //****************  Fonctions statiques  ******************//
     //recuperation de l'objet Etudiant par l'ID de l'étudiant
@@ -53,12 +60,13 @@ class Etudiant {
                             , array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
             return $nb_suivi['COUNT(*)'];
         }
-        return NULL;
+        return "Erreur 430 veuillez contacter l'administrateur système";
     }
 
     public static function RechercherCVEtudiant($_annee, $_mots_clef, $_id_entreprise) {
+        $connexion = BD::GetConnection();
         if (is_numeric($_id_entreprise)) {
-            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT,  PRENOM_ETUDIANT, 
+            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT,  PRENOM_ETUDIANT,CV.ANNEE,CV.TITRE_CV, 
                         IF(ETUDIANT_FAVORIS.id_entreprise = #id_entreprise, 1, 0) as favoris, 
                         IF(NEW_UPDATE_CV.id_entreprise = #id_entreprise, etat, 0) as etat
                         FROM CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_etudiant) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_etudiant)) USING (id_cv)
@@ -69,25 +77,28 @@ class Etudiant {
             $where = '';
             if (is_numeric($_annee) && $_mots_clef != '') {
                 if ($_annee != -1) {
-                    $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef') AND CV.ANNEE = $_annee";
+                    $_mots_clef = $connexion->quote($_mots_clef, PDO::PARAM_STR);
+                    $_annee = $connexion->quote($_annee, PDO::PARAM_STR);
+                    $where = "AND  MATCH MOTS_CLEF AGAINST ($_mots_clef) AND CV.ANNEE = $_annee";
                 } else {
-                    $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef') HAVING(favoris = 1)";
+                    $_mots_clef = $connexion->quote($_mots_clef, PDO::PARAM_STR);
+                    $where = "AND  MATCH MOTS_CLEF AGAINST ($_mots_clef) HAVING(favoris = 1)";
                 }
             } else if (is_numeric($_annee)) {
                 if ($_annee != -1) {
+                    $_annee = $connexion->quote($_annee, PDO::PARAM_STR);
                     $where = " AND CV.ANNEE = $_annee";
                 } else {
                     $where = " HAVING(favoris = 1)";
                 }
             } else if ($_mots_clef != '') {
-                $where = "AND  MATCH MOTS_CLEF AGAINST ('$_mots_clef')";
+                $_mots_clef = $connexion->quote($_mots_clef, PDO::PARAM_STR);
+                $where = "AND  MATCH MOTS_CLEF AGAINST ($_mots_clef)";
             }
             $requete = str_replace('#WHERE', $where, $requete);
-             return BD::Prepare($requete, array(), BD::RECUPERER_TOUT);    
-           
+            return BD::Prepare($requete, array(), BD::RECUPERER_TOUT);
         } else {
-            echo "Erreur 43 veuillez contacter l'administrateur système";
-            return NULL;
+            return "Erreur 43 veuillez contacter l'administrateur système";
         }
     }
 
@@ -126,6 +137,8 @@ class Etudiant {
                     ID_MARITAL = :id_marital,
                     ID_PERMIS = :id_permis
                     WHERE ID_ETUDIANT = :id', $info_etudiant);
+
+                return true;
             } else {
                 $info_etudiant = array(
                     'id' => $_id,
@@ -158,9 +171,11 @@ class Etudiant {
                     ID_PERMIS = :id_permis,
                     ID_CV = :id_cv'
                         , $info_etudiant);
+
+                return true;
             }
         }
-        return NULL;
+        return "Erreur 429 veuillez contacter l'administrateur système";
     }
 
     //Recupération de la liste des permis possible
@@ -176,8 +191,7 @@ class Etudiant {
             BD::Prepare('DELETE FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id_etudiant));
             return;
         } else {
-            echo "Erreur 20 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 20 veuillez contacter l'administrateur du site";
         }
     }
 
@@ -188,13 +202,11 @@ class Etudiant {
             } elseif ($_etat == 1) {
                 BD::Prepare('UPDATE NEW_UPDATE_CV SET ETAT = 1 WHERE ID_ETUDIANT = :id_etudiant', array('id_etudiant' => $_id_etudiant));
             } else {
-                echo "Erreur 56 veuillez contacter l'administrateur du site";
-                return;
+                return "Erreur 56 veuillez contacter l'administrateur du site";
             }
-            return;
+            return true;
         } else {
-            echo "Erreur 47 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 47 veuillez contacter l'administrateur du site";
         }
     }
 
@@ -205,10 +217,9 @@ class Etudiant {
             } else {
                 BD::Prepare('INSERT INTO ETUDIANT_FAVORIS SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
             }
-            return;
+            return true;
         } else {
-            echo "Erreur 42 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 42 veuillez contacter l'administrateur du site";
         }
     }
 
@@ -235,8 +246,7 @@ class Etudiant {
             if ($id_ville > 0) {
                 return $id_ville;
             } else {
-                echo "Erreur 3 veuillez contacter l'administrateur du site";
-                return;
+                return "Erreur 3 veuillez contacter l'administrateur du site";
             }
         }
     }
@@ -370,6 +380,13 @@ class Etudiant {
             $this->xp = CV_XP::GetCVXPByIdCV($this->ID_CV);
         }
         return $this->xp;
+    }
+
+    public function getCompetence() {
+        if ($this->competence == NULL) {
+            $this->competence = CV_Competence::GetCompetenceByIdCV($this->ID_CV);
+        }
+        return $this->competence;
     }
 
 }

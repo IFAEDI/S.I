@@ -1,4 +1,9 @@
-﻿<div class="navbar navbar-fixed-top" >
+﻿<?php
+	global $authentification;
+	global $utilisateur;
+?>
+
+<div class="navbar navbar-fixed-top" >
   <div class="navbar-inner">
 	<div class="container">
 	  <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
@@ -73,7 +78,19 @@
                 </script>
 
 		<ul class="nav pull-right">
-			<li class=""><a data-toggle="modal" href="#login_dialog"><i class="icon-user icon-white"></i> Se connecter</a></li>
+			<li class="">
+				<a data-toggle="modal" href="#login_dialog">
+					<i class="icon-user icon-white"></i>
+					<?php 
+						if( $authentification->isAuthentifie() ) {
+							echo $utilisateur->getPrenom()." ".$utilisateur->getNom();
+						}
+						else {
+							 echo "Se connecter";
+						}
+					?>
+				</a>
+			</li>
 			<li class="divider-vertical"></li>
 		</ul>
 		  
@@ -91,7 +108,10 @@
     <div class="modal-body" style="text-align: center;">
 
 		<div style="width: 49%; display: inline-block; margin-top: 60px; vertical-align: top;">
-	        	<p><a id="cas_login" href="#" class="btn btn-primary" ><i class="icon-user icon-white"></i> Authentification par le CAS INSA</a></p>
+			<form id="cas_login_form" method="post">
+	        	<a id="cas_login" href="#" class="btn btn-primary" ><i class="icon-user icon-white"></i> Authentification par le CAS INSA</a>
+			<input type="hidden" name="action" value="login_cas" />
+			</form>
 		</div>
 		<div style="width: 49%; display: inline-block; border-left: 1px dotted #E0E0E0;">
 

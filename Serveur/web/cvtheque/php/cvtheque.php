@@ -1,4 +1,10 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
 if (!Utilisateur_connecter('entreprise')) {
     inclure_fichier('', '401', 'php');
     die;
@@ -33,7 +39,7 @@ inclure_fichier('cvtheque', 'cvtheque', 'js');
 
 <table style="width: 100%;">
     <tr valign="top">
-        <td id="div_liste_cv" style="width: 190px; max-height: 500px; overflow: auto;"></td>
+        <td id="div_liste_cv" style="width: 220px; max-height: 500px; overflow: auto; display: inline-block;"></td>
         <td id="div_cv"></td>
     </tr>
 </table>

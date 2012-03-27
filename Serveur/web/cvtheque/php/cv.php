@@ -1,4 +1,9 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 session_start();
@@ -25,6 +30,7 @@ $liste_diplome_etudiant = $etudiant->getDiplome();
 $liste_langue_etudiant = $etudiant->getLangue();
 $liste_formation_etudiant = $etudiant->getFormation();
 $liste_XP = $etudiant->getXP();
+$liste_competence = $etudiant->getCompetence();
 
 if ($cv == NULL) {
     $cv = new CV();
@@ -41,6 +47,9 @@ if ($liste_formation_etudiant == NULL) {
 if ($liste_XP == NULL) {
     $liste_XP = new CV_XP();
 }
+if ($liste_competence == NULL) {
+    $liste_competence = new CV_Competence();
+}
 
 
 $tmp_cv = file_get_contents(dirname(__FILE__) . "/../template_cv/defaut/cv.html");
@@ -48,10 +57,14 @@ $tmp_xp = file_get_contents(dirname(__FILE__) . "/../template_cv/defaut/experien
 $tmp_langue = file_get_contents(dirname(__FILE__) . "/../template_cv/defaut/langue.html");
 $tmp_formation = file_get_contents(dirname(__FILE__) . "/../template_cv/defaut/formation.html");
 $tmp_diplome = file_get_contents(dirname(__FILE__) . "/../template_cv/defaut/diplome.html");
+$tmp_competence = file_get_contents(dirname(__FILE__) . "/../template_cv/defaut/competence.html");
 
 $experiences = '';
-if (count($liste_XP) > 0) {
+$nb_tot_xp = count($liste_XP);
+if ($nb_tot_xp > 0) {
+    $nb_xp = 0;
     foreach ($liste_XP as $XP) {
+        $nb_xp++;
         $experience = $tmp_xp;
         $experience = str_replace('#entreprise_xp', Protection_XSS($XP->getEntreprise()), $experience);
         $experience = str_replace('#ville_xp', Protection_XSS($XP->getNomVille()), $experience);
@@ -59,6 +72,12 @@ if (count($liste_XP) > 0) {
         $experience = str_replace('#debut_xp', Protection_XSS($XP->getDebut()), $experience);
         $experience = str_replace('#fin_xp', Protection_XSS($XP->getFin()), $experience);
         $experience = str_replace('#description_xp', nl2br(Protection_XSS($XP->getDescription())), $experience);
+        if($nb_xp ==  $nb_tot_xp){
+            $experience = str_replace('#last', 'last', $experience);
+        }else{
+            $experience = str_replace('#last', '', $experience);
+        }
+        
         $experiences .= $experience;
     }
 }
@@ -115,6 +134,31 @@ if (count($liste_langue_etudiant) > 0) {
     }
 }
 
+$competences1 = '';
+$competences2 = '';
+$competences3 = '';
+if (count($liste_competence) > 0) {
+    $colonne = 1;
+    foreach ($liste_competence as $competence) {
+        if ($colonne == 1) {
+            $competence1 = $tmp_competence;
+            $competence1 = str_replace('#competence', Protection_XSS($competence->getNomCompetence()), $competence1);
+            $competences1 .= $competence1;
+            $colonne++;
+        }elseif($colonne == 2) {
+            $competence2 = $tmp_competence;
+            $competence2 = str_replace('#competence', Protection_XSS($competence->getNomCompetence()), $competence2);
+            $competences2 .= $competence2;
+            $colonne++;
+        }else{
+            $competence3 = $tmp_competence;
+            $competence3 = str_replace('#competence', Protection_XSS($competence->getNomCompetence()), $competence3);
+            $competences3 .= $competence3;
+            $colonne = 1;
+        }
+    }
+}
+
 $cv_search = array(
     '#nom',
     '#prenom',
@@ -135,6 +179,9 @@ $cv_search = array(
     '#formations',
     '#langues',
     '#loisir',
+    '#competence1',
+    '#competence2',
+    '#competence3',
 );
 
 if ($etudiant->getSexe() == 0) {
@@ -154,7 +201,7 @@ $cv_replace = array(
     Protection_XSS($etudiant->getCPVille()),
     Protection_XSS($etudiant->getNomVille()),
     Protection_XSS($etudiant->getPaysVille()),
-    $ne.' '.Protection_XSS($etudiant->getAnniv()),
+    $ne . ' ' . Protection_XSS($etudiant->getAnniv()),
     Protection_XSS($cv->getNomMobilite()),
     Protection_XSS($etudiant->getNomPermis()),
     Protection_XSS($etudiant->getNomMarital()),
@@ -163,6 +210,9 @@ $cv_replace = array(
     $formations,
     $langues,
     Protection_XSS($cv->getLoisir()),
+    $competences1,
+    $competences2,
+    $competences3,
 );
 
 $tmp_cv = str_replace($cv_search, $cv_replace, $tmp_cv);

@@ -1,4 +1,9 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
 
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
@@ -33,12 +38,12 @@ class CV_Langue {
 
 //Recupération de la liste des langues possible
     public static function GetListeLangue() {
-        return BD::Prepare('SELECT * FROM LANGUE', array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM LANGUE ORDER BY LIBELLE_LANGUE ASC', array(), BD::RECUPERER_TOUT);
     }
 
 //Recupération de la liste des niveaux possible
     public static function GetListeNiveau() {
-        return BD::Prepare('SELECT * FROM NIVEAU_LANGUE', array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM NIVEAU_LANGUE ORDER BY LIBELLE_NIVEAU ASC', array(), BD::RECUPERER_TOUT);
     }
 
 //Recupération de la liste des certification possible
@@ -51,8 +56,7 @@ class CV_Langue {
             $score_max = BD::Prepare('SELECT MAX_SCORE_CERTIF FROM CERTIF_LNG WHERE ID_CERTIF = :id_certif', array('id_certif' => $_id_certif), BD::RECUPERER_UNE_LIGNE);
             return $score_max['MAX_SCORE_CERTIF'];
         } else {
-            echo "Erreur 12 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 12 veuillez contacter l'administrateur du site";
         }
     }
 
@@ -73,18 +77,18 @@ class CV_Langue {
                     ID_CERTIF = :id_certif,
                     SCORE_CERTIF = :score, 
                     ID_CV = :id_cv', $info_langue);
+            return true;
         } else {
-            echo "Erreur 4 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 4 veuillez contacter l'administrateur du site";
         }
     }
 
     public static function SupprimerLangueByIdCV($_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             BD::Prepare('DELETE FROM CV_LANGUE WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+            return true;
         } else {
-            echo "Erreur 5 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 5 veuillez contacter l'administrateur du site";
         }
     }
 

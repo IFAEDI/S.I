@@ -1,4 +1,9 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
 
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
@@ -7,6 +12,7 @@ inclure_fichier('controleur', 'cv_diplome.class', 'php');
 inclure_fichier('controleur', 'cv_formation.class', 'php');
 inclure_fichier('controleur', 'cv_langue.class', 'php');
 inclure_fichier('controleur', 'cv_xp.class', 'php');
+inclure_fichier('controleur', 'cv_competence.class', 'php');
 
 class CV {
 
@@ -32,7 +38,9 @@ class CV {
     public static function SupprimerCVByID($_id) {
         if (is_numeric($_id)) {
             BD::Prepare('DELETE FROM CV WHERE ID_CV = :id', array('id' => $_id));
+            return true;
         }
+        return "Erreur 102 veuillez contacter l'administrateur du site";
     }
 
     //Recupération de la liste des mobilité possible
@@ -83,8 +91,7 @@ class CV {
             if ($id_cv > 0) {
                 return $id_cv;
             } else {
-                echo "Erreur 2 veuillez contacter l'administrateur du site";
-                return;
+                return "Erreur 2 veuillez contacter l'administrateur du site";
             }
         }
     }
@@ -93,9 +100,9 @@ class CV {
     public function ChangeDiffusion($_etat) {
         if (is_numeric($_etat)) {
             BD::Prepare('UPDATE CV SET AGREEMENT= :etat WHERE ID_CV = :id', array('id' => $this->getId(), 'etat' => $_etat));
-            return;
+            return true;
         }
-        return NULL;
+        return "Erreur 103 veuillez contacter l'administrateur du site";
     }
 
     //****************  Getters & Setters  ******************//

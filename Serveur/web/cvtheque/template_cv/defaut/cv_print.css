@@ -1,4 +1,4 @@
-#cv,div,h1,h2,h3,h4,h5,h6,p{margin:0;padding:0;}
+#cv,div,h1,h2,h3,h4,h5,h6,p,ul{margin:0;padding:0;}
 h1,h2,h3,h4,h5,h6{font-size:100%;font-weight:normal;}
 #cv{font:13px/1.231 arial,helvetica,clean,sans-serif;*font-size:small;*font:x-small;}
 #cv{text-align:center;}

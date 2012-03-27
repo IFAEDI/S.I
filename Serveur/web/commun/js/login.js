@@ -2,7 +2,7 @@
 * Author : Sébastien Mériot			  *
 * Date : 25.03.2012				  *
 * Description : Gestion de l'authentification par *
-* le CAS de l'INSA.				  *
+* le CAS ou de façon plus classique (user/pass)	  *
 **************************************************/
 
 
@@ -13,13 +13,18 @@ $(document).ready( function() {
 	$( "a#regular_login" ).click( regular_login );
 } );
 
-
+/**
+* Permet l'authentification par le CAS
+* <=> Balancer le form sur la page courante avec une variable cachée (voir le form)
+*/
 function cas_login() {
 
-	alert( "TODO : Redirection CAS" );
-
+	$( "#cas_login_form" ).submit();
 }
 
+/**
+* Authentification de façon normale par user/mdp et en AJAX !
+*/
 function regular_login() {
 	
 	/* Vérification que les champs sont bien remplis */
@@ -44,21 +49,26 @@ function regular_login() {
 		return;
 	}
 
-
 	/* Envoie des données */
 	$.ajax( {
 		type: "GET",
 		dataType: "json",
 		url: "commun/ajax/login.cible.php",
-		data: { action : "regular_auth", username: username, password: password }, 
+		data: { action : "regular_auth", username: username, password: hex_sha1(password) }, 
 		success: function( msg ) {
 
-			alert( msg.code + ' - ' + msg.mesg );
+			if( msg.code == "ok" ) {
+				document.location.reload();
+			}
+			else {
+				$( "#login_form #error" ).html( msg.mesg );
+				$( "#login_form #error" ).slideDown();
+			}
 			
 		},
-		error: function() {
+		error: function( obj, ex, msg ) {
 
-			alert( 'ERROR : TODO' );
+			alert( ex + ' - ' + msg + '\n' + obj.responseText );
 		}
 	
 	} );
