@@ -47,6 +47,8 @@ class Authentification {
 
 		$_SESSION[self::S_AUTH_METHOD] = self::AUTH_CAS;
 		phpCAS::forceAuthentication();
+
+		/* Création de l'utilisateur en session */
 	}
 
 	/**
@@ -61,26 +63,24 @@ class Authentification {
 
 		/* Requête à la base de données pour essayer de trouver l'utilisateur */
 		$result = BD::Prepare( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd', 
-			array( 'login' => $utilisateur, 'passwd' => $mdp ) );
+			array( ':login' => $utilisateur, ':passwd' => $mdp ) );
 
-
-		BD::MontrerErreur();
 
 		/* On regarde que l'on a bien un objet et on fait la vérification */
-		if( $result != null ) {
+		if( $result == null ) {
 			return self::ERR_BD;
 		}
 
-
-		print_r( $result );
-			
-
-		if( $result['CPT'] == 1 )
-			return self::ERR_OK;
+		/* Les cas d'échec */
+		if( $result['CPT'] == 0 )
+			return self::ERR_ID_INVALIDE;
 		else if( $result['CPT'] > 1 )
 			return self::ERR_AMBIGUITE;
 
-		return self::ERR_ID_INVALIDE;
+		/* Création de l'objet utilisateur */
+
+
+		return self::ERR_ID_OK;
 	}
 
 	/**

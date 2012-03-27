@@ -34,6 +34,7 @@ global $theme;
         inclure_fichier('commun', 'utils', 'js');
 
 	inclure_fichier('commun', 'login', 'js');
+	inclure_fichier('commun', 'SHA1', 'js');
         ?>
         <title>AEDI - <?php echo $titre_page ?></title>
     </head>
