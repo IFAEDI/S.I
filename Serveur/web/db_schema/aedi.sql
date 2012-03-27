@@ -298,29 +298,6 @@ INSERT INTO `MOBILITE` (`ID_MOBILITE`, `LIBELLE_MOBILITE`) VALUES
 -- --------------------------------------------------------
 
 --
--- Table structure for table `MotCleStage`
---
-
-CREATE TABLE IF NOT EXISTS `MotCleStage` (
-  `id` int(10) unsigned NOT NULL,
-  `id_stage` int(10) unsigned NOT NULL,
-  `libelle` varchar(50) NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=latin1;
-
---
--- Dumping data for table `MotCleStage`
---
-
-INSERT INTO `MotCleStage` (`id`, `id_stage`, `libelle`) VALUES
-(0, 2, 'code'),
-(1, 1, 'ERP'),
-(2, 1, 'Corporate'),
-(4, 2, 'developpement');
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `NIVEAU_LANGUE`
 --
 
@@ -369,30 +346,32 @@ INSERT INTO `PERMIS` (`ID_PERMIS`, `LIBELLE_PERMIS`) VALUES
 -- Table structure for table `STAGE`
 --
 
-CREATE TABLE IF NOT EXISTS `STAGE` (
+CREATE TABLE IF NOT EXISTS `Stage` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
   `titre` varchar(200) NOT NULL,
-  `annee` char(1) NOT NULL,
-  `description` text NOT NULL,
-  `domaine` varchar(100) NOT NULL,
+  `annee` int(1) NOT NULL,
+  `description` text,
+  `mots_cles` varchar(100) DEFAULT NULL,
+  `domaine` varchar(100) DEFAULT NULL,
   `lien_fichier` varchar(200) DEFAULT NULL,
-  `place` varchar(50) NOT NULL,
-  `duree` varchar(20) NOT NULL,
+  `lieu` varchar(50) NOT NULL,
+  `duree` int(2) DEFAULT NULL,
   `entreprise` varchar(100) NOT NULL,
-  `mail_contact` varchar(150) NOT NULL,
+  `contact` varchar(150) NOT NULL,
   `id_entreprise` int(10) unsigned DEFAULT NULL,
   `id_contact` int(10) unsigned DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=4 ;
+  PRIMARY KEY (`id`),
+  FULLTEXT KEY `recherche_mots_cles` (`titre`,`description`,`mots_cles`)
+) ENGINE=MyISAM  DEFAULT CHARSET=latin1 AUTO_INCREMENT=744 ;
 
 --
--- Dumping data for table `STAGE`
+-- Contenu de la table `Stage`
 --
 
-INSERT INTO `STAGE` (`id`, `titre`, `annee`, `description`, `domaine`, `lien_fichier`, `place`, `duree`, `entreprise`, `mail_contact`, `id_entreprise`, `id_contact`) VALUES
-(1, 'Stage Corporate SAP', '4', 'Pour intégrer la mutualisation budget les managers décident de solutionner les opportunités stratégie.', 'ERP', NULL, 'Paris', '6 mois', 'Expersolusness', 'example@domain.org', NULL, NULL),
-(2, 'Codage d''un outil de test', '3', 'Superbe stage de codage d''un outil de test pour quelque chose d''important, développement en Visual Basic.', 'Outil de test', NULL, 'La Bégude de Mazenc (dans la drôme)', '3 mois', 'Microgiciel', 'boss@microgiciel.fr', NULL, NULL),
-(3, 'Recherche de valeur dans la qualité du système d''informations', '5', 'PFE trèèèèèèèèèès intéressant.', 'Qualité', NULL, 'Mbabane, Zwaziland', '6 mois', 'MétaPipo', 'direction.generale.zwaziland@metapipo.com', NULL, NULL);
+INSERT INTO `Stage` (`id`, `titre`, `annee`, `description`, `mots_cles`, `domaine`, `lien_fichier`, `lieu`, `duree`, `entreprise`, `contact`, `id_entreprise`, `id_contact`) VALUES
+(1, 'Stage Corporate SAP', 4, 'Pour intégrer la mutualisation budget les managers décident de solutionner les opportunités stratégie.', 'pipo conseil consulting erp', 'ERP', NULL, 'Paris', 6, 'Expersolusness', 'example@domain.org', NULL, NULL),
+(2, 'Codage d''un outil de test', 3, 'Superbe stage de codage d''un outil de test pour quelque chose d''important, développement en Visual Basic.', 'code maçon ouvrier plombier', 'Outil de test', NULL, 'La Bégude de Mazenc (dans la drôme)', 3, 'Microgiciel', 'boss@microgiciel.fr', NULL, NULL),
+(3, 'Recherche de valeur dans la qualité du système d''informations', 5, 'PFE trèèèèèèèèèès intéressant.', 'pipo qualité aubry', 'Qualité', NULL, 'Mbabane, Zwaziland', 6, 'MétaPipo', 'direction.generale.zwaziland@metapipo.com', NULL, NULL);
 
 -- --------------------------------------------------------
 

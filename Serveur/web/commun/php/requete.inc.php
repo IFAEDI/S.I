@@ -132,6 +132,9 @@ class Requete {
 	 * que ceux issus des noms de colonnes dans la/les tables lue(s).
 	 */
 	public function lire() {
+		// Décommenter pour du debug
+		// echo $this->requete;
+
 		$this->requete .= $this->clauseWhere;
 
 		return BD::Prepare($this->requete, 
