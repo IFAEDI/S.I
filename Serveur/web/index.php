@@ -35,7 +35,7 @@ if (isset($_SESSION['theme'])) {
 /* * **********************Tant que la classe utilisateur n'est pas fini*********** */
 
 $_SESSION['utilisateur'] = new Utilisateur();
-$_SESSION['utilisateur'] = Utilisateur::GetUtilisateur(1);
+$_SESSION['utilisateur'] = Utilisateur::GetUtilisateur(2);
 /* * ***************************************************************************** */
 
 //Inclusion d'utils des le debut de la page d'index car necessaire pour la cvtheque

@@ -1,4 +1,9 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
 
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
@@ -55,18 +60,18 @@ class CV_Diplome {
                     INSTITUT = :institut, 
                     ID_VILLE = :id_ville,
                     ID_CV = :id_cv', $info_diplome);
+            return true;
         } else {
-            echo "Erreur 8 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 8 veuillez contacter l'administrateur du site";
         }
     }
 
     public static function SupprimerDiplomeByIdCV($_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             BD::Prepare('DELETE FROM CV_DIPLOME WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+            return true;
         } else {
-            echo "Erreur 9 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 9 veuillez contacter l'administrateur du site";
         }
     }
 

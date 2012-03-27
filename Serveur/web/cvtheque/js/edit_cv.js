@@ -1,16 +1,40 @@
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
+
 //****************  Variables Global  ******************//
 
 /* (int) */var nb_langue = 0;
 /* (int) */var nb_xp = 0;
 /* (int) */var nb_formation = 0;
 /* (int) */var nb_diplome = 0;
+/* (int) */var nb_competence = 0;
 var annuler_diplome = new Array();
 var annuler_formation = new Array();
 var annuler_xp = new Array();
 var annuler_langue = new Array();
+var annuler_competence = new Array();
+
 
 //****************  Fonction executée directement après la fin de chargement de la page  ******************//
 $(document).ready(function() {
+    
+    //Ajout des champs pour ajouter une nouvelle competence
+    /* (str) */var competence = "";
+    competence += '<div class="control-group" id="nouvelle_competence">';
+    competence += '<label class="control-label">Nouvelle competence</label>';
+    competence += '<div class="controls">';
+    competence += '<input type="text" id="nom_nouvelle_competence" class="span3" placeholder="Nom de la compétence" style="width : 400px; margin-right: 5px;">';
+    competence += '<a href="javascript:Ajouter_Competence(\'\');" class="icon-ok" style="margin-left : 20px;"></a>';
+    competence += '</div>';
+    competence += '</div><hr>';
+    $('#div_nouvelle_competence').append(competence);
+    
+    
+    
     //Ajout des champs pour ajouter une nouvelle langue
     /* (str) */var langue = "";
     langue += '<div class="control-group" id="nouvelle_langue">';
@@ -41,12 +65,12 @@ $(document).ready(function() {
     xp += '<table cellpadding="8" style="text-align : center;"><tr>';
     xp += '<td><input type="text" id="debut_nouvelle_xp" class="span3" placeholder="Debut" style="width : 80px;"></td>';
     xp += '<td><input type="text" id="fin_nouvelle_xp" class="span3" placeholder="Fin" style="width : 80px;"</td>';
-    xp += '<td><input type="text" id="titre_nouvelle_xp" class="span3" placeholder="Titre" style="width : 430px;"></td>';
+    xp += '<td><input type="text" id="titre_nouvelle_xp" class="span3" placeholder="Titre" style="width : 420px;"></td>';
     xp += '<td><input type="text" id="entreprise_nouvelle_xp" class="span3" placeholder="Entreprise" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_nouvelle_xp" class="span3" placeholder="Ville" style="width : 150px;"></td>';
     xp += '<td><a href="javascript:Ajouter_XP(\'\',\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
-    xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 840px;" placeholder="Descirption"></textarea></td>';  
+    xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 830px;" placeholder="Descirption"></textarea></td>';  
     xp += '</tr></table></div><hr>';
     $('#div_nouvelle_XP').append(xp);
     $( "#debut_nouvelle_xp").datepicker();
@@ -97,23 +121,61 @@ $(document).ready(function() {
         Autocompletion_ville(nom_ville,cp,pays);
     });
     
+    //Ajout automatique en cas d'appui sur la touche entrer
+    $("#nom_nouvelle_competence").keyup(function(event) {
+        if ( event.which == 13 ) {
+            Ajouter_Competence('');
+        }
+    });
+    
+    
     //Accordeon triable pour les differentes partie du CV
     $( "#accordion" )
     .accordion({
-        header: "> div > h3"
-    })
-    .sortable({
-        axis: "y",
-        handle: "h3",
-        stop: function( event, ui ) {
-            // IE doesn't register the blur when sorting
-            // so trigger focusout handlers to remove .ui-state-focus
-            ui.item.children( "h3" ).triggerHandler( "focusout" );
-        }
+        header: "> div > h3",
+        fillSpace: true
+   
     });
 });
 
 //****************  Autre fonction  ******************//
+
+function Ajouter_Competence(_nom){
+    if (_nom == ''){
+        _nom = $("#nom_nouvelle_competence").val();
+    }
+
+    if (_nom == ''){
+        Afficher_erreur("[Competence(s)] Les champs suivants sont obligatoire : Nom competence");
+        return;
+    }
+    
+    $("#nom_nouvelle_competence").val('');
+
+    /* (str) */var competence = "";
+    competence += '<div class="control-group" id="competence'+nb_competence+'">';
+    competence += '<label class="control-label">Competence</label>';
+    competence += '<div class="controls">';
+    competence += '<input type="text" id="nom_competence'+nb_competence+'" class="span3" placeholder="Nom de la compétence" value="'+_nom+'" style="width : 400px; margin-right: 5px;">';
+    competence += '<a href="javascript:Supprimer_Competence('+nb_competence+');" class="icon-remove" style="margin-left : 20px;"></a>';
+    competence += '</div>';
+    competence += '</div>';
+    $('#div_ancienne_competence').append(competence);
+    nb_competence++;
+}
+
+function Supprimer_Competence(_id_competence){
+    annuler_competence['nom'] = $('#nom_competence'+_id_competence).val();
+    $('#btn_annuler_competence').show();
+    $('#competence'+_id_competence).remove();
+}
+
+//Fonction permetant un retour en arriere en cas d'erreur
+function Annuler_competence(){
+    Ajouter_Competence(annuler_competence['nom']);
+    $('#btn_annuler_competence').hide();
+}
+
 //fonction permetant l'ajout d'un diplome
 function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
     if (_annee == '' && _id_mention == '' && _libelle=='' && _institut == '' && _ville == ''){
@@ -324,12 +386,12 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     xp += '<table cellpadding="8" style="text-align : center;"><tr>';
     xp += '<td><input type="text" id="debut_xp'+nb_xp+'" class="span3" placeholder="Debut" value="'+_debut+'" style="width : 80px;"></td>';
     xp += '<td><input type="text" id="fin_xp'+nb_xp+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px;>"</td>';
-    xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 430px;"></td>';
+    xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 420px;"></td>';
     xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_xp'+nb_xp+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;"></td>';
     xp += '<td><a href="javascript:Supprimer_XP('+nb_xp+');" class="icon-remove" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
-    xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 840px;" placeholder="Descirption">'+_desc+'</textarea></td>';
+    xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 830px;" placeholder="Descirption">'+_desc+'</textarea></td>';
     xp += '</tr></table></div>';
     $('#div_ancienne_XP').append(xp);
    
@@ -361,7 +423,12 @@ function Annuler_XP(){
 
 
 //Sauvegarde du CV
-function Sauvegarder(){    
+function Sauvegarder(){ 
+    div_info = $("#div_info");
+    div_info.removeClass("alert-success");
+    div_info.removeClass("alert-error"); 
+    $("#text_info").empty();
+    $('#text_info').append('<span id="span_chargement" ><img src="/cvtheque/img/loading.gif" style="margin-right : 10px;"/>Sauvegarde en cours...</span>');
     //On verifie d'abord tout les champs
 
     //Champs de la partie Informations personnelles
@@ -373,6 +440,12 @@ function Sauvegarder(){
     cp_etudiant = $("#cp_etudiant");
     pays_etudiant = $("#pays_etudiant");
     mail_etudiant = $("#mail_etudiant");
+    anniv_etudiant = $("#anniv_etudiant");
+
+     if (!VerifierChamp(anniv_etudiant,false,false,false)){
+        Afficher_erreur("[Informations personnelles] Le nom étudiant est incorrect");
+        return;
+    }
 
     if (!VerifierChamp(nom_etudiant,false,false,false)){
         Afficher_erreur("[Informations personnelles] Le nom étudiant est incorrect");
@@ -564,6 +637,23 @@ function Sauvegarder(){
             j++;
         }
     }
+    
+    //Champs de la partie competence (on en profite pour tout mettre dans un tableau)
+    var liste_comptetence_etudiant = new Array();
+    j = 0;
+    for (i=0;i<nb_competence;i++){
+        if ($('#competence'+i).length > 0){   
+            nom_competence = $('#nom_competence'+i);
+           
+            if (!VerifierChamp(nom_competence,false,false,false)){
+                Afficher_erreur("[Langue] Le score de la langue est incorrect");
+                return;
+            }  
+            
+            liste_comptetence_etudiant[j] = new Array(nom_competence.val());
+            j++;
+        }
+    }
 
 
     //On transforme les array en json pour les passer au php
@@ -571,6 +661,7 @@ function Sauvegarder(){
     liste_diplome_json = JSON.stringify(liste_diplome_etudiant);
     liste_formation_json = JSON.stringify(liste_formation_etudiant);
     liste_langue_json = JSON.stringify(liste_langue_etudiant);
+    liste_comptetence_json = JSON.stringify(liste_comptetence_etudiant);
     
     
     //On récupere les champs qui reste et qui n'ont pas à etre verifiés
@@ -580,7 +671,6 @@ function Sauvegarder(){
     sexe_etudiant = $("#sel_sexe");
     loisir_etudiant = $("#loisir_etudiant");
     mobilite_etudiant = $("#sel_mobilite");
-    anniv_etudiant = $("#anniv_etudiant");
     titre_cv = $("#titre_cv");
     mots_clef = $("#mots_clef");
     annee = $("#sel_annee_etude");
@@ -610,18 +700,19 @@ function Sauvegarder(){
         liste_experience : liste_experience_json,
         liste_diplome : liste_diplome_json,
         liste_formation : liste_formation_json,
-        liste_langue : liste_langue_json
+        liste_langue : liste_langue_json,
+        liste_comptetence : liste_comptetence_json
         
     },function success(retour){
         retour = $.trim(retour)
-        if (retour == "1"){
-            div_info = $("#div_info");
+        retour_decode = $.parseJSON(retour);
+        if (retour_decode['code'] == 'ok'){
             $("#text_info").empty();
             $("#text_info").append("La sauvegarde c'est bien passée <a href='index.php?page=accueil_cv'>Voir le resultat</a>");
             div_info.addClass("alert-success");
             div_info.removeClass("alert-error");            
         }else{
-            Afficher_erreur(retour);
+            Afficher_erreur(retour_decode['msg']);
         }
     });
 }

@@ -1,4 +1,9 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
 
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
@@ -55,9 +60,9 @@ class CV_Formation {
     public static function SupprimerFormationByIdCV($_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             BD::Prepare('DELETE FROM CV_FORMATION WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+            return true;
         } else {
-            echo "Erreur 7 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 7 veuillez contacter l'administrateur du site";
         }
     }
     

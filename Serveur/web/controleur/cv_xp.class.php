@@ -1,5 +1,11 @@
 <?php
 
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
@@ -66,22 +72,24 @@ class CV_XP {
                     ENTREPRISE = :entreprise,
                     ID_VILLE = :id_ville,
                     ID_CV = :id_cv', $info_XP);
+            return true;
         } else {
-            echo "Erreur 10 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 10 veuillez contacter l'administrateur du site";
         }
     }
 
     public static function SupprimerXPByIdCV($_id_cv) {
         if ($_id_cv > 0 && is_numeric($_id_cv)) {
             BD::Prepare('DELETE FROM CV_XP WHERE ID_CV = :id_cv', array('id_cv' => $_id_cv));
+            return true;
         } else {
-            echo "Erreur 11 veuillez contacter l'administrateur du site";
-            return;
+            return "Erreur 11 veuillez contacter l'administrateur du site";
         }
     }
 
     //****************  Fonctions  ******************//
+    //renvoi true si date1>date2 sinon false
+    //LEs date doivent etre dans se format jj/mm/aaaa
     public static function Comparaison_Date($_date1, $_date2) {
         $date1 = explode("/", $_date1);
         $date2 = explode("/", $_date2);
@@ -89,9 +97,11 @@ class CV_XP {
         $taille_date1 = count($date1);
         $taille_date2 = count($date2);
 
-        for ($i = 1; $i < max($taille_date1, $taille_date2); $i++) {
-            if($date1[$taille_date1-$i]>$date2[$taille_date2-$i]){
+        for ($i = 1; $i <= min($taille_date1, $taille_date2); $i++) {
+            if ($date1[$taille_date1 - $i] > $date2[$taille_date2 - $i]) {
                 return true;
+            } else if ($date1[$taille_date1 - $i] < $date2[$taille_date2 - $i]){
+                return false;
             }
         }
         return false;

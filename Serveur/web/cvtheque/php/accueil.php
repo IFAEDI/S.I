@@ -1,4 +1,10 @@
 <?php
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
 if (!Utilisateur_connecter('etudiant')) {
     inclure_fichier('', '401', 'php');
     die;

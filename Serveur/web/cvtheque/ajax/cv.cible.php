@@ -1,5 +1,12 @@
 <?php
 
+/*
+ * @author Loïc Gevrey
+ *
+ *
+ */
+
+
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 session_start();
 
@@ -33,86 +40,132 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     $liste_diplome = json_decode($_POST['liste_diplome']);
     $liste_formation = json_decode($_POST['liste_formation']);
     $liste_langue = json_decode($_POST['liste_langue']);
+    $liste_comptetence = json_decode($_POST['liste_comptetence']);
 
+
+    //On initialise l'array de retour
+    $array = array();
 
     //On verifie que les variables sont correcte
     if ($nom_etudiant == '') {
-        echo "Erreur : le nom étudiant ne peut être vide";
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : Le nom étudiant ne peut être vide';
+        echo json_encode($retour);
         die;
     }
 
     if ($ville_etudiant == '') {
-        echo "Erreur : la ville étudiant ne peut être vide";
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : La ville étudiant ne peut être vide';
+        echo json_encode($retour);
         die;
     }
 
     if ($cp_etudiant == '' || !is_numeric($cp_etudiant)) {
-        echo "Erreur : le code postal étudiant ne peut être vide";
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : Le code postal étudiant ne peut être vide';
+        echo json_encode($retour);
+
         die;
     }
 
     if ($pays_etudiant == '') {
-        echo "Erreur : le pays étudiant ne peut être vide";
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : Le pays étudiant ne peut être vide';
+        echo json_encode($retour);
         die;
     }
 
     if ($anniv_etudiant == '') {
-        echo "Erreur : l'anniversaire étudiant ne peut être vide";
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : L\'anniversaire étudiant ne peut être vide';
+        echo json_encode($retour);
         die;
     }
 
 
     $Syntaxe = '#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#';
     if (preg_match($Syntaxe, $mail_etudiant) == false) {
-        echo "Erreur : Le format de l'adresse mail n'est pas valide";
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : Le format de l\'adresse mail n\'est pas valide';
+        echo json_encode($retour);
         die();
     }
 
     foreach ($liste_experience as $experience) {
         if ($experience[2] == '') {
-            echo "Erreur : Le titre d'une expérience ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : Le titre d\'une expérience ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($experience[4] == '') {
-            echo "Erreur : L'entreprise d'une expérience ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : L\'entreprise d\'une expérience ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($experience[5] == '') {
-            echo "Erreur : La ville d'une expérience ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : La ville d\'une expérience ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
     }
 
     foreach ($liste_diplome as $diplome) {
         if ($diplome[0] == '') {
-            echo "Erreur : L'année d'un diplome ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : L\'année d\'un diplome ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($diplome[2] == '') {
-            echo "Erreur : Le titre d'un diplome ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : Le titre d\'un diplome ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($diplome[3] == '') {
-            echo "Erreur : L'institut d'un diplome ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : L\'institut d\'un diplome ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($diplome[4] == '') {
-            echo "Erreur : La ville d'un diplome ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : La ville d\'un diplome ne peut etre vide';
+            echo json_encode($retour);
+            die;
+        }
+    }
+
+    foreach ($liste_comptetence as $competence) {
+        if ($competence[0] == '') {
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : Le nom d\'une competence ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
     }
 
     foreach ($liste_formation as $formation) {
         if ($formation[2] == '') {
-            echo "Erreur : L'institut d'une formation ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : L\'institut d\'une formation ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($formation[3] == '') {
-            echo "Erreur : La ville d'une formation ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : La ville d\'une formation ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
         if ($formation[4] == '') {
-            echo "Erreur : L'année d'une formation ne peut etre vide";
+            $retour['code'] = 'error';
+            $retour['msg'] = 'Erreur : L\'année d\'une formation ne peut etre vide';
+            echo json_encode($retour);
             die;
         }
     }
@@ -120,7 +173,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     foreach ($liste_langue as $langue) {
         $score_max = CV_Langue::GetScoreMaxCertif($langue[2]);
         if ((!is_numeric($langue[3]) || $langue[3] > $score_max) && $langue[2] != 1) {
-            echo "Erreur : Le score de la langue est incorrect (>$score_max)";
+            $retour['code'] = 'error';
+            $retour['msg'] = "Erreur : Le score de la langue est incorrect (>$score_max)";
+            echo json_encode($retour);
             die;
         }
     }
@@ -136,47 +191,137 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
 
     //On met a jour/Ajoute le CV
     $id_cv = CV::UpdateCV($etudiant->getIdCV(), $titre_cv, $mobilite_etudiant, $loisir_etudiant, $mots_clef, $annee);
+    if (!is_numeric($id_cv)) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $id_cv;
+        echo json_encode($retour);
+        die;
+    }
 
     //On met à jour/Ajoute les informations etudiante
-    Etudiant::UpdateEtudiant($_SESSION['utilisateur']->getId(), $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
+    $retour_fct = Etudiant::UpdateEtudiant($_SESSION['utilisateur']->getId(), $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
+
 
     //On supprime toutes les langues du cv
-    CV_Langue::SupprimerLangueByIdCV($id_cv);
+    $retour_fct = CV_Langue::SupprimerLangueByIdCV($id_cv);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
 
     //On ajoute les langues rentrées par l'utilisateur
     foreach ($liste_langue as $langue) {
-        CV_Langue::AjouterLangue($langue[0], $langue[1], $langue[2], $langue[3], $id_cv);
+        $retour_fct = CV_Langue::AjouterLangue($langue[0], $langue[1], $langue[2], $langue[3], $id_cv);
+        if (!$retour_fct) {
+            $retour['code'] = 'error';
+            $retour['msg'] = $retour_fct;
+            echo json_encode($retour);
+            die;
+        }
     }
 
     //On supprime toutes les formations du cv
-    CV_Formation::SupprimerFormationByIdCV($id_cv);
+    $retour_fct = CV_Formation::SupprimerFormationByIdCV($id_cv);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
 
     //On ajoute les fomration rentrées par l'utilisateur
     foreach ($liste_formation as $formation) {
-        CV_Formation::AjouterFormation($formation[0], $formation[1], $formation[2], $formation[3], '', '', $formation[4], $id_cv);
+        $retour_fct = CV_Formation::AjouterFormation($formation[0], $formation[1], $formation[2], $formation[3], '', '', $formation[4], $id_cv);
+        if (!$retour_fct) {
+            $retour['code'] = 'error';
+            $retour['msg'] = $retour_fct;
+            echo json_encode($retour);
+            die;
+        }
     }
 
     //On supprime toutes les diplomes du cv
-    CV_Diplome::SupprimerDiplomeByIdCV($id_cv);
+    $retour_fct = CV_Diplome::SupprimerDiplomeByIdCV($id_cv);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
 
     //On ajoute les diplomes rentrés par l'utilisateur
     foreach ($liste_diplome as $diplome) {
-        CV_Diplome::AjouterDiplome($diplome[0], $diplome[1], $diplome[2], $diplome[3], $diplome[4], '', '', $id_cv);
+        $retour_fct = CV_Diplome::AjouterDiplome($diplome[0], $diplome[1], $diplome[2], $diplome[3], $diplome[4], '', '', $id_cv);
+        if (!$retour_fct) {
+            $retour['code'] = 'error';
+            $retour['msg'] = $retour_fct;
+            echo json_encode($retour);
+            die;
+        }
     }
 
     //On supprime toutes les experiences du cv
-    CV_XP::SupprimerXPByIdCV($id_cv);
+    $retour_fct = CV_XP::SupprimerXPByIdCV($id_cv);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
 
     //On ajoute les experiences rentrées par l'utilisateur
     foreach ($liste_experience as $experience) {
-        CV_XP::AjouterXP($experience[0], $experience[1], $experience[2], $experience[3], $experience[4], $experience[5], $_cp, $_pays, $id_cv);
+        $retour_fct = CV_XP::AjouterXP($experience[0], $experience[1], $experience[2], $experience[3], $experience[4], $experience[5], $_cp, $_pays, $id_cv);
+        if (!$retour_fct) {
+            $retour['code'] = 'error';
+            $retour['msg'] = $retour_fct;
+            echo json_encode($retour);
+            die;
+        }
+    }
+
+
+    //On supprime toutes les competences
+    $retour_fct = CV_Competence::SupprimerDiplomeByIdCV($id_cv);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
+
+    //On ajoute les competences rentrées par l'utilisateur
+    foreach ($liste_comptetence as $competence) {
+        $retour_fct = CV_Competence::AjouterCompetence($competence[0], $id_cv);
+        if (!$retour_fct) {
+            $retour['code'] = 'error';
+            $retour['msg'] = $retour_fct;
+            echo json_encode($retour);
+            die;
+        }
     }
 
     //On indique que le CV vient d'etre mis a jour (s'il vient d'etre creer rien ne se passe)
-    Etudiant::MettreEnVu($_SESSION['utilisateur']->getId(), '', 1);
-            
-            
-    echo "1";
+    $retour_fct = Etudiant::MettreEnVu($_SESSION['utilisateur']->getId(), '', 1);
+    if (!$retour_fct) {
+        $retour['code'] = 'error';
+        $retour['msg'] = $retour_fct;
+        echo json_encode($retour);
+        die;
+    }
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
+    die;
 }
 
 
@@ -200,7 +345,11 @@ if (isset($_GET['action']) && $_GET['action'] == 'diffusion_cv') {
 
     $cv = $etudiant->getCV();
     $cv->ChangeDiffusion($etat);
-    echo "1";
+
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
 }
 
 
@@ -220,7 +369,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_cv') {
     $id_cv = $etudiant->getIdCV();
     Etudiant::SupprimerCV($_SESSION['utilisateur']->getId(), $id_cv);
 
-    echo "1";
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
 }
 
 
@@ -233,31 +384,40 @@ if (isset($_GET['action']) && $_GET['action'] == 'autocomplete_ville') {
     echo json_encode(Etudiant::GetVilleByName($_POST['nom_ville']));
 }
 
+
+//Recherche d'un cv
 if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
     if (!Utilisateur_connecter('entreprise')) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs'],$_SESSION['utilisateur']->getId()));
+    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs'], $_SESSION['utilisateur']->getId()));
 }
 
 
+//Enlever des favoris un cv
 if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
     if (!Utilisateur_connecter('entreprise')) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
     Etudiant::MettreEnFavoris($_POST['id_etudiant'], $_SESSION['utilisateur']->getId(), 0);
-    echo "1";
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
 }
 
-
+//Mettre en favoris un cv
 if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
     if (!Utilisateur_connecter('entreprise')) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
     Etudiant::MettreEnFavoris($_POST['id_etudiant'], $_SESSION['utilisateur']->getId(), 1);
-    echo "1";
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
 }
 ?>
