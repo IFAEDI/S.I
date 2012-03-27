@@ -12,6 +12,8 @@ inclure_fichier( 'commun', 'config.inc', 'php' );
 inclure_fichier( 'commun', 'CAS',    'php' );
 inclure_fichier( 'commun', 'bd.inc',     'php' );
 
+inclure_fichier( 'commun', 'utilisateur.class', 'php' );
+
 
 class Authentification {
 
@@ -47,23 +49,21 @@ class Authentification {
 
 		$_SESSION[self::S_AUTH_METHOD] = self::AUTH_CAS;
 		phpCAS::forceAuthentication();
-
-		/* Création de l'utilisateur en session */
 	}
 
 	/**
 	* Force l'authentification normale avec le couple login/passwd
-	* $utilisateur : chaîne de caractère contenant l'utilisateur
+	* $login : chaîne de caractère contenant l'utilisateur
 	* $mdp : mot de passe codé en SHA1
 	* @return ERR_OK si l'auth a réussi, ERR_ID_INVALIDE si les identifiants sont incorrectes, ERR_AMBIGUITE s'il y a plusieurs tuples identiques en base
 	*/
-	public function authentificationNormale( $utilisateur, $mdp ) {
+	public function authentificationNormale( $login, $mdp ) {
 
 		$_SESSION[self::S_AUTH_METHOD] = self::AUTH_NORMAL;
 
 		/* Requête à la base de données pour essayer de trouver l'utilisateur */
 		$result = BD::Prepare( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd', 
-			array( ':login' => $utilisateur, ':passwd' => $mdp ) );
+			array( ':login' => $login, ':passwd' => $mdp ) );
 
 
 		/* On regarde que l'on a bien un objet et on fait la vérification */
@@ -78,9 +78,28 @@ class Authentification {
 			return self::ERR_AMBIGUITE;
 
 		/* Création de l'objet utilisateur */
+		if( $this->creerObjetUtilisateur( $login ) == false )
+			return self::ERR_BD;
 
+		$_SESSION[self::S_IS_USER_AUTH] = true;
 
-		return self::ERR_ID_OK;
+		return self::ERR_OK;
+	}
+
+	/**
+	* Création de l'objet utilisateur en session
+	* $login : Le nom d'utilisateur en chaîne de caractère de l'utilisateur à créer
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	private function creerObjetUtilisateur( $login ) {
+
+		try {
+			@$_SESSION[self::S_USER_OBJ] = new Utilisateur( $login );
+		} catch( Exception $e ) {
+			return false;
+		}
+
+		return true;
 	}
 
 	/**
@@ -116,13 +135,11 @@ class Authentification {
 		/* On bascule le flag à faux */
 		$_SESSION[self::S_IS_USER_AUTH] = false;
 		$_SESSION[self::S_USER_OBJ]	= null;
+		$_SESSION[self::S_AUTH_METHOD]  = null;
 
 		/* On demande à CAS de déconnecter l'utilisateur */
 		if( @$_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
 		        phpCAS::logoutWithUrl(  ); /* A améliorer */
-		}
-		else {
-			/* On enlève le flag relatif au username */
 		}
 	}
 
@@ -132,8 +149,24 @@ class Authentification {
 	*/
 	public function getUtilisateur() {
 
+		/* Check si l'utilisateur est bien authentifié */
 		if( @$_SESSION[self::S_IS_USER_AUTH] == true )
+		{
+			/* Regarde si l'objet est bien setté */
+			if( !( @isset( $_SESSION[self::S_USER_OBJ] ) ) ) {
+				/* Si l'authentification est régulière, pas d'excuse, fuck */
+				if( $_SESSION[self::S_AUTH_METHOD] == self::AUTH_NORMAL ) {
+					return null;
+				}
+				else if( $_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
+					/* Pour le CAS, on a pas pu créer l'utilisateur... Donc on le fait à la voler ici */
+					$login = phpCAS::getUser();
+					$this->creerObjetUtilisateur( $login );
+				}
+			}
+
 			return $_SESSION[self::S_USER_OBJ];
+		}
 
 		return null;
 	}
