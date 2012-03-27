@@ -51,6 +51,7 @@ class CV_Formation {
                     ID_VILLE = :id_ville, 
                     ANNEE_FORMATION = :annee_formation,
                     ID_CV = :id_cv', $info_formation);
+            return true;
         } else {
             echo "Erreur 6 veuillez contacter l'administrateur du site";
             return;

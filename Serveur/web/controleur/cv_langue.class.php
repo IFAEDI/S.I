@@ -38,12 +38,12 @@ class CV_Langue {
 
 //Recupération de la liste des langues possible
     public static function GetListeLangue() {
-        return BD::Prepare('SELECT * FROM LANGUE', array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM LANGUE ORDER BY LIBELLE_LANGUE ASC', array(), BD::RECUPERER_TOUT);
     }
 
 //Recupération de la liste des niveaux possible
     public static function GetListeNiveau() {
-        return BD::Prepare('SELECT * FROM NIVEAU_LANGUE', array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM NIVEAU_LANGUE ORDER BY LIBELLE_NIVEAU ASC', array(), BD::RECUPERER_TOUT);
     }
 
 //Recupération de la liste des certification possible

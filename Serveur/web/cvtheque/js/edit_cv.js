@@ -25,7 +25,7 @@ $(document).ready(function() {
     //Ajout des champs pour ajouter une nouvelle competence
     /* (str) */var competence = "";
     competence += '<div class="control-group" id="nouvelle_competence">';
-    competence += '<label class="control-label">Nouvelle competence</label>';
+    competence += '<label class="control-label">Nouvelle compétence</label>';
     competence += '<div class="controls">';
     competence += '<input type="text" id="nom_nouvelle_competence" class="span3" placeholder="Nom de la compétence" style="width : 400px; margin-right: 5px;">';
     competence += '<a href="javascript:Ajouter_Competence(\'\');" class="icon-ok" style="margin-left : 20px;"></a>';
@@ -63,14 +63,14 @@ $(document).ready(function() {
     /* (str) */var xp = "";
     xp += '<div id="nouvelle_xp">';
     xp += '<table cellpadding="8" style="text-align : center;"><tr>';
-    xp += '<td><input type="text" id="debut_nouvelle_xp" class="span3" placeholder="Debut" style="width : 80px;"></td>';
+    xp += '<td><input type="text" id="debut_nouvelle_xp" class="span3" placeholder="Début" style="width : 80px;"></td>';
     xp += '<td><input type="text" id="fin_nouvelle_xp" class="span3" placeholder="Fin" style="width : 80px;"</td>';
     xp += '<td><input type="text" id="titre_nouvelle_xp" class="span3" placeholder="Titre" style="width : 420px;"></td>';
     xp += '<td><input type="text" id="entreprise_nouvelle_xp" class="span3" placeholder="Entreprise" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_nouvelle_xp" class="span3" placeholder="Ville" style="width : 150px;"></td>';
     xp += '<td><a href="javascript:Ajouter_XP(\'\',\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
-    xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 830px;" placeholder="Descirption"></textarea></td>';  
+    xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 830px;" placeholder="Description"></textarea></td>';  
     xp += '</tr></table></div><hr>';
     $('#div_nouvelle_XP').append(xp);
     $( "#debut_nouvelle_xp").datepicker();
@@ -98,9 +98,9 @@ $(document).ready(function() {
     //Ajout des champs pour ajouter un nouveau diplome
     /* (str) */var diplome = "";
     diplome += '<div class="control-group" id="nouveau_diplome">';
-    diplome += '<label class="control-label">Nouveau diplome</label>';
+    diplome += '<label class="control-label">Nouveau diplôme</label>';
     diplome += '<div class="controls">';
-    diplome += '<input type="text" id="libelle_diplome" class="span3" placeholder="Nom du diplome"  style="width : 200px; margin-right: 5px;">';
+    diplome += '<input type="text" id="libelle_diplome" class="span3" placeholder="Nom du diplôme"  style="width : 200px; margin-right: 5px;">';
     diplome += Creer_Select('sel_mention_nouveau_diplome',-1,liste_mention);
     diplome += '<input type="text" id="annee_nouveau_diplome" class="span3" placeholder="Année"  style="width : 80px; margin: 5px;">';
     diplome += '<input type="text" id="institut_nouveau_diplome" class="span3" placeholder="Institut"  style="width : 200px; margin-right: 5px;">';
@@ -146,7 +146,7 @@ function Ajouter_Competence(_nom){
     }
 
     if (_nom == ''){
-        Afficher_erreur("[Competence(s)] Les champs suivants sont obligatoire : Nom competence");
+        Afficher_erreur("[Compétence(s)] Les champs suivants sont obligatoires : Nom compétence");
         return;
     }
     
@@ -154,7 +154,7 @@ function Ajouter_Competence(_nom){
 
     /* (str) */var competence = "";
     competence += '<div class="control-group" id="competence'+nb_competence+'">';
-    competence += '<label class="control-label">Competence</label>';
+    competence += '<label class="control-label">Compétence</label>';
     competence += '<div class="controls">';
     competence += '<input type="text" id="nom_competence'+nb_competence+'" class="span3" placeholder="Nom de la compétence" value="'+_nom+'" style="width : 400px; margin-right: 5px;">';
     competence += '<a href="javascript:Supprimer_Competence('+nb_competence+');" class="icon-remove" style="margin-left : 20px;"></a>';
@@ -187,7 +187,7 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
     }
     
     if (_annee == '' || _libelle == '' || _institut=='' || _ville == '' || isNaN(_annee)){
-        Afficher_erreur("[Diplome(s)] Les champs suivants sont obligatoire : Nom du diplome, Annee (nombre), Institut et Ville");
+        Afficher_erreur("[Diplome(s)] Les champs suivants sont obligatoires : Nom du diplôme, Année (nombre), Institut et Ville");
         return;
     }
     
@@ -199,9 +199,9 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
 
     /* (str) */var diplome = "";
     diplome += '<div class="control-group" id="diplome'+nb_diplome+'">';
-    diplome += '<label class="control-label">Diplome</label>';
+    diplome += '<label class="control-label">Diplôme</label>';
     diplome += '<div class="controls">';
-    diplome += '<input type="text" id="libelle_diplome'+nb_diplome+'" class="span3" placeholder="Nom du diplome" value="'+_libelle+'" style="width : 200px; margin-right: 5px;">';
+    diplome += '<input type="text" id="libelle_diplome'+nb_diplome+'" class="span3" placeholder="Nom du diplôme" value="'+_libelle+'" style="width : 200px; margin-right: 5px;">';
     diplome += Creer_Select('sel_mention_diplome'+nb_diplome,_id_mention,liste_mention);
     diplome += '<input type="text" id="annee_diplome'+nb_diplome+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px; margin: 5px;">';
     diplome += '<input type="text" id="institut_diplome'+nb_diplome+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 200px; margin-right: 5px;">';
@@ -241,7 +241,7 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
     }
     
     if (_debut == '' || _fin == '' || _institut=='' || _ville == '' ){
-        Afficher_erreur("[Formation(s)] Les champs suivants sont obligatoire : Debut, Fin, Institut et Ville");
+        Afficher_erreur("[Formation(s)] Les champs suivants sont obligatoires : Début, Fin, Institut et Ville");
         return;
     }
     
@@ -367,7 +367,7 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     }
     
     if (_debut == '' || _fin == '' || _titre=='' || _entreprise == '' || _ville == '' ){
-        Afficher_erreur("[Expériences professionnelles] Les champs suivants sont obligatoire : Debut, Fin, Titre, Entreprise et Ville");
+        Afficher_erreur("[Expériences professionnelles] Les champs suivants sont obligatoires : Début, Fin, Titre, Entreprise et Ville");
         return;
     }
     
@@ -384,14 +384,14 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     /* (str) */var xp = "";
     xp += '<div id="xp'+nb_xp+'" class="control-group">';
     xp += '<table cellpadding="8" style="text-align : center;"><tr>';
-    xp += '<td><input type="text" id="debut_xp'+nb_xp+'" class="span3" placeholder="Debut" value="'+_debut+'" style="width : 80px;"></td>';
+    xp += '<td><input type="text" id="debut_xp'+nb_xp+'" class="span3" placeholder="Début" value="'+_debut+'" style="width : 80px;"></td>';
     xp += '<td><input type="text" id="fin_xp'+nb_xp+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px;>"</td>';
     xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 420px;"></td>';
     xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_xp'+nb_xp+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;"></td>';
     xp += '<td><a href="javascript:Supprimer_XP('+nb_xp+');" class="icon-remove" style="margin-left : 20px;"></a></td>';
     xp += '<tr><td></td><td></td>';
-    xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 830px;" placeholder="Descirption">'+_desc+'</textarea></td>';
+    xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 830px;" placeholder="Description">'+_desc+'</textarea></td>';
     xp += '</tr></table></div>';
     $('#div_ancienne_XP').append(xp);
    
@@ -443,27 +443,27 @@ function Sauvegarder(){
     anniv_etudiant = $("#anniv_etudiant");
 
      if (!VerifierChamp(anniv_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le nom étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] La date de naissance de l'étudiant est incorrecte");
         return;
     }
 
     if (!VerifierChamp(nom_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le nom étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] Le nom de l'étudiant est incorrect");
         return;
     }
     
     if (!VerifierChamp(prenom_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le prenom étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] Le prénom de l'étudiant est incorrect");
         return;
     }
 
     if (!VerifierChamp(adresse1_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] L'adresse 1 est incorrect");
+        Afficher_erreur("[Informations personnelles] L'adresse 1 est incorrecte");
         return;
     }
     
     if (!VerifierChamp(ville_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] La ville est incorrect");
+        Afficher_erreur("[Informations personnelles] La ville est incorrecte");
         return;
     }
     
@@ -483,7 +483,7 @@ function Sauvegarder(){
     }else{
         mail_etudiant.parent().parent().parent().removeClass('success');
         mail_etudiant.parent().parent().parent().addClass('error');
-        Afficher_erreur("[Informations personnelles] L'adresse mail est incorrect");
+        Afficher_erreur("[Informations personnelles] L'adresse mail est incorrecte");
         return;
     }
  
@@ -517,7 +517,7 @@ function Sauvegarder(){
             }else{
                 entreprise_xp.parent().parent().parent().parent().parent().removeClass('success');
                 entreprise_xp.parent().parent().parent().parent().parent().addClass('error');
-                Afficher_erreur("[Expériences professionnelles] L'entreprise de l'expérience est incorrect");
+                Afficher_erreur("[Expériences professionnelles] L'entreprise de l'expérience est incorrecte");
                 return;
             }
             
@@ -528,7 +528,7 @@ function Sauvegarder(){
             }else{
                 ville_xp.parent().parent().parent().parent().parent().removeClass('success');
                 ville_xp.parent().parent().parent().parent().parent().addClass('error');
-                Afficher_erreur("[Expériences professionnelles] La ville de l'expérience est incorrect");
+                Afficher_erreur("[Expériences professionnelles] La ville de l'expérience est incorrecte");
                 return;
             }
             
@@ -549,22 +549,22 @@ function Sauvegarder(){
             ville_diplome = $('#ville_diplome'+i);
             
             if (!VerifierChamp(libelle_diplome,false,false,false)){
-                Afficher_erreur("[Diplome(s)] La nom du diplome est incorrect");
+                Afficher_erreur("[Diplôme(s)] La nom du diplôme est incorrect");
                 return;
             }
             
             if (!VerifierChamp(annee_diplome,true,true,true)){
-                Afficher_erreur("[Diplome(s)] L'année du diplome est incorrect");
+                Afficher_erreur("[Diplôme(s)] L'année du diplôme est incorrecte");
                 return;
             }
             
             if (!VerifierChamp(institut_diplome,false,false,false)){
-                Afficher_erreur("[Diplome(s)] L'institut du diplome est incorrect");
+                Afficher_erreur("[Diplôme(s)] L'institut du diplôme est incorrect");
                 return;
             }
             
             if (!VerifierChamp(ville_diplome,false,false,false)){
-                Afficher_erreur("[Diplome(s)] La ville du diplome est incorrect");
+                Afficher_erreur("[Diplôme(s)] La ville du diplôme est incorrecte");
                 return;
             }
           
@@ -590,12 +590,12 @@ function Sauvegarder(){
             }
 
             if (!VerifierChamp(ville_formation,false,false,false)){
-                Afficher_erreur("[Formation] La de formation est incorrect");
+                Afficher_erreur("[Formation] La ville de formation est incorrecte");
                 return;
             }
             
             if (!VerifierChamp(annee_formation,false,false,false)){
-                Afficher_erreur("[Formation] L'année de formation est incorrect");
+                Afficher_erreur("[Formation] L'année de formation est incorrecte");
                 return;
             }  
           
@@ -708,7 +708,7 @@ function Sauvegarder(){
         retour_decode = $.parseJSON(retour);
         if (retour_decode['code'] == 'ok'){
             $("#text_info").empty();
-            $("#text_info").append("La sauvegarde c'est bien passée <a href='index.php?page=accueil_cv'>Voir le resultat</a>");
+            $("#text_info").append("La sauvegarde s'est bien passée <a href='index.php?page=accueil_cv'>Voir le résultat</a>");
             div_info.addClass("alert-success");
             div_info.removeClass("alert-error");            
         }else{

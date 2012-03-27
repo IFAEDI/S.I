@@ -109,7 +109,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
             </span>
 
             <div class="control-group">
-                <label class="control-label">Nom et prenom*</label>
+                <label class="control-label">Nom et prénom*</label>
                 <div class="controls">
                     <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $etudiant->getNom(); ?>">
                     <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $etudiant->getPrenom(); ?>">
@@ -225,7 +225,7 @@ echo '<script> var id_etudiant=\'' . $_SESSION['utilisateur']->getId() . '\';</s
         </div>
     </div>
     <div class="group">
-        <h3><a href="#">Diplome(s)</a></h3>
+        <h3><a href="#">Diplôme(s)</a></h3>
         <div id="div_Formation">
             <a id="btn_annuler_diplome" class="btn" href="javascript:Annuler_diplome();" style="display: none;position: absolute; left: 90%;">Annuler</a>
             <div id="div_nouveau_Diplome"></div>

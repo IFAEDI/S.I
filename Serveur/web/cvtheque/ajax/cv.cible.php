@@ -44,26 +44,26 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
 
 
     //On initialise l'array de retour
-    $array = array();
+    $retour = array();
 
     //On verifie que les variables sont correcte
     if ($nom_etudiant == '') {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : Le nom étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : Le nom de l\'étudiant ne peut être vide';
         echo json_encode($retour);
         die;
     }
 
     if ($ville_etudiant == '') {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : La ville étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : La ville de l\'étudiant ne peut être vide';
         echo json_encode($retour);
         die;
     }
 
     if ($cp_etudiant == '' || !is_numeric($cp_etudiant)) {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : Le code postal étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : Le code postal de l\'étudiant ne peut être vide';
         echo json_encode($retour);
 
         die;
@@ -71,14 +71,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
 
     if ($pays_etudiant == '') {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : Le pays étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : Le pays de l\'étudiant ne peut être vide';
         echo json_encode($retour);
         die;
     }
 
     if ($anniv_etudiant == '') {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : L\'anniversaire étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : L\'anniversaire de l\'étudiant ne peut être vide';
         echo json_encode($retour);
         die;
     }
@@ -95,19 +95,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     foreach ($liste_experience as $experience) {
         if ($experience[2] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : Le titre d\'une expérience ne peut etre vide';
+            $retour['msg'] = 'Erreur : Le titre d\'une expérience ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($experience[4] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : L\'entreprise d\'une expérience ne peut etre vide';
+            $retour['msg'] = 'Erreur : L\'entreprise d\'une expérience ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($experience[5] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : La ville d\'une expérience ne peut etre vide';
+            $retour['msg'] = 'Erreur : La ville d\'une expérience ne peut être vide';
             echo json_encode($retour);
             die;
         }
@@ -116,25 +116,25 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     foreach ($liste_diplome as $diplome) {
         if ($diplome[0] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : L\'année d\'un diplome ne peut etre vide';
+            $retour['msg'] = 'Erreur : L\'année d\'un diplôme ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($diplome[2] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : Le titre d\'un diplome ne peut etre vide';
+            $retour['msg'] = 'Erreur : Le titre d\'un diplôme ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($diplome[3] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : L\'institut d\'un diplome ne peut etre vide';
+            $retour['msg'] = 'Erreur : L\'institut d\'un diplôme ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($diplome[4] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : La ville d\'un diplome ne peut etre vide';
+            $retour['msg'] = 'Erreur : La ville d\'un diplôme ne peut être vide';
             echo json_encode($retour);
             die;
         }
@@ -143,7 +143,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     foreach ($liste_comptetence as $competence) {
         if ($competence[0] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : Le nom d\'une competence ne peut etre vide';
+            $retour['msg'] = 'Erreur : Le nom d\'une compétence ne peut être vide';
             echo json_encode($retour);
             die;
         }
@@ -152,19 +152,19 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     foreach ($liste_formation as $formation) {
         if ($formation[2] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : L\'institut d\'une formation ne peut etre vide';
+            $retour['msg'] = 'Erreur : L\'institut d\'une formation ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($formation[3] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : La ville d\'une formation ne peut etre vide';
+            $retour['msg'] = 'Erreur : La ville d\'une formation ne peut être vide';
             echo json_encode($retour);
             die;
         }
         if ($formation[4] == '') {
             $retour['code'] = 'error';
-            $retour['msg'] = 'Erreur : L\'année d\'une formation ne peut etre vide';
+            $retour['msg'] = 'Erreur : L\'année d\'une formation ne peut être vide';
             echo json_encode($retour);
             die;
         }
