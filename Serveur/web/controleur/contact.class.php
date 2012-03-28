@@ -28,7 +28,7 @@ class Contact {
 
     //****************  Fonctions statiques  ******************//
     // Récuperation de l'objet Contact par l'ID
-    public static function GetContactByID($_id) {
+    public static function GetContactByID(/* int */ $_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM Contact WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
@@ -39,9 +39,14 @@ class Contact {
 	public static function GetListeContacts() {
         return BD::Prepare('SELECT * FROM Contact ORDER BY NOM', array(), BD::RECUPERER_TOUT);
     }
+	
+	// Récuperation des données de l'ensemble des Contacts, ordonné alphabétiquement, pour une entreprise donnée
+	public static function GetListeContactsParEntreprise(/* int */ $_idEntreprise) {
+        return BD::Prepare('SELECT * FROM Contact WHERE ID_ENTREPRISE = :idEntreprise ORDER BY NOM', array('idEntreprise' => $_idEntreprise), BD::RECUPERER_TOUT);
+    }
 
 	// Suppression d'une Contact par ID
-    public static function SupprimerContactByID($_id) {
+    public static function SupprimerContactByID(/* int */ $_id) {
         if (is_numeric($_id)) {
             BD::Prepare('DELETE FROM Contact WHERE ID = :id', array('id' => $_id));
         }

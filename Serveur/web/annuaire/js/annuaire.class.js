@@ -15,7 +15,7 @@ var Annuaire = {};
 
 /** 
  * ---- chercherInfoEntreprise
- * Interroge le serveur pour récupérer l'ensemble des informations sur une entreprise (description, contacts, relations, remarques) - Requétage Ajax
+ * Interroge le serveur pour récupérer l'ensemble des informations sur une entreprise (description, contacts, relationss, remarques) - Requétage Ajax
  * Paramètres :
  *		- idEntreprise : INT - Identifiant de l'entreprise voulue
  * Retour :
@@ -29,10 +29,10 @@ var Annuaire = {};
 					commentaire: "",
 				},
 				contacts: [
-					{nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
-					{nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+					{id: 1, nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
+					{id: 2, nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
 				],
-				relation: {
+				relationss: {
 					parrainage : [
 						{annee: 2012, commentaire:"Ok", couleur:1},
 						{annee: 2011, commentaire:"Bof", couleur:0}
@@ -56,18 +56,17 @@ var Annuaire = {};
 				]
 			}
  */
-Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEntreprise) {
+Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEntreprise, /* void function(void) */ callback ) {
 	// Requête Ajax :
 	var /* objet */ requete = $.ajax({
 		url: "./annuaire/ajax/infoEntreprise.cible.php",
 		type: "POST",
 		data: {id : idEntreprise},
-		dataType: "html"
+		dataType: "json"
 	});
 
 	requete.done(function(donnees) {
-		alert("Ok !");
-		return donnees;
+		callback(donnees);
 	});
 	requete.fail(function(jqXHR, textStatus) {
 		alert( "Request failed: " + textStatus );
@@ -145,18 +144,17 @@ Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/*
 
 /** 
  * ---- afficherInfoEntreprise
- * Récupère & Affiche dans l'hero-unit les informations de l'entreprise demandée 
+ * Affiche dans l'hero-unit les informations de l'entreprise demandée 
  * Paramètres :
  *		- idEntreprise : INT - ID de l'entreprise voulue
  * Retour :
  *		- RIEN (Page directement modifiée)
  */
-Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* int */ idEntreprise) {
+Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ donnees) {
 	// Sorry pour les pavés de cette fonction, dur de faire un compromis entre clarté JS et clarté HTML ...
 	// Si quelqu'un veut refaire ça plus proprement, ca devrait pas être trop difficile.
 
-	// Récupération des données :
-	var /* objet */ donnees = this.chercherInfoEntreprise(idEntreprise);
+	donnees = donnees.entreprise;
 	
 	// Génération des blocs intermédiaires (nécessitant des boucles) :
 	var /* string */ tableauContacts = '';
@@ -172,47 +170,52 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* int */ idEn
 	}
 	
 	var /* string */ tableauParrainage = '';
-	if (donnees.relation.parrainage.length == 0) { // Aucun parrainage avec
-		tableauParrainage = '<tr><th>Parrainage</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-	} else {
-		tableauParrainage = '<tr><th rowspan='+donnees.relation.parrainage.length+'>Parrainage</th><td>Promo '+donnees.relation.parrainage[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relation.parrainage[0].couleur)+'">'+donnees.relation.parrainage[0].commentaire+'</span></td></tr>';
-		for (var /* int */ i = 1; i < donnees.relation.parrainage.length; i++) {
-			tableauParrainage += '<tr><td>Promo '+donnees.relation.parrainage[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relation.parrainage[i].couleur)+'">'+donnees.relation.parrainage[i].commentaire+'</span></td></tr>';
-		}
-	}
-	
 	var /* string */ tableauRIF = '';
-	if (donnees.relation.rif.length == 0) {
-		tableauRIF = '<tr><th>RIF</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-	} else {
-		tableauRIF = '<tr><th rowspan='+donnees.relation.rif.length+'>RIF</th><td>'+donnees.relation.rif[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relation.rif[0].couleur)+'">'+donnees.relation.rif[0].commentaire+'</span></td></tr>';
-		for (var /* int */ i = 1; i < donnees.relation.rif.length; i++) {
-			tableauRIF += '<tr><td>'+donnees.relation.rif[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relation.rif[i].couleur)+'">'+donnees.relation.rif[i].commentaire+'</span></td></tr>';
-		}
-	}	
-
 	var /* string */ tableauStages = '';
-	if (donnees.relation.stages.length == 0) {
-		tableauStages = '<tr><th>Stages</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-	} else {
-		tableauStages = '<tr><th rowspan='+donnees.relation.stages.length+'>Stages</th><td>'+donnees.relation.stages[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relation.stages[0].nbSujets+' sujets</span></td></tr>';
-		for (var /* int */ i = 1; i < donnees.relation.stages.length; i++) {
-			tableauStages += '<tr><td>'+donnees.relation.stages[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relation.stages[i].nbSujets+' sujets</span></td></tr>';
-		}
-	}
-
 	var /* string */ tableauEntretiens = '';
-	if (donnees.relation.entretiens.length == 0) {
-		tableauEntretiens = '<tr><th>Entretien</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-	} else {
-		tableauEntretiens = '<tr><th rowspan='+donnees.relation.entretiens.length+'>Entretiens</th><td>'+donnees.relation.entretiens[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relation.entretiens[0].nbSessions+' sessions</span></td></tr>';
-		for (var /* int */ i = 1; i < donnees.relation.entretiens.length; i++) {
-			tableauEntretiens += '<tr><td>'+donnees.relation.entretiens[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relation.entretiens[i].nbSessions+' sessions</span></td></tr>';
+	
+	if (typeof donnees.relations !== "undefined") {
+		if ((typeof donnees.relations.parrainage !== "undefined") || (donnees.relations.parrainage.length == 0)) { // Aucun parrainage avec
+			tableauParrainage = '<tr><th>Parrainage</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
+		} else {
+			tableauParrainage = '<tr><th rowspan='+donnees.relations.parrainage.length+'>Parrainage</th><td>Promo '+donnees.relations.parrainage[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.parrainage[0].couleur)+'">'+donnees.relations.parrainage[0].commentaire+'</span></td></tr>';
+			for (var /* int */ i = 1; i < donnees.relations.parrainage.length; i++) {
+				tableauParrainage += '<tr><td>Promo '+donnees.relations.parrainage[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.parrainage[i].couleur)+'">'+donnees.relations.parrainage[i].commentaire+'</span></td></tr>';
+			}
 		}
+		
+		if ((typeof donnees.relations.rif === "undefined") || (donnees.relations.rif.length == 0)) {
+			tableauRIF = '<tr><th>RIF</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
+		} else {
+			tableauRIF = '<tr><th rowspan='+donnees.relations.rif.length+'>RIF</th><td>'+donnees.relations.rif[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.rif[0].couleur)+'">'+donnees.relations.rif[0].commentaire+'</span></td></tr>';
+			for (var /* int */ i = 1; i < donnees.relations.rif.length; i++) {
+				tableauRIF += '<tr><td>'+donnees.relations.rif[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.rif[i].couleur)+'">'+donnees.relations.rif[i].commentaire+'</span></td></tr>';
+			}
+		}	
+		
+		if ((typeof donnees.relations.stages === "undefined") || (donnees.relations.stages.length == 0)) {
+			tableauStages = '<tr><th>Stages</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
+		} else {
+			tableauStages = '<tr><th rowspan='+donnees.relations.stages.length+'>Stages</th><td>'+donnees.relations.stages[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.stages[0].nbSujets+' sujets</span></td></tr>';
+			for (var /* int */ i = 1; i < donnees.relations.stages.length; i++) {
+				tableauStages += '<tr><td>'+donnees.relations.stages[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.stages[i].nbSujets+' sujets</span></td></tr>';
+			}
+		}
+		
+		if ((typeof donnees.relations.entretiens === "undefined") || (donnees.relations.entretiens.length == 0)) {
+			tableauEntretiens = '<tr><th>Entretien</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
+		} else {
+			tableauEntretiens = '<tr><th rowspan='+donnees.relations.entretiens.length+'>Entretiens</th><td>'+donnees.relations.entretiens[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.entretiens[0].nbSessions+' sessions</span></td></tr>';
+			for (var /* int */ i = 1; i < donnees.relations.entretiens.length; i++) {
+				tableauEntretiens += '<tr><td>'+donnees.relations.entretiens[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.entretiens[i].nbSessions+' sessions</span></td></tr>';
+			}
+		}
+	} else {
+		tableauEntretiens = 'Aucune relation.';
 	}
 
 	var /* string */ tableauCommentaires = '';
-	if (donnees.relation.entretiens.length == 0) {
+	if (typeof donnees.commentaires === "undefined") {
 		tableauCommentaires = 'Aucun commentaire.';
 	} else {
 		tableauCommentaires = '<table class="table table-stripped">                                                                                              '+
