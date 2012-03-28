@@ -1,5 +1,14 @@
 ﻿<?php
-
+/**
+ * -----------------------------------------------------------
+ * ENTREPRISE - CLASSE PHP
+ * -----------------------------------------------------------
+ * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+ *          Contact - benjamin.planche@aldream.net
+ * ---------------------
+ * Controleur associé à la table Entreprise
+ */
+ 
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
@@ -106,7 +115,17 @@ class Entreprise {
     public function getIdVille() {
         return $this->ID_VILLE;
     }
-
+	
+	public function toarrayObject() {
+		$arrayEntr = array();
+		$arrayEntr['id'] = intval($this->ID);
+		$arrayEntr['nom'] = $this->NOM;
+		$arrayEntr['description'] = $this->DESCRIPTION;
+		$arrayEntr['secteur'] = $this->SECTEUR;
+		$arrayEntr['id_ville'] = intval($this->ID_VILLE);
+		$arrayEntr['commentaire'] = $this->COMMENTAIRE;
+		return $arrayEntr;
+	}
 }
 
 ?>

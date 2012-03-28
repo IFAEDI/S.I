@@ -14,19 +14,6 @@ inclure_fichier('stages', 'controleur', 'php');
  * Auteur : benjamin.bouvier@gmail.com (2011/2012)
  */
 
-/**
- * Fonction qui vérifie si un item donné est présent dans le 
- * tableau global $_POST, et s'il est non vide.
- */
-function verifierPresent($index) {
-	if (!isset($_POST[$index])) {
-		return false;
-	}
-
-	$sansBlanc = trim($_POST[$index]);
-	return !empty($sansBlanc);
-}
-
 /*
  * Récupérer et transformer le JSON
  */

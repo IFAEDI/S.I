@@ -82,12 +82,12 @@
 				<a data-toggle="modal" href="#login_dialog">
 					<i class="icon-user icon-white"></i>
 					<?php 
-						if( $authentification->isAuthentifie() ) {
-							echo $utilisateur->getPrenom()." ".$utilisateur->getNom();
-						}
-						else {
-							 echo "Se connecter";
-						}
+						// if( $authentification->isAuthentifie() ) {
+							// echo $utilisateur->getPrenom()." ".$utilisateur->getNom();
+						// }
+						// else {
+							 // echo "Se connecter";
+						// }
 					?>
 				</a>
 			</li>
