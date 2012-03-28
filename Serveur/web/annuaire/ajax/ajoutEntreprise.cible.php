@@ -28,22 +28,30 @@ inclure_fichier('controleur', 'entreprise.class', 'php');
 /* string */ $nom_entreprise = NULL;
 /* string */ $secteur_entreprise = NULL;
 /* string */ $desc_entreprise = NULL;
+/* string */ $com_entreprise = NULL;
+/* int */ $idVille_entreprise = 0;
 
 if (verifierPresent('nom')) {
 	$nom_entreprise = Protection_XSS($_POST['nom']);
 }
 if (verifierPresent('secteur')) {
-	$nom_entreprise = Protection_XSS($_POST['secteur']);
+	$secteur_entreprise = Protection_XSS($_POST['secteur']);
 }
 if (verifierPresent('description')) {
-	$nom_entreprise = Protection_XSS($_POST['description']);
+	$desc_entreprise = Protection_XSS($_POST['description']);
+}
+if (verifierPresent('commentaire')) {
+	$com_entreprise = Protection_XSS($_POST['commentaire']);
+}
+if (verifierPresent('idVille')) {
+	$idVille_entreprise = intval($_POST['idVille']);
 }
 
 /*
  * Appeler la couche du dessous
  */
  
-/* int */ $id = Entreprise::UpdateEntreprise(0, $nom_entreprise, $desc_entreprise, $secteur_entreprise, '', NULL);
+/* int */ $id = Entreprise::UpdateEntreprise(0, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise, $idVille_entreprise);
 
 /*
  * Renvoyer le JSON

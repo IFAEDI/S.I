@@ -75,13 +75,13 @@ class Entreprise {
 				'commentaire' => $_com,
 				'id_ville' => $_id_ville,
 			);
-			
-            BD::Prepare('INSERT INTO Entreprise SET 
-                    NOM = :nom,
-                    DESCRIPTION = :description,
-					SECTEUR = :secteur,
-                    COMMENTAIRE = :commentaire,
-                    ID_VILLE = :id_ville'
+
+            BD::Prepare('INSERT INTO Entreprise (NOM, DESCRIPTION, SECTEUR, COMMENTAIRE, ID_VILLE) VALUES (
+                    :nom,
+                    :description,
+					:secteur,
+                    :commentaire,
+                    :id_ville)'
                     , $info);
 
             $id = BD::GetConnection()->lastInsertId();
