@@ -41,8 +41,11 @@ global $authentification;
     </head>
 
     <body>
-        <?php inclure_fichier('', 'menu', 'php'); ?>
-        <?php if ($nom_module != '') { ?>
+        <?php 
+	inclure_fichier('', 'menu', 'php'); 
+	inclure_fichier('', 'login', 'php' ); 
+
+        if ($nom_module != '') { ?>
             <ul class="breadcrumb" >
                 <li>
                     <a href="index.php?page=accueil"><i class="icon-home"></i></a> <span class="divider">/</span>

@@ -13,6 +13,8 @@ class Utilisateur {
 	private $annee;
 	private $mail;
 
+	private $premiereConnexion;
+
 
 	/**
 	* Constructeur
@@ -20,19 +22,117 @@ class Utilisateur {
 	*/
 	public function __construct( $login ) {
         
+		$result = $this->_fetchData( $login );
+
+		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
+		if( $result == false ) {
+
+			/* On s'en occupe donc ! */
+			/* Ajout en base */
+			$result = BD::Prepare( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', 
+					array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
+
+			// Non testable !!
+
+			/* Et on rappelle pour fetcher les éléments */
+			$result = $this->_fetchData( $login );
+			if( $result == null || $result->rowCount() == 0 ) {
+				throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
+			}
+		}
+	}
+
+
+	private function _fetchData( $login ) {
+
 		/* Requête à la base pour récupérer le bon utilisateur et construire l'objet */
 		$result = BD::Prepare( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
 
-		/* Si l'objet n'a pas pu être créé, exception */
-		if( $result == null ) {
-			throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
-		}
+		if( $result == null )
+			return false;
 
+		$this->id = $result['id'];
+		$this->login = $result['login'];
 		$this->nom = $result['nom'];
 		$this->prenom = $result['prenom'];
 		$this->annee = $result['annee'];
 		$this->mail = $result['mail'];
+		$this->premiereConnexion = $result['premiere_connexion'];
+
+		return true;
 	}
+
+	/**
+	* Fonction faisant le changement du mot de passe de l'utilisateur
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function changePassword( $mdp ) {
+
+		/* Requête à la base */
+		$result = BD::Prepare( 'UPDATE UTILISATEUR SET mdp = :mdp WHERE id = :id', array( 'mdp' => $mdp, 'id' => $this->id ) );
+
+		return true;
+		//Pas possible pour le moment :
+		/* On regarde si ça a foiré 
+		if( $result == null )
+			return false;
+
+		/* Si une ligne a changé, c'est cool ! :-) 
+		if( $result->rowCount() == 1 )
+			return true;
+		
+		return false;*/
+	}
+
+	/**
+	* Change les informations personnelles de l'utilisateur
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function changeInfoPerso( $nom, $prenom, $mail, $annee ) {
+
+		/* Requête à la base */
+		$result = BD::Prepare( 'UPDATE UTILISATEUR SET nom = :nom, prenom = :prenom, annee = :annee, mail = :mail, premiere_connexion = 0 WHERE id = :id',
+			array( 'nom' => $nom, 'prenom' => $prenom, 'annee' => $annee, 'mail' => $mail, 'id' => $this->id ) );
+
+		$this->nom = $nom;
+		$this->prenom = $prenom;
+		$this->annee = $annee;
+		$this->mail = $mail;
+		$this->premiereConnexion = false;
+
+		return true;
+		//Pas possible pour le moment :
+		/* On regarde si ça a foiré 
+		if( $result == null )
+			return false;
+
+		/* Si une ligne a changé, c'est cool ! :-) 
+		if( $result->rowCount() == 1 )
+			return true;
+
+		return false;*/
+	}
+
+
+	/**
+	* Détermine si c'est la première connexion de l'utilisateur ou non
+	* @return Vrai si c'est le cas, faux sinon
+	*/
+	public function premiereConnexion() {
+
+		return $this->premiereConnexion;
+	}
+
+	/**
+	* Retourne le nom d'utilisateur de l'utilisateur
+	*/
+	public function getLogin() {
+		return $this->login;
+	}
+
+
+
+
 
 	public function estEtudiant() {
         	//TODO

@@ -38,7 +38,7 @@ class Authentification {
 		global $CONFIG;
 
 		/* On fixe les paramètre du serveur CAS à interroger (contenus dans config.inc.php) */
-		phpCAS::client( CAS_VERSION_2_0, $CONFIG['sso']['server'], $CONFIG['sso']['port'], $CONFIG['sso']['root'] );
+		phpCAS::client( CAS_VERSION_2_0, $CONFIG['sso']['server'], $CONFIG['sso']['port'], $CONFIG['sso']['root'], 'true', 'saml' );
 		phpCAS::setNoCasServerValidation();
 	}
 
@@ -62,8 +62,8 @@ class Authentification {
 		$_SESSION[self::S_AUTH_METHOD] = self::AUTH_NORMAL;
 
 		/* Requête à la base de données pour essayer de trouver l'utilisateur */
-		$result = BD::Prepare( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd', 
-			array( ':login' => $login, ':passwd' => $mdp ) );
+		$result = BD::Prepare( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd AND SERVICE = :service', 
+			array( ':login' => $login, ':passwd' => $mdp, ':service' => self::AUTH_NORMAL ) );
 
 
 		/* On regarde que l'on a bien un objet et on fait la vérification */
@@ -108,13 +108,16 @@ class Authentification {
 	*/
 	public function isAuthentifie() {
 
+		/* Actualisation du CAS pour voir si la session n'a pas espiré */
+		phpCAS::handleLogoutRequests();
+
 		/* Test de la variable de session dans un premier temps */
 		if( @$_SESSION[self::S_IS_USER_AUTH] == true ) {
 			return true;
 		}
 
 		/* Si le test échoue, on regarde auprès du CAS au cas où */
-		if( $_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
+		if( @$_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
 			if( phpCAS::isAuthenticated() == true ) {
 
 				/* On fixe la variable de session pour éviter de redemander à CAS */
@@ -135,12 +138,17 @@ class Authentification {
 		/* On bascule le flag à faux */
 		$_SESSION[self::S_IS_USER_AUTH] = false;
 		$_SESSION[self::S_USER_OBJ]	= null;
-		$_SESSION[self::S_AUTH_METHOD]  = null;
 
 		/* On demande à CAS de déconnecter l'utilisateur */
 		if( @$_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
-		        phpCAS::logoutWithUrl(  ); /* A améliorer */
+			$_SESSION[self::S_AUTH_METHOD]  = null;
+
+			/* On fixe l'adresse sur laquelle il faut être redirigé et on déconnecte l'utilisateur */
+			phpCAS::setServerLogoutURL( $_SERVER['REQUEST_URI'] );
+		        phpCAS::logout();
 		}
+
+		$_SESSION[self::S_AUTH_METHOD]  = null;
 	}
 
 
@@ -160,6 +168,7 @@ class Authentification {
 				}
 				else if( $_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
 					/* Pour le CAS, on a pas pu créer l'utilisateur... Donc on le fait à la voler ici */
+					$this->authentificationCAS();
 					$login = phpCAS::getUser();
 					$this->creerObjetUtilisateur( $login );
 				}
@@ -171,6 +180,13 @@ class Authentification {
 		return null;
 	}
 
+	/**
+	* Retourne la méthode d'authentification
+	*/
+	public function getAuthentificationMethode() {
+
+		return $_SESSION[self::S_AUTH_METHOD];
+	}
 };
 
 ?>

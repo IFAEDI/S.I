@@ -6,13 +6,13 @@ $CONFIG = array(
 		'hote' => 'localhost',
 		'port' => 3306,
 		'bdnom' => 'aedi',
-		'nom_utilisateur' => 'aedi',
-		'mot_de_passe' => 'aedi',
+		'nom_utilisateur' => 'root',
+		'mot_de_passe' => 'pioupiou',
 	),
 	'sso' => array (
-		'server' => 'cas.insa-lyon.fr/cas/',
+		'server' => 'cas.insa-lyon.fr',
 		'port' => 443,
-		'root' => '',
+		'root' => '/cas',
 	),
 );
 
