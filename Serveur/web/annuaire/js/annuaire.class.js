@@ -77,6 +77,28 @@ Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEn
 }
 
 /** 
+ * ---- activerBoutonSuppression
+ * Active le bouton de suppression si au moins une checkbox de suppression est cochée.
+ *		- checkbox : JQUERY ELEMENT - checkbox cliquée
+ * Retour :
+ *		- RIEN (Page directement modifiée)
+ */
+Annuaire.nbChecboxCochees = 0;
+Annuaire.activerBoutonSuppression = function activerBoutonSuppression(/* objet JQUERY */ checkbox) {
+	if (checkbox.target.checked) {
+		if (Annuaire.nbChecboxCochees==0) { // C'est la première cochée :
+			$('#boutonSupprEntreprise').removeClass('disabled'); // On active le bouton
+		}
+		Annuaire.nbChecboxCochees++;
+	} else {
+		if (Annuaire.nbChecboxCochees==1) { // C'était la derniere cochée :
+			$('#boutonSupprEntreprise').addClass('disabled'); // On désactive le bouton
+		}
+		Annuaire.nbChecboxCochees--;
+	}
+}
+
+/** 
  * ---- traduirePrioriteContactTexte
  * Traduit textuellement une priorité numérique, selon la convention définie (voir code directement - explicite).
  * Paramètres :
