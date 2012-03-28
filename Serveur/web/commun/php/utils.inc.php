@@ -122,4 +122,19 @@ function Protection_XSS($_chaine) {
     return utf8_encode(htmlentities(utf8_decode($_chaine)));
 }
 
+
+/**
+ * Fonction qui vérifie si un item donné est présent dans le 
+ * tableau global $_POST, et s'il est non vide.
+ * Auteur : benjamin.bouvier@gmail.com
+ */
+function verifierPresent($index) {
+	if (!isset($_POST[$index])) {
+		return false;
+	}
+
+	$sansBlanc = trim($_POST[$index]);
+	return !empty($sansBlanc);
+}
+
 ?>

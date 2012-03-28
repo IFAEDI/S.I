@@ -1,5 +1,15 @@
-﻿<script type="text/javascript">
-<!-- TODO Add commun var here -->
+﻿<!--
+	-----------------------------------------------------------
+	ANNUAIRE - PAGE
+	-----------------------------------------------------------
+	Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+			 Contact - benjamin.planche@aldream.net
+	---------------------
+	Page affichant la liste des entreprises liées à l'AEDI, et offrant de consulter pour chacune le détail de leurs informations (description, contacts, relations, commentaires, ...)
+!-->
+
+	<script type="text/javascript">
+	<!-- TODO Add commun var here -->
 
 	var donnees_Atos = {
 		description: {
@@ -38,6 +48,7 @@
 </script>
 
 <?php
+// Inclusion des fichiers nécessaires (beurk, des includes en plein milieu de page ...) :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
 inclure_fichier('controleur', 'entreprise.class', 'php');
@@ -46,8 +57,8 @@ inclure_fichier('annuaire', 'annuaire.class', 'js');
 inclure_fichier('annuaire', 'run', 'js');
 
 
+// Récupération de la liste des noms d'entreprises :
 $listeEntreprises = Entreprise::GetListeEntreprises();
-print_r($listeEntreprises);
 ?>
 
 <div id="annuaire" class="row" style="margin-top: 20px;">
@@ -62,13 +73,15 @@ print_r($listeEntreprises);
 					<table class="table table-stripped">
 						<tbody>
 							<?php
-								$nb_entreprises = count($listeEntreprises);
-								$premiere_lettrePrec = substr($listeEntreprises[0]["NOM"], 0, 1);
-								$premiere_lettreSuiv = $premiere_lettrePrec;
-								$compteur = 0;
-								$lignes = '';
+								// Génération de la liste des noms d'entreprises :
 								
-                                for ($i = 0; $i < $nb_entreprises; $i++) {
+								/* int */ $nb_entreprises = count($listeEntreprises);
+								/* char */ $premiere_lettrePrec = substr($listeEntreprises[0]["NOM"], 0, 1);
+								/* char */ $premiere_lettreSuiv = $premiere_lettrePrec;
+								/* int */ $compteur = 0;
+								/* string */ $lignes = '';
+								
+                                for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
 									$premiere_lettreSuiv = substr($listeEntreprises[$i]["NOM"], 0, 1);
 									if ($premiere_lettrePrec != $premiere_lettreSuiv) { // On passe à la lettre suivante dans l'alphabet :
 										// On ajoute la colonne affichant la lettre, et on affiche le tout :
