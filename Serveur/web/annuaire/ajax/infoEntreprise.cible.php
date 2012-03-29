@@ -54,6 +54,7 @@
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('controleur', 'contact.class', 'php');
 
 /*
  * Récupérer et transformer le JSON
@@ -68,7 +69,10 @@ if (verifierPresent('id')) {
  * Appeler la couche du dessous
  */
 /* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
-echo $entreprise->getId();
+/* objet */ $contacts = NULL;
+if ($entreprise != NULL) {
+	$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
+}
 
 /*
  * Renvoyer le JSON
@@ -77,6 +81,7 @@ $json['code'] = ($entreprise != NULL) ? 'ok' : 'error';
 // FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
 if ($entreprise != NULL) {
 	$json['entreprise']['description'] = $entreprise->toArrayObject();
+	$json['entreprise']['contacts'] = $contacts;
 }
 echo json_encode($json);
 

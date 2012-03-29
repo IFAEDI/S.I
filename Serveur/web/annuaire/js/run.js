@@ -10,7 +10,7 @@
  
 $('document').ready(function() {
 	// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
-	$('.entreprise').click(function(){Annuaire.afficherInfoEntreprise(1)});
+	$('.entreprise').click(function(){Annuaire.chercherInfoEntreprise(1, Annuaire.afficherInfoEntreprise)});
 	
 	// Mise en place d'une validation des formulaires :
 	$("#formAjoutEntreprise").validate();
