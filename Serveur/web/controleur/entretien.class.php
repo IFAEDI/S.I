@@ -7,12 +7,9 @@ class Entretien {
 
     //****************  Attributs  ******************//
     private $ID;
-    private $ENTREPRISE;
+    private $ID_ENTREPRISE;
     private $VILLE;
-    private $NOM_CONTACT;
-	private $PRENOM_CONTACT;
-	private $MAIL_CONTACT;
-	private $TEL_CONTACT;
+    private $ID_CONTACT;
 	private $DATE;
 
 
@@ -38,28 +35,22 @@ class Entretien {
     }
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'un entretien
-    public static function UpdateEntretien($_id, $_entreprise, $_ville, $_nom_contact, $_prenom_contact, $_mail_contact, $_tel_contact, $_date){
+    public static function UpdateEntretien($_id, $_id_entreprise, $_ville, $_id_contact, $_date){
 
 		$info = array(
 			'id'=> $_id,
-			'entreprise'=>$_entreprise,
+			'id_entreprise'=>$_id_entreprise,
 			'ville'=>$_ville,
-			'nom_contact'=>$_nom_contact,
-			'prenom_contact'=>$_prenom_contact,
-			'mail_contact'=>$_mail_contact,
-			'tel_contact'=>$_tel_contact,
+			'id_contact'=>$_id_contact,
 			'date'=>$_date
 		);
 		
         if ($_id > 0 && is_numeric($_id)) {
             //Si l'etudiant à déjà un CV
             BD::Prepare('UPDATE Entretien SET 
-                    ENTREPRISE = :entreprise,
+                    ID_ENTREPRISE = :id_entreprise,
                     VILLE = :ville,
-					NOM_CONTACT = :nom_contact,
-                    PRENOM_CONTACT = :prenom_contact,
-                    MAIL_CONTACT = :mail_contact,
-                    TEL_CONTACT = :tel_contact,
+					ID_CONTACT = :id_contact,
                     DATE = :date
                     WHERE ID = :id', $info);
               BD::MontrerErreur();
@@ -67,12 +58,9 @@ class Entretien {
         } else {
             BD::Prepare('INSERT INTO Entretien SET 
 					ID = :id,
-                    ENTREPRISE = :entreprise,
+                    ID_ENTREPRISE = :id_entreprise,
                     VILLE = :ville,
-					NOM_CONTACT = :nom_contact,
-                    PRENOM_CONTACT = :prenom_contact,
-                    MAIL_CONTACT = :mail_contact,
-                    TEL_CONTACT = :tel_contact,
+					ID_CONTACT = :id_contact,
                     DATE = :date
 					', $info);
 

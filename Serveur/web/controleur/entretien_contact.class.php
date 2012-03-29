@@ -23,7 +23,7 @@ class Entretien {
 
 	// Récuperation de l'ensemble des intervenants d'une journée passée en paramètre (ex: 27/03/2012)
 	public static function GetListeIntervenantByDate(date) {
-        return BD::Prepare('SELECT * FROM Entretien_contact WHERE id = (SELECT c.id FROM Creneau c, Entretien e WHERE c.id_entretien=e.id AND e.date ="'date'"'), array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM Entretien_contact WHERE id = (SELECT c.id FROM Entretien_creneau c, Entretien e WHERE c.id_entretien=e.id AND e.date ="'date'"'), array(), BD::RECUPERER_TOUT);
     }
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'un intervenant
