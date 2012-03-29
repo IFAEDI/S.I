@@ -1,5 +1,15 @@
-﻿<script type="text/javascript">
-<!-- TODO Add commun var here -->
+﻿<!--
+	-----------------------------------------------------------
+	ANNUAIRE - PAGE
+	-----------------------------------------------------------
+	Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+			 Contact - benjamin.planche@aldream.net
+	---------------------
+	Page affichant la liste des entreprises liées à l'AEDI, et offrant de consulter pour chacune le détail de leurs informations (description, contacts, relations, commentaires, ...)
+!-->
+
+	<script type="text/javascript">
+	<!-- TODO Add commun var here -->
 
 	var donnees_Atos = {
 		description: {
@@ -38,131 +48,184 @@
 </script>
 
 <?php
+// Inclusion des fichiers nécessaires (beurk, des includes en plein milieu de page ...) :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
 inclure_fichier('controleur', 'entreprise.class', 'php');
 inclure_fichier('annuaire', 'annuaire', 'css');
 inclure_fichier('annuaire', 'annuaire.class', 'js');
 inclure_fichier('annuaire', 'run', 'js');
+inclure_fichier('commun', 'jquery.validate.min', 'js');
 
+// TEST :
+$droitEdition = true;
 
+// Récupération de la liste des noms d'entreprises :
 $listeEntreprises = Entreprise::GetListeEntreprises();
-print_r($listeEntreprises);
 ?>
 
 <div id="annuaire" class="row" style="margin-top: 20px;">
 	<div class="span3 columns liste_entreprises">
 		<div class="tabbable">
+			<?php
+				if ($droitEdition) {
+					echo '<button style="margin-right: 10px; margin-top: 5px; float:right;" data-toggle="modal" href="#modalAjoutEntreprise" class="btn  btn-mini" type=""><i class="icon-plus"></i></button>
+							
+							<div class="modal hide fade in" id="modalAjoutEntreprise">
+								<div class="modal-header">
+									<a class="close" data-dismiss="modal">×</a>
+									<h3>Ajout d\'une entreprise - Description générale</h3>
+								</div>
+								<form id="formAjoutEntreprise" class="form-horizontal" target="ajoutEntreprise.cible.php">
+									<div class="modal-body">
+										
+			<fieldset class="control-group">
+			  <div class="control-group">
+				<label class="control-label" for="formAjoutEntrepriseNom">Nom</label>
+				<div class="controls">
+				  <input class="input-xlarge required" id="formAjoutEntrepriseNom" type="text" minlength="2" />
+				</div>
+			  </div>
+			  <div class="control-group">
+				<label class="control-label" for="formAjoutEntrepriseSecteur">Secteur</label>
+				<div class="controls">
+				  <input class="input-xlarge required" id="formAjoutEntrepriseSecteur" type="text" minlength="2" />
+				</div>
+			  </div>
+			  <div class="control-group">
+				<label class="control-label" for="formAjoutEntrepriseDescription">Description</label>
+				<div class="controls">
+				  <textarea class="input-xlarge required" id="formAjoutEntrepriseDescription" rows="3"></textarea>
+				</div>
+			  </div>
+			</fieldset>
+		 
+									</div>
+									<div class="modal-footer form-actions">
+										<button href="#" class="btn" data-dismiss="modal">Annuler</button>
+										<button type="reset" class="btn">RAZ</button>
+										<button id="btnValiderAjoutEntreprise" href="#" class="btn btn-primary">Continuer</button>
+									</div> 
+								</form>
+							</div>
+					';
+				}
+			?>
 			<ul class="nav nav-tabs">
 				  <li class="active"><a href="#liste" data-toggle="tab"><i class="icon-list-alt"></i></a></li>
 				  <li><a href="#recherche" data-toggle="tab"><i class="icon-search"></i></a></li>
 			</ul>
 			<div class="tab-content">
-				<div class="tab-pane active" id="liste">
-					<table class="table table-stripped">
-						<tbody>
-							<?php
-								$nb_entreprises = count($listeEntreprises);
-								$premiere_lettrePrec = substr($listeEntreprises[0]["NOM"], 0, 1);
-								$premiere_lettreSuiv = $premiere_lettrePrec;
-								$compteur = 0;
-								$lignes = '';
-								
-                                for ($i = 0; $i < $nb_entreprises; $i++) {
-									$premiere_lettreSuiv = substr($listeEntreprises[$i]["NOM"], 0, 1);
-									if ($premiere_lettrePrec != $premiere_lettreSuiv) { // On passe à la lettre suivante dans l'alphabet :
-										// On ajoute la colonne affichant la lettre, et on affiche le tout :
-										$lignes = '<tr><td  class="first" rowspan="'.$compteur.'">'.$premiere_lettrePrec.'</td>'.$lignes;
-										echo $lignes;
-										$compteur = 0;
-										$lignes = '';
-										$premiere_lettrePrec = $premiere_lettreSuiv;
+					<input type="hidden" name="checkbox'.$listeEntreprises[$i]["ID"].'" id="" />
+					<div class="tab-pane active" id="liste">
+						<table class="table table-stripped">
+							<tbody>
+								<?php
+									// Génération de la liste des noms d'entreprises :
+									
+									/* int */ $nb_entreprises = count($listeEntreprises);
+									/* char */ $premiere_lettrePrec = substr($listeEntreprises[0]["NOM"], 0, 1);
+									/* char */ $premiere_lettreSuiv = $premiere_lettrePrec;
+									/* int */ $compteur = 0;
+									/* string */ $lignes = '';
+									
+									for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
+										$premiere_lettreSuiv = substr($listeEntreprises[$i]["NOM"], 0, 1);
+										if ($premiere_lettrePrec != $premiere_lettreSuiv) { // On passe à la lettre suivante dans l'alphabet :
+											// On ajoute la colonne affichant la lettre, et on affiche le tout :
+											$lignes = '<tr><td  class="first" rowspan="'.$compteur.'">'.$premiere_lettrePrec.'</td>'.$lignes;
+											echo $lignes;
+											$compteur = 0;
+											$lignes = '';
+											$premiere_lettrePrec = $premiere_lettreSuiv;
+										}
+										
+										// On génère les lignes :
+										$compteur++;
+										if (!empty($lignes)) {
+											$lignes .= '<tr>';
+										}
+										$lignes .= '<td class="entreprise" id-entreprise='.$listeEntreprises[$i]["ID"].' ><a href="#'.$listeEntreprises[$i]["NOM"].'">'.$listeEntreprises[$i]["NOM"].'</a></td>';
+
+										$lignes .=  '</tr>';
 									}
 									
-									// On génère les lignes :
-									$compteur++;
-									if (!empty($lignes)) {
-										$lignes .= '<tr>';
-									}
-									$lignes .= '<td class="entreprise" id-entreprise='.$listeEntreprises[$i]["ID"].' ><a href="#'.$listeEntreprises[$i]["NOM"].'">'.$listeEntreprises[$i]["NOM"].'</a></td></tr>';
-								}
-								
-								// On affiche le dernier contenu générer :
-								$lignes = '<tr><td  class="first" rowspan="'.$compteur.'">'.$premiere_lettrePrec.'</td>'.$lignes;
-								echo $lignes;
-							?>
-								
-							<tr>
-								<td  class="first" rowspan="3">A</td>
-								<td class="entreprise" id-entreprise=1 ><a href="#Atos">Atos</a></td>
-							</tr>
-							<tr>
-								<td class="entreprise" id-entreprise=2 >Axentis</td>
-							</tr>
-							<tr>
-								<td class="entreprise" id-entreprise=3 >Alias</td>
-							</tr>
-							<tr>
-								<td rowspan="2">B</td>
-								<td>Bazoom</td>
-							</tr>
-							<tr>
-								<td>Boxon</td>
-							</tr>
-															<tr>
-								<td rowspan="3">A</td>
-								<td>Atos</td>
-							</tr>
-							<tr>
-								<td>Axentis</td>
-							</tr>
-							<tr>
-								<td>Alias</td>
-							</tr>
-							<tr>
-								<td rowspan="2">B</td>
-								<td>Bazoom</td>
-							</tr>
-							<tr>
-								<td>Boxon</td>
-							</tr>
-															<tr>
-								<td rowspan="3">A</td>
-								<td>Atos</td>
-							</tr>
-							<tr>
-								<td>Axentis</td>
-							</tr>
-							<tr>
-								<td>Alias</td>
-							</tr>
-							<tr>
-								<td rowspan="2">B</td>
-								<td>Bazoom</td>
-							</tr>
-							<tr>
-								<td>Boxon</td>
-							</tr>
-															<tr>
-								<td rowspan="3">A</td>
-								<td>Atos</td>
-							</tr>
-							<tr>
-								<td>Axentis</td>
-							</tr>
-							<tr>
-								<td>Alias</td>
-							</tr>
-							<tr>
-								<td rowspan="2">B</td>
-								<td>Bazoom</td>
-							</tr>
-							<tr>
-								<td>Boxon</td>
-							</tr>
-						</tbody>
-					</table>
-				</div>
+									// On affiche le dernier contenu générer :
+									$lignes = '<tr><td  class="first" rowspan="'.$compteur.'">'.$premiere_lettrePrec.'</td>'.$lignes;
+									echo $lignes;
+								?>
+									
+								<tr>
+									<td  class="first" rowspan="3">A</td>
+									<td class="entreprise" id-entreprise=1 ><a href="#Atos">Atos</a></td>
+								</tr>
+								<tr>
+									<td class="entreprise" id-entreprise=2 >Axentis</td>
+								</tr>
+								<tr>
+									<td class="entreprise" id-entreprise=3 >Alias</td>
+								</tr>
+								<tr>
+									<td rowspan="2">B</td>
+									<td>Bazoom</td>
+								</tr>
+								<tr>
+									<td>Boxon</td>
+								</tr>
+																<tr>
+									<td rowspan="3">A</td>
+									<td>Atos</td>
+								</tr>
+								<tr>
+									<td>Axentis</td>
+								</tr>
+								<tr>
+									<td>Alias</td>
+								</tr>
+								<tr>
+									<td rowspan="2">B</td>
+									<td>Bazoom</td>
+								</tr>
+								<tr>
+									<td>Boxon</td>
+								</tr>
+																<tr>
+									<td rowspan="3">A</td>
+									<td>Atos</td>
+								</tr>
+								<tr>
+									<td>Axentis</td>
+								</tr>
+								<tr>
+									<td>Alias</td>
+								</tr>
+								<tr>
+									<td rowspan="2">B</td>
+									<td>Bazoom</td>
+								</tr>
+								<tr>
+									<td>Boxon</td>
+								</tr>
+																<tr>
+									<td rowspan="3">A</td>
+									<td>Atos</td>
+								</tr>
+								<tr>
+									<td>Axentis</td>
+								</tr>
+								<tr>
+									<td>Alias</td>
+								</tr>
+								<tr>
+									<td rowspan="2">B</td>
+									<td>Bazoom</td>
+								</tr>
+								<tr>
+									<td>Boxon</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
 				<div class="tab-pane" id="recherche">
 					<p>Non-implémenté</p>
 				</div>

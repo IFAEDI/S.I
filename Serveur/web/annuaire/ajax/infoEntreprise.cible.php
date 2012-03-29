@@ -1,0 +1,89 @@
+<?php
+/**
+ * -----------------------------------------------------------
+ * INFOENTREPRISE - CIBLE PHP
+ * -----------------------------------------------------------
+ * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+ *          Contact - benjamin.planche@aldream.net
+ * ---------------------
+ * Cible pour la récupération d'informations sur une entreprise.
+ * Est donc appelée par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sélectionnée dans la liste des noms.
+ * Le principe (repris de Bnj Bouv) est très simple :
+ * 1) On récupère l'ensemble des variables qui ont été insérées.
+ * 2) On appelle le contrôleur 
+ * 3) On renvoit les résultats en JSON
+ * Le résultat sera de la forme :
+ 		{
+			code : "ok", // ou "error" - si error, le champ entreprise n'est pas présent
+			entreprise : {
+				description: {
+					nom: "Atos",
+					description: "Société française recrutant des tonnes de 4IF.",
+					secteur: "SSII",
+					commentaire: "",
+				},
+				contacts: [
+					{nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
+					{nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+				],
+				relation: {
+					parrainage : [
+						{annee: 2012, commentaire:"Ok", couleur:1},
+						{annee: 2011, commentaire:"Bof", couleur:0}
+					],
+					rif : [
+						{annee: 2012, commentaire:"Ok", couleur:1},
+						{annee: 2011, commentaire:"Retard Paiement", couleur:0}
+					],
+					stages: [
+						{annee: 2012, nbSujets:12},
+						{annee: 2011, nbSujets:5}
+					],
+					entretiens: [
+						{annee: 2012, nbSessions:3},
+						{annee: 2011, nbSessions:1}
+					]
+				},
+				commentaires: [
+					{nom: "Le Roux", prenom: "Bill", poste: "SG", date:1332615354000 , categorie:0, commentaire:"A contacter pour un parteneriat"},
+					{nom: "B", prenom: "Dan", poste: "Eq En", date:1332215354000, categorie:3, commentaire:"A contacter pour un calin"}
+				]
+			}
+		}
+ */
+
+require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('controleur', 'contact.class', 'php');
+
+/*
+ * Récupérer et transformer le JSON
+ */
+/* int */ $id_entreprise = NULL;
+
+if (verifierPresent('id')) {
+	$id_entreprise = intval($_POST['id']);
+}
+
+/*
+ * Appeler la couche du dessous
+ */
+/* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
+/* objet */ $contacts = NULL;
+if ($entreprise != NULL) {
+	$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
+}
+
+/*
+ * Renvoyer le JSON
+ */
+$json['code'] = ($entreprise != NULL) ? 'ok' : 'error';
+// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
+if ($entreprise != NULL) {
+	$json['entreprise']['description'] = $entreprise->toArrayObject();
+	$json['entreprise']['contacts'] = $contacts;
+}
+echo json_encode($json);
+
+
+?>

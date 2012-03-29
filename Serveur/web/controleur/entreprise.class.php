@@ -1,5 +1,14 @@
 ﻿<?php
-
+/**
+ * -----------------------------------------------------------
+ * ENTREPRISE - CLASSE PHP
+ * -----------------------------------------------------------
+ * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+ *          Contact - benjamin.planche@aldream.net
+ * ---------------------
+ * Controleur associé à la table Entreprise
+ */
+ 
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
@@ -38,35 +47,41 @@ class Entreprise {
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'une entreprise
     public static function UpdateEntreprise($_id, $_nom, $_desc, $_secteur, $_com, $_id_ville) {
-		$info = array(
-			'id' => $_id,
-			'nom' => $_titre_cv,
-			'description' => $_desc,
-			'secteur' => $_secteur,
-			'commentaire' => $_com,
-			'id_ville' => $_id_ville,
-		);
+
         if ($_id > 0 && is_numeric($_id)) {
-            
+			$info = array(
+				'id' => $_id,
+				'nom' => $_nom,
+				'description' => $_desc,
+				'secteur' => $_secteur,
+				'commentaire' => $_com,
+				'id_ville' => $_id_ville,
+			);
 
             //Si l'etudiant à déjà un CV
             BD::Prepare('UPDATE Entreprise SET 
                     NOM = :nom,
                     DESCRIPTION = :description,
-                    LOISIR = :loisir,
 					SECTEUR = :secteur,
                     COMMENTAIRE = :commentaire,
                     ID_VILLE = :id_ville
                     WHERE ID = :id', $info);
             return $_id;
         } else {
-            BD::Prepare('INSERT INTO Entreprise SET 
-                    NOM = :nom,
-                    DESCRIPTION = :description,
-                    LOISIR = :loisir,
-					SECTEUR = :secteur,
-                    COMMENTAIRE = :commentaire,
-                    ID_VILLE = :id_ville'
+			$info = array(
+				'nom' => $_nom,
+				'description' => $_desc,
+				'secteur' => $_secteur,
+				'commentaire' => $_com,
+				'id_ville' => $_id_ville,
+			);
+
+            BD::Prepare('INSERT INTO Entreprise (NOM, DESCRIPTION, SECTEUR, COMMENTAIRE, ID_VILLE) VALUES (
+                    :nom,
+                    :description,
+					:secteur,
+                    :commentaire,
+                    :id_ville)'
                     , $info);
 
             $id = BD::GetConnection()->lastInsertId();
@@ -106,7 +121,17 @@ class Entreprise {
     public function getIdVille() {
         return $this->ID_VILLE;
     }
-
+	
+	public function toarrayObject() {
+		$arrayEntr = array();
+		$arrayEntr['id'] = intval($this->ID);
+		$arrayEntr['nom'] = $this->NOM;
+		$arrayEntr['description'] = $this->DESCRIPTION;
+		$arrayEntr['secteur'] = $this->SECTEUR;
+		$arrayEntr['id_ville'] = intval($this->ID_VILLE);
+		$arrayEntr['commentaire'] = $this->COMMENTAIRE;
+		return $arrayEntr;
+	}
 }
 
 ?>
