@@ -14,6 +14,9 @@ $CONFIG = array(
 		'port' => 443,
 		'root' => '/cas',
 	),
+	'debug' => array (
+		'auth' => true,
+	),
 );
 
 

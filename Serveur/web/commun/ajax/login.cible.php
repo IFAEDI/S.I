@@ -30,23 +30,29 @@ if( @isset( $_GET['action'] ) ) {
 			$mdp   = mysql_escape_string( $_GET['password'] );
 
 			/* Recherche dans la base si le couple utilisateur/passwd existe */
-			$result = $authentification->authentificationNormale( $login, $mdp );
+			try {
+				$result = $authentification->authentificationNormale( $login, $mdp );
 
-			switch( $result ) {
-				/* Authentification réussie */
-				case Authentification::ERR_OK:
-					$val = array( "code" => "ok" );
-					break;
-				/* Authentification foirée */
-				case Authentification::ERR_ID_INVALIDE:
-					$val = array( "code" => "fail", "mesg" => "Identifiants non valides." );
-					break;
-				case Authentification::ERR_AMBIGUITE:
-					$val = array( "code" => "error", "mesg" => "Une ambiguité est survenue lors de la procédure d'authentification." );
-					break;
-				case Authentification::ERR_BD:
-					$val = array( "code" => "error", "mesg" => "La base de données a rencontré une erreur. Veuillez réessayer ultérieurement." );
-					break;
+				switch( $result ) {
+					/* Authentification réussie */
+					case Authentification::ERR_OK:
+						$val = array( "code" => "ok" );
+						break;
+					/* Authentification foirée */
+					case Authentification::ERR_ID_INVALIDE:
+						$val = array( "code" => "fail", "mesg" => "Identifiants non valides." );
+						break;
+					case Authentification::ERR_AMBIGUITE:
+						$val = array( "code" => "error", "mesg" => "Une ambiguité est survenue lors de la procédure d'authentification." );
+						break;
+					case Authentification::ERR_BD:
+						$val = array( "code" => "error", "mesg" => "La base de données a rencontré une erreur. Veuillez réessayer ultérieurement." );
+						break;
+				}
+			}
+			catch( Exception $e ) {
+
+				$val = array( "code" => "error", "mesg" => $e->getMessage() );
 			}
 		}
 	}
@@ -76,22 +82,38 @@ if( @isset( $_GET['action'] ) ) {
 				/* On regarde s'il faut mettre à jour le mot de passe */
 				if( @strlen( $_GET['password'] ) > 0 ) {
 	
-					if( $utilisateur->changePassword( $password ) == false ) {
+					try {
+						$result = $utilisateur->changePassword( $password );
+						if( $result == false ) {
 
-						$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la modification du mot de passe." );
+							$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la modification du mot de passe." );
+							$continue = false;
+						}
+					}
+					catch( Exception $e ) {
+
+						$msg = "Une erreur est survenue lors de la requête à la base (".BD::getDerniereErreur().")";
+						$val = array( "code" => "error", "mesg" => $msg );
 						$continue = false;
 					}
 				}
 
 				if( $continue ) {
 
-					$result = $utilisateur->changeInfoPerso( $nom, $prenom, $mail, $annee );
+					try {
+						$result = $utilisateur->changeInfoPerso( $nom, $prenom, $mail, $annee );
 
-					if( $result ) {
-						$val = array( "code" => "ok", "nom" => $nom, "prenom" => $prenom );
+						if( $result ) {
+							$val = array( "code" => "ok", "nom" => $nom, "prenom" => $prenom );
+						}
+						else {
+							$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la mise à jour des infos. Veuillez réessayer ultèrieurement." );
+						}
 					}
-					else {
-						$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la mise à jour des infos. Veuillez réessayer ultèrieurement." );
+					catch( Exception $e ) {
+
+						$msg = "Une erreur est survenue lors de la requête à la base (".BD::getDerniereErreur().")";
+						$val = array( "code" => "fail", "mesg" => $msg );
 					}
 				}
 			}

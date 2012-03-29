@@ -19,6 +19,7 @@ class Utilisateur {
 	/**
 	* Constructeur
 	* $login : chaîne de caractère contenant le nom de l'utilisateur à créer
+	* @throws Exception si impossibilité de créer l'utilisateur
 	*/
 	public function __construct( $login ) {
         
@@ -29,24 +30,29 @@ class Utilisateur {
 
 			/* On s'en occupe donc ! */
 			/* Ajout en base */
-			$result = BD::Prepare( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', 
-					array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
+			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
 
-			// Non testable !!
+			if( $result == 0 ) {
+				throw new Exception( 'Impossible d\'insérer le nouvel utilisateur en base.' );
+			} 
 
 			/* Et on rappelle pour fetcher les éléments */
 			$result = $this->_fetchData( $login );
-			if( $result == null || $result->rowCount() == 0 ) {
+			if( $result == false ) {
 				throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
 			}
 		}
 	}
 
-
+	/**
+	* Fonction récupérant tous les attributs de l'utilisateur
+	* $login : Identifiant de l'utilisateur a connecter
+	* @return True si tout est ok, false sinon
+	*/
 	private function _fetchData( $login ) {
 
 		/* Requête à la base pour récupérer le bon utilisateur et construire l'objet */
-		$result = BD::Prepare( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
+		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
 
 		if( $result == null )
 			return false;
@@ -69,19 +75,9 @@ class Utilisateur {
 	public function changePassword( $mdp ) {
 
 		/* Requête à la base */
-		$result = BD::Prepare( 'UPDATE UTILISATEUR SET mdp = :mdp WHERE id = :id', array( 'mdp' => $mdp, 'id' => $this->id ) );
+		$result = BD::executeModif( 'UPDATE UTILISATEUR SET mdp = :mdp WHERE id = :id', array( 'mdp' => $mdp, 'id' => $this->id ) );
 
-		return true;
-		//Pas possible pour le moment :
-		/* On regarde si ça a foiré 
-		if( $result == null )
-			return false;
-
-		/* Si une ligne a changé, c'est cool ! :-) 
-		if( $result->rowCount() == 1 )
-			return true;
-		
-		return false;*/
+		return ($result == 1);
 	}
 
 	/**
@@ -91,8 +87,12 @@ class Utilisateur {
 	public function changeInfoPerso( $nom, $prenom, $mail, $annee ) {
 
 		/* Requête à la base */
-		$result = BD::Prepare( 'UPDATE UTILISATEUR SET nom = :nom, prenom = :prenom, annee = :annee, mail = :mail, premiere_connexion = 0 WHERE id = :id',
+		$result = BD::executeModif( 'UPDATE UTILISATEUR SET nom = :nom, prenom = :prenom, annee = :annee, mail = :mail, premiere_connexion = 0 WHERE id = :id',
 			array( 'nom' => $nom, 'prenom' => $prenom, 'annee' => $annee, 'mail' => $mail, 'id' => $this->id ) );
+
+		if( $result == 0 ) {
+			return false;
+		}
 
 		$this->nom = $nom;
 		$this->prenom = $prenom;
@@ -101,16 +101,6 @@ class Utilisateur {
 		$this->premiereConnexion = false;
 
 		return true;
-		//Pas possible pour le moment :
-		/* On regarde si ça a foiré 
-		if( $result == null )
-			return false;
-
-		/* Si une ligne a changé, c'est cool ! :-) 
-		if( $result->rowCount() == 1 )
-			return true;
-
-		return false;*/
 	}
 
 
