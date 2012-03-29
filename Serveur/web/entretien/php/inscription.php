@@ -6,7 +6,7 @@
 */
 ?>
 
-<form class="form-horizontal" onsubmit="return valider()" id="formInscription" action="#" method="post">
+<form class="form-horizontal" id="formInscription" name="formInscription" action="#" method="post">
 	<fieldset>
 	  <legend>Formulaire d'inscription</legend>
 	  <!-- Partie relative au contact -->
@@ -93,7 +93,7 @@
 	  </div>
 
 	<!-- Partie relative au intervenants -->
-	<table class="table table-striped">
+	<table class="table table-striped" id="tableParticipant">
 	<thead>
 	  <tr>
 		<th>Nom</th>
@@ -125,24 +125,24 @@
 	<h3>Entretien</h3>
 	</div>
 	<div class="modal-body">
-	   <form class="form-horizontal" method="post" action="#">
+	   <form class="form-horizontal" method="post" id="formParticipant" action="#">
 			<div class="control-group" id="control_nom">
 			<label class="control-label">Nom</label>
 			<div class="controls">
-			  <input class="input-medium" type="text" id="nom"/>
+			  <input class="input-medium" type="text" id="nomParticipant"/>
 			</div>
 		  </div>
 		  <div class="control-group" id="control_prenom">
 			<label class="control-label">Prenom</label>
 			<div class="controls">
-			  <input class="input-medium" type="text" id="prenom"/>
+			  <input class="input-medium" type="text" id="prenomParticipant"/>
 			</div>
 		  </div>
 		  <div class="control-group" id="control_email">
 			<label class="control-label" for="email">E mail</label>
 			<div class="controls">
 			  <div class="input-prepend">
-				<span class="add-on">@</span><input class="input-medium" id="email" type="text">
+				<span class="add-on">@</span><input class="input-medium" id="emailParticipant" type="text">
 			  </div>
 			</div>
 		  </div>

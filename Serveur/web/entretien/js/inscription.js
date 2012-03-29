@@ -101,16 +101,29 @@ function valider(){
 					PARTIE AJAX
 ---------------------------------------------------------------------------------*/
 	$("#formInscription").submit( function() {
-	alert('coucou');
-	$.post("entretien/ajax/inscription_post.cible.php", {
-            prenom : prenom
-        },function success(retour){
-            retour = $.trim(retour);
-            if(retour == "1" ){
-                alert('coucou');
-            }
-        });
+	// Si les controles sont bons on post
+	if( valider() != false){
+		$.post("entretien/ajax/inscription_post.cible.php",
+		{ prenom : prenom},
+		function success(retour){
+				if(retour == "1" ){
+					alert('coucou');
+				}
+			});
+	}else{
+		return false;
+	}
 	});
 
 	
+	$("#formParticipant").submit( function() {
+		  var nom = $('#nomParticipant').val();
+		  var prenom = $('#prenomParticipant').val();
+		  var email = $('#emailParticipant').val();
+		  //On ajout le participant au tableau
+		  $("#tableParticipant").append('<tr><td>'+nom+'</td><td>'+prenom+'</td><td>'+email+'</td></tr>');
+		  return false;
+	});
+		
+ 
 	
