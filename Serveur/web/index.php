@@ -7,15 +7,23 @@ inclure_fichier( 'commun', 'authentification.class', 'php' );
 /************************************* AUTHENTIFICATION ***********************************/
 
 $authentification = new Authentification();
+$utilisateur      = null;
 
 /* Si on reçoit une demande pour le CAS */
-if( isset( $_POST['action'] ) ) {
+if( isset( $_REQUEST['action'] ) ) {
 	if( $_POST['action'] == "login_cas" ) {
 		$authentification->authentificationCAS();
 	}
-	else if( $_POST['action'] == "logout" ) {
+	else if( $_GET['action'] == "logout" ) {
 		$authentification->forcerDeconnexion();
 	}
+}
+
+/* On regarde si l'utilisateur est authentifié */
+if( $authentification->isAuthentifie() ) {
+
+	/* On récupère l'objet utilisateur associé */
+	$utilisateur = $authentification->getUtilisateur();
 }
 
 /******************************************* THEME ****************************************/
@@ -32,9 +40,6 @@ if (isset($_SESSION['theme'])) {
 }
 
 
-/* * **********************Tant que la classe utilisateur n'est pas fini*********** */
-
-$utilisateur = $authentification->getUtilisateur();
 /* * ***************************************************************************** */
 
 //Inclusion d'utils des le debut de la page d'index car necessaire pour la cvtheque

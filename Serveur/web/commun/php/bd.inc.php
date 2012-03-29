@@ -26,112 +26,200 @@ require_once(dirname(__FILE__) . '/config.inc.php');
 
 class BD {
 
-    const RECUPERER_UNE_LIGNE = 0;
-    const RECUPERER_TOUT = 1;
+	const RECUPERER_UNE_LIGNE = 0;
+	const RECUPERER_TOUT = 1;
 
-    private $connection;
-    private static $partageInstance;
+	private $connection;
+	private static $partageInstance;
 
-    /**
-     * Constructeur : initialisation de la connexion à la BD MySQL via PDO
-     */
-    private function __construct() {
-        global $CONFIG;
+	private static $derniereErreur;
 
-        /* Initialisation */
-        $this->connection = null;
+	/**
+	* Constructeur : initialisation de la connexion à la BD MySQL via PDO
+	*/
+	private function __construct() {
+		global $CONFIG;
 
-        try {
+		/* Initialisation */
+		$this->connection = null;
+		self::$derniereErreur = 'Aucune erreur.';
 
-            $this->connection = new PDO('mysql:host=' . $CONFIG['bd']['hote'] . ';port=' . $CONFIG['bd']['port'] . ';dbname=' . $CONFIG['bd']['bdnom'], $CONFIG['bd']['nom_utilisateur'], $CONFIG['bd']['mot_de_passe'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
-        } catch (Exception $e) {
+		try {
 
-            echo "BD : parametres incorrects<br/>";
-            echo 'Erreur : ' . $e->getMessage() . '<br/>';
-            echo 'Numero : ' . $e->getCode() . '<br/>';
+			$dn  = 'mysql:host='.$CONFIG['bd']['hote'].';';
+			$dn .= 'port='.$CONFIG['bd']['port'].';';
+			$dn .= 'dbname='.$CONFIG['bd']['bdnom'];
 
-            /* Failed, donc $this->connection == null */
-        }
-    }
+			$this->connection = new PDO( $dn, $CONFIG['bd']['nom_utilisateur'], $CONFIG['bd']['mot_de_passe'], array(PDO::MYSQL_ATTR_INIT_COMMAND => 'SET NAMES utf8'));
+		} catch (Exception $e) {
 
-    /**
-     * Retourne l'unique connexion à la BDD (singleton)
-     * /!\ Peut retourner NULL si l'initialisation a foiré !
-     */
-    public static function GetConnection() {
+			self::$derniereErreur = $e->getMessage();
+			throw $e;
+		}
+	}
 
-        /* Si l'objet n'est pas instancié, on résoud ce problème */
-        if (!isset(self::$partageInstance))
-            self::$partageInstance = new self();
 
-        return self::$partageInstance->connection;
-    }
+	/**
+	* Retourne l'unique connexion à la BDD (singleton)
+	* /!\ Peut retourner NULL si l'initialisation a foiré !
+	*/
+	public static function GetConnection() {
 
-    //Appelle des procedures stockées
-    public static function &AppellerProcedureStocke($_nomProcedure, $_parametres, $_type_recuperation, $_nom_classe = NULL, $_option_recuperation = NULL) {
-        $assigner_parametres = '';
+		/* Si l'objet n'est pas instancié, on le fait */
+		if (!isset(self::$partageInstance)) {
+			self::$partageInstance = new self();
+		}
 
-        foreach ($_parametres as $valeur) {
-            $assigner_parametres .= '?, ';
-        }
+		return self::$partageInstance->connection;
+	}
 
-        $assigner_parametres = trim($assigner_parametres, ', ');
 
-        if ($_nom_classe != NULL && class_exists($_nom_classe))
-            return self::Prepare("CALL $_nomProcedure($assigner_parametres)", $_parametres, $_type_recuperation, PDO::FETCH_CLASS, $_nom_classe);
-        else if ($_option_recuperation != NULL)
-            return self::Prepare("CALL $_nomProcedure($assigner_parametres)", $_parametres, $_type_recuperation, $_option_recuperation, $_nom_classe);
-        else
-            return self::Prepare("CALL $_nomProcedure($assigner_parametres)", $_parametres, $_type_recuperation);
-    }
 
-    //Envoi d'une requête préparée
-    public static function &Prepare($_requete, $_parametres, $_type_recuperation = self::RECUPERER_UNE_LIGNE, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
+	/**
+	* Prépare une requête et l'exécute
+	* @return Un objet PDOStatement si tout est ok, ou null sinon
+	* @throws Exception en cas d'erreur
+	* @deprecated
+	*/
+	public static function &Prepare($_requete, $_parametres, $_type_recuperation = self::RECUPERER_UNE_LIGNE, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
 
-        $resultat = NULL;
-        $enregistrement = NULL;
+		$resultat = NULL;
+		$enregistrement = NULL;
 
-        /* Si l'initialisation a foiré, on évite de faire foirer en cascade ! */
-        if (self::GetConnection() == NULL)
-            return $resultat;
+		/* Si l'initialisation a foiré, on évite de faire foirer en cascade ! */
+		if (self::GetConnection() == NULL) {
+			return $resultat;
+		}
 
-        $enregistrement = self::GetConnection()->prepare($_requete);
+		$enregistrement = self::GetConnection()->prepare($_requete);
 
-        try {
+		try {
 
-            if ($enregistrement != false && $enregistrement->execute($_parametres) != false) {
+			if ($enregistrement != false && $enregistrement->execute($_parametres) != false) {
 
-                if ($_type_recuperation == self::RECUPERER_UNE_LIGNE) {
+				if ($_type_recuperation == self::RECUPERER_UNE_LIGNE) {
 
-                    if ($_option_recuperation == NULL)
-                        $resultat = $enregistrement->fetch($_parametre_recuperation);
-                    else if ($_parametre_recuperation == PDO::FETCH_CLASS)
-                        $resultat = $enregistrement->fetchObject($_option_recuperation);
+					if ($_option_recuperation == NULL)
+						$resultat = $enregistrement->fetch($_parametre_recuperation);
+					else if ($_parametre_recuperation == PDO::FETCH_CLASS)
+						$resultat = $enregistrement->fetchObject($_option_recuperation);
+				}
+				else {
+
+					if ($_option_recuperation == NULL)
+						$resultat = $enregistrement->fetchAll($_parametre_recuperation);
+					else
+						$resultat = $enregistrement->fetchAll($_parametre_recuperation, $_option_recuperation);
+				}
+			}
+		} catch (Exception $e) {
+			throw $e;
+		}
+
+		return $resultat;
+	}
+
+
+
+	/**
+	* Execute une requête SQL de type SELECT
+	* @return Le ou les lignes via un PDOStatement en cas de succès
+	* @throws Exception si une erreur survient avec le message relative à l'erreur
+	*/
+	public static function &executeSelect($_requete, $_parametres, $_type_recuperation = self::RECUPERER_UNE_LIGNE, $_parametre_recuperation = PDO::FETCH_ASSOC, $_option_recuperation = NULL) {
+
+		$enregistrement = NULL;
+		$resultat = NULL;
+
+		/* On évite que ça nous pète à la gueule */
+		if( self::GetConnection() == NULL ) {
+			return null;
+		}
+
+		/* Préparation de la requête à la base */
+		$enregistrement = self::getConnection()->prepare( $_requete );
+
+		if( $enregistrement == false ) {
+			throw new Exception( 'La préparation de la requête a échoué.' );
+		}
+
+		/* Puis exécution */
+		$resultat = $enregistrement->execute( $_parametres );
+		if( $resultat == false ) {
+			$error = $enregistrement->errorInfo();
+			self::$derniereErreur = $error[2];
+			throw new Exception( 'L\'exécution de la requête a échoué.' );
+		}
+
+
+		/* Mise en forme des sets */
+		if( $_type_recuperation == self::RECUPERER_UNE_LIGNE ) {
+
+			if ($_option_recuperation == NULL)
+				$resultat = $enregistrement->fetch($_parametre_recuperation);
+			else if ($_parametre_recuperation == PDO::FETCH_CLASS)
+				$resultat = $enregistrement->fetchObject($_option_recuperation);
+		}
+		else {
+
+			if ($_option_recuperation == NULL)
+				$resultat = $enregistrement->fetchAll($_parametre_recuperation);
+			else
+				$resultat = $enregistrement->fetchAll($_parametre_recuperation, $_option_recuperation);
+		}
+
+		return $resultat;
+	}
+
+	
+	/**
+	* Execute une requête SQL de type INSERT, UPDATE ou DELETE
+	* @return Le nombre de lignes affectées par la requête
+	* @throws Exception si une erreur survient avec le message relative à l'erreur
+	*/
+	public static function &executeModif( $_requete, $_parametres ) {
+
+                $enregistrement = NULL;
+                $resultat = NULL;
+
+                /* On évite que ça nous pète à la gueule */
+                if( self::GetConnection() == NULL ) {
+                        return null;
                 }
-                else {
 
-                    if ($_option_recuperation == NULL)
-                        $resultat = $enregistrement->fetchAll($_parametre_recuperation);
-                    else
-                        $resultat = $enregistrement->fetchAll($_parametre_recuperation, $_option_recuperation);
+                /* Préparation de la requête à la base */
+                $enregistrement = self::getConnection()->prepare( $_requete );
+
+                if( $enregistrement == false ) {
+                        throw new Exception( 'La préparation de la requête a échoué.' );
                 }
-            }
-        } catch (Exception $e) {
-            error_log('Erreur : ' . $e->getMessage() . '\n');
-            error_log('Numero : ' . $e->getCode());
-        }
 
-        return $resultat;
-    }
+                /* Puis exécution */
+                $resultat = $enregistrement->execute( $_parametres );
+                if( $resultat == false ) {
+			$error = $enregistrement->errorInfo();
+			self::$derniereErreur = $error[2];
+                        throw new Exception( 'L\'exécution de la requête a échoué.' );
+                }
 
-    public static function MontrerErreur() {
+		return $resultat;
+	}
 
-        if (self::GetConnection() == NULL) {
-            echo "L'initialisation de la connexion a échoué.";
-            return;
-        }
 
-        print_r(self::GetConnection()->errorInfo());
+	public static function getDerniereErreur() {
+
+		return self::$derniereErreur;
+	}
+
+
+public static function MontrerErreur() {
+
+if (self::GetConnection() == NULL) {
+echo "L'initialisation de la connexion a échoué.";
+return;
+}
+
+print_r(self::GetConnection()->errorInfo());
     }
 
     public function __clone() {
