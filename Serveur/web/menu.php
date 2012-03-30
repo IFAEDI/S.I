@@ -65,7 +65,7 @@
 							<li class="divider"></li>
 
 							<li class="nav-header"><i class="icon-cog"></i> Modules</li>
-							<li><a href="#">CV</a></li>
+							<li><a href="index.php?page=admincv">CV</a></li>
 							<li><a href="#">RIFs</a></li>
 							<li><a href="#">Simulations d'entretiens</a></li>
 						</ul>

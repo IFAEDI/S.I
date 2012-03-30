@@ -23,7 +23,6 @@ function Diffusion(_etat){
 
 function Supprimer_CV(){
     $.post("/cvtheque/ajax/cv.cible.php?action=supprimer_cv", {
-
         },function success(retour){
             retour = $.trim(retour)
              retour_decode = $.parseJSON(retour);
@@ -35,13 +34,6 @@ function Supprimer_CV(){
             }
         });
 }
-
-
-
-
-
-
-
 
 
 //Fonction permettant d'afficher les erreurs

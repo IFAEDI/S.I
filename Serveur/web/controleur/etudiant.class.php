@@ -223,6 +223,24 @@ class Etudiant {
         }
     }
 
+    //Retourne le nombre total de cv dans la base
+    public static function GetNbCV() {
+        $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT',array());
+        return $resultat['COUNT(*)'];
+    }
+
+    //Retourne le nombre total de cv diffusé
+    public static function GetNbDiffuseCV() {
+        $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT, CV 
+           WHERE CV.AGREEMENT = 1
+           AND ETUDIANT.ID_CV = CV.ID_CV',array());
+        return $resultat['COUNT(*)'];
+    }
+    
+    public static function StoperTouteDiffusion() {
+         BD::Prepare('UPDATE CV SET AGREEMENT=0',array());
+    }
+
     //****************  Fonctions  ******************//
     //Renvoi l'id de la ville correspondante ou si elle n'existe pas l'ajoute
     public function GetVilleOrAdd($_nom, $_code_postal, $_pays) {

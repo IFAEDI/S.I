@@ -413,7 +413,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
 
 //Enlever des favoris un cv
 if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
-    if (!Utilisateur_connecter('entreprise')) {
+    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
+            $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
@@ -426,11 +427,25 @@ if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
 
 //Mettre en favoris un cv
 if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
-    if (!Utilisateur_connecter('entreprise')) {
+    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
+            $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
     Etudiant::MettreEnFavoris($_POST['id_etudiant'], $id_utilisateur, 1);
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
+}
+
+//Arrete la diffusion de tous les CV
+if (isset($_GET['action']) && $_GET['action'] == 'arreter_diffusion') {
+    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    Etudiant::StoperTouteDiffusion();
 
     $retour['code'] = 'ok';
     $retour['msg'] = '';
