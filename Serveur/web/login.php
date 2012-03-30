@@ -127,6 +127,9 @@ else {
                 		  </div>
 		                </div>
 			</div>
+
+			<p>Groupe</p>
+			<input class="input-medium disabled" disabled="disabled" value="<?php echo Utilisateur::$UTILISATEUR_TYPES[$utilisateur->getTypeUtilisateur()]; ?> " />
 		</fieldset>
 
 	</form>

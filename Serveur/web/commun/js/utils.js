@@ -301,3 +301,31 @@ function html_entity_decode(texte) {
     texte = replace_saut_ligne(texte);
     return texte;
 }
+
+
+
+/*
+ * Fonction de clonage
+ * @author Keith Devens
+ * @see http://keithdevens.com/weblog/archive/2007/Jun/07/javascript.clone
+ */
+function clone( srcInstance )
+{
+	/*Si l'instance source n'est pas un objet ou qu'elle ne vaut rien c'est une feuille donc on la retourne*/
+	if( typeof(srcInstance) != 'object' || srcInstance == null )
+	{
+		return srcInstance;
+	}
+
+	/*On appel le constructeur de l'instance source pour crée une nouvelle instance de la même classe*/
+	var nouvelleInstance = srcInstance.constructor();
+
+	/*On parcourt les propriétés de l'objet et on les recopies dans la nouvelle instance*/
+	for(var i in srcInstance)
+	{
+		nouvelleInstance[i] = clone( srcInstance[i] );
+	}
+
+	/*On retourne la nouvelle instance*/
+	return nouvelleInstance;
+}

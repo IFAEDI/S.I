@@ -10,6 +10,13 @@ class Utilisateur {
 	const UTILISATEUR_ENSEIGNANT	= 1;
 	const UTILISATEUR_ENTREPRISE	= 2;
 	const UTILISATEUR_ADMIN		= 3;
+	const UTILISATEUR_AEDI		= 4;
+
+	public static $UTILISATEUR_TYPES = array( self::UTILISATEUR_ETUDIANT => 'Etudiant',
+				self::UTILISATEUR_ENSEIGNANT => 'Enseignant',
+				self::UTILISATEUR_ENTREPRISE => 'Entreprise',
+				self::UTILISATEUR_ADMIN => 'Administrateur',
+				self::UTILISATEUR_AEDI => 'Membre de l\'AEDI' );
 
 	/****************  Attributs  ******************/
 	private $id;
@@ -18,6 +25,7 @@ class Utilisateur {
 	private $prenom;
 	private $annee;
 	private $mail;
+	private $service;
 	private $premiereConnexion;
 	private $typeUtilisateur;
 
@@ -69,6 +77,7 @@ class Utilisateur {
 		$this->prenom = $result['prenom'];
 		$this->annee = $result['annee'];
 		$this->mail = $result['mail'];
+		$this->service = $result['service'];
 		$this->premiereConnexion = $result['premiere_connexion'];
 		$this->typeUtilisateur = $result['type'];
 
@@ -134,12 +143,14 @@ class Utilisateur {
 	* @return Vrai si c'est le cas, faux sinon
 	*/
 	public function premiereConnexion() {
-
 		return $this->premiereConnexion;
 	}
 
+	/**
+	* Retourne le type d'utilisateur sous forme d'entier
+	*/
 	public function getTypeUtilisateur() {
-	
+
 		return $this->typeUtilisateur;
 	}
 
@@ -168,6 +179,32 @@ class Utilisateur {
 
 	public function getMail() {
 		return $this->mail;
+	}
+
+	public function getService() {
+		return $this->service;
+	}
+
+	/**
+	* Récupère l'ensemble des utilisateurs en base
+	* @return Un tableau d'instances
+	* @throws Une exception en cas d'erreur
+	*/
+	public static function RecupererTousLesUtilisateurs() {
+
+		$obj = array();
+
+		/* Requête à la base pour récupérer les logins et construire les objets */
+		$result = BD::executeSelect( 'SELECT login FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
+
+		$i = 0;
+		foreach( $result as $row ) {
+
+			$obj[$i] = new Utilisateur( $row['login'] );
+			$i++;
+		}
+
+		return $obj;
 	}
 }
 
