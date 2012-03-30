@@ -1,7 +1,6 @@
 <?php
 
 require_once dirname(__FILE__) . '/commun/php/base.inc.php';
-session_start();
 
 inclure_fichier( 'commun', 'authentification.class', 'php' );
 
