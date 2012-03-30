@@ -191,7 +191,8 @@ class Etudiant {
                 );
 
                 BD::Prepare('INSERT INTO ETUDIANT SET
-                    ID_ETUDIANT = :id,                    
+                    ID_ETUDIANT = :id, 
+                    ID_PERSONNE = :id, 
                     SEXE_ETUDIANT = :sexe,
                     ADRESSE1_ETUDIANT = :adresse1,
                     ADRESSE2_ETUDIANT = :adresse2,
