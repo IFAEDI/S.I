@@ -1,5 +1,4 @@
 <?php
-
 /*
  * @author Loïc Gevrey
  *
@@ -245,8 +244,8 @@ if ($etudiant->getSexe() == 0) {
 }
 
 $cv_replace = array(
-    Protection_XSS($etudiant->getNom()),
-    Protection_XSS($etudiant->getPrenom()),
+    Protection_XSS($utilisateur->getNom()),
+    Protection_XSS($utilisateur->getPrenom()),
     Protection_XSS($cv->getTitre()),
     Protection_XSS($etudiant->getMail()),
     Protection_XSS($etudiant->getTel()),

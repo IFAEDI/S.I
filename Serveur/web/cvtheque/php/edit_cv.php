@@ -88,11 +88,6 @@ if ($etudiant->getNom() == '') {
     $nom_etudiant = $etudiant->getNom();
 }
 
-if ($etudiant->getPrenom() == '') {
-    $prenom_etudiant = $utilisateur->getPrenom();
-} else {
-    $prenom_etudiant = $etudiant->getPrenom();
-}
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info">  
@@ -131,10 +126,10 @@ if ($etudiant->getPrenom() == '') {
                 </span>
 
                 <div class="control-group">
-                    <label class="control-label">Nom et prénom*</label>
+                    <label class="control-label">Nom et prénom</label>
                     <div class="controls">
-                        <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $nom_etudiant ?>">
-                        <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $prenom_etudiant ?>">
+                        <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $utilisateur->getNom(); ?>" disabled>
+                        <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $utilisateur->getPrenom(); ?>" disabled>
                     </div>
                 </div>
 
