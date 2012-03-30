@@ -130,14 +130,14 @@ $(document).ready(function() {
     
     
     //Accordeon triable pour les differentes partie du CV
-    $( "#accordion" )
+    /*$( "#accordion" )
     .accordion({
         header: "> div > h3",
         fillSpace: true
    
-    });
+    });*/
     
-    
+    $( ".accordion" ).collapse();
     
 });
 

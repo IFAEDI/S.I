@@ -63,6 +63,44 @@ class Etudiant {
         return "Erreur 430 veuillez contacter l'administrateur système";
     }
 
+    public static function ListeAccesCvtheque() {
+        return BD::Prepare('SELECT UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.id,
+                            IFNULL(ACCES_CVTHEQUE.ID_UTILISATEUR,0) as acces_cvtheque 
+                            FROM UTILISATEUR LEFT JOIN ACCES_CVTHEQUE ON UTILISATEUR.id=ACCES_CVTHEQUE.ID_UTILISATEUR'
+                        , array(), BD::RECUPERER_TOUT);
+    }
+
+     //Permet de verifier que l'utilisateur à bien acces à la cvtheque
+    public static function AccesCVtheque($_id_utilisateur) {
+        if (is_numeric($_id_utilisateur)) {
+            $resultat =  BD::Prepare('SELECT COUNT(*) FROM ACCES_CVTHEQUE WHERE ID_UTILISATEUR = :id_utilisateur'
+                            , array("id_utilisateur" => $_id_utilisateur));
+            return $resultat['COUNT(*)'];
+        } else {
+            return "Erreur 450 veuillez contacter l'administrateur système";
+        }
+    }
+    
+    //Permet d'autoriser l'acces à la cvtheque à un utilisateur
+    public static function AutoriserAcces($_id_utilisateur) {
+        if (is_numeric($_id_utilisateur)) {
+            return BD::Prepare('INSERT INTO ACCES_CVTHEQUE SET ID_UTILISATEUR = :id_utilisateur'
+                            , array("id_utilisateur" => $_id_utilisateur));
+        } else {
+            return "Erreur 451 veuillez contacter l'administrateur système";
+        }
+    }
+
+    //Permet d'autoriser l'acces à la cvtheque à un utilisateur
+    public static function Interdir_Acces($_id_utilisateur) {
+        if (is_numeric($_id_utilisateur)) {
+            return BD::Prepare('DELETE FROM ACCES_CVTHEQUE WHERE ID_UTILISATEUR = :id_utilisateur'
+                            , array("id_utilisateur" => $_id_utilisateur));
+        } else {
+            return "Erreur 452 veuillez contacter l'administrateur système";
+        }
+    }
+
     public static function RechercherCVEtudiant($_annee, $_mots_clef, $_id_entreprise) {
         $connexion = BD::GetConnection();
         if (is_numeric($_id_entreprise)) {
@@ -225,7 +263,7 @@ class Etudiant {
 
     //Retourne le nombre total de cv dans la base
     public static function GetNbCV() {
-        $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT',array());
+        $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT', array());
         return $resultat['COUNT(*)'];
     }
 
@@ -233,12 +271,12 @@ class Etudiant {
     public static function GetNbDiffuseCV() {
         $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT, CV 
            WHERE CV.AGREEMENT = 1
-           AND ETUDIANT.ID_CV = CV.ID_CV',array());
+           AND ETUDIANT.ID_CV = CV.ID_CV', array());
         return $resultat['COUNT(*)'];
     }
-    
+
     public static function StoperTouteDiffusion() {
-         BD::Prepare('UPDATE CV SET AGREEMENT=0',array());
+        BD::Prepare('UPDATE CV SET AGREEMENT=0', array());
     }
 
     //****************  Fonctions  ******************//

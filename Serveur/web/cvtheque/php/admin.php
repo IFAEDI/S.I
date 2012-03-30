@@ -2,14 +2,13 @@
 global $authentification;
 global $utilisateur;
 
-if ($authentification->isAuthentifie() == false || $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN ) {
+if ($authentification->isAuthentifie() == false || $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
     inclure_fichier('', '401', 'php');
     die;
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 inclure_fichier('cvtheque', 'admin', 'js');
-
 ?>
 
 <h1>Bienvenue sur la page d'administration de la cvthque </h1><br/>
@@ -24,3 +23,16 @@ inclure_fichier('cvtheque', 'admin', 'js');
 <div class="alert" style="padding: 20px;">
     <a class='btn btn-primary' href="javascript:ArreterDiffusion();">Arreter la diffusion de tout les cv</a>
 </div>
+
+
+<table class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Nom de l'utilisateur</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody id="liste_utilisateurs">
+    </tbody>
+</table>

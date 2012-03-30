@@ -82,18 +82,17 @@ echo '<script> var liste_certif=$.parseJSON(\'' . json_encode($liste_certif) . '
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
 echo '<script> var id_etudiant=\'' . $id_utilisateur . '\';</script>';
 
-if($etudiant->getNom() == ''){
+if ($etudiant->getNom() == '') {
     $nom_etudiant = $utilisateur->getNom();
-}else{
+} else {
     $nom_etudiant = $etudiant->getNom();
 }
 
-if($etudiant->getPrenom() == ''){
+if ($etudiant->getPrenom() == '') {
     $prenom_etudiant = $utilisateur->getPrenom();
-}else{
+} else {
     $prenom_etudiant = $etudiant->getPrenom();
 }
-
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info">  
@@ -103,210 +102,262 @@ if($etudiant->getPrenom() == ''){
             </td></tr></table>
 </div>
 
-<div id="accordion"  class="form-horizontal" style="height: 680px; margin-bottom: 100px;">
-    <div class="group">
-        <h3><a href="#">Informations personnelles</a></h3>
-        <div>
-            <legend>Informations personnelles décrivant votre état civil</legend>
-            <span style="position: absolute; left: 86%;top :10px;">Année d'étude : 
-                <select id="sel_annee_etude" style="width: 50px;">
-                    <?php
-                    for ($i = 3; $i < 6; $i++) {
-                        if ($cv->getAnnee() == $i) {
-                            echo "<option value='$i' selected>$i</option>";
-                        } else {
-                            echo "<option value='$i'>$i</option>";
-                        }
-                    }
-                    if ($cv->getAnnee() == 0) {
-                        echo "<option value='0' selected>+</option>";
-                    } else {
-                        echo "<option value='0'>+</option>";
-                    }
-                    ?>
-                </select>
-            </span>
-
-            <div class="control-group">
-                <label class="control-label">Nom et prénom*</label>
-                <div class="controls">
-                    <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $nom_etudiant ?>">
-                    <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $prenom_etudiant ?>">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Téléphone</label>
-                <div class="controls">
-                    <input type="text" id="telephone_etudiant" class="span3" placeholder="Téléphone" value="<?php echo $etudiant->getTel(); ?>">
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Permis</label>
-                <div class="controls">
-                    <select id="sel_permis" name="sel_permis">
+<div id="accordion2"  class="accordion form-horizontal">
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#info_etudiant"> 
+                <h4>Informations personnelles</h4> 
+            </a>
+        </div>
+        <div id="info_etudiant" class="accordion-body collapse in"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+                <span style="float: right;">Année d'étude : 
+                    <select id="sel_annee_etude" style="width: 50px;">
                         <?php
-                        foreach ($liste_permis as $permis) {
-                            if ($permis['ID_PERMIS'] == $etudiant->getIdPermis()) {
-                                echo "<option value='" . $permis['ID_PERMIS'] . "' SELECTED>" . $permis['LIBELLE_PERMIS'] . "</option> ";
+                        for ($i = 3; $i < 6; $i++) {
+                            if ($cv->getAnnee() == $i) {
+                                echo "<option value='$i' selected>$i</option>";
                             } else {
-                                echo "<option value='" . $permis['ID_PERMIS'] . "'>" . $permis['LIBELLE_PERMIS'] . "</option> ";
+                                echo "<option value='$i'>$i</option>";
                             }
                         }
-                        ?>
-                    </select>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Statut Marital</label>
-                <div class="controls">
-                    <select id="sel_statut_marital" >
-                        <?php
-                        foreach ($liste_statut_marital as $statut_marital) {
-                            if ($statut_marital['ID_MARITAL'] == $etudiant->getIdMarital()) {
-                                echo "<option value='" . $statut_marital['ID_MARITAL'] . "' SELECTED>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
-                            } else {
-                                echo "<option value='" . $statut_marital['ID_MARITAL'] . "'>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
-                            }
-                        }
-                        ?>
-                    </select>
-                </div>
-            </div>
-
-            <div class="control-group">
-                <label class="control-label">Sexe</label>
-                <div class="controls">
-                    <select id="sel_sexe">
-                        <?php
-                        if ($etudiant->getSexe() == 0) {
-                            echo "<option value='0' SELECTED>Homme</option> ";
-                            echo "<option value='1' >Femme</option> ";
+                        if ($cv->getAnnee() == 0) {
+                            echo "<option value='0' selected>+</option>";
                         } else {
-                            echo "<option value='0' >Homme</option> ";
-                            echo "<option value='1' SELECTED>Femme</option> ";
+                            echo "<option value='0'>+</option>";
                         }
                         ?>
                     </select>
-                </div>
-            </div>
+                </span>
 
-            <div class="control-group">
-                <label class="control-label">Adresse*</label>
-                <div class="controls">
-                    <input type="text" id="adresse1_etudiant" class="span3" placeholder="Adresse 1" value="<?php echo $etudiant->getAdresse1(); ?>">
-                    <input type="text" id="adresse2_etudiant" class="span3" placeholder="Adresse 2" value="<?php echo $etudiant->getAdresse2(); ?>">
+                <div class="control-group">
+                    <label class="control-label">Nom et prénom*</label>
+                    <div class="controls">
+                        <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $nom_etudiant ?>">
+                        <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $prenom_etudiant ?>">
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                <label class="control-label">Ville*</label>
-                <div class="controls">
-                    <input type="text" id="ville_etudiant" class="span3" placeholder="Ville" value="<?php echo $etudiant->getNomVille(); ?>">
-                    <input type="text" id="cp_etudiant" class="span3" placeholder="CP" value="<?php echo $etudiant->getCPVille(); ?>" style="width : 50px;">
-                    <input type="text" id="pays_etudiant" class="span3" placeholder="Pays" value="<?php echo $etudiant->getPaysVille(); ?>">
+                <div class="control-group">
+                    <label class="control-label">Téléphone</label>
+                    <div class="controls">
+                        <input type="text" id="telephone_etudiant" class="span3" placeholder="Téléphone" value="<?php echo $etudiant->getTel(); ?>">
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                <label class="control-label">Date de naissance*</label>
-                <div class="controls">
-                    <input type="text" id="anniv_etudiant" class="span3" placeholder="Date de naissance" value="<?php echo $etudiant->getAnniv(); ?>">
+                <div class="control-group">
+                    <label class="control-label">Permis</label>
+                    <div class="controls">
+                        <select id="sel_permis" name="sel_permis">
+                            <?php
+                            foreach ($liste_permis as $permis) {
+                                if ($permis['ID_PERMIS'] == $etudiant->getIdPermis()) {
+                                    echo "<option value='" . $permis['ID_PERMIS'] . "' SELECTED>" . $permis['LIBELLE_PERMIS'] . "</option> ";
+                                } else {
+                                    echo "<option value='" . $permis['ID_PERMIS'] . "'>" . $permis['LIBELLE_PERMIS'] . "</option> ";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
                 </div>
-            </div>
 
-            <div class="control-group">
-                <label class="control-label" for="email">Mail*</label>
-                <div class="controls">
-                    <div class="input-prepend">
-                        <span class="add-on">@</span><input type="text" id="mail_etudiant" class="span3" placeholder="Adresse Mail" value="<?php echo $etudiant->getMail(); ?>">
+                <div class="control-group">
+                    <label class="control-label">Statut Marital</label>
+                    <div class="controls">
+                        <select id="sel_statut_marital" >
+                            <?php
+                            foreach ($liste_statut_marital as $statut_marital) {
+                                if ($statut_marital['ID_MARITAL'] == $etudiant->getIdMarital()) {
+                                    echo "<option value='" . $statut_marital['ID_MARITAL'] . "' SELECTED>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
+                                } else {
+                                    echo "<option value='" . $statut_marital['ID_MARITAL'] . "'>" . $statut_marital['LIBELLE_MARITAL'] . "</option> ";
+                                }
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Sexe</label>
+                    <div class="controls">
+                        <select id="sel_sexe">
+                            <?php
+                            if ($etudiant->getSexe() == 0) {
+                                echo "<option value='0' SELECTED>Homme</option> ";
+                                echo "<option value='1' >Femme</option> ";
+                            } else {
+                                echo "<option value='0' >Homme</option> ";
+                                echo "<option value='1' SELECTED>Femme</option> ";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Adresse*</label>
+                    <div class="controls">
+                        <input type="text" id="adresse1_etudiant" class="span3" placeholder="Adresse 1" value="<?php echo $etudiant->getAdresse1(); ?>">
+                        <input type="text" id="adresse2_etudiant" class="span3" placeholder="Adresse 2" value="<?php echo $etudiant->getAdresse2(); ?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Ville*</label>
+                    <div class="controls">
+                        <input type="text" id="ville_etudiant" class="span3" placeholder="Ville" value="<?php echo $etudiant->getNomVille(); ?>">
+                        <input type="text" id="cp_etudiant" class="span3" placeholder="CP" value="<?php echo $etudiant->getCPVille(); ?>" style="width : 50px;">
+                        <input type="text" id="pays_etudiant" class="span3" placeholder="Pays" value="<?php echo $etudiant->getPaysVille(); ?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Date de naissance*</label>
+                    <div class="controls">
+                        <input type="text" id="anniv_etudiant" class="span3" placeholder="Date de naissance" value="<?php echo $etudiant->getAnniv(); ?>">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label" for="email">Mail*</label>
+                    <div class="controls">
+                        <div class="input-prepend">
+                            <span class="add-on">@</span><input type="text" id="mail_etudiant" class="span3" placeholder="Adresse Mail" value="<?php echo $etudiant->getMail(); ?>">
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="group">
-        <h3><a href="#">Expériences professionnelles</a></h3>
-        <div id="div_XP">
-            <a id="btn_annuler_xp" class="btn" href="javascript:Annuler_XP();" style="display: none;position: absolute; left: 90%;">Annuler</a>
-            <div id="div_nouvelle_XP"></div>
-            <div id="div_ancienne_XP"></div>
-        </div>
-    </div>
-    <div class="group" >
-        <h3><a href="#">Compétences</a></h3>
-        <div id="div_competence">
-            <a id="btn_annuler_competence" class="btn" href="javascript:Annuler_competence();" style="display: none;position: absolute; left: 90%;">Annuler</a>
-            <div id="div_nouvelle_competence"></div>
-            <div id="div_ancienne_competence"></div>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Diplôme(s)</a></h3>
-        <div id="div_Formation">
-            <a id="btn_annuler_diplome" class="btn" href="javascript:Annuler_diplome();" style="display: none;position: absolute; left: 90%;">Annuler</a>
-            <div id="div_nouveau_Diplome"></div>
-            <div id="div_ancien_Diplome"></div>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Formation</a></h3>
-        <div id="div_Formation">
-            <a id="btn_annuler_formation" class="btn" href="javascript:Annuler_formation();" style="display: none;position: absolute; left: 90%;">Annuler</a>
-            <div id="div_nouvelle_Formation"></div>
-            <div id="div_ancienne_Formation"></div>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Langues</a></h3>
-        <div id="div_Langues">
-            <a id="btn_annuler_langue" class="btn" href="javascript:Annuler_langue();" style="display: none;position: absolute; left: 90%;">Annuler</a>
-            <div id="div_nouvelle_langue"></div>
-            <div id="div_ancienne_langue"></div>
-        </div>
-    </div>
-    <div class="group">
-        <h3><a href="#">Autres</a></h3>
-        <div id="div_Autres">
-            <div class="control-group">
-                <label class="control-label">Titre du CV</label>
-                <div class="controls">
-                    <input type="text" id="titre_cv" class="span3" placeholder="Titre du CV" value="<?php echo $cv->getTitre() ?>" style="width: 600px;">
-                </div>
-            </div>
 
-            <div class="control-group">
-                <label class="control-label">Loisir(s)</label>
-                <div class="controls">
-                    <input type="text" id="loisir_etudiant" class="span3" placeholder="Loisir(s)" value="<?php echo $cv->getLoisir() ?>" style="width: 600px;">
-                </div>
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#xp"> 
+                <h4>Expériences professionnelles</h4> 
+            </a>
+        </div>
+        <div id="xp" class="accordion-body collapse"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+                <a id="btn_annuler_xp" class="btn" href="javascript:Annuler_XP();" style="display: none;float: right;">Annuler</a>
+                <div id="div_nouvelle_XP"></div>
+                <div id="div_ancienne_XP"></div>
             </div>
+        </div>
+    </div>
 
-            <div class="control-group">
-                <label class="control-label">Mobilité</label>
-                <div class="controls">
-                    <select id="sel_mobilite" >
-                        <?php
-                        foreach ($liste_mobilite as $mobilite) {
-                            if ($mobilite['ID_MOBILITE'] == $cv->getIDMobilite()) {
-                                echo "<option value='" . $mobilite['ID_MOBILITE'] . "' SELECTED>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
-                            } else {
-                                echo "<option value='" . $mobilite['ID_MOBILITE'] . "'>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#competence"> 
+                <h4>Compétences</h4> 
+            </a>
+        </div>
+        <div id="competence" class="accordion-body collapse"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+                <a id="btn_annuler_competence" class="btn" href="javascript:Annuler_competence();" style="display: none;float: right;">Annuler</a>
+                <div id="div_nouvelle_competence"></div>
+                <div id="div_ancienne_competence"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#diplome"> 
+                <h4>Diplôme(s)</h4> 
+            </a>
+        </div>
+        <div id="diplome" class="accordion-body collapse"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+                <a id="btn_annuler_diplome" class="btn" href="javascript:Annuler_diplome();" style="display: none;float: right;">Annuler</a>
+                <div id="div_nouveau_Diplome"></div>
+                <div id="div_ancien_Diplome"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#formation"> 
+                <h4>Formation</h4> 
+            </a>
+        </div>
+        <div id="formation" class="accordion-body collapse"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+                <a id="btn_annuler_formation" class="btn" href="javascript:Annuler_formation();" style="display: none;float: right;">Annuler</a>
+                <div id="div_nouvelle_Formation"></div>
+                <div id="div_ancienne_Formation"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#langue"> 
+                <h4>Langue(s)</h4> 
+            </a>
+        </div>
+        <div id="langue" class="accordion-body collapse"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+                <a id="btn_annuler_langue" class="btn" href="javascript:Annuler_langue();" style="display: none;float: right;">Annuler</a>
+                <div id="div_nouvelle_langue"></div>
+                <div id="div_ancienne_langue"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="accordion-group">
+        <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#autre"> 
+                <h4>Autres</h4> 
+            </a>
+        </div>
+        <div id="autre" class="accordion-body collapse"> 
+            <div class="accordion-inner" style="max-height: 420px; overflow: auto;">
+
+
+                <div class="control-group">
+                    <label class="control-label">Titre du CV</label>
+                    <div class="controls">
+                        <input type="text" id="titre_cv" class="span3" placeholder="Titre du CV" value="<?php echo $cv->getTitre() ?>" style="width: 600px;">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Loisir(s)</label>
+                    <div class="controls">
+                        <input type="text" id="loisir_etudiant" class="span3" placeholder="Loisir(s)" value="<?php echo $cv->getLoisir() ?>" style="width: 600px;">
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Mobilité</label>
+                    <div class="controls">
+                        <select id="sel_mobilite" >
+                            <?php
+                            foreach ($liste_mobilite as $mobilite) {
+                                if ($mobilite['ID_MOBILITE'] == $cv->getIDMobilite()) {
+                                    echo "<option value='" . $mobilite['ID_MOBILITE'] . "' SELECTED>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
+                                } else {
+                                    echo "<option value='" . $mobilite['ID_MOBILITE'] . "'>" . $mobilite['LIBELLE_MOBILITE'] . "</option> ";
+                                }
                             }
-                        }
-                        ?>
-                    </select>
+                            ?>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="control-group">
+                    <label class="control-label">Mots Clef lors de la recherche d'un CV</label>
+                    <div class="controls">
+                        <input type="text" id="mots_clef" class="span3" placeholder="Mots Clef" value="<?php echo $cv->getMotsClef() ?>">
+                    </div>
                 </div>
             </div>
 
-            <div class="control-group">
-                <label class="control-label">Mots Clef lors de la recherche d'un CV</label>
-                <div class="controls">
-                    <input type="text" id="mots_clef" class="span3" placeholder="Mots Clef" value="<?php echo $cv->getMotsClef() ?>">
-                </div>
-            </div>
         </div>
     </div>
 </div>

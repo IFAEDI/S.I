@@ -16,6 +16,13 @@ if ($authentification->isAuthentifie() == false ||
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
+
+if ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getId()) != 1) {
+    inclure_fichier('', '401', 'php');
+    die;
+}
+
+
 inclure_fichier('cvtheque', 'cvtheque', 'js');
 ?>
 
