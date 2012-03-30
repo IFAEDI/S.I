@@ -98,7 +98,7 @@ function Afficher_CV(_id_etudiant){
     $('#img_new'+_id_etudiant).remove();
     $('#lien_cv'+_id_etudiant).css('font-weight', 'normal');
     $('#lien_cv'+_id_etudiant).css('font-style', 'normal');
-    $('#div_cv').load('/cvtheque/php/cv.php?id_etudiant='+_id_etudiant);
+    $('#div_cv').load('/cvtheque/php/cv.php?inc=1&id_etudiant='+_id_etudiant);
 }
 
 function Favoris(_id_etudiant){

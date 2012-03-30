@@ -8,18 +8,45 @@
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
+if (isset($_GET['inc']) && $_GET['inc']==1) {
+    inclure_fichier('commun', 'authentification.class', 'php');
+
+    $authentification = new Authentification();
+    $utilisateur = null;
+    if ($authentification->isAuthentifie()) {
+
+        /* On récupère l'objet utilisateur associé */
+        $utilisateur = $authentification->getUtilisateur();
+        if ($utilisateur == null) {
+            $authentification->forcerDeconnexion();
+        }
+    }
+} else {
+    global $authentification;
+    global $utilisateur;
+}
+
+if ($authentification->isAuthentifie() == false) {
+    inclure_fichier('', '401', 'php');
+    die;
+}
+
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-
-if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
+if (isset($_GET['id_etudiant']) &&
+        ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE ||
+        $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ADMIN)) {
     $id_etudiant = $_GET['id_etudiant'];
-    Etudiant::MettreEnVu($id_etudiant, $_SESSION['utilisateur']->getId(), 2);
-} elseif (Utilisateur_connecter('etudiant')) {
-    $id_etudiant = 1;
+    Etudiant::MettreEnVu($id_etudiant, $utilisateur->getId(), 2);
+} elseif ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ETUDIANT ||
+        $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ADMIN) {
+    $id_etudiant = $utilisateur->getId();
 } else {
     inclure_fichier('', '401', 'php');
     die();
 }
+
+
 
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($id_etudiant);
@@ -38,7 +65,7 @@ $liste_competence = $etudiant->getCompetence();
 if ($cv == NULL) {
     $cv = new CV();
 } else {
-    if ($cv->getAgreement() == 0 && Utilisateur_connecter('entreprise')) {
+    if ($cv->getAgreement() == 0 && $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE) {
         inclure_fichier('', '401', 'php');
         die();
     }

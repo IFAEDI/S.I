@@ -4,10 +4,15 @@
  *
  *
  */
+global $authentification;
+global $utilisateur;
 
-if (!Utilisateur_connecter('entreprise')) {
-    //inclure_fichier('', '401', 'php');
-    //die;
+
+if ($authentification->isAuthentifie() == false ||
+        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
+        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
+    inclure_fichier('', '401', 'php');
+    die;
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
