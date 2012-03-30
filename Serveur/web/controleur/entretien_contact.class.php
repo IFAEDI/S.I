@@ -10,6 +10,7 @@ class Entretien {
     private $NOM;
     private $PRENOM;
     private $MAIL;
+    private $TEL;
 
 
     //****************  Fonctions statiques  ******************//
@@ -27,13 +28,14 @@ class Entretien {
     }
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'un intervenant
-    public static function UpdateIntervenant($_id, $_nom $_prenom, $_mail){
+    public static function UpdateIntervenant($_id, $_nom $_prenom, $_mail, $_tel){
 
 		$info = array(
 			'id'=> $_id,
 			'nom'=>$_nom,
 			'prenom'=>$_prenom,
-			'mail'=>$_mail
+			'mail'=>$_mail,
+			'tel'=>$_tel
 		);   
 		
         if ($_id > 0 && is_numeric($_id)) {
@@ -42,7 +44,8 @@ class Entretien {
             BD::Prepare('UPDATE Entretien_contact SET 
                     NOM = :nom,
                     PRENOM = :prenom,
-                    MAIL = :mail
+                    MAIL = :mail,
+					TEL = :tel
                     WHERE ID = :id', $info);
             return $_id;
         } else {
@@ -50,7 +53,8 @@ class Entretien {
 					ID = :id,
                     NOM = :nom,
                     PRENOM = :prenom,
-                    MAIL = :mail'
+                    MAIL = :mail,
+					TEL = :tel'
                     , $info);
 
             $id = BD::GetConnection()->lastInsertId();

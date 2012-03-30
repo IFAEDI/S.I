@@ -45,9 +45,10 @@ class Entretien {
 			'date'=>$_date
 		);
 		
-        if ($_id > 0 && is_numeric($_id)) {
+        if ($_id < 0 && is_numeric($_id)) {
+			echo 'coucou';
             //Si l'etudiant à déjà un CV
-            BD::Prepare('UPDATE Entretien SET 
+            BD::executeModif('UPDATE Entretien SET 
                     ID_ENTREPRISE = :id_entreprise,
                     VILLE = :ville,
 					ID_CONTACT = :id_contact,
@@ -56,7 +57,8 @@ class Entretien {
               BD::MontrerErreur();
 			return $_id;
         } else {
-            BD::Prepare('INSERT INTO Entretien SET 
+			
+            $retour = BD::executeModif('INSERT INTO Entretien SET 
 					ID = :id,
                     ID_ENTREPRISE = :id_entreprise,
                     VILLE = :ville,
@@ -64,9 +66,8 @@ class Entretien {
                     DATE = :date
 					', $info);
 
-            $id = BD::GetConnection()->lastInsertId();
-            if ($id > 0) {
-                return $id;
+            if ($retour != null ) {
+                echo $retour;
             } else {
                 echo "Erreur 2 veuillez contacter l'administrateur du site";
                 return;
