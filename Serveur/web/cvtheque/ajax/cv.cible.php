@@ -64,7 +64,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     //On verifie que les variables sont correcte
     if ($nom_etudiant == '') {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : Le nom de l\'étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : Le nom de l\'étudiant ne peut être vide (vous pouvez le modifier dans vos parametre de compte utilisateur)';
+        echo json_encode($retour);
+        die;
+    }
+    
+     if ($prenom_etudiant == '') {
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : Le prenom de l\'étudiant ne peut être vide (vous pouvez le modifier dans vos parametre de compte utilisateur)';
         echo json_encode($retour);
         die;
     }

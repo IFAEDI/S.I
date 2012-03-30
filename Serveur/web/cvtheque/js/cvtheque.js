@@ -23,8 +23,8 @@ function Rechercher(){
        
         for(i=0;i<liste_etudiants.length;i++){
             id_etudiant = liste_etudiants[i]['ID_ETUDIANT'];
-            nom_etudiant = liste_etudiants[i]['NOM_ETUDIANT'];
-            prenom_etudiant = liste_etudiants[i]['PRENOM_ETUDIANT'];
+            nom_etudiant = liste_etudiants[i]['NOM'];
+            prenom_etudiant = liste_etudiants[i]['PRENOM'];
             annee = liste_etudiants[i]['ANNEE'];
             titre_cv = liste_etudiants[i]['TITRE_CV'];
             
