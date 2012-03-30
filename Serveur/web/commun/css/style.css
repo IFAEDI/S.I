@@ -17,8 +17,7 @@ body {
 	color: rgb(83, 83, 83);
 }
 
-#layout .footer
-{
+#layout.footer {
     border-top: solid 1px grey;
     margin: 0px;
     margin-top: 15px;
