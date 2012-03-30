@@ -79,66 +79,35 @@
 
 		<ul class="nav pull-right">
 			<li class="">
-				<a data-toggle="modal" href="#login_dialog">
-					<i class="icon-user icon-white"></i>
-					<?php 
-						// if( $authentification->isAuthentifie() ) {
-							// echo $utilisateur->getPrenom()." ".$utilisateur->getNom();
-						// }
-						// else {
-							 // echo "Se connecter";
-						// }
-					?>
-				</a>
+				<?php 
+				/* Affichage du nom prénom ou de la demande de connexion suivant l'état de l'utilisateur */
+				if( $authentification->isAuthentifie() ) {
+					echo '<a data-toggle="modal" href="#user_info_dialog">';
+					echo '<i class="icon-user icon-white"></i><span id="navbar_username"> ';
+							echo $utilisateur->getPrenom()." ".$utilisateur->getNom();
+					echo '</span></a>';
+				}
+				else {
+					echo '<a data-toggle="modal" href="#login_dialog">';
+					 echo 'Se connecter';
+					echo '</a>';
+				}
+				?>
 			</li>
 			<li class="divider-vertical"></li>
+				<?php
+				/* Bouton de déconnexion */
+				if( $authentification->isAuthentifie() ) {
+					echo '<li>';
+					echo '<a href="?action=logout"><i class="icon-off icon-white"></i></a>';
+					echo '</li>';
+					echo '<li class="divider-vertical"></li>';
+				}
+				?>
 		</ul>
 		  
 	  </div>
 	</div>
   </div>
-</div>
-
-
-<div id="login_dialog" class="modal hide fade">
-   <div class="modal-header">
-        <a class="close" data-dismiss="modal" >&times;</a>
-        <h3>Authentification</h3>
-    </div>
-    <div class="modal-body" style="text-align: center;">
-
-		<div style="width: 49%; display: inline-block; margin-top: 60px; vertical-align: top;">
-			<form id="cas_login_form" method="post">
-	        	<a id="cas_login" href="#" class="btn btn-primary" ><i class="icon-user icon-white"></i> Authentification par le CAS INSA</a>
-			<input type="hidden" name="action" value="login_cas" />
-			</form>
-		</div>
-		<div style="width: 49%; display: inline-block; border-left: 1px dotted #E0E0E0;">
-
-		<form id="login_form">
-			<div id="error" class="alert alert-error hide" style="padding-right: 10px;" > </div>
-
-			<fieldset>
-				 <div class="control-group">
-			                <label class="control-label" for="username">Utilisateur</label>
-			                <div class="controls">
-			                 <input class="input-medium" style="margin: 0px;" id="username" type="text" />
-			                </div>
-			          </div>
-				 <div class="control-group">
-			                <label class="control-label" for="password">Mot de passe</label>
-			                <div class="controls">
-			                <input class="input-medium" style="margin: 0px;" id="password" type="password" />
-			                </div>
-			          </div>
-			</fieldset>
-
-			<p><a id="regular_login" href="#" class="btn btn-primary">S'authentifier</a></p>
-		</form>
-		</div>
-    </div>
-    <div class="modal-footer" style="text-align: center;">
-		<a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
-    </div>
 </div>
 
