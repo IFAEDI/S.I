@@ -18,13 +18,6 @@ function Creer_Select(_id_select,_id_option,_data){
     return select;
 }
 
-
-
-
-
-
-
-
 function stripslashes(txt){
     while(true){
         pos = txt.indexOf("$");  

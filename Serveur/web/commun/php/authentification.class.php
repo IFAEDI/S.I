@@ -11,7 +11,6 @@
 inclure_fichier( 'commun', 'config.inc', 'php' );
 inclure_fichier( 'commun', 'CAS',    'php' );
 inclure_fichier( 'commun', 'bd.inc',     'php' );
-
 inclure_fichier( 'commun', 'utilisateur.class', 'php' );
 
 
