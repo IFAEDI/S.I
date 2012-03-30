@@ -54,6 +54,8 @@ class Utilisateur {
 		/* Requête à la base pour récupérer le bon utilisateur et construire l'objet */
 		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
 
+        
+                
 		if( $result == null )
 			return false;
 
