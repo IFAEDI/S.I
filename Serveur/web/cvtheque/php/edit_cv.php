@@ -5,14 +5,19 @@
  *
  */
 
-if (!Utilisateur_connecter('etudiant')) {
+global $authentification;
+global $utilisateur;
+
+if ($authentification->isAuthentifie() == false || (
+        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
+        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ETUDIANT)) {
     inclure_fichier('', '401', 'php');
     die;
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-$id_utilisateur = 1;
+$id_utilisateur = $utilisateur->getId();
 
 //Récuperation complete du CV de l'étudiant
 $etudiant = new Etudiant();

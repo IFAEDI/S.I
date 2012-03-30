@@ -5,27 +5,24 @@
  *
  */
 
+global $authentification;
+global $utilisateur;
 
-if (!Utilisateur_connecter('etudiant')) {
+if ($authentification->isAuthentifie() == false || (
+        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
+        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ETUDIANT)) {
     inclure_fichier('', '401', 'php');
     die;
 }
 
+
+
 inclure_fichier('controleur', 'etudiant.class', 'php');
 inclure_fichier('cvtheque', 'accueil', 'js');
 
-global $authentification;
-global $utilisateur;
 
-if ($authentification->isAuthentifie() == true) {
-    echo 'Prénom :  ' . $utilisateur->getPrenom() . '<br/>';
-    echo 'Nom :  ' . $utilisateur->getNom() . '<br/>';
-    echo 'ID :  ' . $utilisateur->getId() . '<br/>';
-    echo 'Annee :  ' . $utilisateur->getAnnee() . '<br/>';
-    echo 'Mail :  ' . $utilisateur->getMail() . '<br/>';
-}
 
-$id_utilisateur = 1;
+$id_utilisateur = $utilisateur->getId();
 
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
@@ -55,7 +52,7 @@ $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
                         <?php } ?>
                     </td>
                     <td style="text-align : right;">
-                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
+                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php?inc=1','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
                         <a class="btn btn-danger" data-toggle="modal" href="#mod_supression" style="margin-right : 10px;">Supprimer mon CV</a>
                         <a class="btn btn-primary" href="index.php?page=edit_cv">Editer mon CV</a>
                     </td>
@@ -72,7 +69,7 @@ $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
                         <span>Ton CV n'est toujours pas diffusé : <a href='javascript:Diffusion(1);'>Autoriser sa diffusion</a></span>
                     </td>
                     <td style='text-align : right;'>
-                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
+                        <a id='imprimer' style='margin-right : 10px;' class='btn' onClick="window.open('/cvtheque/php/cv.php?inc=1','CV','toolbar=no,status=no,scrollbars=yes,location=no,resize=no,menubar=no')"><span class='ui-icon ui-icon-print' style='display: inline-block;height: 13px; margin-right: 5px;'></span>Imprimer</a>
                         <a class='btn btn-danger' data-toggle='modal' href='#mod_supression' style='margin-right : 10px;'>Supprimer mon CV</a>
                         <a class='btn btn-primary' href="index.php?page=edit_cv">Editer mon CV</a>
                     </td>
