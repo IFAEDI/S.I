@@ -81,6 +81,19 @@ $liste_certif = $temp;
 echo '<script> var liste_certif=$.parseJSON(\'' . json_encode($liste_certif) . '\');</script>';
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
 echo '<script> var id_etudiant=\'' . $id_utilisateur . '\';</script>';
+
+if($etudiant->getNom() == ''){
+    $nom_etudiant = $utilisateur->getNom();
+}else{
+    $nom_etudiant = $etudiant->getNom();
+}
+
+if($etudiant->getPrenom() == ''){
+    $prenom_etudiant = $utilisateur->getPrenom();
+}else{
+    $prenom_etudiant = $etudiant->getPrenom();
+}
+
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info">  
@@ -117,8 +130,8 @@ echo '<script> var id_etudiant=\'' . $id_utilisateur . '\';</script>';
             <div class="control-group">
                 <label class="control-label">Nom et prénom*</label>
                 <div class="controls">
-                    <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $etudiant->getNom(); ?>">
-                    <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $etudiant->getPrenom(); ?>">
+                    <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $nom_etudiant ?>">
+                    <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $prenom_etudiant ?>">
                 </div>
             </div>
 
@@ -308,7 +321,7 @@ foreach ($liste_langue_etudiant as $langue_etudiant) {
 }
 
 foreach ($liste_XP as $XP) {
-    echo 'Ajouter_XP("' . $XP->getDebut() . '","' . $XP->getFin() . '","' . $XP->getTitre() . '","' . preg_replace('`(\\r\\n|\\n|\\r)`', '<br/>',$XP->getDescription()) . '","' . $XP->getEntreprise() . '","' . $XP->getNomVille() . '");';
+    echo 'Ajouter_XP("' . $XP->getDebut() . '","' . $XP->getFin() . '","' . $XP->getTitre() . '","' . preg_replace('`(\\r\\n|\\n|\\r)`', '<br/>', $XP->getDescription()) . '","' . $XP->getEntreprise() . '","' . $XP->getNomVille() . '");';
 }
 
 foreach ($liste_formation_etudiant as $formation_etudiant) {
@@ -325,3 +338,6 @@ foreach ($liste_competence as $competence_etudiant) {
 
 echo '</script>';
 ?>
+
+
+

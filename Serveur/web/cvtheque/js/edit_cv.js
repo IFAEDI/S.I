@@ -28,7 +28,7 @@ $(document).ready(function() {
     competence += '<label class="control-label">Nouvelle compétence</label>';
     competence += '<div class="controls">';
     competence += '<input type="text" id="nom_nouvelle_competence" class="span3" placeholder="Nom de la compétence" style="width : 400px; margin-right: 5px;">';
-    competence += '<a href="javascript:Ajouter_Competence(\'\');" class="icon-ok" style="margin-left : 20px;"></a>';
+    competence += '<a href="javascript:Ajouter_Competence(\'\');" class="btn btn-success" style="margin-left : 20px;"><i class="icon-ok"></i></a>';
     competence += '</div>';
     competence += '</div><hr>';
     $('#div_nouvelle_competence').append(competence);
@@ -46,7 +46,7 @@ $(document).ready(function() {
     langue +='<span style="width : 5px;"> </span>';
     langue += Creer_Select('sel_nouvelle_certif',-1,liste_certif);
     langue += '<input type="text" id="score_nouvelle" class="span3" placeholder="Score" style="width : 80px; margin-left: 5px;" disabled>';
-    langue += '<a href="javascript:Ajouter_Langue(\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
+    langue += '<a href="javascript:Ajouter_Langue(\'\',\'\',\'\',\'\')" class="btn btn-success" style="margin-left : 20px;"><i class="icon-ok"></i></a>';
     langue += '</div>';
     langue += '</div><hr>';
     $('#div_nouvelle_langue').append(langue);
@@ -68,7 +68,7 @@ $(document).ready(function() {
     xp += '<td><input type="text" id="titre_nouvelle_xp" class="span3" placeholder="Titre" style="width : 420px;"></td>';
     xp += '<td><input type="text" id="entreprise_nouvelle_xp" class="span3" placeholder="Entreprise" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_nouvelle_xp" class="span3" placeholder="Ville" style="width : 150px;"></td>';
-    xp += '<td><a href="javascript:Ajouter_XP(\'\',\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a></td>';
+    xp += '<td><a href="javascript:Ajouter_XP(\'\',\'\',\'\',\'\',\'\',\'\')" class="btn btn-success" ><i class="icon-ok"></i></a></td>';
     xp += '<tr><td></td><td></td>';
     xp += '<td COLSPAN=3><textarea rows="4" id="desc_nouvelle_xp" style="width : 830px;" placeholder="Description"></textarea></td>';  
     xp += '</tr></table></div><hr>';
@@ -85,8 +85,8 @@ $(document).ready(function() {
     formation += '<input type="text" id="fin_nouvelle_formation" class="span3" placeholder="Fin"  style="width : 80px; margin-right: 5px;">';
     formation += '<input type="text" id="annee_nouvelle_formation" class="span3" placeholder="Année et description"  style="width : 390px; margin-right: 5px;">';
     formation += '<input type="text" id="institut_nouvelle_formation" class="span3" placeholder="Institut"  style="width : 140px; margin-right: 5px;">';
-    formation += '<input type="text" id="ville_nouvelle_formation" class="span3" placeholder="Ville" style="width : 150px;">';
-    formation += '<a href="javascript:Ajouter_Formation(\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
+    formation += '<input type="text" id="ville_nouvelle_formation" class="span3" placeholder="Ville" style="width : 140px;">';
+    formation += '<a href="javascript:Ajouter_Formation(\'\',\'\',\'\',\'\',\'\')" class="btn btn-success" style="margin-left : 10px;"><i class="icon-ok"></i></a>';
     formation += '</div>';
     formation += '</div><hr>';
     $('#div_nouvelle_Formation').append(formation);
@@ -104,8 +104,8 @@ $(document).ready(function() {
     diplome += Creer_Select('sel_mention_nouveau_diplome',-1,liste_mention);
     diplome += '<input type="text" id="annee_nouveau_diplome" class="span3" placeholder="Année"  style="width : 80px; margin: 5px;">';
     diplome += '<input type="text" id="institut_nouveau_diplome" class="span3" placeholder="Institut"  style="width : 200px; margin-right: 5px;">';
-    diplome += '<input type="text" id="ville_nouveau_diplome" class="span3" placeholder="Ville"  style="width : 150px;">';
-    diplome += '<a href="javascript:Ajouter_Diplome(\'\',\'\',\'\',\'\',\'\')" class="icon-ok" style="margin-left : 20px;"></a>';
+    diplome += '<input type="text" id="ville_nouveau_diplome" class="span3" placeholder="Ville"  style="width : 140px;">';
+    diplome += '<a href="javascript:Ajouter_Diplome(\'\',\'\',\'\',\'\',\'\')" class="btn btn-success" style="margin-left : 10px;"><i class="icon-ok"></i></a>';
     diplome += '</div>';
     diplome += '</div><hr>';
     $('#div_nouveau_Diplome').append(diplome);
@@ -136,6 +136,9 @@ $(document).ready(function() {
         fillSpace: true
    
     });
+    
+    
+    
 });
 
 //****************  Autre fonction  ******************//
@@ -157,7 +160,7 @@ function Ajouter_Competence(_nom){
     competence += '<label class="control-label">Compétence</label>';
     competence += '<div class="controls">';
     competence += '<input type="text" id="nom_competence'+nb_competence+'" class="span3" placeholder="Nom de la compétence" value="'+_nom+'" style="width : 400px; margin-right: 5px;">';
-    competence += '<a href="javascript:Supprimer_Competence('+nb_competence+');" class="icon-remove" style="margin-left : 20px;"></a>';
+    competence += '<a href="javascript:Supprimer_Competence('+nb_competence+');" class="btn btn-warning" style="margin-left : 20px;"><i class="icon-remove"></i></a>';
     competence += '</div>';
     competence += '</div>';
     $('#div_ancienne_competence').append(competence);
@@ -205,8 +208,8 @@ function Ajouter_Diplome(_annee,_id_mention,_libelle,_institut,_ville){
     diplome += Creer_Select('sel_mention_diplome'+nb_diplome,_id_mention,liste_mention);
     diplome += '<input type="text" id="annee_diplome'+nb_diplome+'" class="span3" placeholder="Année" value="'+_annee+'" style="width : 80px; margin: 5px;">';
     diplome += '<input type="text" id="institut_diplome'+nb_diplome+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 200px; margin-right: 5px;">';
-    diplome += '<input type="text" id="ville_diplome'+nb_diplome+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
-    diplome += '<a href="javascript:Supprimer_Diplome('+nb_diplome+');" class="icon-remove" style="margin-left : 20px;"></a>';
+    diplome += '<input type="text" id="ville_diplome'+nb_diplome+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 140px;">';
+    diplome += '<a href="javascript:Supprimer_Diplome('+nb_diplome+');" class="btn btn-warning" style="margin-left : 10px;"><i class="icon-remove"></i></a>';
     diplome += '</div>';
     diplome += '</div>';
     $('#div_ancien_Diplome').append(diplome);
@@ -259,8 +262,8 @@ function Ajouter_Formation(_debut,_fin,_institut,_ville,_annee){
     formation += '<input type="text" id="fin_formation'+nb_formation+'" class="span3" placeholder="Fin" value="'+_fin+'" style="width : 80px; margin-right: 5px;">';
     formation += '<input type="text" id="annee_formation'+nb_formation+'" class="span3" placeholder="Année et description" value="'+_annee+'" style="width : 390px; margin-right: 5px;">';
     formation += '<input type="text" id="institut_formation'+nb_formation+'" class="span3" placeholder="Institut" value="'+_institut+'" style="width : 140px; margin-right: 5px;">';
-    formation += '<input type="text" id="ville_formation'+nb_formation+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;">';
-    formation += '<a href="javascript:Supprimer_formation('+nb_formation+');" class="icon-remove" style="margin-left : 20px;"></a>';
+    formation += '<input type="text" id="ville_formation'+nb_formation+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 140px;">';
+    formation += '<a href="javascript:Supprimer_formation('+nb_formation+');" class="btn btn-warning" style="margin-left : 10px;"><i class="icon-remove"></i></a>';
     formation += '</div>';
     formation += '</div>';
     $('#div_ancienne_Formation').append(formation);
@@ -319,7 +322,7 @@ function Ajouter_Langue(_id_langue_etudiant,_id_niveau,_id_certif,_score_certif)
         langue += '<input type="text" id="score'+nb_langue+'" class="span3" placeholder="Score" value="'+_score_certif+'" style="width : 80px; margin-left: 5px;">';
     }
    
-    langue += '<a href="javascript:Supprimer_langue('+nb_langue+');" class="icon-remove" style="margin-left : 20px;"></a>';
+    langue += '<a href="javascript:Supprimer_langue('+nb_langue+');" class="btn btn-warning" style="margin-left : 20px;"><i class="icon-remove"></i></a>';
     langue += '</div>';
     langue += '</div>';
     $('#div_ancienne_langue').append(langue);
@@ -389,7 +392,7 @@ function Ajouter_XP(_debut,_fin,_titre,_desc,_entreprise,_ville){
     xp += '<td><input type="text" id="titre_xp'+nb_xp+'" class="span3" placeholder="Titre" value="'+_titre+'" style="width : 420px;"></td>';
     xp += '<td><input type="text" id="entreprise_xp'+nb_xp+'" class="span3" placeholder="Entreprise" value="'+_entreprise+'" style="width : 200px;"></td>';
     xp += '<td><input type="text" id="ville_xp'+nb_xp+'" class="span3" placeholder="Ville" value="'+_ville+'" style="width : 150px;"></td>';
-    xp += '<td><a href="javascript:Supprimer_XP('+nb_xp+');" class="icon-remove" style="margin-left : 20px;"></a></td>';
+    xp += '<td><a href="javascript:Supprimer_XP('+nb_xp+');" class="btn btn-warning"><i class="icon-remove"></i></a></td>';
     xp += '<tr><td></td><td></td>';
     xp += '<td COLSPAN=3><textarea rows="4" id="desc_xp'+nb_xp+'" style="width : 830px;" placeholder="Description">'+_desc+'</textarea></td>';
     xp += '</tr></table></div>';

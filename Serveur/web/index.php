@@ -82,7 +82,13 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=admincv';
     $nom_module = 'cvtheque';
     $nom_page = 'admin';
-    $titre_module = 'Entreprises';
+    $titre_module = 'Administration';
+} elseif ($_GET['page'] == 'testcv') {
+    $titre_page = 'Administration CV';
+    $lien_module = 'index.php?page=testcv';
+    $nom_module = 'cvtheque';
+    $nom_page = 'test';
+    $titre_module = 'TEST';
 } elseif ($_GET['page'] == 'annuaire') {
     $titre_page = 'Annuaire';
     $lien_module = 'index.php?page=annuaire';
