@@ -1,4 +1,5 @@
 <?php
+
 /*
  * @author Loïc Gevrey
  *
@@ -6,13 +7,15 @@
  */
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-session_start();
+
 inclure_fichier('controleur', 'etudiant.class', 'php');
+
+
 if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
     $id_etudiant = $_GET['id_etudiant'];
     Etudiant::MettreEnVu($id_etudiant, $_SESSION['utilisateur']->getId(), 2);
 } elseif (Utilisateur_connecter('etudiant')) {
-    $id_etudiant = $_SESSION['utilisateur']->getId();
+    $id_etudiant = 1;
 } else {
     inclure_fichier('', '401', 'php');
     die();
@@ -34,6 +37,11 @@ $liste_competence = $etudiant->getCompetence();
 
 if ($cv == NULL) {
     $cv = new CV();
+} else {
+    if ($cv->getAgreement() == 0 && Utilisateur_connecter('entreprise')) {
+        inclure_fichier('', '401', 'php');
+        die();
+    }
 }
 if ($liste_diplome_etudiant == NULL) {
     $liste_diplome_etudiant = new CV_Diplome();
@@ -72,12 +80,12 @@ if ($nb_tot_xp > 0) {
         $experience = str_replace('#debut_xp', Protection_XSS($XP->getDebut()), $experience);
         $experience = str_replace('#fin_xp', Protection_XSS($XP->getFin()), $experience);
         $experience = str_replace('#description_xp', nl2br(Protection_XSS($XP->getDescription())), $experience);
-        if($nb_xp ==  $nb_tot_xp){
+        if ($nb_xp == $nb_tot_xp) {
             $experience = str_replace('#last', 'last', $experience);
-        }else{
+        } else {
             $experience = str_replace('#last', '', $experience);
         }
-        
+
         $experiences .= $experience;
     }
 }
@@ -137,25 +145,44 @@ if (count($liste_langue_etudiant) > 0) {
 $competences1 = '';
 $competences2 = '';
 $competences3 = '';
-if (count($liste_competence) > 0) {
+$nb_tot_competence = count($liste_competence);
+if ($nb_tot_competence > 0) {
     $colonne = 1;
+    $nb_competence = 0;
     foreach ($liste_competence as $competence) {
         if ($colonne == 1) {
             $competence1 = $tmp_competence;
             $competence1 = str_replace('#competence', Protection_XSS($competence->getNomCompetence()), $competence1);
+            if ($nb_competence + 3 >= $nb_tot_competence) {
+                $competence1 = str_replace('#last', 'last', $competence1);
+            } else {
+                $competence1 = str_replace('#last', '', $competence1);
+            }
+
             $competences1 .= $competence1;
             $colonne++;
-        }elseif($colonne == 2) {
+        } elseif ($colonne == 2) {
             $competence2 = $tmp_competence;
             $competence2 = str_replace('#competence', Protection_XSS($competence->getNomCompetence()), $competence2);
+            if ($nb_competence + 3 >= $nb_tot_competence) {
+                $competence2 = str_replace('#last', 'last', $competence2);
+            } else {
+                $competence2 = str_replace('#last', '', $competence2);
+            }
             $competences2 .= $competence2;
             $colonne++;
-        }else{
+        } else {
             $competence3 = $tmp_competence;
             $competence3 = str_replace('#competence', Protection_XSS($competence->getNomCompetence()), $competence3);
+            if ($nb_competence + 3 >= $nb_tot_competence) {
+                $competence3 = str_replace('#last', 'last', $competence3);
+            } else {
+                $competence3 = str_replace('#last', '', $competence3);
+            }
             $competences3 .= $competence3;
             $colonne = 1;
         }
+        $nb_competence++;
     }
 }
 

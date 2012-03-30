@@ -25,8 +25,10 @@ if ($authentification->isAuthentifie() == true) {
     echo 'Mail :  ' . $utilisateur->getMail() . '<br/>';
 }
 
+$id_utilisateur = 1;
+
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
+$etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
 ?>
 <div class="alert alert-error" id="div_erreur" style="display: none;"></div>
 
@@ -46,7 +48,7 @@ $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
                     <td>
                         <span>Ton CV est actuellement diffusé : <a href="javascript:Diffusion(0);">Arrêter sa diffusion</a></span><br/>
                         <?php
-                        $nb_entreprise_suivi = Etudiant::GetNbSuivi($_SESSION['utilisateur']->getId());
+                        $nb_entreprise_suivi = Etudiant::GetNbSuivi($id_utilisateur);
                         if ($nb_entreprise_suivi > 0) {
                             ?> 
                             <span>Ton CV est actuellement suivi par <?php echo $nb_entreprise_suivi ?> entreprise(s)</span>
