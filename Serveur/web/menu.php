@@ -46,9 +46,33 @@
 					<li class="nav-header"><i class="icon-star"></i> Evénements</li>
 					<li><a href="index.php?page=rifs">Rencontres IF</a></li>
 					<li><a href="index.php?page=inscription">Simulations d'entretiens</a></li>
-					<li><a href="#">Stages</a></li>	
 				</ul>
 			</li>
+			<?php
+			if( $authentification->isAuthentifie() && $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ADMIN ) {
+
+				?>
+					<li class="divider-vertical"></li>
+					<li class="dropdown">
+						<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-eye-open icon-white"></i>
+						Administration <b class="caret"></b></a>
+
+						<ul class="dropdown-menu">
+							<li class="nav-header"><i class="icon-user"></i> Utilisateurs</li>
+							<li><a href="#">Utilisateurs</a></li>
+							<li><a href="#">Journal</a></li>
+	
+							<li class="divider"></li>
+
+							<li class="nav-header"><i class="icon-cog"></i> Modules</li>
+							<li><a href="#">CV</a></li>
+							<li><a href="#">RIFs</a></li>
+							<li><a href="#">Simulations d'entretiens</a></li>
+						</ul>
+					</li>
+				<?php
+			}
+			?>
 
 			<li class="divider-vertical"></li>
 			<li class=""><a href="#"><i class="icon-info-sign icon-white"></i> A propos</a></li>
@@ -58,9 +82,6 @@
 			<li class="divider-vertical"></li>
 		  
 		</ul>
-		<form class="navbar-search pull-left" action="">
-			<input type="text" class="search-query span2" placeholder="Recherche">
-		</form>
 		
                 <script>
                     //Fonction permettant de changer le theme par le numéro

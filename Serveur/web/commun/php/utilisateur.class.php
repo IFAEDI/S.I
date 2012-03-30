@@ -5,15 +5,21 @@ inclure_fichier('commun', 'bd.inc', 'php');
 
 class Utilisateur {
 
-	//****************  Attributs  ******************//
+	/* Constantes liées aux utilisateurs */
+	const UTILISATEUR_ETUDIANT	= 0;
+	const UTILISATEUR_ENSEIGNANT	= 1;
+	const UTILISATEUR_ENTREPRISE	= 2;
+	const UTILISATEUR_ADMIN		= 3;
+
+	/****************  Attributs  ******************/
 	private $id;
 	private $login;
 	private $nom;
 	private $prenom;
 	private $annee;
 	private $mail;
-
 	private $premiereConnexion;
+	private $typeUtilisateur;
 
 
 	/**
@@ -64,6 +70,7 @@ class Utilisateur {
 		$this->annee = $result['annee'];
 		$this->mail = $result['mail'];
 		$this->premiereConnexion = $result['premiere_connexion'];
+		$this->typeUtilisateur = $result['type'];
 
 		return true;
 	}
@@ -103,6 +110,24 @@ class Utilisateur {
 		return true;
 	}
 
+	/**
+	* Change le type d'utilisateur
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function changeUtilisateurType( $type ) {
+
+		/* Requête de mise à jour */
+		$result = BD::executeModif( 'UPDATE UTILISATEUR SET type = :type WHERE id = :id', array( 'type' => $type, 'id' => $this->id ) );
+
+		if( $result == 0 ) {
+			return false;
+		}
+
+		$this->typeUtilisateur = $type;
+
+		return true;
+	}
+
 
 	/**
 	* Détermine si c'est la première connexion de l'utilisateur ou non
@@ -113,6 +138,11 @@ class Utilisateur {
 		return $this->premiereConnexion;
 	}
 
+	public function getTypeUtilisateur() {
+	
+		return $this->typeUtilisateur;
+	}
+
 	/**
 	* Retourne le nom d'utilisateur de l'utilisateur
 	*/
@@ -120,41 +150,25 @@ class Utilisateur {
 		return $this->login;
 	}
 
+	public function getId() {
+		return $this->id;
+	}
 
+	public function getNom() {
+		return $this->nom;
+	}
 
+	public function getPrenom() {
+		return $this->prenom;
+	}
 
+	public function getAnnee() {
+		return $this->annee;
+	}
 
-	public function estEtudiant() {
-        	//TODO
-	        return true;
-    	}
-
-    public function estEntreprise() {
-        //TODO
-        return true;
-    }
-
-    //****************  Getters & Setters  ******************//
-    public function getId() {
-        return $this->id;
-    }
-
-    public function getNom() {
-        return $this->nom;
-    }
-
-    public function getPrenom() {
-        return $this->prenom;
-    }
-
-    public function getAnnee() {
-        return $this->annee;
-    }
-
-    public function getMail() {
-        return $this->mail;
-    }
-	
+	public function getMail() {
+		return $this->mail;
+	}
 }
 
 ?>
