@@ -111,6 +111,16 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=stages';
     $nom_module = 'stages';
     $nom_page = 'stages';
+} elseif( $_GET['page'] == 'Administration_Utilisateurs' ) {
+	$titre_page  = 'Administration des Utilisateurs';
+	$lien_module = 'index.php?page=Administration_Utilisateurs';
+	$nom_module  = 'commun';
+	$nom_page    = 'admin_utilisateurs';
+} elseif( $_GET['page'] == 'Administration_Journal' ) {
+	$titre_page  = 'Journal d\'activité';
+	$lien_module = 'index.php?page=Administration_Journal';
+	$nom_module  = 'commun';
+	$nom_page    = 'admin_journal';
 } else {
     $titre_page = '404';
     $lien_module = '';

@@ -59,8 +59,8 @@
 
 						<ul class="dropdown-menu">
 							<li class="nav-header"><i class="icon-user"></i> Utilisateurs</li>
-							<li><a href="#">Utilisateurs</a></li>
-							<li><a href="#">Journal</a></li>
+							<li><a href="index.php?page=Administration_Utilisateurs">Utilisateurs</a></li>
+							<li><a href="index.php?page=Administration_Journal">Journal</a></li>
 	
 							<li class="divider"></li>
 
