@@ -42,7 +42,7 @@ class BD {
 
 		/* Initialisation */
 		$this->connection = null;
-		self::$derniereErreur = 'Aucune erreur.';
+		self::$derniereErreur = '';
 
 		try {
 
@@ -205,7 +205,9 @@ class BD {
 		return $resultat;
 	}
 
-
+	/**
+	* Retourne la dernière erreur qui est survenue lors d'une requête.
+	*/
 	public static function getDerniereErreur() {
 
 		return self::$derniereErreur;
