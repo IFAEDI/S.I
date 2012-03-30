@@ -14,14 +14,23 @@ if (!Utilisateur_connecter('etudiant')) {
 inclure_fichier('controleur', 'etudiant.class', 'php');
 inclure_fichier('cvtheque', 'accueil', 'js');
 
-echo "id utilisateur : ".$_SESSION['utilisateur']->getId();
+global $authentification;
+global $utilisateur;
+
+if ($authentification->isAuthentifie() == true) {
+    echo 'Prénom :  ' . $utilisateur->getPrenom() . '<br/>';
+    echo 'Nom :  ' . $utilisateur->getNom() . '<br/>';
+    echo 'ID :  ' . $utilisateur->getId() . '<br/>';
+    echo 'Annee :  ' . $utilisateur->getAnnee() . '<br/>';
+    echo 'Mail :  ' . $utilisateur->getMail() . '<br/>';
+}
 
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
 ?>
 <div class="alert alert-error" id="div_erreur" style="display: none;"></div>
 
- 
+
 
 <?php if ($etudiant == null) { ?>
     <div class='alert alert-error'>Oooooooh mais tu n'as pas de CV comme c'est dommage : 
