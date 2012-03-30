@@ -20,6 +20,8 @@ class Authentification {
 	const AUTH_CAS 		= 1;	
 	const AUTH_NORMAL	= 2;
 
+	public static $AUTH_TYPES = array( self::AUTH_CAS => 'CAS', self::AUTH_NORMAL => 'Classique' );
+
 	/* La même mais pour les indices de session */
 	const S_AUTH_METHOD	= 'AUTH_METHOD';
 	const S_IS_USER_AUTH	= 'IS_USER_AUTH';
