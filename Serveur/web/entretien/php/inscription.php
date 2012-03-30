@@ -13,27 +13,27 @@
 	  <div class="control-group" id="control_nom">
 		<label class="control-label">Nom</label>
 		<div class="controls">
-		  <input class="input-medium" type="text" id="nom"/>
+		  <input class="input-medium" type="text" id="nom_contact"/>
 		</div>
 	  </div>
 	  <div class="control-group" id="control_prenom">
 		<label class="control-label">Prenom</label>
 		<div class="controls">
-		  <input class="input-medium" type="text" id="prenom"/>
+		  <input class="input-medium" type="text" id="prenom_contact"/>
 		</div>
 	  </div>
-	  <div class="control-group" id="control_email">
+	  <div class="control-group" id="control_mail">
 		<label class="control-label" for="email">E mail</label>
 		<div class="controls">
 		  <div class="input-prepend">
-			<span class="add-on">@</span><input class="input-medium" id="email" type="text">
+			<span class="add-on">@</span><input class="input-medium" id="mail_contact" type="text">
 		  </div>
 		</div>
 	  </div>
 	  <div class="control-group">
 		<label class="control-label" for="telephone">Telephone</label>
 		<div class="controls">
-			<input class="input-small" type="text" id="telephone"/>
+			<input class="input-small" type="text" id="telephone_contact"/>
 		</div>
 	  </div>
 	  <!-- Partie relative a l'entreprise -->
@@ -102,9 +102,6 @@
 	  </tr>
 	</thead>
 	<tbody>
-	<td>Le Roux</td>
-	<td>Bill</td>
-	<td>bill.le.roux@laposte.fr</td>
 	</tbody>
 	</table>
 	<a class="offset7 actuator btn btn-primary" data-toggle="modal" href="#myModal">
@@ -125,24 +122,24 @@
 	<h3>Entretien</h3>
 	</div>
 	<div class="modal-body">
-	   <form class="form-horizontal" method="post" id="formParticipant" action="#">
-			<div class="control-group" id="control_nom">
+	   <form class="form-horizontal" method="post" id="form_intervenant" action="#">
+			<div class="control-group" id="control_nom_intervenant">
 			<label class="control-label">Nom</label>
 			<div class="controls">
-			  <input class="input-medium" type="text" id="nomParticipant"/>
+			  <input class="input-medium" type="text" id="nom_intervenant"/>
 			</div>
 		  </div>
-		  <div class="control-group" id="control_prenom">
+		  <div class="control-group" id="control_prenom_intervenant">
 			<label class="control-label">Prenom</label>
 			<div class="controls">
-			  <input class="input-medium" type="text" id="prenomParticipant"/>
+			  <input class="input-medium" type="text" id="prenom_intervenant"/>
 			</div>
 		  </div>
-		  <div class="control-group" id="control_email">
+		  <div class="control-group" id="control_mail_intervenant">
 			<label class="control-label" for="email">E mail</label>
 			<div class="controls">
 			  <div class="input-prepend">
-				<span class="add-on">@</span><input class="input-medium" id="emailParticipant" type="text">
+				<span class="add-on">@</span><input class="input-medium" id="mail_intervenant" type="text">
 			  </div>
 			</div>
 		  </div>

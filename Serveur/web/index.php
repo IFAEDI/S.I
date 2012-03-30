@@ -1,7 +1,6 @@
 <?php
 
 require_once dirname(__FILE__) . '/commun/php/base.inc.php';
-session_start();
 
 inclure_fichier( 'commun', 'authentification.class', 'php' );
 
@@ -25,7 +24,9 @@ if( $authentification->isAuthentifie() ) {
 
 	/* On récupère l'objet utilisateur associé */
 	$utilisateur = $authentification->getUtilisateur();
-        
+	if( $utilisateur == null ) {
+		$authentification->forcerDeconnexion();
+	}        
 }
 
 /******************************************* THEME ****************************************/
