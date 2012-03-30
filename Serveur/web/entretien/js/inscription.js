@@ -2,89 +2,81 @@ function valider(){
 	  var valide = true;
 	  //On test la valeur des champs du formulaire
 	  
-	  // NOM
-	  if(document.formInscription.nom.value != ""){
-		var div = document.getElementById("control_nom");
+	  // NOM CONTACT
+	  var div = document.getElementById("control_nom");
+	  if( $("#nom_contact").val() != ""){
 		div.className ="control-group success";
 	  }else{
-		  var div = document.getElementById("control_nom");
 		  div.className ="control-group error";
 		  valide = false;
 	  }
-	  // PRENOM
-	  if(document.formInscription.prenom.value != ""){
-		var div = document.getElementById("control_prenom");
+	  // PRENOM CONTACT
+	  var div = document.getElementById("control_prenom");
+	  if( $("#prenom_contact").val() != ""){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_prenom");
 		div.className ="control-group error";
 		valide = false;
 	  }
-	  // EMAIL
-	  if(document.formInscription.email.value != ""
-	  && verifMail(document.formInscription.email) ){
-		var div = document.getElementById("control_email");
+	  
+	  // MAIL CONTACT
+	  var div = document.getElementById("control_mail");
+	  if( $("#mail_contact").val() != "" && verifMail( $("#mail_contact").val() ) ){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_email");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  // ENTREPRISE
-	  if(document.formInscription.nomEntreprise.value != ""){
-		var div = document.getElementById("control_nomEntreprise");
+	  var div = document.getElementById("control_nomEntreprise");
+	  if( $("#nomEntreprise").val() != ""){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_nomEntreprise");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  // VILLE
-	  if(document.formInscription.villeEntreprise.value != ""){
-		var div = document.getElementById("control_villeEntreprise");
+	  var div = document.getElementById("control_villeEntreprise");
+	  if( $("#villeEntreprise").val() != ""){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_villeEntreprise");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  //DATE
-	  if(document.formInscription.date.value != ""){
-		var div = document.getElementById("control_date");
+	  var div = document.getElementById("control_date");
+	  if( $("#date").val() != ""){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_date");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  //HEURE DEBUT
-	  if(document.formInscription.heureDebut.value != "choix"){
-		var div = document.getElementById("control_heureDebut");
+	  var div = document.getElementById("control_heureDebut");
+	  if( $("#heureDebut").val() != "choix"){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_heureDebut");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  //HEURE FIN
-	  if(document.formInscription.heureFin.value != "choix"){
-		var div = document.getElementById("control_heureFin");
+	  var div = document.getElementById("control_heureFin");
+	  if( $("#heureFin").val() != "choix"){
 		div.className ="control-group success";
 	  }else{
-		var div = document.getElementById("control_heureFin");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  
 	  var retour = (valide == true ? true : false);
 	  return retour;
-	}
+}
 
 	// Permet de verifier l'email
 	function verifMail(champ)
 	{
 	   var regex = /^[a-zA-Z0-9._-]+@[a-z0-9._-]{2,}\.[a-z]{2,4}$/;
-	   if(!regex.test(champ.value))
+	   if(!regex.test(champ) )
 	   {
 		  return false;
 	   }
@@ -94,6 +86,40 @@ function valider(){
 	   }
 	}
 	
+
+function valider_intervenant(){
+	  var valide = true;
+	  //On test la valeur des champs du formulaire
+	  
+	  // NOM INTERVENANT
+	  var div = document.getElementById("control_nom_intervenant");
+	  if( $("#nom_intervenant").val() != ""){
+		div.className ="control-group success";
+	  }else{
+		  div.className ="control-group error";
+		  valide = false;
+	  }
+	  // PRENOM INTERVENANT
+	  var div = document.getElementById("control_prenom_intervenant");
+	  if( $("#prenom_intervenant").val() != ""){
+		div.className ="control-group success";
+	  }else{
+		div.className ="control-group error";
+		valide = false;
+	  }
+	  
+	  // MAIL INTERVENANT
+	  var div = document.getElementById("control_mail_intervenant");
+	  if( $("#mail_intervenant").val() != "" && verifMail( $("#mail_intervenant").val() ) ){
+		div.className ="control-group success";
+	  }else{
+		div.className ="control-group error";
+		valide = false;
+	  }
+	  
+	  var retour = (valide == true ? true : false);
+	  return retour;
+}
 	
 	
 	
@@ -104,7 +130,7 @@ function valider(){
 	// Si les controles sont bons on post
 	if( valider() != false){
 		$.post("entretien/ajax/inscription_post.cible.php",
-		{ prenom : prenom},
+		{ prenom : "prenom"},
 		function success(retour){
 				if(retour == "1" ){
 					alert('coucou');
@@ -116,10 +142,11 @@ function valider(){
 	});
 
 	
-	$("#formParticipant").submit( function() {
-		  var nom = $('#nomParticipant').val();
-		  var prenom = $('#prenomParticipant').val();
-		  var email = $('#emailParticipant').val();
+	$("#form_intervenant").submit( function() {
+		  var nom = $('#nom_intervenant').val();
+		  var prenom = $('#prenom_intervenant').val();
+		  var email = $('#mail_intervenant').val();
+		  if( valider_intervenant() == false ) return false;
 		  //On ajout le participant au tableau
 		  $("#tableParticipant").append('<tr><td>'+nom+'</td><td>'+prenom+'</td><td>'+email+'</td></tr>');
 		  return false;
