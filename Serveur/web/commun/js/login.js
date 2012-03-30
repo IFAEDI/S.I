@@ -89,7 +89,7 @@ function user_info_save() {
 	$( "#user_info_form fieldset" ).children( ".control-group" ).removeClass( "error" );
 
 	/* Vérifie si password existe ou pas */
-	if( password == void 0  ) {
+	if( password == void 0  || password.length == 0 ) {
 		/* Il n'existe pas alors on lui met une vide */
 		password = '';
 	}
