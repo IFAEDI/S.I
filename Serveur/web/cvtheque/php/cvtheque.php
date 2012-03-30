@@ -6,8 +6,8 @@
  */
 
 if (!Utilisateur_connecter('entreprise')) {
-    inclure_fichier('', '401', 'php');
-    die;
+    //inclure_fichier('', '401', 'php');
+    //die;
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');

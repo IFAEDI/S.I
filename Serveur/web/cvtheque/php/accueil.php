@@ -5,6 +5,7 @@
  *
  */
 
+
 if (!Utilisateur_connecter('etudiant')) {
     inclure_fichier('', '401', 'php');
     die;
@@ -12,6 +13,8 @@ if (!Utilisateur_connecter('etudiant')) {
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 inclure_fichier('cvtheque', 'accueil', 'js');
+
+echo "id utilisateur : ".$_SESSION['utilisateur']->getId();
 
 $etudiant = new Etudiant();
 $etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());

@@ -24,6 +24,9 @@ if( $authentification->isAuthentifie() ) {
 
 	/* On récupère l'objet utilisateur associé */
 	$utilisateur = $authentification->getUtilisateur();
+	if( $utilisateur == null ) {
+		$authentification->forcerDeconnexion();
+	}        
 }
 
 /******************************************* THEME ****************************************/
