@@ -19,7 +19,7 @@ if (isset($_GET['id_etudiant']) && Utilisateur_connecter('entreprise')) {
 }
 
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID($_SESSION['utilisateur']->getId());
+$etudiant = Etudiant::GetEtudiantByID($id_etudiant);
 
 if ($etudiant == NULL) {
     $etudiant = new Etudiant();
