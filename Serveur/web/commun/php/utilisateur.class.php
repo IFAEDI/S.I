@@ -1,34 +1,17 @@
 <?php
 
 require_once dirname(__FILE__) . '/base.inc.php';
-inclure_fichier('commun', 'bd.inc', 'php');
+inclure_fichier('commun', 'personne.class', 'php');
 
 class Utilisateur {
-
-	/* Constantes liées aux utilisateurs */
-	const UTILISATEUR_ETUDIANT	= 0;
-	const UTILISATEUR_ENSEIGNANT	= 1;
-	const UTILISATEUR_ENTREPRISE	= 2;
-	const UTILISATEUR_ADMIN		= 3;
-	const UTILISATEUR_AEDI		= 4;
-
-	public static $UTILISATEUR_TYPES = array( self::UTILISATEUR_ETUDIANT => 'Etudiant',
-				self::UTILISATEUR_ENSEIGNANT => 'Enseignant',
-				self::UTILISATEUR_ENTREPRISE => 'Entreprise',
-				self::UTILISATEUR_ADMIN => 'Administrateur',
-				self::UTILISATEUR_AEDI => 'Membre de l\'AEDI' );
 
 	/****************  Attributs  ******************/
 	private $id;
 	private $login;
-	private $nom;
-	private $prenom;
-	private $annee;
-	private $mail;
 	private $service;
-	private $premiereConnexion;
-	private $typeUtilisateur;
+	private $banni;
 
+	private $personne;
 
 	/**
 	* Constructeur
@@ -41,6 +24,8 @@ class Utilisateur {
 
 		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
 		if( $result == false ) {
+
+			echo "pouet";
 
 			/* On s'en occupe donc ! */
 			/* Ajout en base */
@@ -56,6 +41,9 @@ class Utilisateur {
 				throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
 			}
 		}
+
+		/* Et maintenant on crée l'objet Personne associé */
+		$this->personne = new Personne( $this );
 	}
 
 	/**
@@ -68,18 +56,14 @@ class Utilisateur {
 		/* Requête à la base pour récupérer le bon utilisateur et construire l'objet */
 		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
 
-		if( $result == null )
+		if( $result == null ) {
 			return false;
+		}
 
-		$this->id = $result['id'];
-		$this->login = $result['login'];
-		$this->nom = $result['nom'];
-		$this->prenom = $result['prenom'];
-		$this->annee = $result['annee'];
-		$this->mail = $result['mail'];
-		$this->service = $result['service'];
-		$this->premiereConnexion = $result['premiere_connexion'];
-		$this->typeUtilisateur = $result['type'];
+		$this->id = $result['ID_UTILISATEUR'];
+		$this->login = $result['LOGIN'];
+		$this->service = $result['AUTH_SERVICE'];
+		$this->banni = $result['BANNI'];
 
 		return true;
 	}
@@ -91,67 +75,18 @@ class Utilisateur {
 	public function changePassword( $mdp ) {
 
 		/* Requête à la base */
-		$result = BD::executeModif( 'UPDATE UTILISATEUR SET mdp = :mdp WHERE id = :id', array( 'mdp' => $mdp, 'id' => $this->id ) );
+		$result = BD::executeModif( 'UPDATE UTILISATEUR SET PASSWD = :mdp WHERE ID_UTILISATEUR = :id', 
+							array( 'mdp' => $mdp, 'id' => $this->id ) );
 
 		return ($result == 1);
 	}
 
-	/**
-	* Change les informations personnelles de l'utilisateur
-	* @return Vrai si tout est ok, faux sinon
-	*/
-	public function changeInfoPerso( $nom, $prenom, $mail, $annee ) {
-
-		/* Requête à la base */
-		$result = BD::executeModif( 'UPDATE UTILISATEUR SET nom = :nom, prenom = :prenom, annee = :annee, mail = :mail, premiere_connexion = 0 WHERE id = :id',
-			array( 'nom' => $nom, 'prenom' => $prenom, 'annee' => $annee, 'mail' => $mail, 'id' => $this->id ) );
-
-		if( $result == 0 ) {
-			return false;
-		}
-
-		$this->nom = $nom;
-		$this->prenom = $prenom;
-		$this->annee = $annee;
-		$this->mail = $mail;
-		$this->premiereConnexion = false;
-
-		return true;
-	}
 
 	/**
-	* Change le type d'utilisateur
-	* @return Vrai si tout est ok, faux sinon
+	* Retourne la personne associée à l'utilisateur
 	*/
-	public function changeUtilisateurType( $type ) {
-
-		/* Requête de mise à jour */
-		$result = BD::executeModif( 'UPDATE UTILISATEUR SET type = :type WHERE id = :id', array( 'type' => $type, 'id' => $this->id ) );
-
-		if( $result == 0 ) {
-			return false;
-		}
-
-		$this->typeUtilisateur = $type;
-
-		return true;
-	}
-
-
-	/**
-	* Détermine si c'est la première connexion de l'utilisateur ou non
-	* @return Vrai si c'est le cas, faux sinon
-	*/
-	public function premiereConnexion() {
-		return $this->premiereConnexion;
-	}
-
-	/**
-	* Retourne le type d'utilisateur sous forme d'entier
-	*/
-	public function getTypeUtilisateur() {
-
-		return $this->typeUtilisateur;
+	public function getPersonne() {
+		return $this->personne;
 	}
 
 	/**
@@ -161,26 +96,16 @@ class Utilisateur {
 		return $this->login;
 	}
 
+	/**
+	* Retourne l'identifiant de l'utilisateur
+	*/
 	public function getId() {
 		return $this->id;
 	}
 
-	public function getNom() {
-		return $this->nom;
-	}
-
-	public function getPrenom() {
-		return $this->prenom;
-	}
-
-	public function getAnnee() {
-		return $this->annee;
-	}
-
-	public function getMail() {
-		return $this->mail;
-	}
-
+	/**
+	* Retourne le type d'authentification
+	*/
 	public function getService() {
 		return $this->service;
 	}
