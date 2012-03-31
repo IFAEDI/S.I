@@ -1,5 +1,5 @@
 <!-- Formulaire pour l'inscription au RIFs -->
-<form class="form-horizontal" onsubmit="return valider()" id="formInscriptionRif" name="formInscription" method="post">
+<form class="form-horizontal" onsubmit="return soumettreFormulaire()" id="formInscription" name="formInscription" method="post">
 	<legend><h1>Formulaire d'inscription</h1></legend>
 	<fieldset id="infoEntreprise">
 		<legend>Informations sur l'entreprise</legend>
@@ -13,14 +13,14 @@
 		<div class="control-group" id="control_nomResponsable">
 			<label class="control-label" for="nomResponsable">Nom du responsable *</label>
 			<div class="controls">
-				<input class="input-medium span" type="text" id="nomResponsable" placeholder="Nom" required />
+				<input class="input-medium span" type="text" id="nomResponsable" placeholder="Nom" />
 
 			</div>
 		</div>
 		<div class="control-group" id="control_prenomResponsable">
 			<label class="control-label" for="prenomResponsable">Nom du responsable *</label>
 			<div class="controls">
-				<input class="input-medium span" type="text" id="prenomResponsable" placeholder="Prénom" required/>
+				<input class="input-medium span" type="text" id="prenomResponsable" placeholder="Prénom" />
 			</div>
 		</div>
 		<div class="row-fluid">
@@ -143,7 +143,7 @@
 	</fieldset>
 	<fieldset id="infoComplementaire">
 		<legend>Informations Complémentaires</legend>
-		<span class="comment"><em>* : Champ obligatoire</em></span>
+		<span class="comment"><em>* : Champ obligatoireFF</em></span>
 		<div class="control-group" id="control_attente">
 			<label>Quelles sont vos attentes concernant votre participation aux rencontres IF?</label>
 			<div class="controls">
