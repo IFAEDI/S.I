@@ -1,5 +1,13 @@
 <?php
-	inclure_fichier('stages', 'stages', 'css');
+
+global $authentification, $utilisateur;
+if ($authentification->isAuthentifie() == false || 
+        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT) {
+    inclure_fichier('', '401', 'php');
+    die;
+}
+
+inclure_fichier('stages', 'stages', 'css');
 ?>
 
 <script src='/stages/js/stages.js'></script>

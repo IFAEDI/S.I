@@ -9,13 +9,11 @@ global $authentification;
 global $utilisateur;
 
 if ($authentification->isAuthentifie() == false || (
-        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
-        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ETUDIANT)) {
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT)) {
     inclure_fichier('', '401', 'php');
     die;
 }
-
-
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 inclure_fichier('cvtheque', 'accueil', 'js');
