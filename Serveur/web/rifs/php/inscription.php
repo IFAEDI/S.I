@@ -143,7 +143,7 @@
 	</fieldset>
 	<fieldset id="infoComplementaire">
 		<legend>Informations Complémentaires</legend>
-		<span class="comment"><em>* : Champ obligatoireFF</em></span>
+		<span class="comment"><em>* : Champ obligatoire</em></span>
 		<div class="control-group" id="control_attente">
 			<label>Quelles sont vos attentes concernant votre participation aux rencontres IF?</label>
 			<div class="controls">

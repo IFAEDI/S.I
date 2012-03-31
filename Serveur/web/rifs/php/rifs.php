@@ -1,4 +1,4 @@
-dsqd<div class=row-fluid>
+<div class=row-fluid>
 	<div class="span12">
 		<div class="row-fluid">
 			<div id="presentationRif" class="span6">
