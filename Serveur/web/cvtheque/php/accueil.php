@@ -32,7 +32,7 @@ $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
 
 
 <?php if ($etudiant == null) { ?>
-    <div class='alert alert-error'>Oooooooh mais tu n'as pas de CV comme c'est dommage : 
+    <div class='alert alert-error'>Tu n'as pas encore généré ton CV -  
         <a class="btn btn-success" href="index.php?page=edit_cv">Créer mon CV</a></div>
     <?php
 } else {
