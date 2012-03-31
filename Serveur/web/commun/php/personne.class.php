@@ -36,10 +36,15 @@ class Personne {
 	* @throws Exception si impossibilité de créer la personne
 	*/
 	public function __construct( $utilisateur ) {
-        
+
 		$this->utilisateur = $utilisateur;
 
-		$result = $this->_fetchData( $this->utilisateur->getId() );
+		/* Avec un utilisateur null, on ira pas loin donc on s'arrête là. */
+		if( $utilisateur == null ) return;
+
+
+		$id_utilisateur = $this->utilisateur->getId();		
+		$result = $this->_fetchDataByUserID( $id_utilisateur );
 
 		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
 		if( $result == false ) {
@@ -53,7 +58,7 @@ class Personne {
 			} 
 
 			/* Et on rappelle pour fetcher les éléments */
-			$result = $this->_fetchData( $login );
+			$result = $this->_fetchDataByUserID( $login );
 			if( $result == false ) {
 				throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
 			}
@@ -65,13 +70,35 @@ class Personne {
 	* $id : Identifiant de l'utilisateur rattachée à la personne à qui on doit récupérer les données
 	* @return True si tout est ok, false sinon
 	*/
-	private function _fetchData( $id ) {
+	private function _fetchDataByUserID( $id ) {
 
 		/* Requête à la base pour récupérer la bonne personne et construire l'objet */
 		$result = BD::executeSelect( 'SELECT * FROM PERSONNE WHERE ID_UTILISATEUR = :id', array( 'id' => $id ), BD::RECUPERER_UNE_LIGNE );
 
 		if( $result == null )
 			return false;
+
+		return $this->_autoComplete( $result );
+	}
+
+	/**
+        * Fonction récupérant tous les attributs de la personne
+        * $id : Identifiant de la personne à qui on doit récupérer les données
+        * @return True si tout est ok, false sinon
+        */
+        private function _fetchDataByPersonID( $id ) {
+
+                /* Requête à la base pour récupérer la bonne personne et construire l'objet */
+                $result = BD::executeSelect( 'SELECT * FROM PERSONNE WHERE ID_PERSONNE = :id', array( 'id' => $id ), BD::RECUPERER_UNE_LIGNE );
+
+                if( $result == null )
+                        return false;
+
+                return $this->_autoComplete( $result );
+        }
+
+
+	private function _autoComplete( $result ) {
 
 		$this->id = $result['ID_PERSONNE'];
 		$this->nom = $result['NOM'];
@@ -109,6 +136,8 @@ class Personne {
 
 		return true;
 	}
+
+	
 
 	/**
 	* Change les informations personnelles de l'utilisateur
@@ -254,26 +283,41 @@ class Personne {
 	}
 
 	/**
-	* Récupère l'ensemble des utilisateurs en base
+	* Récupère l'ensemble des personnes qui ont le rôle passé en paramètre
 	* @return Un tableau d'instances
 	* @throws Une exception en cas d'erreur
 	*/
-	public static function RecupererTousLesUtilisateurs() {
+	public static function getPersonnesParRole( $role ) {
 
 		$obj = array();
 
-		/* Requête à la base pour récupérer les logins et construire les objets */
-		$result = BD::executeSelect( 'SELECT login FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
+		/* Requête à la base pour récupérer les  et construire les objets */
+		$result = BD::executeSelect( 'SELECT ID_PERSONNE FROM PERSONNE WHERE ROLE = :role', array( 'role' => $role ), BD::RECUPERER_TOUT );
 
 		$i = 0;
 		foreach( $result as $row ) {
 
-			$obj[$i] = new Utilisateur( $row['login'] );
+			$obj[$i] = new Personne( null );
+			$obj[$i]->_fetchDataByPersonID( $row['ID_PERSONNE'] );
 			$i++;
 		}
 
 		return $obj;
 	}
+
+	/**
+        * Récupère une personne bien précise
+	* $id : L'identifiant de la personne à récupérer
+        * @return L'instance de la personne concernée ou null
+        * @throws Une exception en cas d'erreur
+        */
+        public static function getPersonneParID( $id ) {
+
+		$p = new Personne( null );
+		$p->_fetchDataByPersonID( $id );
+
+                return $p;
+        }
 }
 
 ?>
