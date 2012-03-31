@@ -51,14 +51,15 @@ class Personne {
 
 			/* On s'en occupe donc ! */
 			/* Ajout en base */
-			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
+			$result = BD::executeModif( 'INSERT INTO PERSONNE(NOM, ID_UTILISATEUR) VALUES( :nom, :id )', 
+					array( 'nom' => $this->utilisateur->getLogin(), 'id' => $id_utilisateur ) );
 
 			if( $result == 0 ) {
 				throw new Exception( 'Impossible d\'insérer le nouvel utilisateur en base.' );
 			} 
 
 			/* Et on rappelle pour fetcher les éléments */
-			$result = $this->_fetchDataByUserID( $login );
+			$result = $this->_fetchDataByUserID( $id_utilisateur );
 			if( $result == false ) {
 				throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
 			}
