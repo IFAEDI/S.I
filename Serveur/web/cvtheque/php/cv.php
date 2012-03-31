@@ -45,6 +45,11 @@ if (isset($_GET['id_etudiant']) &&
     die();
 }
 
+if ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getId()) != 1) {
+    inclure_fichier('', '401', 'php');
+    die;
+}
+
 
 
 $etudiant = new Etudiant();
