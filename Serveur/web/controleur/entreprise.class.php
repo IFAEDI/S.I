@@ -14,122 +14,150 @@ inclure_fichier('commun', 'bd.inc', 'php');
 
 class Entreprise {
 
-    //****************  Attributs  ******************//
-    private $ID;
-    private $NOM;
-    private $DESCRIPTION;
-    private $SECTEUR;
+	//****************  Attributs  ******************//
+	private $ID_ENTREPRISE;
+	private $NOM;
+	private $DESCRIPTION;
+	private $SECTEUR;
 	private $COMMENTAIRE;
-	private $ID_VILLE;
 
+	//****************  Fonctions statiques  ******************//
+	/**
+	* Récupère une entreprise via son ID
+	* $_id : Identifiant de l'entreprise à récupérer
+	* @return L'instance de l'entreprise si tout est ok, ou NULL
+	* @throws Une exception en cas d'erreur
+	*/
+	public static function GetEntrepriseByID($_id) {
 
+		if (is_numeric($_id)) {
+			return BD::executeSelect('SELECT * FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', 
+						array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__ );
+		}
 
-    //****************  Fonctions statiques  ******************//
-    // Récuperation de l'objet Entreprise par l'ID
-    public static function GetEntrepriseByID($_id) {
-        if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM Entreprise WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
-        }
-        return NULL;
-    }
+		return NULL;
+	}
 
-	// Récuperation des ids et noms de l'ensemble des entreprises, ordonné alphabétiquement
+	/**
+	* Récuperation des ids et noms de l'ensemble des entreprises, ordonné alphabétiquement
+	* @return Un tableau d'instance ou NULL s'il n'a pas été possible d'en récupérer
+	* @throws Une exception en cas d'erreur au niveau des requêtes
+	*/
 	public static function GetListeEntreprises() {
-        return BD::Prepare('SELECT ID, NOM FROM Entreprise ORDER BY NOM', array(), BD::RECUPERER_TOUT);
-    }
 
-	// Suppression d'une entreprise par ID
-    public static function SupprimerEntrepriseByID($_id) {
-        if (is_numeric($_id)) {
-            BD::Prepare('DELETE FROM Entreprise WHERE ID = :id', array('id' => $_id));
-        }
-    }
+		$obj = array();
 
-	// Ajout ($_id <= 0) ou édition ($_id > 0) d'une entreprise
-    public static function UpdateEntreprise($_id, $_nom, $_desc, $_secteur, $_com, $_id_ville) {
+		/* Tentative de sélection de tous les ID ordonnés par nom */
+		$result = BD::executeSelect( 'SELECT ID_ENTREPRISE FROM ENTREPRISE ORDER BY NOM', array(), BD::RECUPERER_TOUT );
+		if( $result == null ) {
+			return null;
+		}
 
-        if ($_id > 0 && is_numeric($_id)) {
-			$info = array(
-				'id' => $_id,
-				'nom' => $_nom,
-				'description' => $_desc,
-				'secteur' => $_secteur,
-				'commentaire' => $_com,
-				'id_ville' => $_id_ville,
-			);
+		/* Pour chacun, on construit l'objet */
+		$i = 0;
+		foreach( $result as $row ) {
 
-            //Si l'etudiant à déjà un CV
-            BD::Prepare('UPDATE Entreprise SET 
-                    NOM = :nom,
-                    DESCRIPTION = :description,
-					SECTEUR = :secteur,
-                    COMMENTAIRE = :commentaire,
-                    ID_VILLE = :id_ville
-                    WHERE ID = :id', $info);
-            return $_id;
-        } else {
-			$info = array(
-				'nom' => $_nom,
-				'description' => $_desc,
-				'secteur' => $_secteur,
-				'commentaire' => $_com,
-				'id_ville' => $_id_ville,
-			);
+			$obj[$i] = self::GetEntrepriseByID( $row['ID_ENTREPRISE'] );
+			$i++;
+		}
 
-            BD::Prepare('INSERT INTO Entreprise (NOM, DESCRIPTION, SECTEUR, COMMENTAIRE, ID_VILLE) VALUES (
-                    :nom,
-                    :description,
-					:secteur,
-                    :commentaire,
-                    :id_ville)'
-                    , $info);
+		return $obj;
+	}
 
-            $id = BD::GetConnection()->lastInsertId();
-            if ($id > 0) {
-                return $id;
-            } else {
-                echo "Erreur 2 veuillez contacter l'administrateur du site";
-                return;
-            }
-        }
-    }
+	/**
+	* Suppression d'une entreprise par ID
+	* $_id : Identifiant de l'entreprise à supprimer
+	* @return Vrai si tout est ok, faux sinon
+	* @throws Une exception en cas d'erreur au niveau de la base
+	*/
+	public static function SupprimerEntrepriseByID($_id) {
 
-    //****************  Fonctions  ******************//
+		if(! is_numeric($_id) ) {
+			return false;
+		}
 
+		$result = BD::executeModif('DELETE FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', array('id' => $_id));
+		/* S'il y a 0 champs modifiés, bizarre... */
+		if( $result == 0 ) {
+			return false;
+		}
 
-    //****************  Getters & Setters  ******************//
-    public function getId() {
-        return $this->ID;
-    }
+		return true;
+	}
 
-    public function getNom() {
-        return $this->NOM;
-    }
+	/**
+	* Ajout ($_id <= 0) ou édition ($_id > 0) d'une entreprise
+	* @return L'identifiant de l'entreprise ou false en cas d'erreur
+	* @throws Une exception en cas d'erreur venant de la base
+	*/
+	public static function UpdateEntreprise( $_id, $_nom, $_desc, $_secteur, $_com ) {
 
-    public function getDescription() {
-        return $this->DESCRIPTION;
-    }
+		/* $_id > 0, on est dans le cas de la mise à jour d'une entreprise */
+		if( $_id > 0 ) {
+
+			/* Préparation du tableau */
+			$info = array( 'id' => $_id, 'nom' => $_nom, 'desc' => $_desc, 'secteur' => $_secteur, 'commentaire' => $_com );
+
+			/* On execute notre requête */
+			$result = BD::executeModif( 'UPDATE ENTREPRISE SET NOM = :nom, DESCRIPTION = :desc, SECTEUR = :secteur, COMMENTAIRE = :commentaire WHERE ID_ENTREPRISE = :id', $info );
+
+			if( $result == 0 ) {
+				return false;
+			}
+
+		}
+		/* Sinon on est dans le cas de l'ajout */
+		else {
+			/* Préparation du tableau associatif */
+			$info = array( 'nom' => $_nom, 'desc' => $_desc, 'secteur' => $_secteur, 'commentaire' => $_com );
+
+			/* Execution de la requête */
+			$result = BD::executeModif( 'INSERT INTO ENTREPRISE( NOM, DESCRIPTION, SECTEUR, COMMENTAIRE) VALUES ( :nom, :desc, :secteur, :commentaire )', $info);
+
+			if( $result == 0 ) {
+				return false;
+			}
+
+			/* On récupère l'ID qui a été affecté */
+			$_id = BD::GetConnection()->lastInsertId();
+		}
+
+		return $_id;
+	}
+
+	//****************  Getters & Setters  ******************//
+	public function getId() {
+		return $this->ID;
+	}
+
+	public function getNom() {
+		return $this->NOM;
+	}
+
+	public function getDescription() {
+		return $this->DESCRIPTION;
+	}
     
-    public function getSecteur() {
-        return $this->SECTEUR;
-    }
+	public function getSecteur() {
+		return $this->SECTEUR;
+	}
 
-    public function getCommentaire() {
-        return $this->COMMENTAIRE;
-    }
+	public function getCommentaire() {
+		return $this->COMMENTAIRE;
+	}
 
-    public function getIdVille() {
-        return $this->ID_VILLE;
-    }
-	
-	public function toarrayObject() {
+	/**
+	* Retourne un tableau avec tous les attributs
+	* @return Un tableau avec les attributs
+	*/
+	public function toArrayObject() {
 		$arrayEntr = array();
 		$arrayEntr['id'] = intval($this->ID);
 		$arrayEntr['nom'] = $this->NOM;
 		$arrayEntr['description'] = $this->DESCRIPTION;
 		$arrayEntr['secteur'] = $this->SECTEUR;
-		$arrayEntr['id_ville'] = intval($this->ID_VILLE);
 		$arrayEntr['commentaire'] = $this->COMMENTAIRE;
+
 		return $arrayEntr;
 	}
 }

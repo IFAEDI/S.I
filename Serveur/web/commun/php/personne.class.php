@@ -27,6 +27,7 @@ class Personne {
 	private $premiereConnexion;
 	private $role;
 
+	private $idUtilisateur;
 	private $utilisateur;
 
 
@@ -79,7 +80,8 @@ class Personne {
 		if( $result == null )
 			return false;
 
-		return $this->_autoComplete( $result );
+		$this->_autoComplete( $result );
+		return true;
 	}
 
 	/**
@@ -95,10 +97,14 @@ class Personne {
                 if( $result == null )
                         return false;
 
-                return $this->_autoComplete( $result );
+                $this->_autoComplete( $result );
+		return true;
         }
 
-
+	/**
+	* Recopie le résultat d'une requête SELECT dans les attributs de l'instance
+	* $result : Le result set d'une requête SELECT contenant les informations de la personne
+	*/
 	private function _autoComplete( $result ) {
 
 		$this->id = $result['ID_PERSONNE'];
@@ -106,6 +112,7 @@ class Personne {
 		$this->prenom = $result['PRENOM'];
 		$this->role = $result['ROLE'];
 		$this->premiereConnexion = $result['PREMIERE_CONNEXION'];
+		$this->idUtilisateur = $result['ID_UTILISATEUR'];
 
 		/* Récupération des adresses mails associées */
 		$result = BD::executeSelect( 'SELECT * FROM MAIL WHERE ID_PERSONNE = :id ORDER BY PRIORITE',
@@ -134,11 +141,7 @@ class Personne {
                                 $i++;
                         }
 		}
-
-		return true;
 	}
-
-	
 
 	/**
 	* Change les informations personnelles de l'utilisateur
@@ -281,6 +284,27 @@ class Personne {
 
 	public function getTelephones() {
 		return $this->telephones;
+	}
+
+	/**
+	* Récupérer le compte utilisateur associé
+	*/
+	public function getUtilisateur() {
+
+		/* Si la personne a bien un compte utilisateur associé mais qui n'est pas instancié */
+		if( isset($this->idUtilisateur) && $this->utilisateur == null ) {
+
+			/* On s'occupe de l'instanciation */
+			$this->utilisateur = new Utilisateur( null );
+			$res = $this->utilisateur->recupererUtilisateur( $this->idUtilisateur, $this );
+
+			/* Là il y a un souci donc on cherche pas plus loin... */
+			if( $res == false ) {
+				$this->utilisateur == null;
+			}
+		}
+
+		return $this->utilisateur;
 	}
 
 	/**

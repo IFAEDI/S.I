@@ -20,6 +20,9 @@ class Utilisateur {
 	*/
 	public function __construct( $login ) {
         
+		/* Le login est null, on crée un objet vide */
+		if( $login == null ) return;
+
 		$result = $this->_fetchData( $login );
 
 		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
@@ -58,13 +61,46 @@ class Utilisateur {
 		if( $result == null ) {
 			return false;
 		}
+	
+		$this->_autoComplete( $result );
+		return true;
+	}
+
+	/**
+	* Recupère un utilisateur associé à une personne
+	* $id : L'identifiant de l'utilisateur à rechercher
+	* $personne : Une instance de la classe personne (optionnel)
+	* @return True si un utilisateur a été trouvé, false sinon
+	*/
+	public function recupererUtilisateur( $id, $personne = null ) {
+
+		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE ID_UTILISATEUR = :id', array( 'id' => $id ) );
+
+		if( $result == null ) {
+			return false;
+		}
+
+		$this->_autoComplete( $result );
+
+		/* S'il n'y a pas de personne associée, on la crée pour être consistant */
+		if( $personne == null ) {
+			$personne = new Personne( $this );
+		}
+
+		$this->personne = $personne;
+		return true;
+	}
+
+	/**
+	* Met à jour les attributs de l'instance avec les données récupérées par la requête
+	* $result : Un result set contenant les résultats d'une requête SELECT
+	*/
+	private function _autoComplete( $result ) {
 
 		$this->id = $result['ID_UTILISATEUR'];
-		$this->login = $result['LOGIN'];
-		$this->service = $result['AUTH_SERVICE'];
-		$this->banni = $result['BANNI'];
-
-		return true;
+                $this->login = $result['LOGIN'];
+                $this->service = $result['AUTH_SERVICE'];
+                $this->banni = $result['BANNI'];
 	}
 
 	/**
