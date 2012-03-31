@@ -25,11 +25,10 @@ class Utilisateur {
 		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
 		if( $result == false ) {
 
-			echo "pouet";
-
 			/* On s'en occupe donc ! */
 			/* Ajout en base */
-			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
+			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(LOGIN, PASSWD, AUTH_SERVICE) VALUES( :login, NULL, :service )', 
+				array( 'login' => $login, 'service' => Authentification::AUTH_CAS ) );
 
 			if( $result == 0 ) {
 				throw new Exception( 'Impossible d\'insérer le nouvel utilisateur en base.' );
