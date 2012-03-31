@@ -70,7 +70,7 @@ class Authentification {
 
 		/* Requête à la base de données pour essayer de trouver l'utilisateur */
 		try {
-			$result = BD::executeSelect( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd AND SERVICE = :service', array( ':login' => $login, ':passwd' => $mdp, ':service' => self::AUTH_NORMAL ) );
+			$result = BD::executeSelect( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND PASSWD = :passwd AND AUTH_SERVICE = :service', array( ':login' => $login, ':passwd' => $mdp, ':service' => self::AUTH_NORMAL ) );
 		}
 		catch( Exception $e ) {
 
@@ -85,7 +85,6 @@ class Authentification {
 
 		/* On regarde que l'on a bien un objet et on fait la vérification */
 		if( $result == null ) {
-
 			return self::ERR_BD;
 		}
 

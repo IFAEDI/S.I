@@ -83,8 +83,6 @@ function user_info_save() {
 	var password = $( "#user_info_form #password" ).val();
 	var nom	     = $( "#user_info_form #nom" ).val();
 	var prenom   = $( "#user_info_form #prenom" ).val();
-	var mail     = $( "#user_info_form #mail" ).val();
-	var annee    = $( "#user_info_form #annee" ).val();
 
 	$( "#user_info_form fieldset" ).children( ".control-group" ).removeClass( "error" );
 
@@ -98,18 +96,51 @@ function user_info_save() {
 		password = hex_sha1(password);
 	}
 
+	/* On formatte la liste des mails et leurs libellés */
+        var mails_array = [];
+        var i = 0;
+        $( "#user_info_form .libelle_mail" ).each( function() {
+
+                mails_array[i] = [$(this).val(), ''];
+                i++;
+        } );
+
+	var i = 0;
+	$( "#user_info_form .mail" ).each( function() {
+
+		mails_array[i][1] = $(this).val();
+		i++;
+	} );
+
+	/* On formatte la liste des téléphones et leurs libellés */
+        var telephones_array = [];
+        var i = 0;
+        $( "#user_info_form .libelle_telephone" ).each( function() {
+
+                telephones_array[i] = [$(this).val(), ''];
+                i++;
+        } );
+
+        var i = 0;
+        $( "#user_info_form .telephone" ).each( function() {
+
+                telephones_array[i][1] = $(this).val();
+                i++;
+        } );
+
+
 	/* Préparation des données à balancer */
 	$.ajax( {
 		type: "GET",
                 dataType: "json",
                 url: "commun/ajax/login.cible.php",
                 data: { 
-			action  : "user_info_save",
-			password: password, 
-			nom     : nom,
-			prenom  : prenom,
-			mail    : mail,
-			annee   : annee
+			action     : "user_info_save",
+			password   : password, 
+			nom        : nom,
+			prenom     : prenom,
+			mails      : mails_array,
+			telephones : telephones_array
 		},
                 success: function( msg ) {
 

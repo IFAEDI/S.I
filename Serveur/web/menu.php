@@ -49,7 +49,7 @@
 				</ul>
 			</li>
 			<?php
-			if( $authentification->isAuthentifie() && $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ADMIN ) {
+			if( $authentification->isAuthentifie() && $utilisateur->getPersonne()->getRole() == Personne::ADMIN ) {
 
 				?>
 					<li class="divider-vertical"></li>
@@ -105,7 +105,7 @@
 				if( $authentification->isAuthentifie() ) {
 					echo '<a data-toggle="modal" href="#user_info_dialog">';
 					echo '<i class="icon-user icon-white"></i><span id="navbar_username"> ';
-							echo $utilisateur->getPrenom()." ".$utilisateur->getNom();
+							echo $utilisateur->getPersonne()->getPrenom()." ".$utilisateur->getPersonne()->getNom();
 					echo '</span></a>';
 				}
 				else {

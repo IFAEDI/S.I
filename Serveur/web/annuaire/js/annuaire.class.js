@@ -3,7 +3,7 @@
  * ANNUAIRE - CLASSE JS
  * -----------------------------------------------------------
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
- *          Contact - benjamin.planche@aldream.net
+ * 			Contact - benjamin.planche@aldream.net
  * ---------------------
  * Assure les principales fonctionnalités / le moteur de la page Annuaire des entreprises. Elle gère notamment :
  * - le chargement dynamique des informations sur une entreprise sélectionnée (AJAX)
@@ -12,6 +12,16 @@
 
 // Définition de l'objet - (Permet une encapsulation des fonctions ... Autant pourrir le moins possible l'espace de nom)
 var Annuaire = {};
+
+// ------------------------ ATTRIBUTS ------------------------ //
+
+// Booléen définissant si l'utilisateur a le droit ou non d'apporter des modifications à l'annuaire (influence l'affichage -> ajout des boutons de modification ; n'empêche pas d'effectuer des contrôles côté serveur !)
+Annuaire.droitModification = false;
+
+// Objet contenant les données sur l'entreprise en cours de visualisation
+Annuaire.infoEntrepriseCourante = {};
+
+// ------------------------ REQUETAGE AJAX ------------------------ //
 
 /** 
  * ---- chercherInfoEntreprise
@@ -73,10 +83,43 @@ Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEn
 	});
 	
 	return donnees_Atos;
-}
+};
+
+/** 
+ * ---- ajouterEntreprise
+ * Valide le formulaire d'ajout d'une entreprise & transmet les informations à la cible PHP.
+ * Paramètres :
+ *		- RIEN
+ * Retour :
+ *		- RIEN (Page directement modifiée)
+ */
+Annuaire.ajouterEntreprise = function ajouterEntreprise() {
+	// Vérification du formulaire :
+	$("#formAjoutEntreprise").validate();
+	if ($("#formAjoutEntreprise").validate()) {
+		// Envoi :
+		var /* objet */ requete = $.ajax({
+			url: "./annuaire/ajax/ajoutEntreprise.cible.php",
+			type: "POST",
+			data: {nom : $('#formAjoutEntrepriseNom').val(), secteur: $('#formAjoutEntrepriseSecteur').val(), description: $('#formAjoutEntrepriseDescription').val()},
+			dataType: "html"
+		});
+
+		requete.done(function(donnees) {
+			alert("Ok !");
+			return donnees;
+		});
+		requete.fail(function(jqXHR, textStatus) {
+			alert( "Request failed: " + textStatus );
+		});
+	}
+};
+
+// ------------------------ COHESION DE LA PAGE ------------------------ //
 
 /** 
  * ---- activerBoutonSuppression
+ * Paramètres :
  * Active le bouton de suppression si au moins une checkbox de suppression est cochée.
  *		- checkbox : JQUERY ELEMENT - checkbox cliquée
  * Retour :
@@ -95,7 +138,123 @@ Annuaire.activerBoutonSuppression = function activerBoutonSuppression(/* objet J
 		}
 		Annuaire.nbChecboxCochees--;
 	}
+};
+
+/** 
+ * ---- activerBoutonAjoutEntree
+ * Utilisée pour le formulaire d'ajout ou d'édition de contact.
+ * Active ou désactive le bouton d'ajout pour entrer une donnée supplémentaire (tel ou email)
+ * Paramètres :
+ *		- event : OBJET EVENT - Evénement généré par la modifiation des champs de saisie obligatoires liés à ce bouton
+ *		- idBouton : STRING - ID du bouton d'ajout
+ *		- labelNeutre : STRING ou INT - Valeur du label neutre pour l'élément option
+ *		- validateur : TO DO - Regex ou autre pour vérifier la validité des données entrées.
+ * Retour :
+ *		- RIEN - Page directement changée
+ */
+Annuaire.activerBoutonAjoutEntree = function activerBoutonAjoutEntree(event, idBouton, labelNeutre, validateur) {
+	// Si on a une entrée valide, on autorise l'ajout.
+	// TO DO - METTRE EN PLACE UNE VRAIE REGLE DE CONTROLE
+	var input = $('#'+event.target.id);
+	if (input.val() != validateur) { // SI Validée (ok, if pas logique, mais TO DO)
+		if (!activerBoutonAjoutEntree.boutonActif[idBouton]) {
+			$('#'+idBouton).removeClass('disabled');
+			$('#'+idBouton).click(function(event) {Annuaire.ajouterEntreeListe(event, idBouton, labelNeutre);} );
+			activerBoutonAjoutEntree.boutonActif[idBouton] = true;
+		}
+	} else {
+		if (activerBoutonAjoutEntree.boutonActif[idBouton]) {
+			$('#'+idBouton).addClass('disabled');
+			$('#'+idBouton).unbind('click');
+			activerBoutonAjoutEntree.boutonActif[idBouton] = false;
+		}
+	}
 }
+Annuaire.activerBoutonAjoutEntree.boutonActif = [];
+	
+/** 
+ * ---- ajouterEntreeListe
+ * Utilisée pour le formulaire d'ajout ou d'édition de contact.
+ * Ajoute, suite à une demande, les champs nécessaires pour entrer une donnée supplémentaire (tel ou email)
+ * Paramètres :
+ *		- event : OBJET EVENT - Evénement généré par la demande
+ *		- idBouton : STRING - ID du bouton d'ajout
+ *		- labelNeutre : STRING ou INT - Valeur du label neutre pour l'élément option
+ * Retour :
+ *		- RIEN - Page directement changée
+ */
+Annuaire.activerBoutonAjoutEntree = function ajouterEntreeListe(event, idBouton, labelNeutre) {
+	var idAleatoire = new Date().getTime();
+	if (event.target.children.length == 0)
+		{ event.target = event.target.parentNode; } // On a cliqué sur le "+" et non sur le bouton, du coup on remonte au bouton.
+	var inputGroupe = $('#'+event.target.id).parent().parent();
+
+	// Ajout de la ligne informative :
+	var numTel = inputGroupe.find('input[type="text"]').val();
+	var labelTel = inputGroupe.find('option:selected').val();
+	inputGroupe.find('ul').append('<li><span class="val label label-info">'+numTel+'</span>&#09;<span class="labelVal label">'+labelTel+'</span>&#09;<a title="Supprimer" id="id'+idAleatoire+'" class="btn btn-danger btn-mini supprTel"><i class="icon-trash"></i></a></li>');
+	inputGroupe.find('#id'+idAleatoire).click(function(event) {supprTel(event);});
+
+	// RAZ des champs du tel :
+	inputGroupe.find('input[type="text"]').val('');
+	inputGroupe.find('option:selected').removeAttr("selected");
+	inputGroupe.find('option[value="'+labelNeutre+'"]').attr('selected', 'selected');
+	$('#'+idBouton).addClass('disabled');
+	$('#'+idBouton).unbind('click');
+	activerBoutonAjoutEntree.boutonActif[idBouton] = false;
+	
+	return false;
+	
+	function supprTel(event) {
+		$('#'+event.target.id).parent().remove();
+	}
+};
+
+/** 
+ * ---- preremplirFormulaireModifContact
+ * Préreplit le formulaire de modification d'un contact avec les infos déja acquises.
+ * Paramètres :
+ *		- event : OBJET EVENT - Evénement généré par la demande
+ * Retour :
+ *		- RIEN - Page directement changée
+ */
+Annuaire.preremplirFormulaireModifContact = function preremplirFormulaireModifContact(event) {
+	/* int */ var idContact = parseInt(event.target.getAttribute('id-contact'));
+	if (typeof Annuaire.infoEntrepriseCourante.contacts !== "undefined") {
+		/* objet */ var contact;
+		for (var i in Annuaire.infoEntrepriseCourante.contacts) {
+			if (Annuaire.infoEntrepriseCourante.contacts[i].id == idContact) {
+				contact = Annuaire.infoEntrepriseCourante.contacts[i];
+				break;
+			}
+		}
+	
+		if (typeof contact !== "undefined") {
+			$('#formModifContactNom').val(contact.nom);
+			$('#formModifContactPrenom').val(contact.prenom);
+			$('#formModifContactPoste').val(contact.metier);
+			
+			/* long */ var idAleatoire;
+			for (/* int */ var i in Annuaire.infoEntrepriseCourante.contacts.telephones) {
+				idAleatoire = new Date().getTime();
+				$('#formModifContactTelGroup ul').append('<li><span class="val label label-info">'+contact.telephones[i].num+'</span>&#09;<span class="labelVal label">'+contact.telephones[i].label+'</span>&#09;<a title="Supprimer" id="id'+idAleatoire+'" class="btn btn-danger btn-mini supprTel"><i class="icon-trash"></i></a></li>');
+			}
+			
+			for (/* int */ var i in Annuaire.infoEntrepriseCourante.contacts.emails) {
+				idAleatoire = new Date().getTime();
+				$('#formModifContactEmailGroup ul').append('<li><span class="val label label-info">'+contact.emails[i].num+'</span>&#09;<span class="labelVal label">'+contact.emails[i].label+'</span>&#09;<a title="Supprimer" id="id'+idAleatoire+'" class="btn btn-danger btn-mini supprTel"><i class="icon-trash"></i></a></li>');
+			}
+			
+			$('#formModifContactPriorite').find('option[value='+contact.priorite+']').attr('selected', 'selected');
+			$('#formModifContactCom').val(contact.commentaire);
+			
+			$('#formModifContactId').val(idContact);
+		}
+	}
+};
+
+// ------------------------ AFFICHAGE ------------------------ //
+
 
 /** 
  * ---- traduirePrioriteContactTexte
@@ -111,7 +270,7 @@ Annuaire.traduirePrioriteContactTexte = function traduirePrioriteContactTexte(/*
 	if (priorite == 0) { return "Incertain" };
 	if (priorite < 0) { return "A éviter" };
 	return "Défaut";
-}
+};
 
 /** 
  * ---- traduireCouleur
@@ -126,7 +285,7 @@ Annuaire.traduireCouleur = function traduireCouleur(/* int */ num) {
 	if (num == 0) { return "warning" };
 	if (num < 0) { return "alert" };
 	return "";
-}
+};
 
 /** 
  * ---- traduireCategorieCommentaire
@@ -140,7 +299,7 @@ Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/*
 	if (num == 0) { return '<span class="badge badge-error"><i class="icon-warning-sign icon-white"></i></span>' }; 	// Alerte
 	if (num == 3) { return '<span class="badge badge-success"><i class="icon-heart icon-white"></i></span>' };			// Bonne nouvelle
 	return '<span class="badge"><i class="icon-asterisk icon-white"></i></span>'; 										// Défaut
-}
+};
 
 /** 
  * ---- afficherInfoEntreprise
@@ -154,19 +313,27 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	// Sorry pour les pavés de cette fonction, dur de faire un compromis entre clarté JS et clarté HTML ...
 	// Si quelqu'un veut refaire ça plus proprement, ca devrait pas être trop difficile.
 
+	Annuaire.infoEntrepriseCourante = donnees.entreprise;
 	donnees = donnees.entreprise;
 	
 	// Génération des blocs intermédiaires (nécessitant des boucles) :
 	var /* string */ tableauContacts = '';
-	for (var /* int */ i in donnees.contacts) {
-		tableauContacts += '			<tr>                                                             '+
-'												<td>'+donnees.contacts[i].nom+'</td>                                               '+
-'												<td>'+donnees.contacts[i].prenom+'</td>                                               '+
-'												<td>'+donnees.contacts[i].metier+'</td>                                                '+
-'												<td><a href="mailto:'+donnees.contacts[i].email+'">'+donnees.contacts[i].email+'</a></td>   '+
-'												<td>'+donnees.contacts[i].tel+'</td>                                         '+
-'												<td><span class="label label-'+Annuaire.traduireCouleur(donnees.contacts[i].priorite)+'">'+Annuaire.traduirePrioriteContactTexte(donnees.contacts[i].priorite)+'</span></td> '+
-'											</tr>															 ';
+	if (donnees.contacts.length == 0) {
+		tableauContacts = "Aucun contact.";
+	} else {
+		for (var /* int */ i in donnees.contacts) {
+			tableauContacts += '			<tr> \n'+
+	'												<td>'+donnees.contacts[i].nom+'</td>\n'+
+	'												<td>'+donnees.contacts[i].prenom+'</td>\n'+
+	'												<td>'+donnees.contacts[i].metier+'</td> \n'+
+	'												<td><a href="mailto:'+donnees.contacts[i].email+'">'+donnees.contacts[i].email+'</a></td>\n'+
+	'												<td>'+donnees.contacts[i].tel+'</td> \n'+
+	'												<td><span class="label label-'+Annuaire.traduireCouleur(donnees.contacts[i].priorite)+'">'+Annuaire.traduirePrioriteContactTexte(donnees.contacts[i].priorite)+'</span></td> ';
+			if (Annuaire.droitModification) { // Ajout des boutons de modifications d'un contact :
+				tableauContacts += '												<td><a id-contact='+donnees.contacts[i].id+' data-toggle="modal" href="#modalModifContact" class="btn  btn-mini btn-modifContact"><i class="icon-pencil"></i></a><a id-contact='+donnees.contacts[i].id+' data-toggle="modal" href="#modalEditEntreprise" class="btn btn-danger  btn-mini"><i class="icon-remove"></i></a></td>\n'
+			}
+			tableauContacts += '											</tr>';
+		}
 	}
 	
 	var /* string */ tableauParrainage = '';
@@ -218,24 +385,24 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	if (typeof donnees.commentaires === "undefined") {
 		tableauCommentaires = 'Aucun commentaire.';
 	} else {
-		tableauCommentaires = '<table class="table table-stripped">                                                                                              '+
-'										<thead>                                                                                                                      '+
-'											<tr>                                                                                                                     '+
-'												<th class="first"></th>                                                                                              '+
-'												<th>Auteur</th>                                                                                                      '+
-'												<th class="first">Poste</th>                                                                                         '+
-'												<th>Date</th>                                                                                                        '+
-'												<th>Commentaires</th>                                                                                                '+
-'										</thead>                                                                                                                     '+
+		tableauCommentaires = '<table class="table table-stripped">\n'+
+'										<thead>\n'+
+'											<tr> \n'+
+'												<th class="first"></th>\n'+
+'												<th>Auteur</th>\n'+
+'												<th class="first">Poste</th>\n'+
+'												<th>Date</th>\n'+
+'												<th>Commentaires</th>\n'+
+'										</thead> \n'+
 '										<tbody>';
 
 		for (var /* int */ i in donnees.commentaires) {
-			tableauCommentaires += '<tr>                                                                                                                         '+
-'												<td>'+Annuaire.traduireCategorieCommentaire(donnees.commentaires[i].categorie)+'</td>                                '+
-'												<td>'+donnees.commentaires[i].prenom +' '+donnees.commentaires[i].nom+'</td>                                         '+
-'												<td><small>'+donnees.commentaires[i].poste +'</small></td>                                                           '+
-'												<td>'+(new Date(donnees.commentaires[i].date)).toDateString() +'</td>                                                                           '+
-'												<td>'+donnees.commentaires[i].commentaire +'</td>                                                                    '+
+			tableauCommentaires += '<tr> \n'+
+'												<td>'+Annuaire.traduireCategorieCommentaire(donnees.commentaires[i].categorie)+'</td> \n'+
+'												<td>'+donnees.commentaires[i].prenom +' '+donnees.commentaires[i].nom+'</td> \n'+
+'												<td><small>'+donnees.commentaires[i].poste +'</small></td> \n'+
+'												<td>'+(new Date(donnees.commentaires[i].date)).toDateString() +'</td>\n'+
+'												<td>'+donnees.commentaires[i].commentaire +'</td>'+
 '											</tr>';
 		}
 
@@ -244,64 +411,67 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	
 	// Génération du bloc entier :
 	$(".module .hero-unit").html('<h1>'+donnees.description.nom+' <small>'+donnees.description.secteur+'</small></h1>'+
-'							<p>'+donnees.description.description+'</p>                                                                                    '+
-'							                                                                                                                                         '+
-'							<div class="accordion" id="accordion2">                                                                                                  '+
-'								<div class="accordion-group">                                                                                                        '+
-'								  <div class="accordion-heading">                                                                                                    '+
-'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#contacts">                                       '+
-'								  <h2>Contacts</h2>                                                                                                                  '+
-'								</a>                                                                                                                                 '+
-'							  </div>                                                                                                                                 '+
-'							  <div id="contacts" class="accordion-body collapse in">                                                                                 '+
-'								<div class="accordion-inner">                                                                                                        '+
-'									 <table class="table table-stripped">                                                                                            '+
-'										<thead>                                                                                                                      '+
-'											<tr>                                                                                                                     '+
-'												<th>Nom</th>                                                                                                         '+
-'												<th>Prénom</th>                                                                                                      '+
-'												<th>Poste</th>                                                                                                       '+
-'												<th>Email</th>                                                                                                       '+
-'												<th>Tel</th>                                                                                                         '+
-'												<th>Rem.</th>                                                                                                        '+
-'										</thead>                                                                                                                     '+
-'										<tbody>                                                                                                                      '+
-'											'+tableauContacts+'                                                                                                      '+
-'										</tbody>                                                                                                                     '+
-'								</table>                                                                                                                             '+
-'								</div>                                                                                                                               '+
-'							  </div>                                                                                                                                 '+
-'							</div>                                                                                                                                   '+
-'							<div class="accordion-group">                                                                                                            '+
-'							  <div class="accordion-heading">                                                                                                        '+
-'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#relations">                                      '+
-'								  <h2>Relations</h2>                                                                                                                 '+
-'								</a>                                                                                                                                 '+
-'							  </div>                                                                                                                                 '+
-'							  <div id="relations" class="accordion-body collapse">                                                                                   '+
-'								<div class="accordion-inner">                                                                                                        '+
-'									 <table class="table table-stripped">                                                                                            '+
-'										<tbody>                                                                                                                      '+
-'											'+tableauParrainage+'                                                                                                    '+
-'											'+tableauRIF+'                                                                                                           '+
-'											'+tableauStages+'                                                                                                        '+
-'											'+tableauEntretiens+'                                                                                                    '+
-'										</tbody>                                                                                                                     '+
-'								</table>                                                                                                                             '+
-'								</div>                                                                                                                               '+
-'							  </div>                                                                                                                                 '+
-'							</div>                                                                                                                                   '+
-'							<div class="accordion-group">                                                                                                            '+
-'							  <div class="accordion-heading">                                                                                                        '+
-'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#remarques">                                      '+
-'								  <h2>Remarques</h2>                                                                                                                 '+
-'								</a>                                                                                                                                 '+
-'							  </div>                                                                                                                                 '+
-'							  <div id="remarques" class="accordion-body collapse">                                                                                   '+
-'								<div class="accordion-inner">                                                                                                        '+
-'									'+tableauCommentaires+'                                                                                                          '+
-'								</div>                                                                                                                               '+
-'							  </div>                                                                                                                                 '+
-'							</div>                                                                                                                                   '+
-'						  </div>                                                                                                                                     ');
+'							<p>'+donnees.description.description+'</p> \n'+
+'							\n'+
+'							<div class="accordion" id="accordion2">\n'+
+'								<div class="accordion-group">\n'+
+'								<div class="accordion-heading">\n'+
+'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#contacts"> \n'+
+'								<h2>Contacts</h2> \n'+
+'								</a>\n'+
+'							</div>\n'+
+'							<div id="contacts" class="accordion-body collapse in"> \n'+
+'								<div class="accordion-inner">\n'+
+'									 <table class="table table-stripped"> \n'+
+'										<thead>\n'+
+'											<tr> \n'+
+'												<th>Nom</th>\n'+
+'												<th>Prénom</th>\n'+
+'												<th>Poste</th> \n'+
+'												<th>Email</th> \n'+
+'												<th>Tel</th>\n'+
+'												<th>Rem.</th>\n'+
+'										</thead> \n'+
+'										<tbody>\n'+
+'											'+tableauContacts+'\n'+
+'										</tbody> \n'+
+'								</table> \n'+
+'								</div>\n'+
+'							</div>\n'+
+'							</div>\n'+
+'							<div class="accordion-group"> \n'+
+'							<div class="accordion-heading">\n'+
+'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#relations">\n'+
+'								<h2>Relations</h2>\n'+
+'								</a>\n'+
+'							</div>\n'+
+'							<div id="relations" class="accordion-body collapse">\n'+
+'								<div class="accordion-inner">\n'+
+'									 <table class="table table-stripped"> \n'+
+'										<tbody>\n'+
+'											'+tableauParrainage+'\n'+
+'											'+tableauRIF+'\n'+
+'											'+tableauStages+'\n'+
+'											'+tableauEntretiens+'\n'+
+'										</tbody> \n'+
+'								</table> \n'+
+'								</div>\n'+
+'							</div>\n'+
+'							</div>\n'+
+'							<div class="accordion-group"> \n'+
+'							<div class="accordion-heading">\n'+
+'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#remarques">\n'+
+'								<h2>Remarques</h2>\n'+
+'								</a>\n'+
+'							</div>\n'+
+'							<div id="remarques" class="accordion-body collapse">\n'+
+'								<div class="accordion-inner">\n'+
+'									'+tableauCommentaires+' \n'+
+'								</div>\n'+
+'							</div>\n'+
+'							</div>\n'+
+'						</div> ');
+
+	// Préremplissage du formulaire de modification d'un contact :
+	$('.btn-modifContact').click(function(event){Annuaire.preremplirFormulaireModifContact(event)});
 };

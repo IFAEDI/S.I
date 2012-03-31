@@ -15,26 +15,22 @@ $('document').ready(function() {
 	// Mise en place d'une validation des formulaires :
 	$("#formAjoutEntreprise").validate();
 	$("#btnValiderAjoutEntreprise").click( function() {
-		$("#formAjoutEntreprise").validate();
-		if ($("#formAjoutEntreprise").validate()) {
-			var /* objet */ requete = $.ajax({
-				url: "./annuaire/ajax/ajoutEntreprise.cible.php",
-				type: "POST",
-				data: {nom : $('#formAjoutEntrepriseNom').val(), secteur: $('#formAjoutEntrepriseSecteur').val(), description: $('#formAjoutEntrepriseDescription').val()},
-				dataType: "html"
-			});
-
-			requete.done(function(donnees) {
-				alert("Ok !");
-				return donnees;
-			});
-			requete.fail(function(jqXHR, textStatus) {
-				alert( "Request failed: " + textStatus );
-			});
-		}
+		Annuaire.ajouterEntreprise();
 	});
+	
+	$("#formModifContact").validate();
+	
+	// Mise en page - Ajout/Supression de champs pour des mails/telephones supplémentaires dans les formulaires :
+	$('#formModifContactTel').focusout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactTelAjout', 'Bureau', '');});
+	$('#formModifContactTel').mouseout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactTelAjout', 'Bureau', '');});
+	$('#formModifContactEmail').focusout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactEmailAjout', 'Pro', '');});
+	$('#formModifContactEmail').mouseout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactEmailAjout', 'Pro', '');});
+		
 	
 	// Mise en page - Dimensionnement de la liste selon la hauteur disponible sur la page.
 	$('.liste_entreprises').css('height', (window.innerHeight - 180)+'px');
+	
+	// Initialisation de l'objet Annuaire :
+	Annuaire.droitModification = ($("#inputModif").val()==1)?true:false;
 	
 });

@@ -1,3 +1,7 @@
+#annuaire {
+	margin-top: 20px;
+}
+
 .liste_entreprises {
 	height: 500px;
 	overflow: scroll;
@@ -9,4 +13,19 @@
 
 .entreprise:hover{
 	cursor: pointer;
+}
+
+.editionEntreprise {
+	margin-right: 10px;
+	margin-top: 5px;
+	float:right;
+}
+
+#contacts td .btn {
+	margin-right: 5px;
+	
+}
+#contacts td .btn:last-child {
+	margin-right: 0px;
+	
 }
