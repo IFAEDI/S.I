@@ -127,11 +127,13 @@ if ($_GET['page'] == 'accueil') {
     $lien_module = 'index.php?page=Administration_Utilisateurs';
     $nom_module = 'commun';
     $nom_page = 'admin_utilisateurs';
+    $titre_module = 'Administration';
 } elseif ($_GET['page'] == 'Administration_Journal') {
     $titre_page = 'Journal d\'activité';
     $lien_module = 'index.php?page=Administration_Journal';
     $nom_module = 'commun';
     $nom_page = 'admin_journal';
+    $titre_module = 'Administration';
 } else {
     $titre_page = '404';
     $lien_module = '';

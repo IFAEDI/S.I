@@ -44,8 +44,7 @@ class Utilisateur {
 			}
 		}
 
-		/* Et maintenant on crée l'objet Personne associé */
-		$this->personne = new Personne( $this );
+		$this->personne = null;
 	}
 
 	/**
@@ -121,6 +120,11 @@ class Utilisateur {
 	* Retourne la personne associée à l'utilisateur
 	*/
 	public function getPersonne() {
+	
+		if( $this->personne == null ) {
+			$this->personne = new Personne( $this );
+		}
+
 		return $this->personne;
 	}
 
