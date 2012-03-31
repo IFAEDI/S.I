@@ -20,6 +20,8 @@ class Authentification {
 	const AUTH_CAS 		= 1;	
 	const AUTH_NORMAL	= 2;
 
+	public static $AUTH_TYPES = array( self::AUTH_CAS => 'CAS', self::AUTH_NORMAL => 'Classique' );
+
 	/* La même mais pour les indices de session */
 	const S_AUTH_METHOD	= 'AUTH_METHOD';
 	const S_IS_USER_AUTH	= 'IS_USER_AUTH';
@@ -68,7 +70,7 @@ class Authentification {
 
 		/* Requête à la base de données pour essayer de trouver l'utilisateur */
 		try {
-			$result = BD::executeSelect( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND MDP = :passwd AND SERVICE = :service', array( ':login' => $login, ':passwd' => $mdp, ':service' => self::AUTH_NORMAL ) );
+			$result = BD::executeSelect( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login AND PASSWD = :passwd AND AUTH_SERVICE = :service', array( ':login' => $login, ':passwd' => $mdp, ':service' => self::AUTH_NORMAL ) );
 		}
 		catch( Exception $e ) {
 
@@ -83,7 +85,6 @@ class Authentification {
 
 		/* On regarde que l'on a bien un objet et on fait la vérification */
 		if( $result == null ) {
-
 			return self::ERR_BD;
 		}
 

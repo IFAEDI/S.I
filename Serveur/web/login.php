@@ -97,36 +97,59 @@ else {
 			 <div class="control-group">
 				<label class="control-label" for="password">Nom</label>
 				<div class="controls">
-				<input class="input-medium" style="margin: 0px;" id="nom" type="text" value="<?=$utilisateur->getNom();?>"/>
+				<input class="input-medium" style="margin: 0px;" id="nom" type="text" value="<?=$utilisateur->getPersonne()->getNom();?>"/>
 				</div>
 			</div>
 			 <div class="control-group">
 				<label class="control-label" for="password">Prénom</label>
 				<div class="controls">
-				<input class="input-medium" style="margin: 0px;" id="prenom" type="text" value="<?=$utilisateur->getPrenom();?>" />
-				</div>
-			</div>
-			 <div class="control-group">
-				<label class="control-label" for="password">Année</label>
-				<div class="controls">
-					<select class="input-medium" id="annee">
-						<option></option>
-						<option value="3" <? if( $utilisateur->getAnnee() == 3 ) echo "SELECTED"; ?> >3IF</option>
-						<option value="4" <? if( $utilisateur->getAnnee() == 4 ) echo "SELECTED"; ?> >4IF</option>
-						<option value="5" <? if( $utilisateur->getAnnee() == 5 ) echo "SELECTED"; ?> >5IF</option>
-						<option value="M" <? if( $utilisateur->getAnnee() == 'M' ) echo "SELECTED"; ?> >Master IF</option>
-						<option value="6" <? if( $utilisateur->getAnnee() == 6 ) echo "SELECTED"; ?> >Diplomé</option>
-					</select>
+				<input class="input-medium" style="margin: 0px;" id="prenom" type="text" value="<?=$utilisateur->getPersonne()->getPrenom();?>" />
 				</div>
 			</div>
 			 <div class="control-group">
 				<label class="control-label" for="email">Adresse mail</label>
 		                <div class="controls">
                 		  <div class="input-prepend">
-		                        <span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium" id="mail" type="text" value="<?=$utilisateur->getMail();?>" />
+				<?php
+					$mails = $utilisateur->getPersonne()->getMails();
+				?>
+		                        <span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_mail" type="text" value="<?=@$mails[0][0];?>" />
+		                        <span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium mail" type="text" value="<?=@$mails[0][1];?>" />
+                		  </div>
+                		  <div class="input-prepend">
+		                        <span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_mail" type="text" value="<?=@$mails[1][0];?>" />
+		                        <span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium mail" type="text" value="<?=@$mails[1][1];?>" />
+                		  </div>
+                		  <div class="input-prepend">
+		                        <span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_mail" type="text" value="<?=@$mails[2][0];?>" />
+		                        <span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium mail" type="text" value="<?=@$mails[2][1];?>" />
                 		  </div>
 		                </div>
 			</div>
+			<div class="control-group">
+                                <label class="control-label" for="telephone">Téléphone</label>
+                                <div class="controls">
+				<div class="input-prepend">
+                		  <div class="input-prepend">
+				<?php
+					$telephones = $utilisateur->getPersonne()->getTelephones();
+				?>
+                                        <span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_telephone" type="text" value="<?=@$telephones[0][0];?>" />
+                                        <span class="add-on" style="margin-top: -9px;"><i class="icon-volume-up"></i></span><input class="input-medium telephone" type="text" value="<?=@$telephones[0][1];?>" />
+                                  </div>
+                                  <div class="input-prepend">
+                                        <span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_telephone" type="text" value="<?=@$telephones[1][0];?>" />
+                                        <span class="add-on" style="margin-top: -9px;"><i class="icon-volume-up"></i></span><input class="input-medium telephone" type="text" value="<?=@$telephones[1][1];?>" />
+                                  </div>
+                                  <div class="input-prepend">
+                                        <span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_telephone" type="text" value="<?=@$telephones[2][1];?>" />
+                                        <span class="add-on" style="margin-top: -9px;"><i class="icon-volume-up"></i></span><input class="input-medium telephone" type="text" value="<?=@$telephones[2][2];?>" />
+                                  </div>
+                                </div>
+                        </div>
+
+			<p>Groupe</p>
+			<input class="input-medium disabled" disabled="disabled" value="<?php echo Personne::$ROLES[$utilisateur->getPersonne()->getRole()]; ?> " />
 		</fieldset>
 
 	</form>
@@ -145,7 +168,7 @@ else {
 /**
 * Si l'utilisateur se connecte pour la première fois avec le CAS, on le force à rentrer ses informations perso
 */
-if( $utilisateur != null && $utilisateur->premiereConnexion() == true ) {
+if( $utilisateur != null && $utilisateur->getPersonne()->premiereConnexion() == true ) {
 
 	?>
 		<script type="text/javascript">

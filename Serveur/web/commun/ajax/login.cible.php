@@ -63,8 +63,8 @@ if( @isset( $_GET['action'] ) ) {
 		if( $authentification->isAuthentifie() == true ) {
 
 			/* On check que l'on a bien nos variables */
-			if( !( @isset( $_GET['password'] ) && @isset( $_GET['nom'] ) && @isset( $_GET['prenom'] ) 
-						&& @isset( $_GET['annee'] ) && @isset( $_GET['mail'] ) ) ) {
+			if( !( @isset( $_GET['password'] ) && @isset( $_GET['nom'] ) && @isset( $_GET['prenom'] ) && @isset( $_GET['mails'] ) 
+				&& @isset( $_GET['telephones'] ) ) ) {
 
 				$val = array( "code" => "error", "mesg" => "Variables manquantes." );
 			}
@@ -76,9 +76,7 @@ if( @isset( $_GET['action'] ) ) {
 				$password = strip_tags( mysql_escape_string( $_GET['password'] ) );
 				$nom      = strip_tags( mysql_escape_string( $_GET['nom'] ) );
 				$prenom   = strip_tags( mysql_escape_string( $_GET['prenom'] ) );
-				$annee    = strip_tags( mysql_escape_string( $_GET['annee'] ) );
-				$mail	  = strip_tags( mysql_escape_string( $_GET['mail'] ) );
-
+				
 				/* On regarde s'il faut mettre à jour le mot de passe */
 				if( @strlen( $_GET['password'] ) > 0 ) {
 	
@@ -101,10 +99,24 @@ if( @isset( $_GET['action'] ) ) {
 				if( $continue ) {
 
 					try {
-						$result = $utilisateur->changeInfoPerso( $nom, $prenom, $mail, $annee );
-
+						$result = $utilisateur->getPersonne()->changeInfo( $nom, $prenom );
 						if( $result ) {
-							$val = array( "code" => "ok", "nom" => $nom, "prenom" => $prenom );
+
+							$result = $utilisateur->getPersonne()->changeMails( $_GET['mails'] );
+							if( $result ) {
+							
+								$result = $utilisateur->getPersonne()->changeTelephones( $_GET['telephones'] );
+								if( $result ) {
+									$val = array( "code" => "ok", "nom" => $nom, "prenom" => $prenom );
+								}
+								else {
+									$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la mise à jour des numéros de téléphone. Veuillez réessayer ultèrieurement." );
+								}
+							}
+							else {
+								$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la mise à jour des mails. Veuillez réessayer ultèrieurement." );
+							}
+						
 						}
 						else {
 							$val = array( "code" => "fail", "mesg" => "Une erreur est survenue lors de la mise à jour des infos. Veuillez réessayer ultèrieurement." );

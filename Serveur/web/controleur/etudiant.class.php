@@ -15,8 +15,8 @@ class Etudiant {
 
     //****************  Attributs  ******************//
     private $ID_ETUDIANT;
-    private $NOM_ETUDIANT;
-    private $PRENOM_ETUDIANT;
+    private $NOM;
+    private $PRENOM;
     private $SEXE_ETUDIANT;
     private $ADRESSE1_ETUDIANT;
     private $ADRESSE2_ETUDIANT;
@@ -44,8 +44,9 @@ class Etudiant {
     //recuperation de l'objet Etudiant par l'ID de l'étudiant
     public static function GetEtudiantByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS, STATUT_MARITAL 
-                WHERE id_etudiant = :id 
+            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS, STATUT_MARITAL, PERSONNE 
+                WHERE ID_UTILISATEUR = :id 
+                AND PERSONNE.ID_PERSONNE = ETUDIANT.ID_PERSONNE
                 AND PERMIS.ID_PERMIS = ETUDIANT.ID_PERMIS 
                 AND STATUT_MARITAL.ID_MARITAL=ETUDIANT.ID_MARITAL'
                             , array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
@@ -63,14 +64,53 @@ class Etudiant {
         return "Erreur 430 veuillez contacter l'administrateur système";
     }
 
+    public static function ListeAccesCvtheque() {
+        return BD::Prepare('SELECT UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.id,
+                            IFNULL(ACCES_CVTHEQUE.ID_UTILISATEUR,0) as acces_cvtheque 
+                            FROM UTILISATEUR LEFT JOIN ACCES_CVTHEQUE ON UTILISATEUR.id=ACCES_CVTHEQUE.ID_UTILISATEUR'
+                        , array(), BD::RECUPERER_TOUT);
+    }
+
+     //Permet de verifier que l'utilisateur à bien acces à la cvtheque
+    public static function AccesCVtheque($_id_utilisateur) {
+        if (is_numeric($_id_utilisateur)) {
+            $resultat =  BD::Prepare('SELECT COUNT(*) FROM ACCES_CVTHEQUE WHERE ID_UTILISATEUR = :id_utilisateur'
+                            , array("id_utilisateur" => $_id_utilisateur));
+            return $resultat['COUNT(*)'];
+        } else {
+            return "Erreur 450 veuillez contacter l'administrateur système";
+        }
+    }
+    
+    //Permet d'autoriser l'acces à la cvtheque à un utilisateur
+    public static function AutoriserAcces($_id_utilisateur) {
+        if (is_numeric($_id_utilisateur)) {
+            return BD::Prepare('INSERT INTO ACCES_CVTHEQUE SET ID_UTILISATEUR = :id_utilisateur'
+                            , array("id_utilisateur" => $_id_utilisateur));
+        } else {
+            return "Erreur 451 veuillez contacter l'administrateur système";
+        }
+    }
+
+    //Permet d'autoriser l'acces à la cvtheque à un utilisateur
+    public static function Interdir_Acces($_id_utilisateur) {
+        if (is_numeric($_id_utilisateur)) {
+            return BD::Prepare('DELETE FROM ACCES_CVTHEQUE WHERE ID_UTILISATEUR = :id_utilisateur'
+                            , array("id_utilisateur" => $_id_utilisateur));
+        } else {
+            return "Erreur 452 veuillez contacter l'administrateur système";
+        }
+    }
+
     public static function RechercherCVEtudiant($_annee, $_mots_clef, $_id_entreprise) {
         $connexion = BD::GetConnection();
         if (is_numeric($_id_entreprise)) {
-            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM_ETUDIANT,  PRENOM_ETUDIANT,CV.ANNEE,CV.TITRE_CV, 
+            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM,  PRENOM,CV.ANNEE,CV.TITRE_CV, 
                         IF(ETUDIANT_FAVORIS.id_entreprise = #id_entreprise, 1, 0) as favoris, 
                         IF(NEW_UPDATE_CV.id_entreprise = #id_entreprise, etat, 0) as etat
-                        FROM CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_etudiant) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_etudiant)) USING (id_cv)
+                        FROM PERSONNE, CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_etudiant) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_etudiant)) USING (id_cv)
                         WHERE CV.AGREEMENT = 1
+                        AND ETUDIANT.ID_PERSONNE = PERSONNE.ID_PERSONNE 
                         #WHERE
                         ORDER BY etat ASC, RAND()";
             $requete = str_replace('#id_entreprise', $_id_entreprise, $requete);
@@ -102,7 +142,7 @@ class Etudiant {
         }
     }
 
-    public static function UpdateEtudiant($_id, $_id_cv, $_nom, $_prenom, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_id_marital, $_id_permis) {
+    public static function UpdateEtudiant($_id, $_id_cv, $_sexe, $_adresse1, $_adresse2, $_ville, $_cp, $_pays, $_telephone, $_mail, $_anniv, $_id_marital, $_id_permis) {
         if (is_numeric($_id)) {
             $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
 
@@ -111,8 +151,6 @@ class Etudiant {
             if ($id_cv['ID_ETUDIANT'] > 0) {
                 $info_etudiant = array(
                     'id' => $_id,
-                    'nom' => $_nom,
-                    'prenom' => $_prenom,
                     'sexe' => $_sexe,
                     'adresse1' => $_adresse1,
                     'adresse2' => $_adresse2,
@@ -125,8 +163,6 @@ class Etudiant {
                 );
                 //Si l'etudiant à déjà un CV
                 BD::Prepare('UPDATE ETUDIANT SET 
-                    NOM_ETUDIANT = :nom,
-                    PRENOM_ETUDIANT = :prenom,
                     SEXE_ETUDIANT = :sexe,
                     ADRESSE1_ETUDIANT = :adresse1,
                     ADRESSE2_ETUDIANT = :adresse2,
@@ -142,8 +178,6 @@ class Etudiant {
             } else {
                 $info_etudiant = array(
                     'id' => $_id,
-                    'nom' => $_nom,
-                    'prenom' => $_prenom,
                     'sexe' => $_sexe,
                     'adresse1' => $_adresse1,
                     'adresse2' => $_adresse2,
@@ -157,9 +191,8 @@ class Etudiant {
                 );
 
                 BD::Prepare('INSERT INTO ETUDIANT SET
-                    ID_ETUDIANT = :id,                    
-                    NOM_ETUDIANT = :nom,
-                    PRENOM_ETUDIANT = :prenom,
+                    ID_ETUDIANT = :id, 
+                    ID_PERSONNE = :id, 
                     SEXE_ETUDIANT = :sexe,
                     ADRESSE1_ETUDIANT = :adresse1,
                     ADRESSE2_ETUDIANT = :adresse2,
@@ -225,7 +258,7 @@ class Etudiant {
 
     //Retourne le nombre total de cv dans la base
     public static function GetNbCV() {
-        $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT',array());
+        $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT', array());
         return $resultat['COUNT(*)'];
     }
 
@@ -233,12 +266,12 @@ class Etudiant {
     public static function GetNbDiffuseCV() {
         $resultat = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT, CV 
            WHERE CV.AGREEMENT = 1
-           AND ETUDIANT.ID_CV = CV.ID_CV',array());
+           AND ETUDIANT.ID_CV = CV.ID_CV', array());
         return $resultat['COUNT(*)'];
     }
-    
+
     public static function StoperTouteDiffusion() {
-         BD::Prepare('UPDATE CV SET AGREEMENT=0',array());
+        BD::Prepare('UPDATE CV SET AGREEMENT=0', array());
     }
 
     //****************  Fonctions  ******************//
@@ -289,11 +322,11 @@ class Etudiant {
     }
 
     public function getNom() {
-        return $this->NOM_ETUDIANT;
+        return $this->NOM;
     }
 
     public function getPrenom() {
-        return $this->PRENOM_ETUDIANT;
+        return $this->PRENOM;
     }
 
     public function getSexe() {

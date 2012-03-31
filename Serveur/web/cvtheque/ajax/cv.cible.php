@@ -64,7 +64,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     //On verifie que les variables sont correcte
     if ($nom_etudiant == '') {
         $retour['code'] = 'error';
-        $retour['msg'] = 'Erreur : Le nom de l\'étudiant ne peut être vide';
+        $retour['msg'] = 'Erreur : Le nom de l\'étudiant ne peut être vide (vous pouvez le modifier dans vos parametre de compte utilisateur)';
+        echo json_encode($retour);
+        die;
+    }
+    
+     if ($prenom_etudiant == '') {
+        $retour['code'] = 'error';
+        $retour['msg'] = 'Erreur : Le prenom de l\'étudiant ne peut être vide (vous pouvez le modifier dans vos parametre de compte utilisateur)';
         echo json_encode($retour);
         die;
     }
@@ -450,5 +457,49 @@ if (isset($_GET['action']) && $_GET['action'] == 'arreter_diffusion') {
     $retour['code'] = 'ok';
     $retour['msg'] = '';
     echo json_encode($retour);
+}
+
+/* Récupération de l'ensemble des utilisateurs */
+if (isset($_GET['action']) && $_GET['action'] == "get_user_list") {
+    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+        die;
+    }
+
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    try {
+        /* Récupération */
+        $utilisateurs = Etudiant::ListeAccesCvtheque();
+
+        $val = array('code' => 'ok', 'utilisateurs' => $utilisateurs);
+    } catch (Exception $e) {
+        $val = array('code' => 'error', 'mesg' => $e->getMessage());
+    }
+    echo json_encode($val);
+}
+
+
+
+/* Récupération de l'ensemble des utilisateurs */
+if (isset($_GET['action']) && $_GET['action'] == "changer_acces") {
+    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+        die;
+    }
+
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    try {
+        /* Récupération */
+        if ($_POST['etat'] == 1) {
+            Etudiant::AutoriserAcces($_POST['id_utilisateur']);
+        }
+
+        if ($_POST['etat'] == 0) {
+            Etudiant::Interdir_Acces($_POST['id_utilisateur']);
+        }
+
+        $val = array('code' => 'ok',);
+    } catch (Exception $e) {
+        $val = array('code' => 'error', 'mesg' => $e->getMessage());
+    }
+    echo json_encode($val);
 }
 ?>
