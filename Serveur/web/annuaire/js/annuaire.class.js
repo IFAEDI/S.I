@@ -231,10 +231,11 @@ Annuaire.updaterContact = function updaterContact() {
 
 		requete.done(function(donnees) {
 			if (donnees.code == "ok") {
-				if ((donnees.id >= 0) && (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise)) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
-					nouveauContact.id = donnees.id;
+				var idNouvContact = parseInt(donnees.id);
+				if ((idNouvContact >= 0) && (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise)) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
+				
 					nouveauContact.personne.id = donnees.id_personne;
-					if (typeof Annuaire.infoEntrepriseCourante.contacts === "undefined") { Annuaire.infoEntrepriseCourante.contacts = []; }
+					if (typeof Annuaire.infoEntrepriseCourante.contacts === "undefined") { Annuaire.infoEntrepriseCourante.contacts = []; }					
 					nouveauContact.fonction = decodeURIComponent(nouveauContact.fonction);
 					nouveauContact.personne.nom = decodeURIComponent(nouveauContact.personne.nom);
 					nouveauContact.personne.prenom = decodeURIComponent(nouveauContact.personne.prenom);
@@ -250,7 +251,22 @@ Annuaire.updaterContact = function updaterContact() {
 					nouveauContact.ville.libelle = decodeURIComponent(nouveauContact.ville.libelle);
 					nouveauContact.ville.pays = decodeURIComponent(nouveauContact.ville.pays);
 					nouveauContact.commentaire = decodeURIComponent(nouveauContact.commentaire);
-					Annuaire.infoEntrepriseCourante.contacts.push(nouveauContact);
+
+					// On met à jour l'ancien contact ou ajoute le nouveau :
+					if (idNouvContact == 0) {
+						for (var i in Annuaire.infoEntrepriseCourante.contacts) {
+							if (Annuaire.infoEntrepriseCourante.contacts[i].id_contact == nouveauContact.id) {
+								Annuaire.infoEntrepriseCourante.contacts[i] = nouveauContact;
+								break;
+							}
+						}
+						
+					}
+					else {
+						nouveauContact.id = donnees.id;
+						Annuaire.infoEntrepriseCourante.contacts.push(nouveauContact);
+					}
+
 					var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
 					Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
 				}

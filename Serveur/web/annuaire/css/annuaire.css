@@ -29,3 +29,9 @@ table .first{
 	margin-right: 0px;
 	
 }
+
+#options {
+	float:right;
+	margin-top: 10px;
+	margin-left:5px;
+}

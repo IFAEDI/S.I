@@ -27,7 +27,7 @@ inclure_fichier('commun', 'jquery.validate.min', 'js');
 inclure_fichier('commun', 'dateFormat', 'js');
 
 // TEST :
-$droitEdition = $utilisateur->getPersonne()->getRole() == Personne::ADMIN;
+$droitEdition = true;
 
 // Récupération de la liste des noms d'entreprises :
 $listeEntreprises = Entreprise::GetListeEntreprises();
@@ -35,44 +35,63 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 
 <div id="annuaire" class="row">
 	<input type="hidden" id="inputModif" name="inputModif" value=<?php echo ($droitEdition? 1:0); ?> />
-	<div class="span2 columns liste_entreprises">
-		<div class="tabbable">
-			<?php
-				if ($droitEdition) {
-					echo '<button title="Ajouter Entreprise" data-toggle="modal" href="#modalUpdateEntreprise" class="btn  btn-mini editionEntreprise" type=""><i class="icon-plus"></i></button>';
-				}
-			?>
-			<ul class="nav nav-tabs">
-				  <li class="active"><a href="#liste" data-toggle="tab"><i class="icon-list-alt"></i></a></li>
-				  <li><a href="#recherche" data-toggle="tab"><i class="icon-search"></i></a></li>
-			</ul>
-			<div class="tab-content">
-					<div class="tab-pane active" id="liste">
-						<table id="listeEntreprises" class="table table-stripped">
-							<tbody>
-								<?php
-									// Génération de la liste des noms d'entreprises :
-									
-									/* int */ $nb_entreprises = count($listeEntreprises);
-									
-									echo '<script type="text/javascript">';
-									for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
-										echo 'Annuaire.listeEntreprises['.$i.'] = ['.$listeEntreprises[$i]->getId().', "'.$listeEntreprises[$i]->getNom().'"];';
-									}
-									echo 'Annuaire.afficherListeEntreprises();';
-									
-									// On en profite pour passer au JS des info sur l'utilisateur :
-									echo 'Annuaire.utilisateur = {personne:{prenom:"'.$utilisateur->getPersonne()->getPrenom().'", nom:"'.$utilisateur->getPersonne()->getNom().'", role:'.$utilisateur->getPersonne()->getRole().'}};</script>';
-									
-								?>
-							</tbody>
-						</table>
-					</div>
-				<div class="tab-pane" id="recherche">
-					<p>Non-implémenté</p>
+	<div class="span2 columns">
+		<div class="liste_entreprises">
+			<div class="tabbable">
+				<div id="boutonAjoutEntrepriseListe">
+					<?php
+						if ($droitEdition) {
+							echo '<button title="Ajouter Entreprise" data-toggle="modal" href="#modalUpdateEntreprise" class="btn  btn-mini editionEntreprise" type=""><i class="icon-plus"></i></button>';
+						}
+					?>
 				</div>
-			</div>
-		</div> <!-- /tabbable -->
+				<ul class="nav nav-tabs">
+					  <li class="active"><a title="Liste" href="#liste" data-toggle="tab"><i class="icon-list-alt"></i></a></li>
+					  <li><a title="Recherche" href="#recherche" data-toggle="tab"><i class="icon-search"></i></a></li>
+				</ul>
+				<div class="tab-content">
+						<div class="tab-pane active" id="liste">
+							<table id="listeEntreprises" class="table table-stripped">
+								<tbody>
+									<?php
+										// Génération de la liste des noms d'entreprises :
+										
+										/* int */ $nb_entreprises = count($listeEntreprises);
+										
+										echo '<script type="text/javascript">';
+										for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
+											echo 'Annuaire.listeEntreprises['.$i.'] = ['.$listeEntreprises[$i]->getId().', "'.$listeEntreprises[$i]->getNom().'"];';
+										}
+										echo 'Annuaire.afficherListeEntreprises();';
+										
+										// On en profite pour passer au JS des info sur l'utilisateur :
+										echo 'Annuaire.utilisateur = {personne:{prenom:"'.$utilisateur->getPersonne()->getPrenom().'", nom:"'.$utilisateur->getPersonne()->getNom().'", role:'.$utilisateur->getPersonne()->getRole().'}};</script>';
+										
+									?>
+								</tbody>
+							</table>
+						</div>
+					<div class="tab-pane" id="recherche">
+						<p>Non-implémenté</p>
+					</div>
+				</div>
+			</div> <!-- /tabbable -->
+		</div>
+		
+		<div style="" id="options">
+			<form id="formOptions" class="form" target="ajoutEntreprise.cible.php">
+				<fieldset class="control-group">
+					<div class="control-group">
+						<div class="controls">
+							<label class="checkbox">
+								<input name="formOptionsEdition" id="formOptionsEdition" value="0" type="checkbox"/>
+								<span class="badge"><i class="icon-edit icon-white"></i></span>
+							</label>
+						</div>
+					</div>
+				</fieldset>
+			</form>
+		</div>
 		
 	</div>
 	
