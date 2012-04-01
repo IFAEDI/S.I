@@ -18,8 +18,14 @@ function Rechercher(){
     },function success(retour){
         retour = $.trim(retour);
         liste_etudiants = $.parseJSON(retour);
+       
         select_etudiant = "<center></center>";
         select_etudiant += "<input id='in_filtre' placeholder='Filtrer' style='width : 180px;'/>";
+       
+        if(liste_etudiants.length == 0){
+            select_etudiant += "<br>Votre recherche n'a donné aucun résultat";
+        }
+       
        
         for(i=0;i<liste_etudiants.length;i++){
             id_personne = liste_etudiants[i]['ID_PERSONNE'];
@@ -42,12 +48,20 @@ function Rechercher(){
                 
                 if(liste_etudiants[i]['etat'] == 1){
                     select_etudiant += "<a class='lien_cv' id='lien_cv"+id_personne+"' href='javascript:Afficher_CV("+id_personne+");' style='font-style:italic;font-weight:bold'>";
-                    select_etudiant += nom_etudiant+' '+prenom_etudiant+" ("+annee+"IF)"; 
+                    if(annee == 0){
+                        select_etudiant += nom_etudiant+' '+prenom_etudiant; 
+                    }else{
+                        select_etudiant += nom_etudiant+' '+prenom_etudiant+" ("+annee+"IF)"; 
+                    }
                     select_etudiant += "<span class='titre_cv' style='margin-left : 8px;' >"+titre_cv+"</span>";
                     select_etudiant +="</a>";
                 }else{
                     select_etudiant += "<a class='lien_cv' id='lien_cv"+id_personne+"' href='javascript:Afficher_CV("+id_personne+");'>";
-                    select_etudiant += nom_etudiant+' '+prenom_etudiant+" ("+annee+"IF)";
+                    if(annee == 0){
+                        select_etudiant += nom_etudiant+' '+prenom_etudiant; 
+                    }else{
+                        select_etudiant += nom_etudiant+' '+prenom_etudiant+" ("+annee+"IF)"; 
+                    }
                     select_etudiant += "<span class='titre_cv' style='margin-left : 8px;' >"+titre_cv+"</span>";
                     select_etudiant +="</a>";
                 }
@@ -107,8 +121,8 @@ function Favoris(id_personne){
             id_personne : id_personne
         },function success(retour){
             retour = $.trim(retour);
-             retour_decode = $.parseJSON(retour);
-        if (retour_decode['code'] == 'ok'){
+            retour_decode = $.parseJSON(retour);
+            if (retour_decode['code'] == 'ok'){
                 $("#img"+id_personne).removeClass('unstar');
                 $("#img"+id_personne).addClass('star');
                 $("#img"+id_personne).attr('src', '/cvtheque/img/star_on.png');
@@ -119,8 +133,8 @@ function Favoris(id_personne){
             id_personne : id_personne
         },function success(retour){
             retour = $.trim(retour);
-             retour_decode = $.parseJSON(retour);
-        if (retour_decode['code'] == 'ok'){
+            retour_decode = $.parseJSON(retour);
+            if (retour_decode['code'] == 'ok'){
                 $("#img"+id_personne).removeClass('star');
                 $("#img"+id_personne).addClass('unstar');
                 $("#img"+id_personne).attr('src', '/cvtheque/img/star_off.png');

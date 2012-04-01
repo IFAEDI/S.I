@@ -451,12 +451,12 @@ function Sauvegarder(){
     }
 
     if (!VerifierChamp(nom_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le nom de l'étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] Le nom de l'étudiant est incorrect (vous pouvez le modifier dans vos parametre de compte utilisateur)");
         return;
     }
     
     if (!VerifierChamp(prenom_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le prénom de l'étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] Le prénom de l'étudiant est incorrect (vous pouvez le modifier dans vos parametre de compte utilisateur)");
         return;
     }
 

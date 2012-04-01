@@ -83,7 +83,7 @@ class Contact {
 	*/
 	public static function GetListeContactsParEntreprise(/* int */ $_idEntreprise, /*Entreprise*/ $_entreprise = null ) {
 
-		$result = BD::executeSelect('SELECT ID_CONTACT FROM CONTACT_ENTREPRISE WHERE ID_ENTREPRISE = :idEntreprise ORDER BY PRIORITE', 
+		$result = BD::executeSelect('SELECT ID_CONTACT FROM CONTACT_ENTREPRISE WHERE ID_ENTREPRISE = :idEntreprise ORDER BY PRIORITE DESC', 
 						array('idEntreprise' => $_idEntreprise), BD::RECUPERER_TOUT);
 		if( $result == null ) {
 			return null;
@@ -130,26 +130,34 @@ class Contact {
 	* @return Le nouvel identifiant si tout est ok, false sinon
 	* @throws Une exception si une erreur est survenue au niveau de la BDD
 	*/
-	public static function UpdateContact( $_id, $_personne, $_entreprise, $_ville, $_fonction, $_com, $_priorite ) {
+	public static function UpdateContact( $_id, $_personne, $_entreprise, $_ville, $_fonction, $_com = '', $_priorite = 0) {
 
 		/* Il faut impérativement une instance entreprise et une instance de personne passée en paramètre */
 		if( $_entreprise == null || $_personne == null ) {
-			return false;
+			return -1;
 		}
 
 		/* Mise à jour du contact */
 		if( $_id > 0 ) {
 	
 			/* Préparation du tableau associatif */
-			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 
-				'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
+			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'UPDATE CONTACT_UTILISATEUR SET ID_PERSONNE = :idPersonne, ID_ENTREPRISE = idEntreprise, ID_VILLE = :idVille, FONCTION = :fonction, COMMENTAIRE = :commentaire, PRIORITE = :priorite WHERE ID_CONTACT = :id', $info );
+			$result = BD::executeModif( 'UPDATE CONTACT_ENTREPRISE SET
+				ID_PERSONNE = :idPersonne,
+				ID_ENTREPRISE = :idEntreprise,
+				ID_VILLE = :idVille,
+				FONCTION = :fonction,
+				COMMENTAIRE = :commentaire,
+				PRIORITE = :priorite
+				WHERE ID_CONTACT = :id', $info );
 
 			if( $result == 0 ) {
-				return false;
+				return -1;
 			}
+			
+			return 0;
 		}
 		/* Ajout d'un nouveau contact */
 		else {
@@ -159,9 +167,9 @@ class Contact {
 				'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'INSERT INTO CONTACT_UTILISATEUR(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
+			$result = BD::executeModif( 'INSERT INTO CONTACT_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
 			if( $result == 0 ) {
-				return false;
+				return -1;
 			}
 
 			/* Récupération de l'identifiant du nouveau contact */

@@ -188,13 +188,23 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 							<ul class="help-block"></ul>
 						</div>
 					</div>
+					<div  id="formUpdateContactVilleGroup" class="control-group">
+						<label class="control-label" for="formUpdateContactVille">Ville <i class="icon-asterisk"></i></label>
+						<div class="controls">
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-map-marker"></i></span><input class="input-medium required" id="formUpdateContactVilleLibelle" placeholder="Ville" type="text" minlength="2" />
+							</div>
+							<input class="input-mini required" id="formUpdateContactVilleCodePostal" placeholder="Code" type="text" minlength="2" />
+							<input class="input-small required" id="formUpdateContactVillePays" placeholder="Pays" type="text" minlength="3" />
+						</div>
+					</div>
 					
 					<div class="control-group">
 						<label class="control-label" for="formUpdateContactPriorite">Priorité & Commentaire</label>
 						<div class="controls">
 							<select id="formUpdateContactPriorite" name="formUpdateContactPriorite" class="input-medium">
 								<option value=3 >3 - Prioritaire</option>
-								<option selected="selected" value=2 >2 - Normale</option>
+								<option id="formUpdateContactPrioriteDefaut" selected="selected" value=2 >2 - Normale</option>
 								<option value=1 >1 - Faible</option>
 								<option value=0 >0 - Inconnue</option>
 								<option value=-1 >X - Déconseillée</option>
@@ -278,6 +288,19 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 			<div class="modal-footer alert">
 				<a href="#" class="btn" data-dismiss="modal">Non</a>
 				<a id="btnModalConfirmer" href="#" class="btn btn-primary" data-dismiss="modal">Oui</a>
+			</div> 
+		</div>
+		
+		<div class="modal hide fade in" id="modalErreur">
+			<div class="modal-header">
+				<a class="close" data-dismiss="modal">×</a>
+				<h3>Erreur</h3>
+			</div>
+			<div class="modal-body">
+				<p class="alert alert-error"></p>					
+			</div>
+			<div class="modal-footer alert">
+				<a href="#" class="btn btn-primary" data-dismiss="modal">Ok</a>
 			</div> 
 		</div>
 	</div>

@@ -137,6 +137,12 @@ function verifierPresent($index) {
 	$sansBlanc = trim($_POST[$index]);
 	return !empty($sansBlanc);
 }
+function verifierPresentObjet($index) {
+	if (!isset($_POST[$index])) {
+		return false;
+	}
+	return true;
+}
 
 
 

@@ -14,8 +14,8 @@ $('document').ready(function() {
 	var ancre = location.hash.substring(location.hash.indexOf("#")+1);
 	if (ancre != '') {
 		for (var i in Annuaire.listeEntreprises) {
-			if (ancre ==  Annuaire.listeEntreprises[i]) {
-				Annuaire.chercherInfoEntreprise(parseInt(i), Annuaire.afficherInfoEntreprise);
+			if (ancre ==  Annuaire.listeEntreprises[i][1]) {
+				Annuaire.chercherInfoEntreprise(Annuaire.listeEntreprises[i][0], Annuaire.afficherInfoEntreprise);
 				break;
 			}
 		}
@@ -28,6 +28,7 @@ $('document').ready(function() {
 	});
 	
 	$("#formUpdateContact").validate();
+	$('#formUpdateContactPrioriteDefaut').attr('selected', true);
 	$("#btnValiderUpdateContact").click( function() {
 		Annuaire.updaterContact();
 	});
