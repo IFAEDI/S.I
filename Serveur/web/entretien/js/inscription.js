@@ -173,7 +173,7 @@ $('document').ready(function() {
 		};
 		
 		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', obj, function(creneau_list) {
+		$.post('/S.I/Serveur/web/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
 				var jsonCreneau = eval('(' + creneau_list + ')');
 				afficherCreneaux(jsonCreneau);
 				$('.reservation').click(function(){
@@ -224,7 +224,65 @@ function disponible(id_etudiant){
 }
 
 
+/*
+ * Partie Administration
+*/
 
+$('document').ready(function() {
+	$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', function(entretien_list) {
+		var jsonEntretien = eval('(' + entretien_list + ')');
+		afficherEntretiens(jsonEntretien);
+		$('.validation').click(function(){
+			$("#id_entretien").val($(this).attr("id_entretien"));
+		});
+	});
+	return false;
+});
+
+
+// Requete validation d'un entretien
+$('document').ready(function() {
+	$("#formValiderEntretien").submit( function() {
+		var obj = {
+			id_entretien: $('#id_entretien').val()
+		};
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/valider_entretien.cible.php', obj, function() {
+			// Ajouter message ici
+		});
+	});
+});
+ 
+
+function afficherEntretiens(jsonEntretien){
+	
+	var /* string */ text = "<thead><tr><th>Jour</th><th>Entreprise</th><th>Etat</th><th></th></tr></thead><tbody>";
+	for (var /* int */ i in jsonEntretien.entretien){
+		var /*string */ nom = jsonEntretien.entretien[i].nom;
+		text += "<tr><td>"+jsonEntretien.entretien[i].date+"</td>"
+		+			"<td>"+jsonEntretien.entretien[i].nom+"</td>"
+		+			"<td>"+valide(jsonEntretien.entretien[i].etat)+"</td>";
+		if( jsonEntretien.entretien[i].etat != 0){
+			// On ne met pas de boutton
+			text += "<td></td>";
+		}else{
+			text +=	"<td><a class=\"validation btn btn-success\" id_entretien="+jsonEntretien.entretien[i].id_entretien+" data-toggle=\"modal\" href=\"#myModal\">Valider</a>"
+				+ "<a class=\"validation btn btn-danger\" id_entretien="+jsonEntretien.entretien[i].id_entretien+" data-toggle=\"modal\" href=\"#myModal\">Refuser</a></td>";
+		}
+		text +=	  "</tr>"
+	}
+	text += "</tbody>";
+	$('.table').html(text);
+}
+
+// Fonction qui analyse l'etat de l'entretien en fonction de l'etat
+function valide(etat){
+	if( etat == 0){
+		return "En attente";
+	}else{
+		return "Valide";
+	}
+}
 
 
 

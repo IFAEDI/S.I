@@ -107,6 +107,12 @@ if ($_GET['page'] == 'accueil') {
     $nom_module = 'entretien';
     $nom_page = 'entretienEtudiant';
     $titre_module = 'Etudiants';
+} elseif ($_GET['page'] == 'admin_entretien') {
+    $titre_page = 'Administration Entretien';
+    $lien_module = 'index.php?page=admin_entretien';
+    $nom_module = 'entretien';
+    $nom_page = 'admin_entretien';
+    $titre_module = 'Etudiants';
 } elseif ($_GET['page'] == 'rifs') {
     $titre_page = 'Rencontres IF';
     $lien_module = 'index.php?page=rifs';

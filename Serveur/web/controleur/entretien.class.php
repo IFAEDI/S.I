@@ -6,7 +6,7 @@ inclure_fichier('commun', 'bd.inc', 'php');
 class Entretien {
 
     //****************  Attributs  ******************//
-    private $ID;
+    private $ID_ENTRETIEN;
     private $ID_CONTACT;
 	private $DATE;
 	private $ETAT;
@@ -23,7 +23,10 @@ class Entretien {
 
 	// Récuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
-        return BD::Prepare('SELECT * FROM Entretien', array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom
+			FROM Entretien et, Contact c, Entreprise e
+			WHERE et.id_contact = c.id_contact
+			AND c.id_entreprise = e.id', array(), BD::RECUPERER_TOUT);
     }
 
 	// Récuperation des entretiens valides par l'administration
@@ -41,7 +44,7 @@ class Entretien {
 	// Suppression d'un entretien par ID
     public static function SupprimerEntretienByID($_id) {
         if (is_numeric($_id)) {
-            BD::Prepare('DELETE FROM Entretien WHERE ID = :id', array('id' => $_id));
+            BD::Prepare('DELETE FROM Entretien WHERE ID_ENTRETIEN = :id', array('id' => $_id));
         }
     }
 
@@ -55,18 +58,17 @@ class Entretien {
 		);
 		
         if ($_id < 0 && is_numeric($_id)) {
-			echo 'coucou';
             //Si l'etudiant à déjà un CV
             BD::executeModif('UPDATE Entretien SET 
 					ID_CONTACT = :id_contact,
                     DATE = :date
-                    WHERE ID = :id', $info);
+                    WHERE ID_ENTRETIEN = :id', $info);
               BD::MontrerErreur();
 			return $_id;
         } else {
 			
             $retour = BD::executeModif('INSERT INTO Entretien SET 
-					ID = :id,
+					ID_ENTRETIEN = :id,
 					ID_CONTACT = :id_contact,
                     DATE = :date
 					', $info);
@@ -80,6 +82,21 @@ class Entretien {
         }
 		
     }
+	
+	// Permet de valider un entretien demande par une entreprise
+	public static function ValiderEntretien($_id){
+		$etat = 1;
+		$info = array(
+			'id'=> $_id,
+			'etat'=> $etat,
+		);
+		BD::executeModif('UPDATE Entretien SET 
+				ETAT = :etat
+				WHERE ID_ENTRETIEN = :id', $info);
+		  BD::MontrerErreur();
+		return $_id;
+	
+	}
 
     //****************  Fonctions  ******************//
 
