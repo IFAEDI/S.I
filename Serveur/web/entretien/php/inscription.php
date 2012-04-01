@@ -111,7 +111,6 @@ $list_entreprises =  $list_entreprises."\"";
 	</div>
 	<div class="modal-body">
 	   <form class="form-horizontal" name="formAjoutEntreprise" method="post" >
-			<input type="hidden" id="id_creaneau" value=""/>
 			<p>Parlez nous un peu plus de vous ...</p>
 	
 		  <div class="control-group" id="control_nomEntreprise">
