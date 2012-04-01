@@ -34,7 +34,7 @@ else {
 
 			<div style="text-align: right;">
 				<a href="#" id="raffraichir" class="btn btn-info"><i class="icon-refresh icon-white"></i> Raffraîchir</a>
-				<a href="#" id="ajouter"  class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
+				<a href="#admin_user_dialog" data-toggle="modal" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
 			</div>
 
 			<table class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">
@@ -107,7 +107,6 @@ else {
 			<input class="input-medium" style="margin: 0px;" id="pwd" type="password" />
 		</div>
 	</div>
-	<!--
 	<div class="control-group">
 		<p>Service d'authentification</p>
 		<div class="controls">
@@ -115,7 +114,6 @@ else {
 			</select>
 		</div>
 	</div>
-	-->
 	<div class="control-group">
 		<p>Nom</p>
 		<div class="controls">
@@ -173,7 +171,6 @@ else {
 
     </div>
     <div class="modal-footer" style="text-align: center;">
-		<a href="#" class="btn btn-success">Enregistrer</a>
                 <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
     </div>
 </div>

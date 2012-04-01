@@ -67,7 +67,6 @@ class Contact {
                 /* Pour chacun, on construit l'objet */
                 $i = 0;
                 foreach( $result as $row ) {
-
                         $obj[$i] = self::GetContactByID( $row['ID_CONTACT'] );
                         $i++;
                 }
@@ -166,7 +165,7 @@ class Contact {
 			}
 
 			/* Récupération de l'identifiant du nouveau contact */
-			$_id = BD::getConnectionn()->lastInsertId();
+			$_id = BD::getConnection()->lastInsertId();
 		}
 
 		return $_id;
@@ -177,7 +176,7 @@ class Contact {
 
     //****************  Getters & Setters  ******************//
     public function getId() {
-        return $this->ID;
+        return $this->ID_CONTACT;
     }
 
     public function getFonction() {
@@ -206,7 +205,7 @@ class Contact {
 
 	/* Si l'objet n'est pas instancié, on le fait */
 	if( $this->personne == null ) {
-		$this->personne = Personne:GetPersonneParID( $this->ID_PERSONNE );
+		$this->personne = Personne::GetPersonneParID( $this->ID_PERSONNE );
 	}
 
         return $this->personne;
@@ -221,6 +220,22 @@ class Contact {
 
 	return $this->ville;
     }
+	
+	public function toArrayObject($avecEntreprise, $avecVille, $avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
+		$arrayContact = array();
+		$arrayContact['id_contact'] = intval($this->ID_CONTACT);
+		$arrayContact['fonction'] = $this->FONCTION;
+		$arrayContact['priorite'] = $this->PRIORITE;
+		$arrayContact['commentaire'] = $this->COMMENTAIRE;
+		$arrayContact['personne'] = $this->getPersonne()->toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur);
+		if ($avecVille) {
+			$arrayContact['ville'] = $this->getVille()->toArrayObject();
+		}
+		if ($avecEntreprise) {
+			$arrayContact['entreprise'] = $this->getEntreprise()->toArrayObject();
+		}
+		return $arrayContact;
+	}
 	
 }
 

@@ -20,7 +20,7 @@ class Ville {
 	* $id : ID de la ville à construire
 	* @throws Exception si la ville n'existe pas
 	*/
-	public __construct( $id ) {
+	public function __construct( $id ) {
 
 		$result = BD::executeSelect( 'SELECT * FROM VILLE WHERE ID_VILLE = :id', array( 'id' => $id ) );
 
@@ -48,6 +48,16 @@ class Ville {
 
 	public function getPays() {
 		return $this->pays;
+	}
+
+	public function toArrayObject() {
+		$arrayVille = array();
+		$arrayVille['id'] = intval($this->id);
+		$arrayVille['code_postal'] = $this->code_postal;
+		$arrayVille['libelle'] = $this->libelle;
+		$arrayVille['pays'] = $this->pays;
+
+		return $arrayVille;
 	}
 };
 

@@ -130,8 +130,6 @@ class Requete {
 	 * chaque champ présent dans la sélection deviendra un champ
 	 * de l'objet ; les noms des champs sont exactement les mêmes
 	 * que ceux issus des noms de colonnes dans la/les tables lue(s).
-	 *
-	 * @throws Exception si une erreur a eu lieu au niveau de la bdd.
 	 */
 	public function lire() {
 		// Décommenter pour du debug
@@ -139,7 +137,7 @@ class Requete {
 
 		$this->requete .= $this->clauseWhere;
 
-		return BD::executeSelect($this->requete, 
+		return BD::Prepare($this->requete, 
 					$this->attributs,
 					BD::RECUPERER_TOUT,
 					PDO::FETCH_OBJ);

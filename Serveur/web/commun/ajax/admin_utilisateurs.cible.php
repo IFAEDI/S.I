@@ -67,39 +67,6 @@ if( @isset( $_GET['action'] ) ) {
 
 		$val = array( 'code' => 'ok', 'services' => $service, 'types' => $type );
 	}
-	/* Récupération des informations d'un utilisateur précis */
-	else if( $_GET['action'] == "get_user_info" ) {
-
-		/* On check que l'on a tous les paramètres */
-		if( ! (@isset( $_GET['id'] ) ) ) {
-			$val = array( 'code' => 'error', 'mesg' => 'Variable manquante.' );
-		}
-		else {
-
-			$id = mysql_escape_string( $_GET['id'] );
-
-			try {
-				/* On fait dans les noms de variables cours car faire un tableau associatif, c'est chiant. */
-				$u = Utilisateur::RecupererUtilisateur( $id );
-				if( $u != null ) {
-
-					$p = $u->getPersonne();
-
-					$info = array( 'login' => $u->getLogin(), 'service' => $u->getService(),
-							'nom' => $p->getNom(), 'prenom' => $p->getPrenom(), 'role' => $p->getRole(),
-							'mails' => $p->getMails(), 'telephones' => $p->getTelephones() );
-
-					$val = array( 'code' => 'ok', 'utilisateur' => $info );
-				}
-				else {
-					$val = array( 'code' => 'fail', 'mesg' => 'Utilisateur introuvable.' );
-				}
-			}
-			catch( Exception $e ) {
-				$val = array( 'code' => 'error', 'mesg' => 'Une erreur s\'est produite en interrogeant la base : '.$e->getMessage() );
-			}
-		}
-	}
 	/* Suppression d'un utilisateur */
 	else if( $_GET['action'] == "del_user" ) {
 		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );

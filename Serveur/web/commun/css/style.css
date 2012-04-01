@@ -4,6 +4,25 @@ body {
     padding-top: 25px;
 }
 
+/* tablesorter */
+
+
+table.tablesorter thead tr .header {
+	background-image: url(../img/symboles/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center left;
+	cursor: pointer;
+	padding-left: 20px;
+}
+
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(../img/symboles/asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(../img/symboles/desc.gif);
+}
+
+
 
 /* ---------- MODULE RIF ---------- */
 
@@ -42,3 +61,18 @@ body {
 	margin: 11px;
 }
 
+#rif p:first-letter
+{
+	padding-left:20px;
+}
+
+#rif .centre
+{
+	text-align:center;
+}
+
+#rif .comment{
+	font-size:0.9em; 
+	color:grey; 
+	font-style:italic;
+}

@@ -336,13 +336,28 @@ class Personne {
         * @return L'instance de la personne concernée ou null
         * @throws Une exception en cas d'erreur
         */
-        public static function getPersonneParID( $id ) {
+    public static function getPersonneParID( $id ) {
 
 		$p = new Personne( null );
 		$p->_fetchDataByPersonID( $id );
 
-                return $p;
-        }
+        return $p;
+    }
+
+	public function toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
+		$arrayPer = array();
+		$arrayPer['id'] = intval($this->id);
+		$arrayPer['nom'] = $this->nom;
+		$arrayPer['prenom'] = $this->prenom;
+		if ($avecMails) { $arrayPer['mails'] = $this->mails; }
+		if ($avecTels) { $arrayPer['telephones'] = $this->telephones; }
+		if ($avec1ereConnexion) { $arrayPer['premiereConnexion'] = $this->premiereConnexion; }
+		if ($avecRole) { $arrayPer['role'] = $this->role; }
+		if ($avecUtilisateur) { $arrayPer['utilisateur'] = $this->utilisateur; }
+
+
+		return $arrayPer;
+	}
 }
 
 ?>

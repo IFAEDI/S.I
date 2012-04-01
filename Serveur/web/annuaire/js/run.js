@@ -9,23 +9,25 @@
  */
  
 $('document').ready(function() {
-	// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
-	$('.entreprise').click(function(){Annuaire.chercherInfoEntreprise(1, Annuaire.afficherInfoEntreprise)});
 	
 	// Mise en place d'une validation des formulaires :
-	$("#formAjoutEntreprise").validate();
-	$("#btnValiderAjoutEntreprise").click( function() {
-		Annuaire.ajouterEntreprise();
+	$("#formUpdateEntreprise").validate();
+	$("#btnValiderUpdateEntreprise").click( function() {
+		Annuaire.updaterEntreprise();
 	});
 	
-	$("#formModifContact").validate();
+	$("#formUpdateContact").validate();
+	$("#btnValiderUpdateContact").click( function() {
+		Annuaire.updaterContact();
+	});
 	
 	// Mise en page - Ajout/Supression de champs pour des mails/telephones supplémentaires dans les formulaires :
-	$('#formModifContactTel').focusout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactTelAjout', 'Bureau', '');});
-	$('#formModifContactTel').mouseout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactTelAjout', 'Bureau', '');});
-	$('#formModifContactEmail').focusout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactEmailAjout', 'Pro', '');});
-	$('#formModifContactEmail').mouseout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formModifContactEmailAjout', 'Pro', '');});
-		
+	$('#formUpdateContactTel').focusout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formUpdateContactTelAjout', 'Bureau', '');});
+	$('#formUpdateContactTel').mouseout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formUpdateContactTelAjout', 'Bureau', '');});
+	$('#formUpdateContactEmail').focusout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formUpdateContactEmailAjout', 'Pro', '');});
+	$('#formUpdateContactEmail').mouseout(function(event) { Annuaire.activerBoutonAjoutEntree(event, 'formUpdateContactEmailAjout', 'Pro', '');});
+	$('#formUpdateContact a[type="reset"]').click(Annuaire.resetFormContact);
+	$('#modalUpdateContact a[data-dismiss="modal"]').click(Annuaire.resetFormContact);	
 	
 	// Mise en page - Dimensionnement de la liste selon la hauteur disponible sur la page.
 	$('.liste_entreprises').css('height', (window.innerHeight - 180)+'px');
