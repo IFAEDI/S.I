@@ -9,17 +9,25 @@
 !-->
 
 <?php
+
+global $authentification, $utilisateur;
+if (($authentification->isAuthentifie() == false) || 
+        (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
+    inclure_fichier('', '401', 'php');
+    die;
+}
+
 // Inclusion des fichiers nécessaires (beurk, des includes en plein milieu de page ...) :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
 inclure_fichier('controleur', 'entreprise.class', 'php');
 inclure_fichier('annuaire', 'annuaire', 'css');
 inclure_fichier('annuaire', 'annuaire.class', 'js');
-inclure_fichier('annuaire', 'run', 'js');
 inclure_fichier('commun', 'jquery.validate.min', 'js');
+inclure_fichier('commun', 'dateFormat', 'js');
 
 // TEST :
-$droitEdition = true;
+$droitEdition = $utilisateur->getPersonne()->getRole() == Personne::ADMIN;
 
 // Récupération de la liste des noms d'entreprises :
 $listeEntreprises = Entreprise::GetListeEntreprises();
@@ -49,9 +57,13 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 									
 									echo '<script type="text/javascript">';
 									for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
-										echo 'Annuaire.listeEntreprises['.$listeEntreprises[$i]->getId().'] = "'.$listeEntreprises[$i]->getNom().'";';
+										echo 'Annuaire.listeEntreprises['.$i.'] = ['.$listeEntreprises[$i]->getId().', "'.$listeEntreprises[$i]->getNom().'"];';
 									}
-									echo 'Annuaire.afficherListeEntreprises();</script>';
+									echo 'Annuaire.afficherListeEntreprises();';
+									
+									// On en profite pour passer au JS des info sur l'utilisateur :
+									echo 'Annuaire.utilisateur = {personne:{prenom:"'.$utilisateur->getPersonne()->getPrenom().'", nom:"'.$utilisateur->getPersonne()->getNom().'", role:'.$utilisateur->getPersonne()->getRole().'}};</script>';
+									
 								?>
 							</tbody>
 						</table>
@@ -74,11 +86,11 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 	
 	<div id="ensembleModal" style="display:hidden;">
 		<div class="modal hide fade in" id="modalUpdateEntreprise">
-			<div class="modal-header">
-				<a class="close" data-dismiss="modal">×</a>
-				<h3>Ajout d'une entreprise - Description générale</h3>
-			</div>
 			<form id="formUpdateEntreprise" class="form-horizontal" target="ajoutEntreprise.cible.php">
+				<div class="modal-header">
+					<a class="close reset" data-dismiss="modal">×</a>
+					<h3>Ajout d'une entreprise - Description générale</h3>
+				</div>
 				<input id="formUpdateEntrepriseId" value=0 type="hidden"/>
 				<div class="modal-body">
 										
@@ -109,8 +121,8 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 		 
 				</div>
 				<div class="modal-footer form-actions">
-					<a href="#" class="btn" data-dismiss="modal">Annuler</a>
-					<a type="reset" class="btn">RAZ</a>
+					<a href="#" class="btn reset" data-dismiss="modal">Annuler</a>
+					<a class="btn reset">RAZ</a>
 					<a id="btnValiderUpdateEntreprise" href="#" class="btn btn-primary">Continuer</a>
 				</div> 
 			</form>
@@ -203,6 +215,58 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 			</form>
 		</div>
 		
+		<div class="modal hide fade in" id="modalAjoutCommentaire">
+			<form id="formAjoutCommentaire" class="form-horizontal" target="ajoutEntreprise.cible.php">
+				<div class="modal-header">
+					<a class="close reset" data-dismiss="modal">×</a>
+					<h3>Ajout d'un commentaire</h3>
+				</div>
+				<input id="formAjoutCommentaireId" value=0 type="hidden"/>
+				<div class="modal-body">
+										
+					<fieldset class="control-group">
+						<div class="control-group">
+							<label class="control-label">Catégorie</i></label>
+							<div class="controls">
+								<label class="radio inline">
+									<input class="formAjoutCommentaireCateg" name="formAjoutCommentaireCategorie" id="formAjoutCommentaireCategorie1" value="0" checked="checked" type="radio"/>
+									<span class="badge"><i class="icon-asterisk icon-white"></i></span>
+								</label>
+								<label class="radio inline">
+									<input class="formAjoutCommentaireCateg" name="formAjoutCommentaireCategorie" id="formAjoutCommentaireCategorie2" value="-1" type="radio"/>
+									<span class="badge badge-error"><i class="icon-remove icon-white"></i></span>
+								</label>
+								<label class="radio inline">
+									<input class="formAjoutCommentaireCateg" name="formAjoutCommentaireCategorie" id="formAjoutCommentaireCategorie3" value="1" type="radio"/>
+									<span class="badge badge-warning"><i class="icon-warning-sign icon-white"></i></span>
+								</label>
+								<label class="radio inline">
+									<input class="formAjoutCommentaireCateg" name="formAjoutCommentaireCategorie" id="formAjoutCommentaireCategorie4" value="2" type="radio"/>
+									<span class="badge badge-info"><i class="icon-info-sign icon-white"></i></span>
+								</label>
+								<label class="radio inline">
+									<input class="formAjoutCommentaireCateg" name="formAjoutCommentaireCategorie" id="formAjoutCommentaireCategorie5" value="3" type="radio"/>
+									<span class="badge badge-success"><i class="icon-ok icon-white"></i></span>
+								</label>
+							</div>
+						</div>
+						<div class="control-group">
+							<label class="control-label" for="formAjoutCommentaireContenu">Commentaire <i class="icon-asterisk"></i></label>
+							<div class="controls">
+								<textarea class="input-xlarge required" id="formAjoutCommentaireContenu" rows="3"  placeholder="Commentaire" ></textarea>
+							</div>
+						</div>
+					</fieldset>
+		 
+				</div>
+				<div class="modal-footer form-actions">
+					<a href="#" class="btn reset" data-dismiss="modal">Annuler</a>
+					<a class="btn reset">RAZ</a>
+					<a id="btnValiderAjoutCommentaire" href="#" class="btn btn-primary">Continuer</a>
+				</div> 
+			</form>
+		</div>
+		
 		<div class="modal hide fade in" id="modalConfirmation">
 			<div class="modal-header">
 				<a class="close" data-dismiss="modal">×</a>
@@ -217,4 +281,7 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 			</div> 
 		</div>
 	</div>
+	<?php
+		inclure_fichier('annuaire', 'run', 'js');
+	?>
 </div>		
