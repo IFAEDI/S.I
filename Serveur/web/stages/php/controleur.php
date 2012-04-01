@@ -12,6 +12,11 @@ inclure_fichier('commun', 'requete.inc', 'php'); // Ajouter dans base.inc ?
 class Stages {
 
 	/**
+	 * Valeur renvoyée en cas de d'erreur au niveau de la BDD.
+	 */
+	const ERROR = -1; 
+
+	/**
 	 * Recherche des stages appropriés selon les paramètres donnés.
 	 *
 	 * $mots_cles : tableau contenant les mots clés sous forme de
@@ -21,6 +26,10 @@ class Stages {
 	 * 	plus de 12 mois, le cas échéant). 
 	 * $lieu : chaîne
 	 * $entreprise : chaîne
+	 *
+	 * @return Une liste de stages si la requête s'est bien passée,
+	 * (si cette liste vaut NULL, elle est vide), ou self::ERROR si
+	 * il y a eu une erreur au niveau de la BDD.
 	 */
 
 	static function rechercher($mots_cles, $annee, $duree,
@@ -72,22 +81,26 @@ class Stages {
 		}
 
 		// Pré-traitement des résultats
-		$resultats = $requete->lire();
-		$nb_resultats = count($resultats);
-		for ($i = 0; $i < $nb_resultats; ++$i) {
-			// Reformater les années correctement.
-			if ($resultats[$i]->annee == 7) {
-				$resultats[$i]->annee = '3 et 4';
-			} else if ($resultats[$i]->annee == 9) {
-				$resultats[$i]->annee = '4 et 5';
+		try {
+			$resultats = $requete->lire();
+			$nb_resultats = count($resultats);
+			for ($i = 0; $i < $nb_resultats; ++$i) {
+				// Reformater les années correctement.
+				if ($resultats[$i]->annee == 7) {
+					$resultats[$i]->annee = '3 et 4';
+				} else if ($resultats[$i]->annee == 9) {
+					$resultats[$i]->annee = '4 et 5';
+				}
+	
+				// L'indiquer si la description est vide.
+				if (!$resultats[$i]->description) {
+					$resultats[$i]->description = '(pas de description)';
+				}
 			}
-
-			// L'indiquer si la description est vide.
-			if (!$resultats[$i]->description) {
-				$resultats[$i]->description = '(pas de description)';
-			}
+			return $resultats; 
+		} catch (Exception $e) {
+			return self::ERROR;
 		}
-		return $resultats; 
 	}
 }
 

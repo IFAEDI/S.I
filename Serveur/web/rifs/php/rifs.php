@@ -1,3 +1,5 @@
+<?php inclure_fichier('rifs', 'rifs', 'css'); ?>
+
 <div class=row-fluid>
 	<div class="span12">
 		<div class="row-fluid">
@@ -25,7 +27,7 @@
 			<div class="span6">
 				<img src="http://i3.kym-cdn.com/photos/images/newsfeed/000/210/370/celebrity-pictures-nicolas-cage-stoic-crazy.jpg" />
 			</div>
-		</div>		
+		</div>
 		<div id="infoRif">
 			<h1>Informations</h1>
 			<div class="Date">
@@ -38,7 +40,7 @@
 			<div class="tarif">
 				<h2>Tarifs</h2>
 				<div class="row-fluid">
-					<div class="span6"> 
+					<div class="span6">
 						<ul>
 							<li>Entreprise parrainant l'une des trois promotions en cours : </li>
 							<li>Entreprise payant la taxe d'apprentissage à l'INSA : </li>

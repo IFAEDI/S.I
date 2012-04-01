@@ -54,11 +54,11 @@ if (verifierPresent('entreprise')) {
 $resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu, 
        			$entreprise);
 
+
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($resultats != NULL) ? 'ok' : 'error';
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
+$json['code'] = ($resultats != Stages::ERROR) ? 'ok' : 'error';
 $json['msg'] = $resultats;
 echo json_encode($json);
 
