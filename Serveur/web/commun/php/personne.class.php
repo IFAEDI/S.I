@@ -284,6 +284,20 @@ class Personne {
 		return true;
 	}
 
+	/**
+	* Supprime la personne de la base
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function supprimerPersonne() {
+
+		$result = BD::executeModif( 'DELETE FROM PERSONNE WHERE ID_PERSONNE = :id', array( 'id' => $this->id ) );
+
+		if( $result == 0 ) {
+			return false;
+		}
+
+		return true;
+	}
 
 	/**
 	* Détermine si c'est la première connexion de l'utilisateur ou non

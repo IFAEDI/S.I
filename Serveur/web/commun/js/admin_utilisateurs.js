@@ -4,7 +4,8 @@
 * Description : Gestion des utilisateurs en base  *
 **************************************************/
 
-var max_utilisateur_par_page = 15;
+var max_utilisateur_par_page = 3;
+var page_courante = 1;
 
 var liste_utilisateurs = null;
 var liste_services     = null;
@@ -53,7 +54,7 @@ function recupererListeUtilisateurs() {
                         if( msg.code == "ok" ) {
 				/* Conservation de la liste en mémoire et on actualise la table */
 				liste_utilisateurs = clone(msg.utilisateurs);
-				raffraichirTable( 0 );
+				raffraichirTable();
                         }
                         else {
 				var err = 'Une erreur est survenue lors de la récupération des utilisateurs : ' + msg.mesg; 
@@ -157,13 +158,16 @@ function raffraichirListeRoles() {
 
 /**
 * Actualise le contenu de la table
-* debut : L'index de l'utilisateur à partir duquel on commence à afficher
 */
-function raffraichirTable( debut ) {
+function raffraichirTable() {
+
+	raffraichirPages();
 
 	var tbody = '';
 	var i = 0;
 	var index = 1;
+	/* Mon Dieu, un calcul scientifique ! */
+	var debut = (page_courante-1) * max_utilisateur_par_page;
 
 	/* Parcourons les utilisateurs */
 	while( i < liste_utilisateurs.length ) {
@@ -183,7 +187,10 @@ function raffraichirTable( debut ) {
 		}
 
 		/* On applique les bornes */
-		if( i < debut ) continue;
+		if( i < debut ) {
+			i++;
+			continue;
+		}
 		if( i == debut + max_utilisateur_par_page ) break; 
 
 		tbody += '<tr>';
@@ -202,11 +209,11 @@ function raffraichirTable( debut ) {
 		}
 		tbody += '</td>';
 
-		/* Les actions, à savoir Voir, Editer, Bannir */
+		/* Les actions, à savoir Editer et Bannir */
 		var id = liste_utilisateurs[i].id;
 		tbody += '<td style="text-align: center;">';
-		tbody += '<a href="#" class="edit" uid="' + id + '"><i class="icon-pencil"></i></a> ';
-		tbody += '<a href="#" class="del"  uid="' + id + '"><i class="icon-remove"></i></a>';
+		tbody += '<a href="#" class="edit" uid="' + id + '" title="Editer"><i class="icon-pencil"></i></a> ';
+		tbody += '<a href="#" class="del"  uid="' + id + '" title="Bannir"><i class="icon-remove"></i></a>';
 		tbody += '</td>';
 		tbody += '</tr>';
 
@@ -218,6 +225,47 @@ function raffraichirTable( debut ) {
 	/* Ajout des triggers */
 	$( "a.edit" ).click( editerUtilisateur );
 	$( "a.del"  ).click( supprimerUtilisateur );
+}
+
+/**
+* Raffraichit les numéros de page
+*/
+function raffraichirPages() {
+
+	/* On vide les pages */
+	$( '#admin_utilisateurs .pagination ul' ).html( '' );
+
+	/* On détermine leur nombre et on les ajoute */
+	var nb_pages = Math.ceil( liste_utilisateurs.length / max_utilisateur_par_page );
+	for( var i = 1; i <= nb_pages; i++ ) {
+		$( '#admin_utilisateurs .pagination ul' ).append( '<li><a href="#">' + i + '</a></li>' );
+	}
+
+	/* Cas de figure ou on a supprimé un élément par exemple, faut changer la page courante par la dernière */
+	if( page_courante > nb_pages ) {
+		page_courante = nb_pages;
+	}
+
+	/* Sélectionne la page courante à la méthode LARACHE */
+	var i = 1;
+	$( '#admin_utilisateurs .pagination li' ).each( function() { 
+		if( i == page_courante ) {
+			$(this).toggleClass( 'active' );
+		}
+		i++;
+	} );
+
+	/* Ajout des triggers */
+	$( "#admin_utilisateurs .pagination a" ).click( changerPage );
+}
+
+/**
+* Change de page
+*/
+function changerPage() {
+
+	page_courante = $(this).html();
+	raffraichirTable();
 }
 
 /**
@@ -479,6 +527,10 @@ function enregistrerUtilisateur() {
 */
 function supprimerUtilisateur() {
 
+	/* Précoche la case de suppression de la personne associée */
+	$( "#admin_del_user_dialog #del_personne" ).attr( 'checked', true );
+
+	/* Conservation de l'id de l'utilisateur */
 	action_sur = $(this).attr( 'uid' );
 	$( "#admin_del_user_dialog" ).modal( 'show' );
 }
@@ -488,6 +540,17 @@ function supprimerUtilisateur() {
 */
 function confirmerSuppressionUtilisateur() {
 
+	var suppr_personne = $( '#admin_del_user_dialog #del_personne:checked' ).val();
+
+	/* On détermine s'il faut supprimer la personne associée */
+	if( void 0 != suppr_personne ) {
+		suppr_personne = 1;
+	}
+	else {
+		suppr_personne = 0;
+	}
+
+
 	$.ajax( {
                 async: false,
                 type: "GET",
@@ -495,14 +558,14 @@ function confirmerSuppressionUtilisateur() {
                 url: "commun/ajax/admin_utilisateurs.cible.php",
                 data: {
                         action  : "del_user",
-			id	: action_sur
+			id	: action_sur,
+			delP	: suppr_personne
                 },
                 success: function( msg ) {
 
                         if( msg.code == "ok" ) {
 				/* Optimisation powa ! (ou pas) */
 				recupererListeUtilisateurs();
-				$( '#admin_utilisateurs' ).modal( 'hide' );
                         }
                         else {
                                 var err = 'Une erreur est survenue lors de la suppression : ' + msg.code + '/' + msg.mesg;
@@ -516,5 +579,5 @@ function confirmerSuppressionUtilisateur() {
                 }
 	} );
 
-	$( "#admin_del_user_dialog" ).modal( "hide" );
+	$( '#admin_del_user_dialog' ).modal( 'hide' );
 }
