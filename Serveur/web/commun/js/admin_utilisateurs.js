@@ -4,7 +4,7 @@
 * Description : Gestion des utilisateurs en base  *
 **************************************************/
 
-var max_utilisateur_par_page = 3;
+var max_utilisateur_par_page = 20;
 var page_courante = 1;
 
 var liste_utilisateurs = null;
