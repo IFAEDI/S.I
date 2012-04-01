@@ -1,9 +1,12 @@
 <?php
-/*if (!Utilisateur_connecter('entreprise')) {
+global $authentification;
+global $utilisateur;
+
+if ($authentification->isAuthentifie() == false || (
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
     inclure_fichier('', '401', 'php');
     die;
 }
-*/
 ?>
 
 <legend>Entreprises</legend>

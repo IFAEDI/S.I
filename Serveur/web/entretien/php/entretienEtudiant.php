@@ -1,5 +1,11 @@
 <?php
-if (!Utilisateur_connecter('entreprise')) {
+global $authentification;
+global $utilisateur;
+
+if ($authentification->isAuthentifie() == false || (
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+        $utilisateur->getPersonne()->getRole() != Personne::AEDI &&
+        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT)) {
     inclure_fichier('', '401', 'php');
     die;
 }
