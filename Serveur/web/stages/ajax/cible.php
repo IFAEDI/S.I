@@ -1,7 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('stages', 'controleur', 'php');
+inclure_fichier('controleur', 'stages.class', 'php');
 
 /**
  * Ce fichier sert de cible à la recherche de stages. C'est celui qui
