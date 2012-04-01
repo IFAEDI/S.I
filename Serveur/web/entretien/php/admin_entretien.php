@@ -24,7 +24,7 @@ Vous pouvez accepter ou refuser celles qui ne sont pas encore inscrite.
 <br />
 <br />
 
-<form class="form-horizontal" id="formChoixDate" action="#" method="post">
+<form class="form-horizontal" id="formChoixDateAdmin" action="#" method="post">
 	<fieldset>
 		<legend>Etudiants</legend>
 		<br />
@@ -91,7 +91,13 @@ Vous pouvez accepter ou refuser celles qui ne sont pas encore inscrite.
 	<div class="modal-body">
 	   <form class="form-horizontal" id="formAjoutEtudiant" method="post" action="#" >
 			<input type="hidden" id="id_creneau"/>
-			<p>Etes-vous sur de vouloir inscrire un etudiant a ce creneau ?</p>
+			<p>Inscription de l'etudiant</p>
+			 <div class="control-group" id="control_nom">
+				<label class="control-label">Etudiant</label>
+				<div class="controls">
+				  <input class="input-medium" type="text" id="nom_contact"/>
+				</div>
+			  </div>
 			<div class="modal-footer">
 			<input type="submit" class="btn btn-primary" value="Valider"/>
 			<a href="#" class="btn" data-dismiss="modal">Annuler</a>

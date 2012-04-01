@@ -228,6 +228,7 @@ function disponible(id_etudiant){
 							Partie Administration
  ------------------------------------------------------------------------------------ */
 
+ // Affichage liste entretiens
 $('document').ready(function() {
 	$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', function(entretien_list) {
 		var jsonEntretien = eval('(' + entretien_list + ')');
@@ -301,7 +302,7 @@ function valide(etat){
 
 // Requete recuperation creneaux d'un jour
 $('document').ready(function() {
-	$("#formChoixDate").submit( function() {
+	$("#formChoixDateAdmin").submit( function() {
 		var obj = {
 			date: $('#date_creneaux').val()
 		};
@@ -318,8 +319,6 @@ $('document').ready(function() {
 	});
 });
 
-
-
 function afficherCreneauxAdmin(jsonCreneau){
 	
 	var /* string */ text = "";
@@ -331,7 +330,7 @@ function afficherCreneauxAdmin(jsonCreneau){
 		+	"<div id=\"#collapse"+i+"\" class=\"accordion-body collapse in\">"
 		+	   "<div class=\"accordion-inner\">"
 		+		"<table class=\"table table-striped\">"
-		+		"<thead><tr><th>Debut</th><th>Fin</th><th>Etat</th><th></th></tr></thead>"
+		+		"<thead><tr><th>Debut</th><th>Fin</th><th>Etudiant</th><th></th></tr></thead>"
 		+		"<tbody><tr>"
 		+			"<td>"+jsonCreneau.creneau[i].debut+"</td>"
 		+			"<td>"+jsonCreneau.creneau[i].fin+"</td>"
@@ -339,7 +338,7 @@ function afficherCreneauxAdmin(jsonCreneau){
 		if( disponible(jsonCreneau.creneau[i].id_etudiant) != "Disponible"){
 			text +=	"<td><a class=\"annulation btn btn-inverse\" id_creneau="+jsonCreneau.creneau[i].id_creneau+" data-toggle=\"modal\" href=\"#refuserEtudiantModal\">Enlever</a></td>"
 		}else{
-			text +=	"<td><a class=\"reservation btn btn-inverse\" id_creneau="+jsonCreneau.creneau[i].id_creneau+" data-toggle=\"modal\" href=\"#ajouterEtudiantModal\">Ajouter</a></td>"
+			//text +=	"<td><a class=\"reservation btn btn-inverse\" id_creneau="+jsonCreneau.creneau[i].id_creneau+" data-toggle=\"modal\" href=\"#ajouterEtudiantModal\">Ajouter</a></td>"
 		}
 		text +=	  "</tr>"
 		+		  "</tbody></table></div></div></div>";

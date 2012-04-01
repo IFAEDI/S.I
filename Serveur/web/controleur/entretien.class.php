@@ -23,10 +23,12 @@ class Entretien {
 
 	// Récuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
-        return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, c.mail
-			FROM Entretien et, Contact c, Entreprise e
+        return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, m.mail
+			FROM Entretien et, Contact c, Entreprise e, Personne p, Mail m
 			WHERE et.id_contact = c.id_contact
-			AND c.id_entreprise = e.id', array(), BD::RECUPERER_TOUT);
+			AND c.id_personne = p.id_personne
+			AND m.id_personne = p.id_personne
+			AND c.id_entreprise = e.id_entreprise', array(), BD::RECUPERER_TOUT);
     }
 
 	// Récuperation des entretiens valides par l'administration
