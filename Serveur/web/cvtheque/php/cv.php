@@ -1,13 +1,15 @@
 <?php
+
 /*
  * @author Loïc Gevrey
  *
  *
  */
 
+
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
-if (isset($_GET['inc']) && $_GET['inc']==1) {
+if (isset($_GET['inc']) && $_GET['inc'] == 1) {
     inclure_fichier('commun', 'authentification.class', 'php');
 
     $authentification = new Authentification();
@@ -32,6 +34,7 @@ if ($authentification->isAuthentifie() == false) {
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
+
 if (isset($_GET['id_personne']) &&
         ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE ||
         $utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
@@ -45,7 +48,9 @@ if (isset($_GET['id_personne']) &&
     die();
 }
 
-if ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getPersonne()->getId()) != 1) {
+
+
+if ($utilisateur->getPersonne()->getRole() == Personne::ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getPersonne()->getId()) != 1) {
     inclure_fichier('', '401', 'php');
     die;
 }
@@ -69,7 +74,7 @@ $liste_competence = $etudiant->getCompetence();
 if ($cv == NULL) {
     $cv = new CV();
 } else {
-    if ($cv->getAgreement() == 0 && $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE) {
+    if ($cv->getAgreement() == 0 && $utilisateur->getPersonne()->getRole() == Personne::ENTREPRISE) {
         inclure_fichier('', '401', 'php');
         die();
     }
@@ -249,8 +254,8 @@ if ($etudiant->getSexe() == 0) {
 }
 
 $cv_replace = array(
-    Protection_XSS($etudiant->getNom()),
-    Protection_XSS($etudiant->getPrenom()),
+    Protection_XSS($utilisateur->getPersonne()->getNom()),
+    Protection_XSS($utilisateur->getPersonne()->getPrenom()),
     Protection_XSS($cv->getTitre()),
     Protection_XSS($etudiant->getMail()),
     Protection_XSS($etudiant->getTel()),
