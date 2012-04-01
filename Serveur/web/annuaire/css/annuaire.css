@@ -2,30 +2,36 @@
 	margin-top: 20px;
 }
 
-.liste_entreprises {
+#annuaire .liste_entreprises {
 	height: 500px;
 	overflow: scroll;
 }
 
-.desc_entreprise table .first{
+#annuaire table .first{
 	width: 20px;
 }
 
-.entreprise:hover{
+#annuaire .entreprise:hover{
 	cursor: pointer;
 }
 
-.editionEntreprise {
+#annuaire .editionEntreprise {
 	margin-right: 10px;
 	margin-top: 5px;
 	float:right;
 }
 
-#contacts td .btn {
+#annuaire #contacts td .btn {
 	margin-right: 5px;
 	
 }
-#contacts td .btn:last-child {
+#annuaire #contacts td .btn:last-child {
 	margin-right: 0px;
 	
+}
+
+#annuaire #options {
+	float:right;
+	margin-top: 10px;
+	margin-left:5px;
 }

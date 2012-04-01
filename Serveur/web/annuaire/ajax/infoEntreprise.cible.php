@@ -51,10 +51,28 @@
 			}
 		}
  */
+ 
+ 
+ // Vérification de l'authentification :
+require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+inclure_fichier('commun', 'authentification.class', 'php');
+$authentification = new Authentification();
+$utilisateur = null;
+if ($authentification->isAuthentifie()) {
+
+    /* On récupère l'objet utilisateur associé */
+    $utilisateur = $authentification->getUtilisateur();
+    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
+        $authentification->forcerDeconnexion();
+		inclure_fichier('', '401', 'php');
+		die;
+    }
+}
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
 inclure_fichier('controleur', 'contact.class', 'php');
+inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 /*
  * Récupérer et transformer le JSON
@@ -70,8 +88,10 @@ if (verifierPresent('id')) {
  */
 /* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
 /* objet */ $contacts = NULL;
+/* objet */ $commentaires = NULL;
 if ($entreprise != NULL) {
 	$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
+	$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
 }
 
 /*
@@ -81,7 +101,18 @@ $json['code'] = ($entreprise != NULL) ? 'ok' : 'error';
 // FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
 if ($entreprise != NULL) {
 	$json['entreprise']['description'] = $entreprise->toArrayObject();
-	$json['entreprise']['contacts'] = $contacts;
+	if (gettype($contacts) == 'array') {
+		$json['entreprise']['contacts'] = Array();
+		foreach( $contacts as $contact ) {
+			array_push($json['entreprise']['contacts'], $contact->toArrayObject(false, true, true, true, false, false, false));
+		}
+	}
+	if (gettype($commentaires) == 'array') {
+		$json['entreprise']['commentaires'] = Array();
+		foreach( $commentaires as $commentaire ) {
+			array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
+		}
+	}
 }
 echo json_encode($json);
 

@@ -102,8 +102,9 @@ class Entreprise {
 			$result = BD::executeModif( 'UPDATE ENTREPRISE SET NOM = :nom, DESCRIPTION = :desc, SECTEUR = :secteur, COMMENTAIRE = :commentaire WHERE ID_ENTREPRISE = :id', $info );
 
 			if( $result == 0 ) {
-				return false;
+				return -1;
 			}
+			return 0;
 
 		}
 		/* Sinon on est dans le cas de l'ajout */
@@ -115,11 +116,12 @@ class Entreprise {
 			$result = BD::executeModif( 'INSERT INTO ENTREPRISE( NOM, DESCRIPTION, SECTEUR, COMMENTAIRE) VALUES ( :nom, :desc, :secteur, :commentaire )', $info);
 
 			if( $result == 0 ) {
-				return false;
+				return -1;
 			}
 
 			/* On récupère l'ID qui a été affecté */
 			$_id = BD::GetConnection()->lastInsertId();
+			
 		}
 
 		return $_id;
@@ -127,7 +129,7 @@ class Entreprise {
 
 	//****************  Getters & Setters  ******************//
 	public function getId() {
-		return $this->ID;
+		return $this->ID_ENTREPRISE;
 	}
 
 	public function getNom() {
@@ -152,7 +154,7 @@ class Entreprise {
 	*/
 	public function toArrayObject() {
 		$arrayEntr = array();
-		$arrayEntr['id'] = intval($this->ID);
+		$arrayEntr['id_entreprise'] = intval($this->ID_ENTREPRISE);
 		$arrayEntr['nom'] = $this->NOM;
 		$arrayEntr['description'] = $this->DESCRIPTION;
 		$arrayEntr['secteur'] = $this->SECTEUR;

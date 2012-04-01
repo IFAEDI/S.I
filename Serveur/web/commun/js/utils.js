@@ -329,3 +329,15 @@ function clone( srcInstance )
 	/*On retourne la nouvelle instance*/
 	return nouvelleInstance;
 }
+
+/*
+ * Fonction pour reset un formulaire
+ * @author Paolo Bergantino
+ * @see http://stackoverflow.com/questions/680241/resetting-a-multi-stage-form-with-jquery
+ */
+function resetForm($form) {
+    $form.find('input:text, input:password, input:file, select').val('');
+    $form.find('input:radio, input:checkbox')
+         .removeAttr('checked').removeAttr('selected');
+}
+

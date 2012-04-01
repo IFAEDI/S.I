@@ -55,38 +55,13 @@ class Utilisateur {
 	private function _fetchData( $login ) {
 
 		/* Requête à la base pour récupérer le bon utilisateur et construire l'objet */
-		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
+		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE LOGIN = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
 
 		if( $result == null ) {
 			return false;
 		}
 	
 		$this->_autoComplete( $result );
-		return true;
-	}
-
-	/**
-	* Recupère un utilisateur associé à une personne
-	* $id : L'identifiant de l'utilisateur à rechercher
-	* $personne : Une instance de la classe personne (optionnel)
-	* @return True si un utilisateur a été trouvé, false sinon
-	*/
-	public function recupererUtilisateur( $id, $personne = null ) {
-
-		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE ID_UTILISATEUR = :id', array( 'id' => $id ) );
-
-		if( $result == null ) {
-			return false;
-		}
-
-		$this->_autoComplete( $result );
-
-		/* S'il n'y a pas de personne associée, on la crée pour être consistant */
-		if( $personne == null ) {
-			$personne = new Personne( $this );
-		}
-
-		$this->personne = $personne;
 		return true;
 	}
 
@@ -115,6 +90,45 @@ class Utilisateur {
 		return ($result == 1);
 	}
 
+
+        /**
+        * Fonction faisant le changement du login de l'utilisateur
+        * @return Vrai si tout est ok, faux sinon
+        */
+        public function changeLogin( $login ) {
+
+                /* Requête à la base */
+                $result = BD::executeModif( 'UPDATE UTILISATEUR SET LOGIN = :login WHERE ID_UTILISATEUR = :id',
+                                                        array( 'login' => $login, 'id' => $this->id ) );
+
+		if( $result == 1 ) {
+			$this->login = $login;
+			return true;
+		}
+
+                return false;
+        }
+
+	/**
+	* Supprime un utilisateur et potentiellement la personne associée de la base
+	* $supprimerPersonne : Booléen disant s'il on doit supprimer ou non la personne associée
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function supprimerUtilisateur( $supprimerPersonne ) {
+
+		$result = BD::executeModif( 'DELETE FROM UTILISATEUR WHERE ID_UTILISATEUR = :id', array( 'id' => $this->id ) );
+
+		if( $result == 0 ) {
+			return false;
+		}
+
+		if( $supprimerPersonne == true ) {
+			$p = $this->getPersonne();
+			return $p->supprimerPersonne();
+		}
+
+		return true;
+	}
 
 	/**
 	* Retourne la personne associée à l'utilisateur
@@ -159,17 +173,78 @@ class Utilisateur {
 		$obj = array();
 
 		/* Requête à la base pour récupérer les logins et construire les objets */
-		$result = BD::executeSelect( 'SELECT login FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
+		$result = BD::executeSelect( 'SELECT LOGIN FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
 
 		$i = 0;
 		foreach( $result as $row ) {
 
-			$obj[$i] = new Utilisateur( $row['login'] );
+			$obj[$i] = new Utilisateur( $row['LOGIN'] );
 			$i++;
 		}
 
 		return $obj;
 	}
+
+        /**
+        * Recupère un utilisateur associé à une personne
+        * $id : L'identifiant de l'utilisateur à rechercher
+        * $personne : Une instance de la classe personne (optionnel)
+        * @return Une instance utilisateur si un utilisateur a été trouvé, null sinon
+        */
+        public static function RecupererUtilisateur( $id, $personne = null ) {
+
+		/* Recherche dans la base */
+                $result = BD::executeSelect( 'SELECT LOGIN FROM UTILISATEUR WHERE ID_UTILISATEUR = :id', array( 'id' => $id ) );
+
+                if( $result == null ) {
+                        return null;
+                }
+
+		/* Création de l'utilisateur avec le login */
+		$utilisateur = new Utilisateur( $result['LOGIN'] );
+
+		/* Si une instance de Personne a été passée, on l'associe pour éviter trop de requêtes */
+		if( $personne != null ) {
+			$utilisateur->personne = $personne;
+		}
+
+                return $utilisateur;
+        }
+
+	/**
+	* Ajoute un nouvel utilisateur en base
+	* $login : Le login du nouvel utilisateur
+	* $pwd : Le mot de passe du nouvel utilisateur
+	* @return La nouvelle instance créée ou null
+	*/
+	public static function AjouterUtilisateur( $login, $pwd ) {
+
+		$result = BD::executeModif( 'INSERT INTO UTILISATEUR( LOGIN, PASSWD, AUTH_SERVICE) VALUES( :login, :pwd, :service )',
+					array( 'login' => $login, 'pwd' => $pwd, 'service' => Authentification::AUTH_NORMAL ) );
+
+		if( $result == 0 ) {
+			return null;
+		}
+
+		return new Utilisateur( $login );
+	}
+
+	/**
+	* Recherche un utilisateur avec ce login
+	* $login : Le login à rechercher
+	* @return Vrai s'il existe, faux sinon
+	*/
+	public static function UtilisateurExiste( $login ) {
+
+		$result = BD::executeSelect( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login', array( 'login' => $login ) );
+
+		if( $result == null ) {
+			return false;
+		}
+
+		return ($result['CPT'] > 0);
+	}
+
 }
 
 ?>

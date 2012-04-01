@@ -4,6 +4,108 @@ body {
     padding-top: 25px;
 }
 
+/* tablesorter */
+
+
+table.tablesorter thead tr .header {
+	background-image: url(../img/symboles/bg.gif);
+	background-repeat: no-repeat;
+	background-position: center left;
+	cursor: pointer;
+	padding-left: 20px;
+}
+
+table.tablesorter thead tr .headerSortUp {
+	background-image: url(../img/symboles/asc.gif);
+}
+table.tablesorter thead tr .headerSortDown {
+	background-image: url(../img/symboles/desc.gif);
+}
+
+/* ---------- MODULE ANNUAIRE ---------- */
+
+#annuaire {
+	margin-top: 20px;
+}
+
+#annuaire .liste_entreprises {
+	height: 500px;
+	overflow: scroll;
+}
+
+#annuaire table .first{
+	width: 20px;
+}
+
+#annuaire .entreprise:hover{
+	cursor: pointer;
+}
+
+#annuaire .editionEntreprise {
+	margin-right: 10px;
+	margin-top: 5px;
+	float:right;
+}
+
+#annuaire #contacts td .btn {
+	margin-right: 5px;
+	
+}
+#annuaire #contacts td .btn:last-child {
+	margin-right: 0px;
+	
+}
+
+#annuaire #options {
+	float:right;
+	margin-top: 10px;
+	margin-left:5px;
+}
+
+/* ---------- MODULE STAGE ---------- */
+
+#stages #submit_recherche {
+	float: right;	
+}
+
+#stages h1 {
+	text-align: center;
+	margin-bottom: 10px;
+}
+
+#stages #form_stages {
+	min-height: 170px;
+}	
+
+/* Simulation des balises details et summary */
+#stages details, summary {
+	display: block;
+}
+
+#stages summary {
+	cursor: pointer;
+}
+
+#stages summary:hover, summary:focus {
+	background: #ddd;
+}
+
+#stages .no-details details > * {
+	display: none;
+}
+
+/*Mettre les images de puces : fleche haut et fleche bas */
+#stages .no-details details summary:before {
+	float: left; width: 20px; content: '-';
+}
+#stages .no-details details.open summary:before {
+	content: '-';
+}
+
+#stages .no-details details summary {
+	display: block;
+}
+
 
 /* ---------- MODULE RIF ---------- */
 
@@ -42,3 +144,18 @@ body {
 	margin: 11px;
 }
 
+#rif p:first-letter
+{
+	padding-left:20px;
+}
+
+#rif .centre
+{
+	text-align:center;
+}
+
+#rif .comment{
+	font-size:0.9em; 
+	color:grey; 
+	font-style:italic;
+}

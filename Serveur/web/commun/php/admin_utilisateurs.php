@@ -34,7 +34,7 @@ else {
 
 			<div style="text-align: right;">
 				<a href="#" id="raffraichir" class="btn btn-info"><i class="icon-refresh icon-white"></i> Raffraîchir</a>
-				<a href="#admin_user_dialog" data-toggle="modal" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
+				<a href="#" id="ajouter"  class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
 			</div>
 
 			<table class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">
@@ -70,9 +70,6 @@ else {
 
 			<div class="pagination" style="text-align: center;">
 			<ul>
-				<li><a href="#">Prev</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">Next</a></li>
 			</ul>
 			</div>
 
@@ -95,6 +92,8 @@ else {
     </div>
     <div class="modal-body" style="text-align: center;">
 
+	<div class="hide alert alert-error" id="erreur"></div>
+
 	<div class="control-group">
 		<p>Nom d'utilisateur</p>
 		<div class="controls">
@@ -107,6 +106,7 @@ else {
 			<input class="input-medium" style="margin: 0px;" id="pwd" type="password" />
 		</div>
 	</div>
+	<!--
 	<div class="control-group">
 		<p>Service d'authentification</p>
 		<div class="controls">
@@ -114,6 +114,7 @@ else {
 			</select>
 		</div>
 	</div>
+	-->
 	<div class="control-group">
 		<p>Nom</p>
 		<div class="controls">
@@ -171,6 +172,7 @@ else {
 
     </div>
     <div class="modal-footer" style="text-align: center;">
+		<a href="#" id="enregistrer" class="btn btn-success">Enregistrer</a>
                 <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
     </div>
 </div>
@@ -185,10 +187,12 @@ else {
 
         <p>Êtes-vous sûr de vouloir bannir cette utilisateur?</p>
 
+	<input type="checkbox" id="del_personne" class="input-medium" /> <span>Supprimer également la personne associée</span>
+
     </div>
     <div class="modal-footer" style="text-align: center;">
                 <a href="#" data-dismiss="modal" class="btn btn-primary">Annuler</a>
-                <a href="#" id="confirm" class="btn btn-danger">Confirmer</a>
+                <a href="#" id="confirmer" class="btn btn-danger">Confirmer</a>
     </div>
 </div>
 

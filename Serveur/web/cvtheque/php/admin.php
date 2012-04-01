@@ -2,7 +2,7 @@
 global $authentification;
 global $utilisateur;
 
-if ($authentification->isAuthentifie() == false || $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+if ($authentification->isAuthentifie() == false || $utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
     inclure_fichier('', '401', 'php');
     die;
 }
@@ -22,6 +22,8 @@ inclure_fichier('cvtheque', 'admin', 'js');
 
 <div class="alert" style="padding: 20px;">
     <a class='btn btn-primary' href="javascript:ArreterDiffusion();">Arreter la diffusion de tout les cv</a>
+    <a class='btn' href="javascript:MettreNouveau();">Mettre tous les CVs à 'Nouveau'</a>
+    <a class='btn btn-danger' href="javascript:ViderFavorisCV();">Vider la table des CVs favoris</a>
 </div>
 
 

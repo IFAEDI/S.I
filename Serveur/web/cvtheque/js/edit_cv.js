@@ -451,12 +451,12 @@ function Sauvegarder(){
     }
 
     if (!VerifierChamp(nom_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le nom de l'étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] Le nom de l'étudiant est incorrect (vous pouvez le modifier dans vos parametre de compte utilisateur)");
         return;
     }
     
     if (!VerifierChamp(prenom_etudiant,false,false,false)){
-        Afficher_erreur("[Informations personnelles] Le prénom de l'étudiant est incorrect");
+        Afficher_erreur("[Informations personnelles] Le prénom de l'étudiant est incorrect (vous pouvez le modifier dans vos parametre de compte utilisateur)");
         return;
     }
 
@@ -681,7 +681,6 @@ function Sauvegarder(){
     
     
     $.post("/cvtheque/ajax/cv.cible.php?action=edit_cv", {
-        id_etudiant : id_etudiant,
         nom_etudiant : nom_etudiant.val(),
         prenom_etudiant : prenom_etudiant.val(),
         telephone_etudiant : telephone_etudiant.val(),

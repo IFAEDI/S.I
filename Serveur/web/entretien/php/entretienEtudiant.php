@@ -1,154 +1,38 @@
 <?php
-/*if (!Utilisateur_connecter('entreprise')) {
+global $authentification;
+global $utilisateur;
+
+if ($authentification->isAuthentifie() == false || (
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+        $utilisateur->getPersonne()->getRole() != Personne::AEDI &&
+        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT)) {
     inclure_fichier('', '401', 'php');
     die;
 }
-*/
+
 ?>
+<form class="form-horizontal" id="formChoixDate" action="#" method="post">
+	<fieldset>
+		<legend>Simulations d'entretiens</legend>
+		<br />
+		<p>Afin de faire votre demande d'inscription a des sessions de simulation d'entretiens, vous pouvez choisir la date souhaitee via le calendrier.
+		Une fois la liste des creneaux disponibles vous pourrez vous inscrire aux sessions encore disponibles. A noter que la validation de votre creneau se
+		fera ulterieurement par l'administration.
+		</p>
+		<br />
+		<div class="control-group" id="control_date">
+		<label class="offset1 control-label">Date</label>
+		<div class="controls">
+		  <input name="date1" id="date_creneaux" class="input-medium date-pick"/>
+		<button type="submit" class="btn btn-primary offset1">Rechercher</button>
+		</div>
+		 </div>
+	</fieldset>
+</form>
 			
-<div class="accordion" id="accordion2">
-	<div class="accordion-group">
-	  <div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseOne">
-		  Altran
-   	    </a>
-      </div>
-        <div id="collapseOne" class="accordion-body collapse in">
-           <div class="accordion-inner">
-            <table class="table table-striped">
-			<thead>
-			  <tr>
-				<th>Debut</th>
-				<th>Fin</th>	
-				<th>Etat</th>
-				<th></th>
-			  </tr>
-			</thead>
-			<tbody>
-			  <tr>
-				<td>14h00</td>
-				<td>14h45</td>
-				<td>Disponible</td>
-				<td>
-				<a class="reservation btn btn-inverse" entreprise="Altran" heureDeb="14h00" heureFin="14h45" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a>
-				</td>
-			  </tr>
-			  <tr>
-				<td>14h45</td>
-				<td>15h30</td>
-				<td>Reserve</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Disponible</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			</tbody>
-			</table>
-        </div>
-	  </div>
-	</div>
-	<div class="accordion-group">
-	  <div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseTwo">
-		  Thales
-   	    </a>
-      </div>
-        <div id="collapseTwo" class="accordion-body collapse in">
-           <div class="accordion-inner">
-            <table class="table table-striped">
-			<thead>
-			  <tr>
-				<th>Debut</th>
-				<th>Fin</th>
-				<th>Etat</th>
-				<th></th>
-			  </tr>
-			</thead>
-			<tbody>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Disponible</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Reserve</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Disponible</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			</tbody>
-			</table>
-        </div>
-	  </div>
-	</div>
-	<div class="accordion-group">
-	  <div class="accordion-heading">
-		<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#collapseThree">
-		  Areva
-   	    </a>
-      </div>
-        <div id="collapseThree" class="accordion-body collapse in">
-           <div class="accordion-inner">
-            <table class="table table-striped">
-			<thead>
-			  <tr>
-				<th>Debut</th>
-				<th>Fin</th>
-				<th>Etat</th>
-				<th></th>
-			  </tr>
-			</thead>
-			<tbody>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Disponible</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Reserve</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			  <tr>
-				<td>15h30</td>
-				<td>16h15</td>
-				<td>Disponible</td>
-				<td><a class="reservation btn btn-inverse" data-toggle="modal" href="#myModal">
-				S'inscrire
-				</a></td>
-			  </tr>
-			</tbody>
-			</table>
-        </div>
-	  </div>
+<div class="accordion" id="accordion_creneau">
+	
+	
 </div>
 
 
@@ -158,10 +42,8 @@
 	<h3>Entretien</h3>
 	</div>
 	<div class="modal-body">
-	   <form class="form-horizontal" name="formReservation" method="post" >
-			<input type="hidden" name="heureDeb"/>
-			<input type="hidden" name="heureFin"/>
-			<input type="hidden" name="entreprise"/>
+	   <form class="form-horizontal" id="formReservation" method="post" action="#" >
+			<input type="hidden" id="id_creneau"/>
 			<p>Etes-vous sur de vouloir vous inscrire a cette session ?</p>
 			<div class="modal-footer">
 			<input type="submit" class="btn btn-primary" value="Valider"/>
@@ -171,18 +53,21 @@
 	</div>
 </div>
 
+
 <script type="text/javascript" charset="utf-8">
 
-// Permet de retrouver le créneau concerne
-$(".reservation").click(function() {
-		document.formReservation.heureDeb.value = $(this).attr("heureDeb");
-		document.formReservation.heureFin.value = $(this).attr("heureFin");
-		document.formReservation.entreprise.value = $(this).attr("entreprise");
+
+// Permet d'afficher le choix de la date
+$(function(){
+	$('.date-pick').datePicker();
 });
 
 </script>
 
 
 <?php
-
+inclure_fichier('entretien', 'inscription', 'js');
+inclure_fichier('entretien', 'jquery.datePicker', 'js');
+inclure_fichier('entretien', 'date', 'js');
+inclure_fichier('entretien', 'datePicker', 'css');
 ?>

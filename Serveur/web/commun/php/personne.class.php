@@ -233,23 +233,71 @@ class Personne {
 	}
 
 	/**
-	* Change le type d'utilisateur
+	* Change le role de la personne
 	* @return Vrai si tout est ok, faux sinon
 	*/
-	public function changeUtilisateurType( $type ) {
+	public function changeRole( $role ) {
 
 		/* Requête de mise à jour */
-		$result = BD::executeModif( 'UPDATE UTILISATEUR SET type = :type WHERE id = :id', array( 'type' => $type, 'id' => $this->id ) );
+		$result = BD::executeModif( 'UPDATE PERSONNE SET ROLE = :role WHERE ID_PERSONNE = :id', array( 'role' => $role, 'id' => $this->id ) );
 
 		if( $result == 0 ) {
 			return false;
 		}
 
-		$this->typeUtilisateur = $type;
+		$this->typeUtilisateur = $role;
 
 		return true;
 	}
 
+	/**
+	* Affecte un utilisateur à cette personne
+	* $utilisateur : L'instance de l'utilisateur à affecter (null pour désaffecter )
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function changeUtilisateur( $utilisateur ) {
+		
+		/* Désaffectation de l'utilisateur */
+		if( $utilisateur == null ) {
+
+			$result = BD::executeModif( 'UPDATE PERSONNE SET ID_UTILISATEUR = NULL WHERE ID_PERSONNE = :id', array( 'id' => $this->id ) );
+
+			if( $result == 0 ) {
+				return false;
+			}
+
+			$this->idUtilisateur = -1;
+			$this->utilisateur = null;
+		}
+		/* Affectation */
+		else {
+			$result = BD::executeModif( 'UPDATE PERSONNE SET ID_UTILISATEUR = :uid WHERE ID_PERSONNE = :pid',
+					array( 'uid' => $utilisateur->getId(), 'pid' => $this->id ) );
+
+			if( $result == 0 ) {
+				return false;
+			}
+
+			$this->utilisateur = $utilisateur;
+		}
+
+		return true;
+	}
+
+	/**
+	* Supprime la personne de la base
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function supprimerPersonne() {
+
+		$result = BD::executeModif( 'DELETE FROM PERSONNE WHERE ID_PERSONNE = :id', array( 'id' => $this->id ) );
+
+		if( $result == 0 ) {
+			return false;
+		}
+
+		return true;
+	}
 
 	/**
 	* Détermine si c'est la première connexion de l'utilisateur ou non
@@ -336,13 +384,60 @@ class Personne {
         * @return L'instance de la personne concernée ou null
         * @throws Une exception en cas d'erreur
         */
-        public static function getPersonneParID( $id ) {
+	public static function getPersonneParID( $id ) {
 
 		$p = new Personne( null );
 		$p->_fetchDataByPersonID( $id );
 
-                return $p;
-        }
+		return $p;
+	}
+
+	/**
+	* Créer une nouvelle personne
+	* $nom : Son nom
+	* $prenom : Son prénom
+	* $role : Son rôle
+	* $utilisateur : L'objet utilisateur potentiellement associé (optionnel)
+	* @return La nouvelle personne, ou null
+	* @throws Exception sur erreur de la BDD
+	*/
+	public static function AjouterPersonne( $nom, $prenom, $role, $utilisateur = null ) {
+
+		/* Insertion en base de la nouvelle personne */
+		$result = BD::executeModif( "INSERT INTO PERSONNE( NOM, PRENOM, ROLE ) VALUES( :nom, :prenom, :role )",
+				array( 'nom' => $nom, 'prenom' => $prenom, 'role' => $role ) );
+
+		if( $result == 0 ) {
+			return null;
+		}
+
+		/* On récupère son identifiant pour créer l'instance */
+		$pid = BD::GetConnection()->lastInsertId();
+
+		$personne = new Personne( null );
+		$personne->_fetchDataByPersonID( $pid );
+
+		if( $utilisateur != null ) {
+			$personne->changeUtilisateur( $utilisateur );
+		}
+
+		return $personne;
+	}
+
+	public function toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
+		$arrayPer = array();
+		$arrayPer['id'] = intval($this->id);
+		$arrayPer['nom'] = $this->nom;
+		$arrayPer['prenom'] = $this->prenom;
+		if ($avecMails) { $arrayPer['mails'] = $this->mails; }
+		if ($avecTels) { $arrayPer['telephones'] = $this->telephones; }
+		if ($avec1ereConnexion) { $arrayPer['premiereConnexion'] = $this->premiereConnexion; }
+		if ($avecRole) { $arrayPer['role'] = $this->role; }
+		if ($avecUtilisateur) { $arrayPer['utilisateur'] = $this->utilisateur; }
+
+
+		return $arrayPer;
+	}
 }
 
 ?>

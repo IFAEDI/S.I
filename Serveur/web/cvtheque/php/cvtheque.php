@@ -9,15 +9,15 @@ global $utilisateur;
 
 
 if ($authentification->isAuthentifie() == false ||
-        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
-        $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+        $utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE) {
     inclure_fichier('', '401', 'php');
     die;
 }
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-if ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getId()) != 1) {
+if ($utilisateur->getPersonne()->getRole() == Personne::ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getPersonne()->getId()) != 1) {
     inclure_fichier('', '401', 'php');
     die;
 }

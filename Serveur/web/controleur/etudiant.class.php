@@ -44,9 +44,8 @@ class Etudiant {
     //recuperation de l'objet Etudiant par l'ID de l'étudiant
     public static function GetEtudiantByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS, STATUT_MARITAL, PERSONNE 
-                WHERE ID_UTILISATEUR = :id 
-                AND PERSONNE.ID_PERSONNE = ETUDIANT.ID_PERSONNE
+            return BD::Prepare('SELECT * FROM ETUDIANT, PERMIS, STATUT_MARITAL 
+                WHERE ETUDIANT.ID_PERSONNE = :id 
                 AND PERMIS.ID_PERMIS = ETUDIANT.ID_PERMIS 
                 AND STATUT_MARITAL.ID_MARITAL=ETUDIANT.ID_MARITAL'
                             , array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
@@ -57,7 +56,7 @@ class Etudiant {
     public static function GetNbSuivi($_id) {
         if (is_numeric($_id)) {
             $nb_suivi = BD::Prepare('SELECT COUNT(*) FROM ETUDIANT_FAVORIS
-                WHERE ID_ETUDIANT = :id'
+                WHERE ID_PERSONNE = :id'
                             , array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
             return $nb_suivi['COUNT(*)'];
         }
@@ -65,38 +64,38 @@ class Etudiant {
     }
 
     public static function ListeAccesCvtheque() {
-        return BD::Prepare('SELECT UTILISATEUR.nom, UTILISATEUR.prenom, UTILISATEUR.id,
-                            IFNULL(ACCES_CVTHEQUE.ID_UTILISATEUR,0) as acces_cvtheque 
-                            FROM UTILISATEUR LEFT JOIN ACCES_CVTHEQUE ON UTILISATEUR.id=ACCES_CVTHEQUE.ID_UTILISATEUR'
+        return BD::Prepare('SELECT PERSONNE.nom, PERSONNE.prenom, PERSONNE.ID_PERSONNE,
+                            IFNULL(ACCES_CVTHEQUE.ID_PERSONNE,0) as acces_cvtheque 
+                            FROM PERSONNE LEFT JOIN ACCES_CVTHEQUE ON PERSONNE.ID_PERSONNE=ACCES_CVTHEQUE.ID_PERSONNE'
                         , array(), BD::RECUPERER_TOUT);
     }
 
-     //Permet de verifier que l'utilisateur à bien acces à la cvtheque
-    public static function AccesCVtheque($_id_utilisateur) {
-        if (is_numeric($_id_utilisateur)) {
-            $resultat =  BD::Prepare('SELECT COUNT(*) FROM ACCES_CVTHEQUE WHERE ID_UTILISATEUR = :id_utilisateur'
-                            , array("id_utilisateur" => $_id_utilisateur));
+    //Permet de verifier que l'utilisateur à bien acces à la cvtheque
+    public static function AccesCVtheque($_id_personne) {
+        if (is_numeric($_id_personne)) {
+            $resultat = BD::Prepare('SELECT COUNT(*) FROM ACCES_CVTHEQUE WHERE ID_PERSONNE = :id_personne'
+                            , array("id_personne" => $_id_personne));
             return $resultat['COUNT(*)'];
         } else {
             return "Erreur 450 veuillez contacter l'administrateur système";
         }
     }
-    
+
     //Permet d'autoriser l'acces à la cvtheque à un utilisateur
-    public static function AutoriserAcces($_id_utilisateur) {
-        if (is_numeric($_id_utilisateur)) {
-            return BD::Prepare('INSERT INTO ACCES_CVTHEQUE SET ID_UTILISATEUR = :id_utilisateur'
-                            , array("id_utilisateur" => $_id_utilisateur));
+    public static function AutoriserAcces($_id_personne) {
+        if (is_numeric($_id_personne)) {
+            return BD::Prepare('INSERT INTO ACCES_CVTHEQUE SET ID_PERSONNE = :id_personne'
+                            , array("id_personne" => $_id_personne));
         } else {
             return "Erreur 451 veuillez contacter l'administrateur système";
         }
     }
 
     //Permet d'autoriser l'acces à la cvtheque à un utilisateur
-    public static function Interdir_Acces($_id_utilisateur) {
-        if (is_numeric($_id_utilisateur)) {
-            return BD::Prepare('DELETE FROM ACCES_CVTHEQUE WHERE ID_UTILISATEUR = :id_utilisateur'
-                            , array("id_utilisateur" => $_id_utilisateur));
+    public static function InterdireAcces($_id_personne) {
+        if (is_numeric($_id_personne)) {
+            return BD::Prepare('DELETE FROM ACCES_CVTHEQUE WHERE ID_PERSONNE = :id_personne'
+                            , array("id_personne" => $_id_personne));
         } else {
             return "Erreur 452 veuillez contacter l'administrateur système";
         }
@@ -105,10 +104,10 @@ class Etudiant {
     public static function RechercherCVEtudiant($_annee, $_mots_clef, $_id_entreprise) {
         $connexion = BD::GetConnection();
         if (is_numeric($_id_entreprise)) {
-            $requete = "SELECT ETUDIANT.ID_ETUDIANT, NOM,  PRENOM,CV.ANNEE,CV.TITRE_CV, 
+            $requete = "SELECT ETUDIANT.ID_PERSONNE, NOM,  PRENOM,CV.ANNEE,CV.TITRE_CV, 
                         IF(ETUDIANT_FAVORIS.id_entreprise = #id_entreprise, 1, 0) as favoris, 
                         IF(NEW_UPDATE_CV.id_entreprise = #id_entreprise, etat, 0) as etat
-                        FROM PERSONNE, CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_etudiant) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_etudiant)) USING (id_cv)
+                        FROM PERSONNE, CV JOIN (ETUDIANT LEFT OUTER JOIN ETUDIANT_FAVORIS USING(id_personne) LEFT OUTER JOIN  NEW_UPDATE_CV USING(id_personne)) USING (id_cv)
                         WHERE CV.AGREEMENT = 1
                         AND ETUDIANT.ID_PERSONNE = PERSONNE.ID_PERSONNE 
                         #WHERE
@@ -146,9 +145,9 @@ class Etudiant {
         if (is_numeric($_id)) {
             $id_ville = self::GetVilleOrAdd($_ville, $_cp, $_pays);
 
-            $id_cv = BD::Prepare('SELECT ID_ETUDIANT FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
+            $id_cv = BD::Prepare('SELECT ID_PERSONNE FROM ETUDIANT WHERE ID_PERSONNE = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE);
 
-            if ($id_cv['ID_ETUDIANT'] > 0) {
+            if ($id_cv['ID_PERSONNE'] > 0) {
                 $info_etudiant = array(
                     'id' => $_id,
                     'sexe' => $_sexe,
@@ -161,6 +160,7 @@ class Etudiant {
                     'id_marital' => $_id_marital,
                     'id_permis' => $_id_permis,
                 );
+
                 //Si l'etudiant à déjà un CV
                 BD::Prepare('UPDATE ETUDIANT SET 
                     SEXE_ETUDIANT = :sexe,
@@ -172,7 +172,7 @@ class Etudiant {
                     ANNIV_ETUDIANT = :anniv,
                     ID_MARITAL = :id_marital,
                     ID_PERMIS = :id_permis
-                    WHERE ID_ETUDIANT = :id', $info_etudiant);
+                    WHERE ID_PERSONNE = :id', $info_etudiant);
 
                 return true;
             } else {
@@ -191,7 +191,7 @@ class Etudiant {
                 );
 
                 BD::Prepare('INSERT INTO ETUDIANT SET
-                    ID_ETUDIANT = :id, 
+                    ID_ETUDIANT = :id,
                     ID_PERSONNE = :id, 
                     SEXE_ETUDIANT = :sexe,
                     ADRESSE1_ETUDIANT = :adresse1,
@@ -212,28 +212,29 @@ class Etudiant {
     }
 
     //Recupération de la liste des permis possible
-    public static function SupprimerCV($_id_etudiant, $_id_cv) {
-        if (is_numeric($_id_etudiant) && is_numeric($_id_cv)) {
+    public static function SupprimerCV($_id_personne, $_id_cv) {
+        if (is_numeric($_id_personne) && is_numeric($_id_cv)) {
             CV_Langue::SupprimerLangueByIdCV($_id_cv);
             CV_Formation::SupprimerFormationByIdCV($_id_cv);
             CV_Diplome::SupprimerDiplomeByIdCV($_id_cv);
             CV_XP::SupprimerXPByIdCV($_id_cv);
             CV::SupprimerCVByID($_id_cv);
-            BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE id_etudiant = :id', array('id' => $_id_etudiant));
-            BD::Prepare('DELETE FROM NEW_UPDATE_CV WHERE id_etudiant = :id', array('id' => $_id_etudiant));
-            BD::Prepare('DELETE FROM ETUDIANT WHERE id_etudiant = :id', array('id' => $_id_etudiant));
+            BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE ID_PERSONNE = :id', array('id' => $_id_personne));
+            BD::Prepare('DELETE FROM NEW_UPDATE_CV WHERE ID_PERSONNE = :id', array('id' => $_id_personne));
+            BD::Prepare('DELETE FROM ETUDIANT WHERE ID_PERSONNE = :id', array('id' => $_id_personne));
             return;
         } else {
             return "Erreur 20 veuillez contacter l'administrateur du site";
         }
     }
 
-    public static function MettreEnVu($_id_etudiant, $_id_entreprise, $_etat) {
-        if (is_numeric($_id_etudiant) && is_numeric($_etat)) {
+    //Met le CV à vue
+    public static function MettreEnVu($_id_personne, $_id_entreprise, $_etat) {
+        if (is_numeric($_id_personne) && is_numeric($_etat)) {
             if ($_etat == 2 && is_numeric($_id_entreprise)) {
-                BD::Prepare('REPLACE INTO NEW_UPDATE_CV SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise, ETAT = 2', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+                BD::Prepare('REPLACE INTO NEW_UPDATE_CV SET ID_PERSONNE = :id_personne, ID_ENTREPRISE = :id_entreprise, ETAT = 2', array('id_personne' => $_id_personne, 'id_entreprise' => $_id_entreprise));
             } elseif ($_etat == 1) {
-                BD::Prepare('UPDATE NEW_UPDATE_CV SET ETAT = 1 WHERE ID_ETUDIANT = :id_etudiant', array('id_etudiant' => $_id_etudiant));
+                BD::Prepare('UPDATE NEW_UPDATE_CV SET ETAT = 1 WHERE ID_PERSONNE = :id_personne', array('id_personne' => $_id_personne));
             } else {
                 return "Erreur 56 veuillez contacter l'administrateur du site";
             }
@@ -243,12 +244,24 @@ class Etudiant {
         }
     }
 
-    public static function MettreEnFavoris($_id_etudiant, $_id_entreprise, $_etat) {
-        if (is_numeric($_id_etudiant) && is_numeric($_id_entreprise) && is_numeric($_etat)) {
+    //Remet tous les CV dans l'état nouveau pour toute les entreprise
+    public static function TousMettreNouveau() {
+        BD::Prepare('DELETE FROM NEW_UPDATE_CV', array());
+    }
+
+     //Remet tous les CV dans l'état nouveau pour toute les entreprise
+    public static function SuprimerLesFavoris() {
+        BD::Prepare('DELETE FROM ETUDIANT_FAVORIS', array());
+    }
+    
+    
+    //Met le CV en favoris
+    public static function MettreEnFavoris($_id_personne, $_id_entreprise, $_etat) {
+        if (is_numeric($_id_personne) && is_numeric($_id_entreprise) && is_numeric($_etat)) {
             if ($_etat == 0) {
-                BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE ID_ETUDIANT = :id_etudiant AND ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+                BD::Prepare('DELETE FROM ETUDIANT_FAVORIS WHERE ID_PERSONNE = :id_personne AND ID_ENTREPRISE = :id_personne', array('id_personne' => $_id_personne, 'id_entreprise' => $_id_entreprise));
             } else {
-                BD::Prepare('INSERT INTO ETUDIANT_FAVORIS SET ID_ETUDIANT = :id_etudiant, ID_ENTREPRISE = :id_entreprise', array('id_etudiant' => $_id_etudiant, 'id_entreprise' => $_id_entreprise));
+                BD::Prepare('INSERT INTO ETUDIANT_FAVORIS SET ID_PERSONNE = :id_personne, ID_ENTREPRISE = :id_personne', array('id_personne' => $_id_personne, 'id_entreprise' => $_id_entreprise));
             }
             return true;
         } else {
@@ -318,7 +331,7 @@ class Etudiant {
 
     //****************  Getters & Setters  ******************//
     public function getId() {
-        return $this->ID_ETUDIANT;
+        return $this->ID_PERSONNE;
     }
 
     public function getNom() {

@@ -6,11 +6,10 @@ inclure_fichier('commun', 'bd.inc', 'php');
 class Entretien {
 
     //****************  Attributs  ******************//
-    private $ID;
-    private $ID_ENTREPRISE;
-    private $VILLE;
+    private $ID_ENTRETIEN;
     private $ID_CONTACT;
 	private $DATE;
+	private $ETAT;
 
 
     //****************  Fonctions statiques  ******************//
@@ -24,50 +23,65 @@ class Entretien {
 
 	// Récuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
-        return BD::Prepare('SELECT * FROM Entretien', array(), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, m.mail
+			FROM Entretien et, Contact_entreprise c, Entreprise e, Personne p, Mail m
+			WHERE et.id_contact = c.id_contact
+			AND c.id_personne = p.id_personne
+			AND m.id_personne = p.id_personne
+			AND c.id_entreprise = e.id_entreprise', array(), BD::RECUPERER_TOUT);
     }
 
+	// Récuperation des entretiens valides par l'administration
+	public static function GetListeEntretiensValides() {
+		$_etat = 1;
+        return BD::Prepare('SELECT * FROM Entretien where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
+    }
+	
+	// Récuperation des entretiens NON valides
+	public static function GetListeEntretiensNonValides() {
+		$_etat = 0;
+        return BD::Prepare('SELECT * FROM Entretien where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
+    }
+	
 	// Suppression d'un entretien par ID
     public static function SupprimerEntretienByID($_id) {
         if (is_numeric($_id)) {
-            BD::Prepare('DELETE FROM Entretien WHERE ID = :id', array('id' => $_id));
+            BD::Prepare('DELETE FROM Entretien WHERE ID_ENTRETIEN = :id', array('id' => $_id));
         }
     }
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'un entretien
-    public static function UpdateEntretien($_id, $_id_entreprise, $_ville, $_id_contact, $_date){
+    public static function UpdateEntretien($_id, $_id_contact, $_date, $_etat){
 
 		$info = array(
 			'id'=> $_id,
-			'id_entreprise'=>$_id_entreprise,
-			'ville'=>$_ville,
 			'id_contact'=>$_id_contact,
-			'date'=>$_date
+			'date'=>$_date,
+			'etat'=>$_etat
 		);
 		
-        if ($_id < 0 && is_numeric($_id)) {
-			echo 'coucou';
+        if( $_id > 0 ) {
             //Si l'etudiant à déjà un CV
             BD::executeModif('UPDATE Entretien SET 
-                    ID_ENTREPRISE = :id_entreprise,
-                    VILLE = :ville,
 					ID_CONTACT = :id_contact,
-                    DATE = :date
-                    WHERE ID = :id', $info);
+                    DATE = :date,
+                    ETAT = :etat
+                    WHERE ID_ENTRETIEN = :id', $info);
               BD::MontrerErreur();
 			return $_id;
         } else {
 			
             $retour = BD::executeModif('INSERT INTO Entretien SET 
-					ID = :id,
-                    ID_ENTREPRISE = :id_entreprise,
-                    VILLE = :ville,
+					ID_ENTRETIEN = :id,
 					ID_CONTACT = :id_contact,
-                    DATE = :date
+                    DATE = :date,
+					ETAT = :etat
 					', $info);
-
-            if ($retour != null ) {
-                echo $retour;
+			$id = BD::getConnection()->lastInsertId();
+			
+            if ($id  != null ) {
+                echo $id;
+				return $id;
             } else {
                 echo "Erreur 2 veuillez contacter l'administrateur du site";
                 return;
@@ -75,6 +89,37 @@ class Entretien {
         }
 		
     }
+	
+	// Permet de valider un entretien demande par une entreprise
+	public static function ValiderEntretien($_id){
+		$etat = 1;
+		$info = array(
+			'id'=> $_id,
+			'etat'=> $etat,
+		);
+		BD::executeModif('UPDATE Entretien SET 
+				ETAT = :etat
+				WHERE ID_ENTRETIEN = :id', $info);
+		  BD::MontrerErreur();
+		return $_id;
+	
+	}
+
+	
+	// Permet de refuser un entretien demande par une entreprise
+	public static function RefuserEntretien($_id){
+		$etat = 0;
+		$info = array(
+			'id'=> $_id,
+			'etat'=> $etat,
+		);
+		BD::executeModif('UPDATE Entretien SET 
+				ETAT = :etat
+				WHERE ID_ENTRETIEN = :id', $info);
+		  BD::MontrerErreur();
+		return $_id;
+	
+	}
 
     //****************  Fonctions  ******************//
 
@@ -83,29 +128,9 @@ class Entretien {
     public function getId() {
         return $this->ID;
     }
-
-    public function getEntreprise() {
-        return $this->ENTREPRISE;
-    }
-
-    public function getVille() {
-        return $this->VILLE;
-    }
     
-    public function getNomContact() {
-        return $this->NOM_CONTACT;
-    }
-
-    public function getPrenomContact() {
-        return $this->PRENOM_CONTACT;
-    }
-	
-	public function getMailContact() {
-        return $this->MAIL_CONTACT;
-    }
-
-	public function getTelContact() {
-        return $this->TEL_CONTACT;
+    public function getIdContact() {
+        return $this->ID_CONTACT;
     }
 	
     public function getDate() {

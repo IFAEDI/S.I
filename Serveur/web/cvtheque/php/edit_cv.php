@@ -10,6 +10,7 @@ global $utilisateur;
 
 if ($authentification->isAuthentifie() == false || (
         $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+        $utilisateur->getPersonne()->getRole() != Personne::AEDI &&
         $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT)) {
     inclure_fichier('', '401', 'php');
     die;
@@ -17,11 +18,11 @@ if ($authentification->isAuthentifie() == false || (
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-$id_utilisateur = $utilisateur->getId();
+$id_personne = $utilisateur->getPersonne()->getId();
 
 //Récuperation complete du CV de l'étudiant
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
+$etudiant = Etudiant::GetEtudiantByID($id_personne);
 
 
 if ($etudiant == NULL) {
@@ -80,7 +81,7 @@ $liste_certif = $temp;
 
 echo '<script> var liste_certif=$.parseJSON(\'' . json_encode($liste_certif) . '\');</script>';
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
-echo '<script> var id_etudiant=\'' . $id_utilisateur . '\';</script>';
+echo '<script> var id_personne=\'' . $id_personne . '\';</script>';
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info">  
@@ -121,8 +122,8 @@ echo '<script> var id_etudiant=\'' . $id_utilisateur . '\';</script>';
                 <div class="control-group">
                     <label class="control-label">Nom et prénom</label>
                     <div class="controls">
-                        <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $etudiant->getNom(); ?>" disabled>
-                        <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $etudiant->getPrenom(); ?>" disabled>
+                        <input type="text" id="nom_etudiant" class="span3" placeholder="Nom" value="<?php echo $utilisateur->getPersonne()->getNom(); ?>" disabled>
+                        <input type="text" id="prenom_etudiant" class="span3" placeholder="Prenom" value="<?php echo $utilisateur->getPersonne()->getPrenom(); ?>" disabled>
                     </div>
                 </div>
 

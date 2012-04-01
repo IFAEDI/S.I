@@ -48,6 +48,18 @@ class Contact {
 
 		return NULL;
 	}
+	
+	
+	public static function GetContactParNom(/* string */ $_nom ,$_prenom) {
+
+		return BD::executeSelect('SELECT ID_CONTACT FROM CONTACT_ENTREPRISE c, PERSONNE p
+					WHERE c.ID_PERSONNE = p.ID_PERSONNE AND
+					p.NOM = :nom AND p.prenom = :prenom', array('nom' => $_nom, 'prenom' => $_prenom), 
+					BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+
+		return NULL;
+	}
+	
 
 	/**
 	* Récuperation l'ensemble des Contacts, ordonnés par priorité
@@ -67,7 +79,6 @@ class Contact {
                 /* Pour chacun, on construit l'objet */
                 $i = 0;
                 foreach( $result as $row ) {
-
                         $obj[$i] = self::GetContactByID( $row['ID_CONTACT'] );
                         $i++;
                 }
@@ -84,7 +95,7 @@ class Contact {
 	*/
 	public static function GetListeContactsParEntreprise(/* int */ $_idEntreprise, /*Entreprise*/ $_entreprise = null ) {
 
-		$result = BD::executeSelect('SELECT ID_CONTACT FROM CONTACT_ENTREPRISE WHERE ID_ENTREPRISE = :idEntreprise ORDER BY PRIORITE', 
+		$result = BD::executeSelect('SELECT ID_CONTACT FROM CONTACT_ENTREPRISE WHERE ID_ENTREPRISE = :idEntreprise ORDER BY PRIORITE DESC', 
 						array('idEntreprise' => $_idEntreprise), BD::RECUPERER_TOUT);
 		if( $result == null ) {
 			return null;
@@ -131,26 +142,34 @@ class Contact {
 	* @return Le nouvel identifiant si tout est ok, false sinon
 	* @throws Une exception si une erreur est survenue au niveau de la BDD
 	*/
-	public static function UpdateContact( $_id, $_personne, $_entreprise, $_ville, $_fonction, $_com, $_priorite ) {
+	public static function UpdateContact( $_id, $_personne, $_entreprise, $_ville, $_fonction, $_com = '', $_priorite = 0) {
 
 		/* Il faut impérativement une instance entreprise et une instance de personne passée en paramètre */
 		if( $_entreprise == null || $_personne == null ) {
-			return false;
+			return -1;
 		}
 
 		/* Mise à jour du contact */
 		if( $_id > 0 ) {
 	
 			/* Préparation du tableau associatif */
-			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 
-				'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
+			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'UPDATE CONTACT_UTILISATEUR SET ID_PERSONNE = :idPersonne, ID_ENTREPRISE = idEntreprise, ID_VILLE = :idVille, FONCTION = :fonction, COMMENTAIRE = :commentaire, PRIORITE = :priorite WHERE ID_CONTACT = :id', $info );
+			$result = BD::executeModif( 'UPDATE CONTACT_ENTREPRISE SET
+				ID_PERSONNE = :idPersonne,
+				ID_ENTREPRISE = :idEntreprise,
+				ID_VILLE = :idVille,
+				FONCTION = :fonction,
+				COMMENTAIRE = :commentaire,
+				PRIORITE = :priorite
+				WHERE ID_CONTACT = :id', $info );
 
 			if( $result == 0 ) {
-				return false;
+				return -1;
 			}
+			
+			return 0;
 		}
 		/* Ajout d'un nouveau contact */
 		else {
@@ -160,13 +179,13 @@ class Contact {
 				'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'INSERT INTO CONTACT_UTILISATEUR(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
+			$result = BD::executeModif( 'INSERT INTO CONTACT_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
 			if( $result == 0 ) {
-				return false;
+				return -1;
 			}
 
 			/* Récupération de l'identifiant du nouveau contact */
-			$_id = BD::getConnectionn()->lastInsertId();
+			$_id = BD::getConnection()->lastInsertId();
 		}
 
 		return $_id;
@@ -177,7 +196,7 @@ class Contact {
 
     //****************  Getters & Setters  ******************//
     public function getId() {
-        return $this->ID;
+        return $this->ID_CONTACT;
     }
 
     public function getFonction() {
@@ -206,7 +225,7 @@ class Contact {
 
 	/* Si l'objet n'est pas instancié, on le fait */
 	if( $this->personne == null ) {
-		$this->personne = Personne:GetPersonneParID( $this->ID_PERSONNE );
+		$this->personne = Personne::GetPersonneParID( $this->ID_PERSONNE );
 	}
 
         return $this->personne;
@@ -221,6 +240,22 @@ class Contact {
 
 	return $this->ville;
     }
+	
+	public function toArrayObject($avecEntreprise, $avecVille, $avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
+		$arrayContact = array();
+		$arrayContact['id_contact'] = intval($this->ID_CONTACT);
+		$arrayContact['fonction'] = $this->FONCTION;
+		$arrayContact['priorite'] = $this->PRIORITE;
+		$arrayContact['commentaire'] = $this->COMMENTAIRE;
+		$arrayContact['personne'] = $this->getPersonne()->toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur);
+		if ($avecVille) {
+			$arrayContact['ville'] = $this->getVille()->toArrayObject();
+		}
+		if ($avecEntreprise) {
+			$arrayContact['entreprise'] = $this->getEntreprise()->toArrayObject();
+		}
+		return $arrayContact;
+	}
 	
 }
 

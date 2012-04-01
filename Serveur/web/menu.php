@@ -65,6 +65,7 @@
 							<li class="divider"></li>
 
 							<li class="nav-header"><i class="icon-cog"></i> Modules</li>
+							<li><a href="index.php?page=annuaire">Annuaire Entreprises</a></li>
 							<li><a href="index.php?page=admincv">CV</a></li>
 							<li><a href="#">RIFs</a></li>
 							<li><a href="#">Simulations d'entretiens</a></li>
@@ -75,9 +76,9 @@
 			?>
 
 			<li class="divider-vertical"></li>
-			<li class=""><a href="#"><i class="icon-info-sign icon-white"></i> A propos</a></li>
+			<li class=""><a href="index.php?page=A_Propos"><i class="icon-info-sign icon-white"></i> A propos</a></li>
 
-			<li class=""><a href="#"><i class="icon-envelope icon-white"></i> Contact</a></li>
+			<li class=""><a href="index.php?page=Contact"><i class="icon-envelope icon-white"></i> Contact</a></li>
 
 			<li class="divider-vertical"></li>
 		  
