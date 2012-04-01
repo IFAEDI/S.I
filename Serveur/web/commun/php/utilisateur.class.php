@@ -110,6 +110,27 @@ class Utilisateur {
         }
 
 	/**
+	* Supprime un utilisateur et potentiellement la personne associée de la base
+	* $supprimerPersonne : Booléen disant s'il on doit supprimer ou non la personne associée
+	* @return Vrai si tout est ok, faux sinon
+	*/
+	public function supprimerUtilisateur( $supprimerPersonne ) {
+
+		$result = BD::executeModif( 'DELETE FROM UTILISATEUR WHERE ID_UTILISATEUR = :id', array( 'id' => $this->id ) );
+
+		if( $result == 0 ) {
+			return false;
+		}
+
+		if( $supprimerPersonne == true ) {
+			$p = $this->getPersonne();
+			return $p->supprimerPersonne();
+		}
+
+		return true;
+	}
+
+	/**
 	* Retourne la personne associée à l'utilisateur
 	*/
 	public function getPersonne() {
@@ -223,6 +244,7 @@ class Utilisateur {
 
 		return ($result['CPT'] > 0);
 	}
+
 }
 
 ?>

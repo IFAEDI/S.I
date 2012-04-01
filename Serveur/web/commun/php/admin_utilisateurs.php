@@ -70,9 +70,6 @@ else {
 
 			<div class="pagination" style="text-align: center;">
 			<ul>
-				<li><a href="#">Prev</a></li>
-				<li class="active"><a href="#">1</a></li>
-				<li><a href="#">Next</a></li>
 			</ul>
 			</div>
 
@@ -189,6 +186,8 @@ else {
     <div class="modal-body" style="text-align: center;">
 
         <p>Êtes-vous sûr de vouloir bannir cette utilisateur?</p>
+
+	<input type="checkbox" id="del_personne" class="input-medium" /> <span>Supprimer également la personne associée</span>
 
     </div>
     <div class="modal-footer" style="text-align: center;">
