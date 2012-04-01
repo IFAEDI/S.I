@@ -41,7 +41,8 @@ if (isset($_GET['id_personne']) &&
     $id_personne = $_GET['id_personne'];
     Etudiant::MettreEnVu($id_personne, $utilisateur->getPersonne()->getId(), 2);
 } elseif ($utilisateur->getPersonne()->getRole() != Personne::ETUDIANT ||
-        $utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN ||
+        $utilisateur->getPersonne()->getRole() != Personne::AEDI) {
     $id_personne = $utilisateur->getPersonne()->getId();
 } else {
     inclure_fichier('', '401', 'php');
