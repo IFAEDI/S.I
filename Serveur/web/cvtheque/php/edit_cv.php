@@ -80,7 +80,7 @@ $liste_certif = $temp;
 
 echo '<script> var liste_certif=$.parseJSON(\'' . json_encode($liste_certif) . '\');</script>';
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
-echo '<script> var id_etudiant=\'' . $id_personne . '\';</script>';
+echo '<script> var id_personne=\'' . $id_personne . '\';</script>';
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info">  

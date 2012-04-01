@@ -32,14 +32,14 @@ if ($authentification->isAuthentifie() == false) {
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-if (isset($_GET['id_etudiant']) &&
+if (isset($_GET['id_personne']) &&
         ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE ||
         $utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
-    $id_etudiant = $_GET['id_etudiant'];
-    Etudiant::MettreEnVu($id_etudiant, $utilisateur->getPersonne()->getId(), 2);
+    $id_personne = $_GET['id_personne'];
+    Etudiant::MettreEnVu($id_personne, $utilisateur->getPersonne()->getId(), 2);
 } elseif ($utilisateur->getPersonne()->getRole() != Personne::ETUDIANT ||
         $utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
-    $id_etudiant = $utilisateur->getPersonne()->getId();
+    $id_personne = $utilisateur->getPersonne()->getId();
 } else {
     inclure_fichier('', '401', 'php');
     die();
@@ -53,7 +53,7 @@ if ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE && Etudiant::
 
 
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID($id_etudiant);
+$etudiant = Etudiant::GetEtudiantByID($id_personne);
 
 if ($etudiant == NULL) {
     $etudiant = new Etudiant();
