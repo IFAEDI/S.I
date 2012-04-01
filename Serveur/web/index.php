@@ -140,7 +140,23 @@ if ($_GET['page'] == 'accueil') {
     $nom_module = 'commun';
     $nom_page = 'admin_journal';
     $titre_module = 'Administration';
-} else {
+}
+elseif( $_GET['page'] == 'Contact' ) {
+	$titre_page= 'Contact';
+	$lien_module = '';
+	$nom_module = '';
+	$titre_module = '';
+	$nom_page = 'contact';
+}
+elseif( $_GET['page'] == 'A_Propos' ) {
+        $titre_page= 'A Propos';
+        $lien_module = '';
+        $nom_module = '';
+        $titre_module = '';
+        $nom_page = 'a_propos';
+
+}
+else {
     $titre_page = '404';
     $lien_module = '';
     $nom_module = '';

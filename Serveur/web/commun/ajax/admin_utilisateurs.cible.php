@@ -102,7 +102,31 @@ if( @isset( $_GET['action'] ) ) {
 	}
 	/* Suppression d'un utilisateur */
 	else if( $_GET['action'] == "del_user" ) {
-		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );
+
+		/* Check que l'on a bien toutes les infos */
+		if( ! (@isset( $_GET['id'] ) && @isset( $_GET['delP'] ) ) ) {
+
+			$val = array( 'code' => 'error', 'mesg' => 'Variables manquantes.' );
+		}
+		else {
+		
+			$id	= mysql_escape_string( $_GET['id'] );
+			$delP   = mysql_escape_string( $_GET['delP'] );
+
+			$utilisateur = Utilisateur::RecupererUtilisateur( $id );
+			if( $utilisateur == null ) {
+				$val = array( 'code' => 'fail', 'mesg' => 'Utilisateur introuvable.' );
+			}
+			else {
+
+				if( $utilisateur->supprimerUtilisateur( $delP ) == true ) {
+					$val = array( 'code' => 'ok' );
+				}
+				else {
+					$val = array( 'code' => 'fail', 'mesg' => 'Une erreur est survenue lors de la suppression.' );
+				}
+			}
+		}
 	}
 	/* Edition d'un utilisateur */
 	else if( $_GET['action'] == "edit_user" ) {

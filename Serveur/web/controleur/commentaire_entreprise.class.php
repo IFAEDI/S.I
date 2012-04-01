@@ -123,8 +123,8 @@ class CommentaireEntreprise {
 	/**
 	* Ajout ($_id <= 0) ou édition ($_id > 0) d'un Commentaire
 	* $_id : L'identifiant du commentaire à mettre à jour ( ou <= 0 si il doit être créé )
-	* $_personne : Instance d'une personne à attacher
-	* $_entreprise : Instance d'une entreprise à attacher
+	* $_personne : ID d'une personne à attacher
+	* $_entreprise : ID d'une entreprise à attacher
 	* @return Le nouvel identifiant si tout est ok, false sinon
 	* @throws Une exception si une erreur est survenue au niveau de la BDD
 	*/
@@ -139,7 +139,7 @@ class CommentaireEntreprise {
 		if( $_id > 0 ) {
 	
 			/* Préparation du tableau associatif */
-			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 
+			$info = array( 'id' => $_id, 'idPersonne' => $_personne, 'idEntreprise' => $_entreprise, 
 				'contenu' => $_contenu, 'categorie' => $_categorie, 'date' => $_date);
 
 			/* Execution de la requête */
@@ -153,11 +153,11 @@ class CommentaireEntreprise {
 		else {
 			
 			/* Préparation du tableau associatif */
-			$info = array('idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 
+			$info = array('idPersonne' => $_personne, 'idEntreprise' => $_entreprise, 
 				'contenu' => $_contenu, 'categorie' => $_categorie);
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'INSERT INTO COMMENTAIRE_PERSONNE(ID_PERSONNE, ID_ENTREPRISE, CONTENU, CATEGORIE) VALUES( :idPersonne, :idEntreprise, :contenu, :categorie)', $info );
+			$result = BD::executeModif( 'INSERT INTO COMMENTAIRE_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, CONTENU, CATEGORIE) VALUES( :idPersonne, :idEntreprise, :contenu, :categorie)', $info );
 			if( $result == 0 ) {
 				return false;
 			}
