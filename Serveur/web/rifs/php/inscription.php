@@ -1,5 +1,5 @@
 <!-- Formulaire pour l'inscription au RIFs -->
-<form class="form-horizontal" onsubmit="return soumettreFormulaire()" id="formInscription" name="formInscription" method="post">
+<form class="form-horizontal" onsubmit="return soumettreFormulaire()" id="formInscription" name="formInscription" method="post" enctype="multipart/form-data">
 	<legend><h1>Formulaire d'inscription</h1></legend>
 	<fieldset id="infoEntreprise">
 		<legend>Informations sur l'entreprise</legend>
@@ -14,12 +14,6 @@
 			<label class="control-label" for="nomResponsable">Nom du responsable *</label>
 			<div class="controls">
 				<input class="input-medium span" type="text" id="nomResponsable" placeholder="Nom" />
-
-			</div>
-		</div>
-		<div class="control-group" id="control_prenomResponsable">
-			<label class="control-label" for="prenomResponsable">Nom du responsable *</label>
-			<div class="controls">
 				<input class="input-medium span" type="text" id="prenomResponsable" placeholder="Prénom" />
 			</div>
 		</div>
@@ -63,8 +57,15 @@
 		<div class="control-group" id="control_logoEntreprise">
 			<label class="control-label" for="logoEntreprise">Logo de l'entreprise *</label>
 			<div class="controls">
+				<input type="hidden" name="MAX_FILE_SIZE" value="5000" />
 				<input class="input-medium" type="file" accept="image/*" id="logoEntreprise" />
 				<span class="help-inline">N'accepte que des fichiers images de taille inférieure à 5 Mo</span>
+			</div>
+		</div>
+		<div class="control-group" id="control_descEntreprise">
+			<label>Description de votre entreprise <em>(description qui apparaîtra sur la brochure de l'évènement) *</em></label>
+			<div class="controls">
+				<textarea class="input-xxlarge controleNomEntreprise" rows="3" id="descriptionEntreprise"></textarea>
 			</div>
 		</div>
 	</fieldset>
@@ -73,29 +74,32 @@
 		<span class="comment"><em>* : Champ obligatoire</em></span>
 		<div class="control-group" id="control_intervenant">
 			<label class="control-label">Nom - Prénom</label>
-			<div class="controls">
-				<input class="input-medium span" type="text" id="nom_1" placeholder="Nom" />
-				<input class="input-medium span" type="text" id="prenom_1" placeholder="Prénom" />
+			<div class="controls" id="control_participants">
+				<div class="nomPrenomIntervenant">
+					<input class="input-medium span nomIntervenant" type="text" id="nomIntervenant[]" placeholder="Nom" />
+					<input class="input-medium span prenomIntervenant" type="text" id="prenomIntervenant[]" placeholder="Prénom" />
+				</div>
 			</div>
+			<span onclick="ajouterIntervenant()" class="link" id="ajoutIntervenant">Ajouter un intervenant</span>
 		</div>
 		<div class="control-group" id="control_momentPresence">
 			<label class="control-label">Présence *</label>
 			<div class="controls">
 				<label class="radio inline">
-					<input id="momentPresence_matin" type="radio" value="matin" name="momentPresence" />
+					<input id="momentPresence_matin" type="radio" value="Matin" name="momentPresence" />
 					Matin
 				</label>
 				<label class="radio inline">
-					<input id="momentPresence_apresMidi" type="radio" value="apresMidi" name="momentPresence" />
+					<input id="momentPresence_apresMidi" type="radio" value="Apres-Midi" name="momentPresence" />
 					Après-Midi
 				</label>
 				<label class="radio inline">
-					<input id="momentPresence_journee" type="radio" checked="" value="journee" name="momentPresence" />
+					<input id="momentPresence_journee" type="radio" checked="" value="Journee" name="momentPresence" />
 					Journée entière
 				</label>
 			</div>
 		</div>
-		<div class="control-group" id="control_momentPresence">
+		<div class="control-group" id="control_restaurant">
 			<label class="control-label">Participation au restaurant *</label>
 			<div class="controls">
 				<label class="radio inline">
@@ -129,8 +133,7 @@
 			<div class="span8">
 				<label class="control-label" for="infoMatosTechnique">Description du matériel apporté</label>
 				<div class="controls">
-					<textarea class="input-xxlarge" rows="3" id="infoMatosTechnique">
-					</textarea>
+					<textarea class="input-xxlarge" rows="3" id="infoMatosTechnique"></textarea>
 				</div>
 			</div>
 			<div class="span3">
@@ -143,26 +146,16 @@
 	</fieldset>
 	<fieldset id="infoComplementaire">
 		<legend>Informations Complémentaires</legend>
-		<span class="comment"><em>* : Champ obligatoire</em></span>
 		<div class="control-group" id="control_attente">
 			<label>Quelles sont vos attentes concernant votre participation aux rencontres IF?</label>
 			<div class="controls">
-				<textarea class="input-xxlarge" rows="3" id="attente">
-				</textarea>
-			</div>
-		</div>
-		<div class="control-group" id="control_descEntreprise">
-			<label>Description de votre entreprise <em>(description qui apparaîtra sur la brochure de l'évènement) *</em></label>
-			<div class="controls">
-				<textarea class="input-xxlarge controleNomEntreprise" rows="3" id="descriptionEntreprise">
-				</textarea>
+				<textarea class="input-xxlarge" rows="3" id="attente"></textarea>
 			</div>
 		</div>
 		<div class="control-group" id="control_autre">
 			<label>Autres (commentaires, remarques, ...)</label>
 			<div class="controls">
-				<textarea class="input-xxlarge" rows="3" id="autre">
-				</textarea>
+				<textarea class="input-xxlarge" rows="3" id="autre"></textarea>
 			</div>
 		</div>
 	</fieldset>
@@ -171,4 +164,9 @@
 
 <?php
 	inclure_fichier('rifs', 'script', 'js');
+	inclure_fichier('rifs', 'rifs', 'css');
+
+	// Chargement de la librairie plupload et des librairies nécessaires à son exécution
+	/*inclure_fichier('rifs', 'plupload.full.js', 'js');
+	inclure_fichier('rifs', 'jquery.ui.plupload.js', 'js');*/
 ?>
