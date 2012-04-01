@@ -61,7 +61,7 @@
 			</div>
 		</div>
 		<div class="control-group" id="control_logoEntreprise">
-			<label class="control-label" for="logoEntreprise">Logo de l'entreprise</label>
+			<label class="control-label" for="logoEntreprise">Logo de l'entreprise *</label>
 			<div class="controls">
 				<input class="input-medium" type="file" accept="image/*" id="logoEntreprise" />
 				<span class="help-inline">N'accepte que des fichiers images de taille inférieure à 5 Mo</span>
@@ -154,7 +154,7 @@
 		<div class="control-group" id="control_descEntreprise">
 			<label>Description de votre entreprise <em>(description qui apparaîtra sur la brochure de l'évènement) *</em></label>
 			<div class="controls">
-				<textarea class="input-xxlarge" rows="3" id="description">
+				<textarea class="input-xxlarge controleNomEntreprise" rows="3" id="descriptionEntreprise">
 				</textarea>
 			</div>
 		</div>

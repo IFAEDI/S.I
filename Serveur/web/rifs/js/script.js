@@ -62,6 +62,17 @@ function valider(){
 		div.className ="control-group error";
 		valide = false;
 	  }
+
+
+	  // DESCRIPTIF DE L ENTREPRISE
+	  if(document.formInscription.descriptionEntreprise.length != null){
+		var div = document.getElementById("control_descEntreprise");
+		div.className ="control-group success";
+	  }else{
+		  var div = document.getElementById("control_descEntreprise");
+		  div.className ="control-group error";
+		  valide = false;
+	  }
 	  
 	  var retour = (valide == true ? true : false);	  
 	  return retour;
@@ -75,27 +86,16 @@ function soumettreFormulaire(){
 	alert(result);
 	if (result == true){
 		var nomEntreprise = document.formInscription.nomEntreprise.value;
-		$.ajax({
-			type :"POST",
-			url :"generation_formulaire.cible.php",
-			data : ({nomEntreprise : nomEntreprise}),
-			success: function(msg){ // si l'appel a bien fonctionné
-				if(msg==1) // si la connexion en php a fonctionnée
-				{
-					$("div.module").html("Succès.");
-					// on désactive l'affichage du formulaire et on affiche un message de bienvenue à la place
+		$.post("rifs/ajax/inscription_post.cible.php",
+		{ prenom : "prenom"},
+		function success(retour){
+				if(retour == "1" ){
+					alert('coucou');
 				}
-				else // si la connexion en php n'a pas fonctionnée
-				{
-					alert("Erreur dans la génération du pdf")
-					// on affiche un message d'erreur dans le span prévu à cet effet
-				}
-		   }
-		});
-		return false; // permet de rester sur la même page à la soumission du formulaire
+			});
 	}else
 	{
-		alert("MERDE...");
+		window.scrollTo(0,0);
 		return false;
 	}
 	
