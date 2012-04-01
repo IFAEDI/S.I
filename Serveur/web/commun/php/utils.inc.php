@@ -138,4 +138,66 @@ function verifierPresent($index) {
 	return !empty($sansBlanc);
 }
 
+
+
+/**
+ * Fonction qui vérifie si une adresse email donnée est valide grace a une regex
+ * Auteur : daniel.baudry2@gmail.com
+ */
+function verifierMail($adresse) {
+	$syntaxe='#^[\w.-]+@[\w.-]+\.[a-zA-Z]{2,6}$#'; 
+	if(preg_match($syntaxe,$adresse)){ 
+		return true; 
+	}else{
+		return false;
+	}
+}
+
+
+/**
+ * Fonction qui vérifie si un numero telephone donné est valide grace a une regex
+ * Auteur : daniel.baudry2@gmail.com
+ */
+function verifierTelephone($tel) {
+	$syntaxe='#^0[0-9]([ .-]?[0-9]{2}){4}$#'; 
+	if(preg_match($syntaxe,$tel)){ 
+		return true; 
+	}else{
+		return false;
+	}
+}
+
+
+/**
+ * Fonction qui vérifie si une date donnée est valide grace a une regex
+ * Auteur : daniel.baudry2@gmail.com
+ */
+function verifierDate($date) {
+	$syntaxe='(0[1-9]|[12][0-9]|3[01])[- /.](0[1-9]|1[012])[- /.](19|20)[0-9]{2}'; 
+	if(preg_match($syntaxe,$date)){ 
+		return true; 
+	}else{
+		return false;
+	}
+}
+
+
+/**
+ * Fonction qui vérifie si un horaire donné est valide grace a une regex
+ * exemple: 12h34
+ * Auteur : daniel.baudry2@gmail.com
+ */
+function verifierHoraire($horaire) {
+	$syntaxe='^[0-9]{2}h[0-9]{2}$'; 
+	if(preg_match($syntaxe,$horaire)){ 
+		return true; 
+	}else{
+		return false;
+	}
+}
+
+
+
+
+
 ?>

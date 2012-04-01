@@ -85,72 +85,155 @@ function valider(){
 		  return true;
 	   }
 	}
-	
 
-function valider_intervenant(){
-	  var valide = true;
-	  //On test la valeur des champs du formulaire
-	  
-	  // NOM INTERVENANT
-	  var div = document.getElementById("control_nom_intervenant");
-	  if( $("#nom_intervenant").val() != ""){
-		div.className ="control-group success";
-	  }else{
-		  div.className ="control-group error";
-		  valide = false;
-	  }
-	  // PRENOM INTERVENANT
-	  var div = document.getElementById("control_prenom_intervenant");
-	  if( $("#prenom_intervenant").val() != ""){
-		div.className ="control-group success";
-	  }else{
-		div.className ="control-group error";
-		valide = false;
-	  }
-	  
-	  // MAIL INTERVENANT
-	  var div = document.getElementById("control_mail_intervenant");
-	  if( $("#mail_intervenant").val() != "" && verifMail( $("#mail_intervenant").val() ) ){
-		div.className ="control-group success";
-	  }else{
-		div.className ="control-group error";
-		valide = false;
-	  }
-	  
-	  var retour = (valide == true ? true : false);
-	  return retour;
-}
-	
-	
 	
 /*---------------------------------------------------------------------------------
 					PARTIE AJAX
 ---------------------------------------------------------------------------------*/
+// Requet inscription entreprise
+$('document').ready(function() {
 	$("#formInscription").submit( function() {
 	// Si les controles sont bons on post
 	if( valider() != false){
-		$.post("entretien/ajax/inscription_post.cible.php",
-		{ prenom : "prenom"},
-		function success(retour){
-				if(retour == "1" ){
-					alert('coucou');
-				}
-			});
-	}else{
-		return false;
-	}
-	});
-
-	
-	$("#form_intervenant").submit( function() {
-		  var nom = $('#nom_intervenant').val();
-		  var prenom = $('#prenom_intervenant').val();
-		  var email = $('#mail_intervenant').val();
-		  if( valider_intervenant() == false ) return false;
-		  //On ajout le participant au tableau
-		  $("#tableParticipant").append('<tr><td>'+nom+'</td><td>'+prenom+'</td><td>'+email+'</td></tr>');
-		  return false;
-	});
+		var obj = {
+			nom_entreprise: $('#nomEntreprise').val(),
+			ville_entreprise: $('#villeEntreprise').val(),
+			nom_contact: $('#nom_contact').val(),
+			prenom_contact: $('#prenom_contact').val(),
+			mail_contact: $('#mail_contact').val(),
+			tel_contact: $('#tel_contact').val(),
+			heureDebut: $('#heureDebut').val()+$('#minuteDebut').val(),
+			heureFin: $('#heureFin').val()+$('#minuteFin').val(),
+			date: $('#date').val(),
+			//tableau intervenant
+			//table_intervenant: $('#table_intervenant')
+		};
 		
+		//TODO: changer url par : /entretien/ajax/inscription_post.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/inscription_post.cible.php', obj, function() {
+				alert('succes');
+				//TODO: gèrer le retour de l'insert
+			});
+	}
+		return false;
+	});
+});
+
+// Recupere la liste des contact associes a une entreprise
+$('document').ready(function() {
+	$("#nomContact").focus( function() {
+		var obj = {
+			nom_entreprise: $('#entreprise').val()
+		};
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/liste_contacts.cible.php', obj, function(liste_contacts) {
+				var jsonContact = eval('(' + liste_contacts + ')');
+				majListeContacts(jsonContact);
+				$('.typeahead').typeahead();
+			});
+	});
+});
+
+/*
+ * Methode qui permet de maj la liste servant à l'autocompletion des contacs
+*/
+function majListeContacts(jsonContact){
+	jsonContact
+	var liste_contacts = "[";
+	for (var /* int */ i in jsonContact.contact){
+		liste_contacts += "\""+ jsonContact.contact[i].prenom +" "+jsonContact.contact[i].nom+"\"";
+		if( jsonContact.contact[i++] == "undefined" ){
+			liste_contacts += "\",";
+		}
+	}
+	liste_contacts += "]";
+	$("#nomContact").attr("data-source",liste_contacts);
+} 
+
+
+// Requete inscription etudiant a un entretien
+$('document').ready(function() {
+	$("#formReservation").submit( function() {
+		var obj = {
+			id_creneau: $('#id_creneau').val()
+		};
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/inscription_etudiant.cible.php', obj, function() {
+			// Ajouter message ici
+		});
+	});
+});
  
+ 
+// Requete recuperation simulations d'un jour
+$('document').ready(function() {
+	$("#formChoixDate").submit( function() {
+		var obj = {
+			date: $('#date_creneaux').val()
+		};
+		
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', obj, function(creneau_list) {
+				var jsonCreneau = eval('(' + creneau_list + ')');
+				afficherCreneaux(jsonCreneau);
+				$('.reservation').click(function(){
+					$("#id_creneau").val($(this).attr("id_creneau"));
+				});
+			});
+		return false;
+	});
+});
+
+
+
+function afficherCreneaux(jsonCreneau){
 	
+	var /* string */ text = "";
+	for (var /* int */ i in jsonCreneau.creneau){
+		var /*string */ nom = jsonCreneau.creneau[i].nom;
+		text += "<div class=\"accordion-group\"><div class=\"accordion-heading\"><a class=\"accordion-toggle\" data-toggle=\"collapse\""
+		+ "data-parent=\"#accordion_creneau\" href=\"#collapse"+i+"\">"+ jsonCreneau.creneau[i].nom +"</a>"
+		+ "</div>"
+		+	"<div id=\"#collapse"+i+"\" class=\"accordion-body collapse in\">"
+		+	   "<div class=\"accordion-inner\">"
+		+		"<table class=\"table table-striped\">"
+		+		"<thead><tr><th>Debut</th><th>Fin</th><th>Etat</th><th></th></tr></thead>"
+		+		"<tbody><tr>"
+		+			"<td>"+jsonCreneau.creneau[i].debut+"</td>"
+		+			"<td>"+jsonCreneau.creneau[i].fin+"</td>"
+		+			"<td>"+disponible(jsonCreneau.creneau[i].id_etudiant)+"</td>";
+		if( disponible(jsonCreneau.creneau[i].id_etudiant) != "Disponible"){
+			// On ne met pas de boutton
+		}else{
+		text +=	"<td><a class=\"reservation btn btn-inverse\" id_creneau="+jsonCreneau.creneau[i].id_creneau+" data-toggle=\"modal\" href=\"#myModal\">S'inscrire</a></td>"
+		}
+		text +=	  "</tr>"
+		+		  "</tbody></table></div></div></div>";
+	}
+	$('#accordion_creneau').html(text);
+}
+
+
+function disponible(id_etudiant){
+	//TODO: changer le test ??????????????????
+	if(id_etudiant != "0"){
+		return "Reserve";
+	}else{
+		return "Disponible";
+	}
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

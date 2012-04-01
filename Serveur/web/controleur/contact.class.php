@@ -44,6 +44,11 @@ class Contact {
 	public static function GetListeContactsParEntreprise(/* int */ $_idEntreprise) {
         return BD::Prepare('SELECT * FROM Contact WHERE ID_ENTREPRISE = :idEntreprise ORDER BY NOM', array('idEntreprise' => $_idEntreprise), BD::RECUPERER_TOUT);
     }
+	
+	// Récuperation des données de l'ensemble des Contacts, ordonné alphabétiquement, pour une entreprise donnée
+	public static function GetListeContactsParNomEntreprise(/* int */ $_nomEntreprise) {
+        return BD::Prepare('SELECT c.nom, c.prenom FROM Contact c, Entreprise e WHERE e.nom = :nomEntreprise ORDER BY c.NOM', array('nomEntreprise' => $_nomEntreprise), BD::RECUPERER_TOUT);
+    }
 
 	// Suppression d'une Contact par ID
     public static function SupprimerContactByID(/* int */ $_id) {
