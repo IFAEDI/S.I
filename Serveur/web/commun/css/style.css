@@ -42,18 +42,3 @@ body {
 	margin: 11px;
 }
 
-#rif p:first-letter
-{
-	padding-left:20px;
-}
-
-#rif .centre
-{
-	text-align:center;
-}
-
-#rif .comment{
-	font-size:0.9em; 
-	color:grey; 
-	font-style:italic;
-}

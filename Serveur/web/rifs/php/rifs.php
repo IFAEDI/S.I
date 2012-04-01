@@ -1,3 +1,5 @@
+<?php inclure_fichier('rifs', 'rifs', 'css'); ?>
+
 <div class=row-fluid>
 	<div class="span12">
 		<div class="row-fluid">
