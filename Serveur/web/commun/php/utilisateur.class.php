@@ -55,7 +55,7 @@ class Utilisateur {
 	private function _fetchData( $login ) {
 
 		/* Requête à la base pour récupérer le bon utilisateur et construire l'objet */
-		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE login = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
+		$result = BD::executeSelect( 'SELECT * FROM UTILISATEUR WHERE LOGIN = :login', array( 'login' => $login ), BD::RECUPERER_UNE_LIGNE );
 
 		if( $result == null ) {
 			return false;
@@ -90,6 +90,24 @@ class Utilisateur {
 		return ($result == 1);
 	}
 
+
+        /**
+        * Fonction faisant le changement du login de l'utilisateur
+        * @return Vrai si tout est ok, faux sinon
+        */
+        public function changeLogin( $login ) {
+
+                /* Requête à la base */
+                $result = BD::executeModif( 'UPDATE UTILISATEUR SET LOGIN = :login WHERE ID_UTILISATEUR = :id',
+                                                        array( 'login' => $login, 'id' => $this->id ) );
+
+		if( $result == 1 ) {
+			$this->login = $login;
+			return true;
+		}
+
+                return false;
+        }
 
 	/**
 	* Retourne la personne associée à l'utilisateur
@@ -172,6 +190,39 @@ class Utilisateur {
                 return $utilisateur;
         }
 
+	/**
+	* Ajoute un nouvel utilisateur en base
+	* $login : Le login du nouvel utilisateur
+	* $pwd : Le mot de passe du nouvel utilisateur
+	* @return La nouvelle instance créée ou null
+	*/
+	public static function AjouterUtilisateur( $login, $pwd ) {
+
+		$result = BD::executeModif( 'INSERT INTO UTILISATEUR( LOGIN, PASSWD, AUTH_SERVICE) VALUES( :login, :pwd, :service )',
+					array( 'login' => $login, 'pwd' => $pwd, 'service' => Authentification::AUTH_NORMAL ) );
+
+		if( $result == 0 ) {
+			return null;
+		}
+
+		return new Utilisateur( $login );
+	}
+
+	/**
+	* Recherche un utilisateur avec ce login
+	* $login : Le login à rechercher
+	* @return Vrai s'il existe, faux sinon
+	*/
+	public static function UtilisateurExiste( $login ) {
+
+		$result = BD::executeSelect( 'SELECT COUNT(*) AS CPT FROM UTILISATEUR WHERE LOGIN = :login', array( 'login' => $login ) );
+
+		if( $result == null ) {
+			return false;
+		}
+
+		return ($result['CPT'] > 0);
+	}
 }
 
 ?>

@@ -106,11 +106,112 @@ if( @isset( $_GET['action'] ) ) {
 	}
 	/* Edition d'un utilisateur */
 	else if( $_GET['action'] == "edit_user" ) {
-		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );
-	}
-	/** Ajout d'un utilisateur */
-	else if( $_GET['action'] == "add_user" ) {
-		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );
+
+		/* Check que l'on a bien toutes les infos */
+		if( ! (@isset( $_GET['id'] ) && @isset( $_GET['login'] ) && @isset( $_GET['pwd'] ) && @isset( $_GET['nom'] ) &&
+			@isset( $_GET['prenom'] ) && @isset( $_GET['role'] ) && @isset( $_GET['mails'] ) && @isset( $_GET['telephones'] ) ) ) {
+
+			$val = array( 'code' => 'error', 'mesg' => 'Variables manquantes.' );
+		}
+		else {
+			$id     = strip_tags( mysql_escape_string( $_GET['id'] ) );
+			$login  = strip_tags( mysql_escape_string( $_GET['login'] ) );
+			$pwd    = strip_tags( mysql_escape_string( $_GET['pwd'] ) );
+			$nom    = strip_tags( mysql_escape_string( $_GET['nom'] ) );
+			$prenom = strip_tags( mysql_escape_string( $_GET['prenom'] ) );
+			$role   = strip_tags( mysql_escape_string( $_GET['role'] ) );
+
+			try {
+				/* Si $id < 0 on ajoute un nouveau, sinon on édite */
+				if( $id < 0 ) {
+
+					/* Check que l'utilisateur n'existe pas déjà */
+					if( Utilisateur::UtilisateurExiste( $login ) == true ) {
+						throw new Exception( "L'utilisateur '$login' existe déja." );
+					}
+
+					/* Ajout de l'utilisateur et de la personne */
+					$u = Utilisateur::AjouterUtilisateur( $login, $pwd );
+					if( $u == null ) {
+						throw new Exception( "L'utilisateur n'a pas pu être créé." );
+					}
+
+					$p = Personne::AjouterPersonne( $nom, $prenom, $role, $u );
+					if( $p == null ) {
+						throw new Exception( "La personne associée à l'utilisateur n'a pas pu être créée." );
+					}
+
+					/* On met à jour les infos diverses */
+					if( $p->changeMails( $_GET['mails'] ) == false ) {
+						throw new Exception( "Erreur lors de la mise à jour des mails." );
+					}
+
+					if( $p->changeTelephones( $_GET['telephones'] ) == false ) {
+						throw new Exception( "Erreur lors de la mise à jour des téléphones." );
+					}
+					
+
+					$val = array( 'code' => 'ok' );
+				}
+				else {
+					/* Récupération de l'utilisateur et de la personne pour travailler dessus */
+					$u = Utilisateur::RecupererUtilisateur( $id );
+					if( $u != null ) {
+						$p = $u->getPersonne();
+						if( $p != null ) {
+
+							/* S'il faut changer le mot de passe uniquement */
+							if( strlen( $pwd ) > 0 ) {
+								if( $u->changePassword( $pwd ) == false ) {
+									throw new Exception( "Erreur lors du changement du mot de passe." );
+								}
+							}
+
+							/* Changement du login si nécessaire */
+							if( strcmp( $u->getLogin(), $login ) != 0 ) {
+
+								/* Check que l'utilisateur n'existe pas déjà */
+			                                        if( Utilisateur::UtilisateurExiste( $login ) == true ) {
+                        			                        throw new Exception( "L'utilisateur '$login' existe déja." );
+			                                        }
+
+								if( $u->changeLogin( $login ) == false ) {
+									throw new Exception( "Erreur lors du changement de login." );
+								}
+							}
+
+							/* Mise à jour des infos de la personne à présent */
+							if( $p->changeInfo( $nom, $prenom ) == false ) {
+								throw new Exception( "Erreur lors de la mise à jour des infos perso." );
+							}
+
+							if( $p->changeMails( $_GET['mails'] ) == false ) {
+								throw new Exception( "Erreur lors de la mise à jour des mails." );
+							}
+
+							if( $p->changeTelephones( $_GET['telephones'] ) == false ) {
+								throw new Exception( "Erreur lors de la mise à jour des téléphones." );
+							}
+
+							if( $p->changeRole( $role ) == false ) {
+								throw new Exception( "Erreur lors de la mise à jour du rôle." );
+							}
+
+							$val = array( 'code' => 'ok' );
+						}
+						else {
+							$val = array( 'code' => 'error', 'mesg' => 'Personne associée à l\'utilisateur introuvable.' );
+						}
+					}
+					else {
+						$val = array( 'code' => 'error', 'mesg' => 'Utilisateur introuvable.' );
+					}
+				}
+			}
+			catch( Exception $e ) {
+				$val = array( 'code' => 'fail', 'mesg' => $e->getMessage() );
+			}
+		}
 	}
 	else {
 		$val = array( 'code' => 'error', 'mesg' => 'Action invalide.' );

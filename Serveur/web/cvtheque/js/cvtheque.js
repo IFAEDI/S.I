@@ -22,7 +22,7 @@ function Rechercher(){
         select_etudiant += "<input id='in_filtre' placeholder='Filtrer' style='width : 180px;'/>";
        
         for(i=0;i<liste_etudiants.length;i++){
-            id_etudiant = liste_etudiants[i]['ID_ETUDIANT'];
+            id_personne = liste_etudiants[i]['ID_PERSONNE'];
             nom_etudiant = liste_etudiants[i]['NOM'];
             prenom_etudiant = liste_etudiants[i]['PRENOM'];
             annee = liste_etudiants[i]['ANNEE'];
@@ -34,29 +34,29 @@ function Rechercher(){
             if( prenom_etudiant == null){
                 prenom_etudiant = '';
             }
-            if( id_etudiant != null){
+            if( id_personne != null){
                 select_etudiant +="<div>";
                 if(liste_etudiants[i]['etat'] == 0){
-                    select_etudiant += "<img id='img_new"+id_etudiant+"' src='/cvtheque/img/new.png' style='margin-right : 5px;'>";
+                    select_etudiant += "<img id='img_new"+id_personne+"' src='/cvtheque/img/new.png' style='margin-right : 5px;'>";
                 }
                 
                 if(liste_etudiants[i]['etat'] == 1){
-                    select_etudiant += "<a class='lien_cv' id='lien_cv"+id_etudiant+"' href='javascript:Afficher_CV("+id_etudiant+");' style='font-style:italic;font-weight:bold'>";
+                    select_etudiant += "<a class='lien_cv' id='lien_cv"+id_personne+"' href='javascript:Afficher_CV("+id_personne+");' style='font-style:italic;font-weight:bold'>";
                     select_etudiant += nom_etudiant+' '+prenom_etudiant+" ("+annee+"IF)"; 
                     select_etudiant += "<span class='titre_cv' style='margin-left : 8px;' >"+titre_cv+"</span>";
                     select_etudiant +="</a>";
                 }else{
-                    select_etudiant += "<a class='lien_cv' id='lien_cv"+id_etudiant+"' href='javascript:Afficher_CV("+id_etudiant+");'>";
+                    select_etudiant += "<a class='lien_cv' id='lien_cv"+id_personne+"' href='javascript:Afficher_CV("+id_personne+");'>";
                     select_etudiant += nom_etudiant+' '+prenom_etudiant+" ("+annee+"IF)";
                     select_etudiant += "<span class='titre_cv' style='margin-left : 8px;' >"+titre_cv+"</span>";
                     select_etudiant +="</a>";
                 }
                 
-                select_etudiant += "<a href='javascript:Favoris("+id_etudiant+");' style='position : relative; top : -2px; margin-left : 10px;'>";
+                select_etudiant += "<a href='javascript:Favoris("+id_personne+");' style='position : relative; top : -2px; margin-left : 10px;'>";
                 if(liste_etudiants[i]['favoris'] == 0){
-                    select_etudiant += "<img id='img"+id_etudiant+"' src='/cvtheque/img/star_off.png' class='unstar' style='float: right'>"+"</a>";
+                    select_etudiant += "<img id='img"+id_personne+"' src='/cvtheque/img/star_off.png' class='unstar' style='float: right'>"+"</a>";
                 }else{
-                    select_etudiant += "<img id='img"+id_etudiant+"' src='/cvtheque/img/star_on.png' class='star' style='float: right'>"+"</a>";
+                    select_etudiant += "<img id='img"+id_personne+"' src='/cvtheque/img/star_on.png' class='star' style='float: right'>"+"</a>";
                 }
                 select_etudiant += "</div>";
             }
@@ -91,39 +91,39 @@ function Rechercher(){
     });
 }
 
-function Afficher_CV(_id_etudiant){
+function Afficher_CV(id_personne){
     $('.titre_cv').hide();
     $('#div_liste_cv').css('width','210');
     $('#div_liste_cv').css('margin-right','10px');
-    $('#img_new'+_id_etudiant).remove();
-    $('#lien_cv'+_id_etudiant).css('font-weight', 'normal');
-    $('#lien_cv'+_id_etudiant).css('font-style', 'normal');
-    $('#div_cv').load('/cvtheque/php/cv.php?inc=1&id_etudiant='+_id_etudiant);
+    $('#img_new'+id_personne).remove();
+    $('#lien_cv'+id_personne).css('font-weight', 'normal');
+    $('#lien_cv'+id_personne).css('font-style', 'normal');
+    $('#div_cv').load('/cvtheque/php/cv.php?inc=1&id_personne='+id_personne);
 }
 
-function Favoris(_id_etudiant){
-    if ($("#img"+_id_etudiant).hasClass('unstar')){
+function Favoris(id_personne){
+    if ($("#img"+id_personne).hasClass('unstar')){
         $.post("/cvtheque/ajax/cv.cible.php?action=star_cv", {
-            id_etudiant : _id_etudiant
+            id_personne : id_personne
         },function success(retour){
             retour = $.trim(retour);
              retour_decode = $.parseJSON(retour);
         if (retour_decode['code'] == 'ok'){
-                $("#img"+_id_etudiant).removeClass('unstar');
-                $("#img"+_id_etudiant).addClass('star');
-                $("#img"+_id_etudiant).attr('src', '/cvtheque/img/star_on.png');
+                $("#img"+id_personne).removeClass('unstar');
+                $("#img"+id_personne).addClass('star');
+                $("#img"+id_personne).attr('src', '/cvtheque/img/star_on.png');
             }
         });
     }else{
         $.post("/cvtheque/ajax/cv.cible.php?action=unstar_cv", {
-            id_etudiant : _id_etudiant
+            id_personne : id_personne
         },function success(retour){
             retour = $.trim(retour);
              retour_decode = $.parseJSON(retour);
         if (retour_decode['code'] == 'ok'){
-                $("#img"+_id_etudiant).removeClass('star');
-                $("#img"+_id_etudiant).addClass('unstar');
-                $("#img"+_id_etudiant).attr('src', '/cvtheque/img/star_off.png');
+                $("#img"+id_personne).removeClass('star');
+                $("#img"+id_personne).addClass('unstar');
+                $("#img"+id_personne).attr('src', '/cvtheque/img/star_off.png');
             }
         });
     }

@@ -17,7 +17,7 @@ class Creneau {
     // Récuperation de l'objet Creneau par l'ID
     public static function GetCreneauByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM Creaneau WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM Creneau WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -47,7 +47,7 @@ class Creneau {
         if ($_id > 0 && is_numeric($_id)) {
 
             //Si l'etudiant à déjà un CV
-            BD::Prepare('UPDATE Creaneau SET 
+            BD::Prepare('UPDATE Creneau SET 
                     ID_ENTRETIEN = :id_entretien,
                     DEBUT = :debut,
 					FIN = :fin,
@@ -55,7 +55,7 @@ class Creneau {
                     WHERE ID_CRENEAU = :id_creneau', $info);
             return $_id;
         } else {
-            BD::Prepare('INSERT INTO Creaneau SET 
+            BD::Prepare('INSERT INTO Creneau SET 
 					ID_CRENEAU = :id_creneau,
                     ID_ENTRETIEN = :id_entretien,
                     DEBUT = :debut,
@@ -74,14 +74,14 @@ class Creneau {
 		
     }
 	
-	// Reservation d'un creaneau par un etudiant
+	// Reservation d'un creneau par un etudiant
     public static function ReserverCreneau($_id_creneau, $_id_etudiant){
 		$info = array(
 			'id_creneau'=> $_id_creneau,
 			'id_etudiant'=>$_id_etudiant
 		);
 		
-		// On remplit le creaneau par l'id de l'etudiant correspondant
+		// On remplit le creneau par l'id de l'etudiant correspondant
 		BD::Prepare('UPDATE Creneau SET
                     ID_ETUDIANT = :id_etudiant
                     WHERE ID_CRENEAU = :id_creneau', $info);

@@ -11,7 +11,6 @@ inclure_fichier('commun', 'authentification.class', 'php');
 $authentification = new Authentification();
 $utilisateur = null;
 if ($authentification->isAuthentifie()) {
-
     /* On récupère l'objet utilisateur associé */
     $utilisateur = $authentification->getUtilisateur();
     if ($utilisateur == null) {
@@ -23,7 +22,7 @@ if ($authentification->isAuthentifie() == false) {
     die;
 }
 
-$id_utilisateur = $utilisateur->getId();
+$id_personne = $utilisateur->getPersonne()->getId();
 
 //Edition ou Ajout d'un nouveau CV
 if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
@@ -68,8 +67,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
         echo json_encode($retour);
         die;
     }
-    
-     if ($prenom_etudiant == '') {
+
+    if ($prenom_etudiant == '') {
         $retour['code'] = 'error';
         $retour['msg'] = 'Erreur : Le prenom de l\'étudiant ne peut être vide (vous pouvez le modifier dans vos parametre de compte utilisateur)';
         echo json_encode($retour);
@@ -206,7 +205,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
 
     //On recupere l'id_cv si l'étudiant en à deja un
     $etudiant = new Etudiant();
-    $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
+    $etudiant = Etudiant::GetEtudiantByID($id_personne);
     if ($etudiant == NULL) {
         $etudiant = new Etudiant();
     }
@@ -221,7 +220,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     }
 
     //On met à jour/Ajoute les informations etudiante
-    $retour_fct = Etudiant::UpdateEtudiant($id_utilisateur, $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
+    $retour_fct = Etudiant::UpdateEtudiant($id_personne, $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
     if (!$retour_fct) {
         $retour['code'] = 'error';
         $retour['msg'] = $retour_fct;
@@ -332,7 +331,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
     }
 
     //On indique que le CV vient d'etre mis a jour (s'il vient d'etre creer rien ne se passe)
-    $retour_fct = Etudiant::MettreEnVu($id_utilisateur, '', 1);
+    $retour_fct = Etudiant::MettreEnVu($id_personne, '', 1);
     if (!$retour_fct) {
         $retour['code'] = 'error';
         $retour['msg'] = $retour_fct;
@@ -359,7 +358,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'diffusion_cv') {
     $etat = $_POST['etat'];
 
     $etudiant = new Etudiant();
-    $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
+    $etudiant = Etudiant::GetEtudiantByID($id_personne);
     if ($etudiant == NULL) {
         echo "Erreur 18 veuillez contacter l'administrateur";
         die;
@@ -382,14 +381,14 @@ if (isset($_GET['action']) && $_GET['action'] == 'supprimer_cv') {
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
     $etudiant = new Etudiant();
-    $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
+    $etudiant = Etudiant::GetEtudiantByID($id_personne);
     if ($etudiant == NULL) {
         echo "Erreur 19 veuillez contacter l'administrateur";
         die;
     }
 
     $id_cv = $etudiant->getIdCV();
-    Etudiant::SupprimerCV($id_utilisateur, $id_cv);
+    Etudiant::SupprimerCV($id_personne, $id_cv);
 
     $retour['code'] = 'ok';
     $retour['msg'] = '';
@@ -414,7 +413,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs'], $id_utilisateur));
+    echo json_encode(Etudiant::RechercherCVEtudiant($_POST['annee'], $_POST['mots_clefs'], $id_personne));
 }
 
 
@@ -425,7 +424,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    Etudiant::MettreEnFavoris($_POST['id_etudiant'], $id_utilisateur, 0);
+    Etudiant::MettreEnFavoris($_POST['id_personne'], $id_personne, 0);
 
     $retour['code'] = 'ok';
     $retour['msg'] = '';
@@ -439,7 +438,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    Etudiant::MettreEnFavoris($_POST['id_etudiant'], $id_utilisateur, 1);
+    Etudiant::MettreEnFavoris($_POST['id_personne'], $id_personne, 1);
 
     $retour['code'] = 'ok';
     $retour['msg'] = '';

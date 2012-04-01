@@ -22,15 +22,16 @@ $(document).ready( function() {
 	recupererLibelles();
 	recupererListeUtilisateurs();
 
-	$( "a#filter_service" ).click( filtrer_service );
-	$( "a#no_filter_service" ).click( supprime_filtre_service );
-	$( "a#filter_type" ).click( filtrer_type );
-	$( "a#no_filter_type" ).click( supprime_filtre_type );
+	$( "#admin_utilisateurs #filter_service" ).click( filtrer_service );
+	$( "#admin_utilisateurs #no_filter_service" ).click( supprime_filtre_service );
+	$( "#admin_utilisateurs #filter_type" ).click( filtrer_type );
+	$( "#admin_utilisateurs #no_filter_type" ).click( supprime_filtre_type );
 
-	$( "a#raffraichir" ).click( recupererListeUtilisateurs );
-	$( "a#ajouter" ).click( ajouterUtilisateur );
+	$( "#admin_utilisateurs #raffraichir" ).click( recupererListeUtilisateurs );
+	$( "#admin_utilisateurs #ajouter" ).click( ajouterUtilisateur );
 
-	$( "#admin_del_user_dialog #confirm" ).click( confirmerSuppressionUtilisateur );
+	$( "#admin_user_dialog #enregistrer" ).click( enregistrerUtilisateur );
+	$( "#admin_del_user_dialog #confirmer" ).click( confirmerSuppressionUtilisateur );
 } );
 
 
@@ -264,6 +265,10 @@ function ajouterUtilisateur() {
 
 	/* On balance la dialog */
 	$( "#admin_user_dialog" ).modal( 'show' );
+
+	/* Si jamais il y avait eu des erreurs précédemment, on enlève les class error */
+	$( "#admin_user_dialog input" ).parents( ".control-group" ).removeClass( "error" );
+	$( "#admin_user_dialog #erreur" ).hide();
 }
 
 /**
@@ -273,6 +278,11 @@ function editerUtilisateur() {
 
 	/* On édite un utilisateur qui a l'id X */
 	action_sur = $(this).attr( 'uid' );
+
+	/* On vide tous les champs */
+	$( "#admin_user_dialog input" ).each( function() {
+		$(this).val( '' );
+	} );
 
 	/* On demande au serveur de nous fournir toutes les informations concernant le user */
 	$.ajax( {
@@ -287,10 +297,6 @@ function editerUtilisateur() {
                 success: function( msg ) {
 
                         if( msg.code == "ok" ) {
-/*                                        $info = array( 'login' => $u->getLogin(), 'service' => $u->getService(),
-                                                        'nom' => $p->getNom(), 'prenom' => $p->getPrenom(), 'role' => $p->getRole(),
-                                                        'mails' => $p->getMails(), 'telephones' => $p->getTelephones() );
-*/
 
 				$( "#admin_user_dialog #login" ) .val( msg.utilisateur.login );
 				$( "#admin_user_dialog #nom" )   .val( msg.utilisateur.nom );
@@ -336,6 +342,9 @@ function editerUtilisateur() {
                                 } );
 	
 
+				/* Si jamais il y avait eu des erreurs précédemment, on enlève les class error */
+				$( "#admin_user_dialog #erreur" ).hide();
+				$( "#admin_user_dialog input" ).parents( ".control-group" ).removeClass( "error" );
 				/* On balance le dialog */
 				$( "#admin_user_dialog" ).modal( 'show' );
                         }
@@ -350,6 +359,119 @@ function editerUtilisateur() {
                         alert( ex + ' - ' + msg + '\n' + obj.responseText );
                 }
 	} );
+}
+
+/**
+* Enregistrement des modifications effectuées sur un utilisateur
+*/
+function enregistrerUtilisateur() {
+
+	/* Si jamais il y avait eu des erreurs précédemment, on enlève les class error */
+	$( "#admin_user_dialog input" ).parents( ".control-group" ).removeClass( "error" );
+
+	/* Récupération des données */
+	var login  = $( "#admin_user_dialog #login"  ).val();
+	var passwd = $( "#admin_user_dialog #pwd"    ).val();
+	var nom	   = $( "#admin_user_dialog #nom"    ).val();
+	var prenom = $( "#admin_user_dialog #prenom" ).val();
+	var role   = $( "#admin_user_dialog #role"   ).val();
+	var erreur = false;
+
+	/* On test que les données sont bien saisies */
+	if( login.length == 0 ) {
+		$( "#admin_user_dialog #login" ).parents( '.control-group' ).addClass( "error" );
+		erreur = true;
+	}
+	/* On force la saisie du mot de passe qu'à la création */
+	if( passwd.length == 0 && action_sur == -1 ) {
+		$( "#admin_user_dialog #pwd" ).parents( '.control-group' ).addClass( "error" );
+		erreur = true;
+	}
+	if( nom.length == 0 ) {
+		$( "#admin_user_dialog #nom" ).parents( '.control-group' ).addClass( "error" );
+		erreur = true;
+	}
+
+	/* Si on a eu une erreur, on ne va pas plus loin */
+	if( erreur == true ) {
+		var msg = "Veuillez saisir tous les champs indiqués en rouge avant de poursuivre.";
+		$( "#admin_user_dialog #erreur" ).html( msg );
+		$( "#admin_user_dialog #erreur" ).slideDown();
+		return false;
+	}
+
+	/* Si on a un mdp, on le transmet crypté */
+	if( passwd.length > 0 ) {
+		passwd = hex_sha1( passwd );
+	}
+
+        /* On formatte la liste des mails et leurs libellés */
+        var mails_array = [];
+        var i = 0;
+        $( "#admin_user_dialog .libelle_mail" ).each( function() {
+
+                mails_array[i] = [$(this).val(), ''];
+                i++;
+        } );
+
+        var i = 0;
+        $( "#admin_user_dialog .mail" ).each( function() {
+
+                mails_array[i][1] = $(this).val();
+                i++;
+        } );
+
+        /* On formatte la liste des téléphones et leurs libellés */
+        var telephones_array = [];
+        var i = 0;
+        $( "#admin_user_dialog .libelle_telephone" ).each( function() {
+
+                telephones_array[i] = [$(this).val(), ''];
+                i++;
+        } );
+
+        var i = 0;
+        $( "#admin_user_dialog .telephone" ).each( function() {
+
+                telephones_array[i][1] = $(this).val();
+                i++;
+        } );
+
+	/* Envoie de la requête au serveur */
+	$.ajax( {
+		async: false,
+		type: "GET",
+		dataType: "json",
+		url: "commun/ajax/admin_utilisateurs.cible.php",
+		data: {
+			action    : "edit_user",
+			id        : action_sur,
+			login     : login,
+			pwd       : passwd,
+			nom       : nom,
+			prenom    : prenom,
+			role      : role,
+			mails     : mails_array,
+			telephones: telephones_array
+		},
+                success: function( msg ) {
+
+                        if( msg.code == "ok" ) {
+				/* Pas très optimisé mais bon..... on refresh la table entière */
+				recupererListeUtilisateurs();
+				$( "#admin_user_dialog" ).modal( 'hide' );
+                        }
+                        else {
+                                var err = 'Une erreur est survenue lors de la mise à jour : ' + msg.code + '/' + msg.mesg;
+                                $( '#admin_user_dialog #erreur' ).html( err );
+                                $( '#admin_user_dialog #erreur' ).slideDown();
+                        }
+
+                },
+                error: function( obj, ex, msg ) {
+                        alert( ex + ' - ' + msg + '\n' + obj.responseText );
+                }
+	} );	
 }
 
 /**
@@ -378,10 +500,12 @@ function confirmerSuppressionUtilisateur() {
                 success: function( msg ) {
 
                         if( msg.code == "ok" ) {
-				alert( 'ok' );
+				/* Optimisation powa ! (ou pas) */
+				recupererListeUtilisateurs();
+				$( '#admin_utilisateurs' ).modal( 'hide' );
                         }
                         else {
-                                var err = 'Une erreur est survenue lors de la récupération des libellés : ' + msg.code + '/' + msg.mesg;
+                                var err = 'Une erreur est survenue lors de la suppression : ' + msg.code + '/' + msg.mesg;
                                 $( '#admin_utilisateurs #erreur' ).html( err );
                                 $( '#admin_utilisateurs #erreur' ).slideDown();
                         }
