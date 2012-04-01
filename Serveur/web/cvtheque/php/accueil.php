@@ -22,10 +22,10 @@ inclure_fichier('cvtheque', 'accueil', 'js');
 
 
 
-$id_utilisateur = $utilisateur->getId();
+$id_personne = $utilisateur->getPersonne()->getId();
 
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
+$etudiant = Etudiant::GetEtudiantByID($id_personne);
 ?>
 <div class="alert alert-error" id="div_erreur" style="display: none;"></div>
 
@@ -45,7 +45,7 @@ $etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
                     <td>
                         <span>Ton CV est actuellement diffusé : <a href="javascript:Diffusion(0);">Arrêter sa diffusion</a></span><br/>
                         <?php
-                        $nb_entreprise_suivi = Etudiant::GetNbSuivi($id_utilisateur);
+                        $nb_entreprise_suivi = Etudiant::GetNbSuivi($id_personne);
                         if ($nb_entreprise_suivi > 0) {
                             ?> 
                             <span>Ton CV est actuellement suivi par <?php echo $nb_entreprise_suivi ?> entreprise(s)</span>

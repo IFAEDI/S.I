@@ -33,19 +33,19 @@ if ($authentification->isAuthentifie() == false) {
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
 if (isset($_GET['id_etudiant']) &&
-        ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE ||
-        $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ADMIN)) {
+        ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE ||
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
     $id_etudiant = $_GET['id_etudiant'];
-    Etudiant::MettreEnVu($id_etudiant, $utilisateur->getId(), 2);
-} elseif ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ETUDIANT ||
-        $utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ADMIN) {
-    $id_etudiant = $utilisateur->getId();
+    Etudiant::MettreEnVu($id_etudiant, $utilisateur->getPersonne()->getId(), 2);
+} elseif ($utilisateur->getPersonne()->getRole() != Personne::ETUDIANT ||
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
+    $id_etudiant = $utilisateur->getPersonne()->getId();
 } else {
     inclure_fichier('', '401', 'php');
     die();
 }
 
-if ($utilisateur->getTypeUtilisateur() == Utilisateur::UTILISATEUR_ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getId()) != 1) {
+if ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getPersonne()->getId()) != 1) {
     inclure_fichier('', '401', 'php');
     die;
 }
