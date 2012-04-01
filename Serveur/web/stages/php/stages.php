@@ -9,9 +9,8 @@ if ($authentification->isAuthentifie() == false ||
 }
 
 inclure_fichier('stages', 'stages', 'css');
+inclure_fichier('stages', 'stages', 'js');
 ?>
-
-<script src='/stages/js/stages.js'></script>
 
 <div id="stages">
 
