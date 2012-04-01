@@ -424,7 +424,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    Etudiant::MettreEnFavoris($_POST['id_etudiant'], $id_personne, 0);
+    Etudiant::MettreEnFavoris($_POST['id_personne'], $id_personne, 0);
 
     $retour['code'] = 'ok';
     $retour['msg'] = '';
@@ -438,7 +438,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
-    Etudiant::MettreEnFavoris($_POST['id_etudiant'], $id_personne, 1);
+    Etudiant::MettreEnFavoris($_POST['id_personne'], $id_personne, 1);
 
     $retour['code'] = 'ok';
     $retour['msg'] = '';

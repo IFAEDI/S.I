@@ -95,6 +95,8 @@ else {
     </div>
     <div class="modal-body" style="text-align: center;">
 
+	<div class="hide alert alert-error" id="erreur"></div>
+
 	<div class="control-group">
 		<p>Nom d'utilisateur</p>
 		<div class="controls">
@@ -173,7 +175,7 @@ else {
 
     </div>
     <div class="modal-footer" style="text-align: center;">
-		<a href="#" class="btn btn-success">Enregistrer</a>
+		<a href="#" id="enregistrer" class="btn btn-success">Enregistrer</a>
                 <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
     </div>
 </div>
@@ -191,7 +193,7 @@ else {
     </div>
     <div class="modal-footer" style="text-align: center;">
                 <a href="#" data-dismiss="modal" class="btn btn-primary">Annuler</a>
-                <a href="#" id="confirm" class="btn btn-danger">Confirmer</a>
+                <a href="#" id="confirmer" class="btn btn-danger">Confirmer</a>
     </div>
 </div>
 
