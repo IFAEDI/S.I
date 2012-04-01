@@ -3,9 +3,9 @@ require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'creneau.class', 'php');
 
 //Si l'utilisateur n'est pas une etudiant, on arrete tout
-/*if (!Utilisateur_connecter('etudiant')) {
+if (!Utilisateur_connecter('etudiant')) {
       die;
-}*/
+}
 	
 	if( empty($_POST) ) {
         die;
@@ -17,7 +17,7 @@ inclure_fichier('controleur', 'creneau.class', 'php');
 	}
 	
 	//TODO: On recupere l'id de l'etudiant
-	/*if( $authentification->isAuthentifie() ){
+	if( $authentification->isAuthentifie() ){
 		// On récupère l'objet utilisateur associé
 		$utilisateur = $authentification->getUtilisateur();
 		$id_utilisateur = $utilisateur->getId();
@@ -26,9 +26,8 @@ inclure_fichier('controleur', 'creneau.class', 'php');
 		}
 	}else{
 		die;
-	}*/
+	}
 	
-	$id_utilisateur = 22;
 	$retour = Creneau::ReserverCreneau($_id_creneau, $id_utilisateur);
 	
 	

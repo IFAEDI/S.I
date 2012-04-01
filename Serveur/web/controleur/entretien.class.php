@@ -24,7 +24,7 @@ class Entretien {
 	// Récuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
         return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, m.mail
-			FROM Entretien et, Contact c, Entreprise e, Personne p, Mail m
+			FROM Entretien et, Contact_entreprise c, Entreprise e, Personne p, Mail m
 			WHERE et.id_contact = c.id_contact
 			AND c.id_personne = p.id_personne
 			AND m.id_personne = p.id_personne
@@ -51,19 +51,21 @@ class Entretien {
     }
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'un entretien
-    public static function UpdateEntretien($_id, $_id_contact, $_date){
+    public static function UpdateEntretien($_id, $_id_contact, $_date, $_etat){
 
 		$info = array(
 			'id'=> $_id,
 			'id_contact'=>$_id_contact,
-			'date'=>$_date
+			'date'=>$_date,
+			'etat'=>$_etat
 		);
 		
-        if ($_id < 0 && is_numeric($_id)) {
+        if( $_id > 0 ) {
             //Si l'etudiant à déjà un CV
             BD::executeModif('UPDATE Entretien SET 
 					ID_CONTACT = :id_contact,
-                    DATE = :date
+                    DATE = :date,
+                    ETAT = :etat
                     WHERE ID_ENTRETIEN = :id', $info);
               BD::MontrerErreur();
 			return $_id;
@@ -72,11 +74,14 @@ class Entretien {
             $retour = BD::executeModif('INSERT INTO Entretien SET 
 					ID_ENTRETIEN = :id,
 					ID_CONTACT = :id_contact,
-                    DATE = :date
+                    DATE = :date,
+					ETAT = :etat
 					', $info);
-
-            if ($retour != null ) {
-                echo $retour;
+			$id = BD::getConnection()->lastInsertId();
+			
+            if ($id  != null ) {
+                echo $id;
+				return $id;
             } else {
                 echo "Erreur 2 veuillez contacter l'administrateur du site";
                 return;

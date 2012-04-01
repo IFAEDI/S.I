@@ -3,41 +3,16 @@ function valider(){
 	  //On test la valeur des champs du formulaire
 	  
 	  // NOM CONTACT
-	  var div = document.getElementById("control_nom");
-	  if( $("#nom_contact").val() != ""){
+	  var div = document.getElementById("control_nomContact");
+	  if( $("#nomContact").val() != ""){
 		div.className ="control-group success";
 	  }else{
 		  div.className ="control-group error";
 		  valide = false;
 	  }
-	  // PRENOM CONTACT
-	  var div = document.getElementById("control_prenom");
-	  if( $("#prenom_contact").val() != ""){
-		div.className ="control-group success";
-	  }else{
-		div.className ="control-group error";
-		valide = false;
-	  }
-	  
-	  // MAIL CONTACT
-	  var div = document.getElementById("control_mail");
-	  if( $("#mail_contact").val() != "" && verifMail( $("#mail_contact").val() ) ){
-		div.className ="control-group success";
-	  }else{
-		div.className ="control-group error";
-		valide = false;
-	  }
 	  // ENTREPRISE
 	  var div = document.getElementById("control_nomEntreprise");
-	  if( $("#nomEntreprise").val() != ""){
-		div.className ="control-group success";
-	  }else{
-		div.className ="control-group error";
-		valide = false;
-	  }
-	  // VILLE
-	  var div = document.getElementById("control_villeEntreprise");
-	  if( $("#villeEntreprise").val() != ""){
+	  if( $("#entreprise").val() != ""){
 		div.className ="control-group success";
 	  }else{
 		div.className ="control-group error";
@@ -96,22 +71,13 @@ $('document').ready(function() {
 	// Si les controles sont bons on post
 	if( valider() != false){
 		var obj = {
-			nom_entreprise: $('#nomEntreprise').val(),
-			ville_entreprise: $('#villeEntreprise').val(),
-			nom_contact: $('#nom_contact').val(),
-			prenom_contact: $('#prenom_contact').val(),
-			mail_contact: $('#mail_contact').val(),
-			tel_contact: $('#tel_contact').val(),
-			heureDebut: $('#heureDebut').val()+$('#minuteDebut').val(),
-			heureFin: $('#heureFin').val()+$('#minuteFin').val(),
+			nom_entreprise: $('#entreprise').val(),
+			nom_contact: $('#nomContact').val(),
 			date: $('#date').val(),
-			//tableau intervenant
-			//table_intervenant: $('#table_intervenant')
+			heureDebut: $('#heureDebut').val()+$('#minuteDebut').val(),
+			heureFin: $('#heureFin').val()+$('#minuteFin').val()
 		};
-		
-		//TODO: changer url par : /entretien/ajax/inscription_post.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/inscription_post.cible.php', obj, function() {
-				alert('succes');
+		$.post('/entretien/ajax/inscription_post.cible.php', obj, function() {
 				//TODO: gèrer le retour de l'insert
 			});
 	}
@@ -120,7 +86,7 @@ $('document').ready(function() {
 });
 
 // Recupere la liste des contact associes a une entreprise
-$('document').ready(function() {
+/*$('document').ready(function() {
 	$("#nomContact").focus( function() {
 		var obj = {
 			nom_entreprise: $('#entreprise').val()
@@ -133,14 +99,14 @@ $('document').ready(function() {
 			});
 	});
 });
-
+*/
 /*
  * Methode qui permet de maj la liste servant à l'autocompletion des contacs
 */
-function majListeContacts(jsonContact){
+/*function majListeContacts(jsonContact){
 	jsonContact
 	var liste_contacts = "[";
-	for (var /* int */ i in jsonContact.contact){
+	for (var i in jsonContact.contact){
 		liste_contacts += "\""+ jsonContact.contact[i].prenom +" "+jsonContact.contact[i].nom+"\"";
 		if( jsonContact.contact[i++] == "undefined" ){
 			liste_contacts += "\",";
@@ -148,7 +114,7 @@ function majListeContacts(jsonContact){
 	}
 	liste_contacts += "]";
 	$("#nomContact").attr("data-source",liste_contacts);
-} 
+} */
 
 
 // Requete inscription etudiant a un entretien
@@ -157,8 +123,7 @@ $('document').ready(function() {
 		var obj = {
 			id_creneau: $('#id_creneau').val()
 		};
-		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/inscription_etudiant.cible.php', obj, function() {
+		$.post('/entretien/ajax/inscription_etudiant.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
@@ -172,8 +137,7 @@ $('document').ready(function() {
 			date: $('#date_creneaux').val()
 		};
 		
-		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
+		$.post('/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
 				var jsonCreneau = eval('(' + creneau_list + ')');
 				afficherCreneaux(jsonCreneau);
 				$('.reservation').click(function(){
@@ -247,8 +211,7 @@ $('document').ready(function() {
 		var obj = {
 			id_entretien: $('#id_entretien').val()
 		};
-		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/valider_entretien.cible.php', obj, function() {
+		$.post('/entretien/ajax/valider_entretien.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
@@ -260,8 +223,7 @@ $('document').ready(function() {
 		var obj = {
 			id_entretien: $('#id_entretien').val()
 		};
-		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/refuser_entretien.cible.php', obj, function() {
+		$.post('/entretien/ajax/refuser_entretien.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
@@ -307,8 +269,7 @@ $('document').ready(function() {
 			date: $('#date_creneaux').val()
 		};
 		
-		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
+		$.post('/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
 				var jsonCreneau = eval('(' + creneau_list + ')');
 				afficherCreneauxAdmin(jsonCreneau);
 				$('.annulation').click(function(){
@@ -352,8 +313,7 @@ $('document').ready(function() {
 		var obj = {
 			id_creneau: $('#id_creneau').val()
 		};
-		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/annuler_etudiant.cible.php', obj, function() {
+		$.post('/entretien/ajax/annuler_etudiant.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
