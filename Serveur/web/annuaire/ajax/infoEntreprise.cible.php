@@ -51,6 +51,23 @@
 			}
 		}
  */
+ 
+ 
+ // Vérification de l'authentification :
+require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+inclure_fichier('commun', 'authentification.class', 'php');
+$authentification = new Authentification();
+$utilisateur = null;
+if ($authentification->isAuthentifie()) {
+
+    /* On récupère l'objet utilisateur associé */
+    $utilisateur = $authentification->getUtilisateur();
+    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
+        $authentification->forcerDeconnexion();
+		inclure_fichier('', '401', 'php');
+		die;
+    }
+}
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
@@ -91,8 +108,8 @@ if ($entreprise != NULL) {
 		}
 	}
 	if (gettype($commentaires) == 'array') {
+		$json['entreprise']['commentaires'] = Array();
 		foreach( $commentaires as $commentaire ) {
-			$json['entreprise']['commentaires'] = Array();
 			array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
 		}
 	}

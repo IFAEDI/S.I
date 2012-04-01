@@ -681,7 +681,6 @@ function Sauvegarder(){
     
     
     $.post("/cvtheque/ajax/cv.cible.php?action=edit_cv", {
-        id_etudiant : id_etudiant,
         nom_etudiant : nom_etudiant.val(),
         prenom_etudiant : prenom_etudiant.val(),
         telephone_etudiant : telephone_etudiant.val(),

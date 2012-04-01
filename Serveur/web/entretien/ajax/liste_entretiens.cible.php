@@ -1,34 +1,21 @@
 <?php
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'creneau.class', 'php');
+inclure_fichier('controleur', 'entretien.class', 'php');
 
-//TODO: decommenterSi l'utilisateur n'est pas une etudiant, on arrete tout
-/*if (!Utilisateur_connecter('etudiant')) {
+//TODO: decommenterSi l'utilisateur n'est pas un admin, on arrete tout
+/*if (!Utilisateur_connecter('administrateur')) {
       die;
 }
-*/	
-	if( empty($_POST) ) {
-        die;
-    }
+*/
+	$entretien = Entretien::GetListeEntretien();
 	
-	// On verifie la presence de l'id du creneau choisis
-	if( !empty($_POST['date']) ){
-		$_date = $_POST['date'];
-	}else{
-		die;
-	}
-	
-	$creneau = new Creneau();
-	$retour = $creneau::GetListeCreneauxByDate($_date);
-	
-	//TODO: Construire l'objet à renvoyer
 	/*
 	 * Renvoyer le JSON
 	 */
-	$json['code'] = ($retour != NULL) ? 'ok' : 'error';
 	// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-	if ($retour != NULL) {
-		$json['creneau'] = $retour;
+	$json['code'] = 'ok';
+	if ($entretien != NULL) {
+		$json['entretien'] = $entretien;
 	}
 	echo json_encode($json);
 	

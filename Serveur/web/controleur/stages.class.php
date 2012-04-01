@@ -1,6 +1,6 @@
 <?php
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'requete.inc', 'php'); // Ajouter dans base.inc ?
 
 /**
@@ -90,11 +90,6 @@ class Stages {
 					$resultats[$i]->annee = '3 et 4';
 				} else if ($resultats[$i]->annee == 9) {
 					$resultats[$i]->annee = '4 et 5';
-				}
-	
-				// L'indiquer si la description est vide.
-				if (!$resultats[$i]->description) {
-					$resultats[$i]->description = '(pas de description)';
 				}
 			}
 			return $resultats; 
