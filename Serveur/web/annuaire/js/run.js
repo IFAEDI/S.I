@@ -21,6 +21,20 @@ $('document').ready(function() {
 		}
 	}
 	
+	// Activation / Désactivation du mode Edition :
+	$('#formOptions .checkbox input').change( function () {
+		Annuaire.droitModification = $('#formOptionsEdition').is(':checked');
+		Annuaire.afficherListeEntreprises();
+		var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
+		Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
+		if (Annuaire.droitModification) {
+			$('#boutonAjoutEntrepriseListe').html('<button id="boutonAjoutEntrepriseListe" title="Ajouter Entreprise" data-toggle="modal" href="#modalUpdateEntreprise" class="btn  btn-mini editionEntreprise" type=""><i class="icon-plus"></i></button>');
+		} else {
+			$('#boutonAjoutEntrepriseListe').children().remove();
+		}
+		
+	});
+	
 	// Mise en place d'une validation des formulaires :
 	$("#formUpdateEntreprise").validate();
 	$("#btnValiderUpdateEntreprise").click( function() {
@@ -62,5 +76,6 @@ $('document').ready(function() {
 	
 	// Initialisation de l'objet Annuaire :
 	Annuaire.droitModification = ($("#inputModif").val()==1)?true:false;
+	if (Annuaire.droitModification) { $('#formOptionsEdition').attr('checked', true); }
 	
 });

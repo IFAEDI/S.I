@@ -39,7 +39,7 @@ function afficherResultats(json) {
 		}
 
 		// Affichage sous forme d'une liste de définitions
-		affichage += '<li><div class="info">' +
+		affichage += '<li class="offre"><div class="info">' +
 			'<details><summary>' + resultat.titre + '</summary>' +
 			'<dl class="dl-horizontal">' +
 			'<dt>Stage de</dt><dd>' + resultat.annee + 'ème année</dd>' +
@@ -60,7 +60,6 @@ function afficherResultats(json) {
 $('document').ready(function() {
 	$('#fenetre').hide();
 	$('#information').hide();
-
 	/**
 	 * Préparation du comportement d'un clic sur le bouton
 	 * rechercher :
@@ -75,7 +74,7 @@ $('document').ready(function() {
 			annee: $('#annee').val()
 		};
 
-		$.post('/stages/ajax/cible.php', obj, function(d,t,j) {
+		$.post('stages/ajax/cible.php', obj, function(d,t,j) {
 			afficherResultats(JSON.parse(d));	
 		});
 
