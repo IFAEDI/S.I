@@ -26,7 +26,7 @@ class Creneau {
 	public static function GetListeCreneauxByDate($date) {
         return BD::Prepare('SELECT e.nom, cr.id_creneau, cr.debut, cr.fin, cr.id_etudiant
 							FROM Creneau cr, Entreprise e, Contact c, Entretien et
-							WHERE e.id = c.id_entreprise
+							WHERE e.id_entreprise = c.id_entreprise
 							AND et.id_contact = c.id_contact
 							AND cr.id_entretien = et.id_entretien
 							AND et.etat =1 AND et.date = :date

@@ -12,13 +12,14 @@ $entreprises = Entreprise::GetListeEntreprises();
 // On construit la liste de recherche des entreprises
 $list_entreprises = "\"";
 foreach( $entreprises as $entreprise){
-	if( $list_entreprises != "\""){
-		$list_entreprises = $list_entreprises."\",\"".$entreprise['NOM'];
-	}else{
-		$list_entreprises = $list_entreprises.$entreprise['NOM'];
-	}
+		if( $list_entreprises != "\""){
+			$list_entreprises = $list_entreprises."\",\"".$entreprise['NOM'];
+		}else{
+			$list_entreprises = $list_entreprises.$entreprise['NOM'];
+		}
 }
 $list_entreprises =  $list_entreprises."\"";
+echo $list_entreprises;
 ?>
 
 <form class="form-horizontal" id="formInscription" name="formInscription" action="#" method="post">
