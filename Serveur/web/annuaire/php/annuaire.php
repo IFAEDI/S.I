@@ -21,7 +21,6 @@ if (($authentification->isAuthentifie() == false) ||
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
 inclure_fichier('controleur', 'entreprise.class', 'php');
-inclure_fichier('annuaire', 'annuaire', 'css');
 inclure_fichier('annuaire', 'annuaire.class', 'js');
 inclure_fichier('commun', 'jquery.validate.min', 'js');
 inclure_fichier('commun', 'dateFormat', 'js');
@@ -255,7 +254,7 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 										
 					<fieldset class="control-group">
 						<div class="control-group">
-							<label class="control-label">Catégorie</i></label>
+							<label class="control-label">Catégorie</label>
 							<div class="controls">
 								<label class="radio inline">
 									<input class="formAjoutCommentaireCateg" name="formAjoutCommentaireCategorie" id="formAjoutCommentaireCategorie1" value="0" checked="checked" type="radio"/>

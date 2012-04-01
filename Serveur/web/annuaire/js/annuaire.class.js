@@ -871,6 +871,7 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	Annuaire.infoEntrepriseCourante = donnees.entreprise;
 	donnees = donnees.entreprise;
 	if (typeof donnees === "undefined") { return; }
+	if (typeof donnees.entreprise === "undefined") { return; }
 	
 	// Génération des blocs intermédiaires (nécessitant des boucles) :
 	var /* string */ tableauContacts = '';

@@ -60,7 +60,6 @@ function afficherResultats(json) {
 $('document').ready(function() {
 	$('#fenetre').hide();
 	$('#information').hide();
-
 	/**
 	 * Préparation du comportement d'un clic sur le bouton
 	 * rechercher :
@@ -75,7 +74,7 @@ $('document').ready(function() {
 			annee: $('#annee').val()
 		};
 
-		$.post('/stages/ajax/cible.php', obj, function(d,t,j) {
+		$.post('./stages/ajax/cible.php', obj, function(d,t,j) {
 			afficherResultats(JSON.parse(d));	
 		});
 
