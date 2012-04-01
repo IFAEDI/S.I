@@ -2,7 +2,6 @@
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entretien.class', 'php');
 
-//TODO: decommenterSi l'utilisateur n'est pas un admin, on arrete tout
 /*if (!Utilisateur_connecter('administrateur')) {
       die;
 }

@@ -2,11 +2,6 @@
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'contact.class', 'php');
 
-//TODO: decommenterSi l'utilisateur n'est pas une etudiant, on arrete tout
-/*if (!Utilisateur_connecter('etudiant')) {
-      die;
-}
-*/	
 	if( empty($_POST) ) {
         die;
     }

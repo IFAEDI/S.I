@@ -1,25 +1,28 @@
 <?php
-//TODO: decommenter
-/*if (!Utilisateur_connecter('entreprise')) {
+global $authentification;
+global $utilisateur;
+
+if ($authentification->isAuthentifie() == false || (
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+        $utilisateur->getPersonne()->getRole() != Personne::AEDI &&
+        $utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE)) {
     inclure_fichier('', '401', 'php');
     die;
 }
-*/
+
 inclure_fichier('controleur', 'entreprise.class', 'php');
 
 $entreprises = Entreprise::GetListeEntreprises();
-
 // On construit la liste de recherche des entreprises
 $list_entreprises = "\"";
-foreach( $entreprises as $entreprise){
-		if( $list_entreprises != "\""){
-			$list_entreprises = $list_entreprises."\",\"".$entreprise['NOM'];
-		}else{
-			$list_entreprises = $list_entreprises.$entreprise['NOM'];
-		}
+for( $i = 0; $i < sizeof($entreprises) ; $i++) {
+    if( $list_entreprises != "\""){
+		$list_entreprises .= "\",\"".$entreprises[$i]->nom;
+	}else{
+		$list_entreprises .= $entreprises[$i]->nom;
+	}
 }
 $list_entreprises =  $list_entreprises."\"";
-echo $list_entreprises;
 ?>
 
 <form class="form-horizontal" id="formInscription" name="formInscription" action="#" method="post">

@@ -25,7 +25,7 @@ class Creneau {
 	// Récuperation de l'ensemble des creneau d'une journée passée en paramètre (ex: 27/03/2012) et etat = 1 valide
 	public static function GetListeCreneauxByDate($date) {
         return BD::Prepare('SELECT e.nom, cr.id_creneau, cr.debut, cr.fin, cr.id_etudiant
-							FROM Creneau cr, Entreprise e, Contact c, Entretien et
+							FROM Creneau cr, Entreprise e, Contact_entreprise c, Entretien et
 							WHERE e.id_entreprise = c.id_entreprise
 							AND et.id_contact = c.id_contact
 							AND cr.id_entretien = et.id_entretien
@@ -44,7 +44,7 @@ class Creneau {
 			'id_etudiant'=>$_id_etudiant
 		);   
 		
-        if ($_id > 0 && is_numeric($_id)) {
+        if(is_numeric($_id) && $_id > 0) {
 
             //Si l'etudiant à déjà un CV
             BD::Prepare('UPDATE Creneau SET 

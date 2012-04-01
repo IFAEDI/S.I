@@ -11,6 +11,10 @@
 	min-height: 170px;
 }	
 
+.offre {
+	border-bottom: 1px dotted black;
+}
+
 /* Simulation des balises details et summary */
 #stages details, summary {
 	display: block;

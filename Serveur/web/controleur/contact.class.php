@@ -48,6 +48,18 @@ class Contact {
 
 		return NULL;
 	}
+	
+	
+	public static function GetContactParNom(/* string */ $_nom ,$_prenom) {
+
+		return BD::executeSelect('SELECT ID_CONTACT FROM CONTACT_ENTREPRISE c, PERSONNE p
+					WHERE c.ID_PERSONNE = p.ID_PERSONNE AND
+					p.NOM = :nom AND p.prenom = :prenom', array('nom' => $_nom, 'prenom' => $_prenom), 
+					BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+
+		return NULL;
+	}
+	
 
 	/**
 	* Récuperation l'ensemble des Contacts, ordonnés par priorité
