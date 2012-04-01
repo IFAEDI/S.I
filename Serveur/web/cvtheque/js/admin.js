@@ -18,6 +18,34 @@ function ArreterDiffusion(){
         });
 }
 
+function MettreNouveau(){
+    $.post("/cvtheque/ajax/cv.cible.php?action=mettre_nouveau", {
+        },function success(retour){
+            retour = $.trim(retour)
+            retour_decode = $.parseJSON(retour);
+            if (retour_decode['code'] != 'ok'){
+                Afficher_erreur(retour);
+            }else{
+                $('#mod_supression').modal('hide');
+                location.reload(); 
+            }
+        });
+}
+
+function ViderFavorisCV(){
+    $.post("/cvtheque/ajax/cv.cible.php?action=vider_favoris", {
+        },function success(retour){
+            retour = $.trim(retour)
+            retour_decode = $.parseJSON(retour);
+            if (retour_decode['code'] != 'ok'){
+                Afficher_erreur(retour);
+            }else{
+                $('#mod_supression').modal('hide');
+                location.reload(); 
+            }
+        });
+}
+
 function Afficher_erreur(erreur){
     div_erreur = $("#div_erreur");
     div_erreur.text(erreur);
@@ -75,9 +103,9 @@ function raffraichirTable( debut ) {
 
         tbody += '<td style="text-align: center;">';
         if(liste_utilisateurs[i].acces_cvtheque == 0){
-            tbody += '<a id="btn'+liste_utilisateurs[i].id+'" href="javascript:Changer_acces('+ liste_utilisateurs[i].id +')" class="btn btn-success" style="width : 100px; height : 20px;">Autoriser</a> ';
+            tbody += '<a id="btn'+liste_utilisateurs[i].ID_PERSONNE+'" href="javascript:Changer_acces('+ liste_utilisateurs[i].ID_PERSONNE +')" class="btn btn-success" style="width : 100px; height : 20px;">Autoriser</a> ';
         }else{
-            tbody += '<a id="btn'+liste_utilisateurs[i].id+'" href="javascript:Changer_acces('+ liste_utilisateurs[i].id +')"  class="btn btn-danger" style="width : 100px; height : 20px;">Interdir</a> ';
+            tbody += '<a id="btn'+liste_utilisateurs[i].ID_PERSONNE+'" href="javascript:Changer_acces('+ liste_utilisateurs[i].ID_PERSONNE +')"  class="btn btn-danger" style="width : 100px; height : 20px;">Interdire</a> ';
         }
         tbody += '</td>';
         tbody += '</tr>';
@@ -114,7 +142,7 @@ function Changer_acces(id_utilisteur){
             }else{
                
                 if(etat == 1){
-                    btn.text('Interdir');
+                    btn.text('Interdire');
                     btn.removeClass('btn-success')
                     btn.addClass('btn-danger')
                 }else{

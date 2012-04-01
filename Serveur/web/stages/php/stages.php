@@ -2,7 +2,8 @@
 
 global $authentification, $utilisateur;
 if ($authentification->isAuthentifie() == false || 
-        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT) {
+        ($utilisateur->getPersonne()->getRole() != Personne::ETUDIANT &&
+        $utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
     inclure_fichier('', '401', 'php');
     die;
 }

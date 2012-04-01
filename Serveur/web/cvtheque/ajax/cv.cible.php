@@ -218,9 +218,9 @@ if (isset($_GET['action']) && $_GET['action'] == 'edit_cv') {
         echo json_encode($retour);
         die;
     }
-
+    
     //On met à jour/Ajoute les informations etudiante
-    $retour_fct = Etudiant::UpdateEtudiant($id_personne, $id_cv, $nom_etudiant, $prenom_etudiant, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
+    $retour_fct = Etudiant::UpdateEtudiant($id_personne, $id_cv, $sexe_etudiant, $adresse1_etudiant, $adresse2_etudiant, $ville_etudiant, $cp_etudiant, $pays_etudiant, $telephone_etudiant, $mail_etudiant, $anniv_etudiant, $statut_marital_etudiant, $permis_etudiant);
     if (!$retour_fct) {
         $retour['code'] = 'error';
         $retour['msg'] = $retour_fct;
@@ -408,8 +408,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'autocomplete_ville') {
 
 //Recherche d'un cv
 if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
-    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
-            $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+            $utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
@@ -419,8 +419,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'rechercher_cv') {
 
 //Enlever des favoris un cv
 if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
-    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
-            $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+            $utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
@@ -433,8 +433,8 @@ if (isset($_GET['action']) && $_GET['action'] == 'unstar_cv') {
 
 //Mettre en favoris un cv
 if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
-    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN &&
-            $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ENTREPRISE) {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+            $utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
@@ -447,7 +447,7 @@ if (isset($_GET['action']) && $_GET['action'] == 'star_cv') {
 
 //Arrete la diffusion de tous les CV
 if (isset($_GET['action']) && $_GET['action'] == 'arreter_diffusion') {
-    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
         die;
     }
     inclure_fichier('controleur', 'etudiant.class', 'php');
@@ -458,9 +458,33 @@ if (isset($_GET['action']) && $_GET['action'] == 'arreter_diffusion') {
     echo json_encode($retour);
 }
 
+if (isset($_GET['action']) && $_GET['action'] == 'mettre_nouveau') {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    Etudiant::TousMettreNouveau();
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
+}
+
+if (isset($_GET['action']) && $_GET['action'] == 'vider_favoris') {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
+        die;
+    }
+    inclure_fichier('controleur', 'etudiant.class', 'php');
+    Etudiant::SuprimerLesFavoris();
+
+    $retour['code'] = 'ok';
+    $retour['msg'] = '';
+    echo json_encode($retour);
+}
+
 /* Récupération de l'ensemble des utilisateurs */
 if (isset($_GET['action']) && $_GET['action'] == "get_user_list") {
-    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
         die;
     }
 
@@ -478,9 +502,9 @@ if (isset($_GET['action']) && $_GET['action'] == "get_user_list") {
 
 
 
-/* Récupération de l'ensemble des utilisateurs */
+/* Changer l'acces a la cvtheque */
 if (isset($_GET['action']) && $_GET['action'] == "changer_acces") {
-    if ($utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+    if ($utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
         die;
     }
 
@@ -492,7 +516,7 @@ if (isset($_GET['action']) && $_GET['action'] == "changer_acces") {
         }
 
         if ($_POST['etat'] == 0) {
-            Etudiant::Interdir_Acces($_POST['id_utilisateur']);
+            Etudiant::InterdireAcces($_POST['id_utilisateur']);
         }
 
         $val = array('code' => 'ok',);

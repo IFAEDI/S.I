@@ -23,7 +23,7 @@ class Entretien {
 
 	// Récuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
-        return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom
+        return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, c.mail
 			FROM Entretien et, Contact c, Entreprise e
 			WHERE et.id_contact = c.id_contact
 			AND c.id_entreprise = e.id', array(), BD::RECUPERER_TOUT);
@@ -86,6 +86,22 @@ class Entretien {
 	// Permet de valider un entretien demande par une entreprise
 	public static function ValiderEntretien($_id){
 		$etat = 1;
+		$info = array(
+			'id'=> $_id,
+			'etat'=> $etat,
+		);
+		BD::executeModif('UPDATE Entretien SET 
+				ETAT = :etat
+				WHERE ID_ENTRETIEN = :id', $info);
+		  BD::MontrerErreur();
+		return $_id;
+	
+	}
+
+	
+	// Permet de refuser un entretien demande par une entreprise
+	public static function RefuserEntretien($_id){
+		$etat = 0;
 		$info = array(
 			'id'=> $_id,
 			'etat'=> $etat,

@@ -86,8 +86,7 @@ class Creneau {
                     ID_ETUDIANT = :id_etudiant
                     WHERE ID_CRENEAU = :id_creneau', $info);
 		return $_id_creneau;
-	}
-	
+	}	
 	
     //****************  Fonctions  ******************//
 
