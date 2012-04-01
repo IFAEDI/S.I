@@ -19,7 +19,7 @@ inclure_fichier('stages', 'stages', 'js');
 			<form class="well form" id="form_stages">
 				<fieldset class="control-group form-search">
 					<input type="text" class="input-medium search-query" placeholder="Mots-clés">
-					<button  id="submit_recherche" type="submit" class="btn">Recherche</button>
+					<button  id="submit_recherche" type="submit" class="btn">Rechercher <i class="icon-search"></i></button>
 				</fieldset>
 				<fieldset class="control-group">
 					<div class="control-group">
@@ -51,7 +51,7 @@ inclure_fichier('stages', 'stages', 'js');
 		</div>
 		
 		<div class="span8 columns">
-			<div class="alert alert-block alert-success">
+			<div class="alert alert-block alert-info">
 					<h4 class="alert-heading">Propositions de Stage - Formulaire Etudiant</h4>
 					Vous pouvez rechercher par mots-clés dans le titre ou la description du sujet proposé, par
 				année pour laquelle vous êtes intéressés, par lieu (en entrant un nom de ville ou un numéro
