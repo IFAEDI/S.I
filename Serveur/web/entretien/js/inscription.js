@@ -173,7 +173,7 @@ $('document').ready(function() {
 		};
 		
 		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
-		$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', obj, function(creneau_list) {
+		$.post('/S.I/Serveur/web/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
 				var jsonCreneau = eval('(' + creneau_list + ')');
 				afficherCreneaux(jsonCreneau);
 				$('.reservation').click(function(){
@@ -224,9 +224,152 @@ function disponible(id_etudiant){
 }
 
 
+/* ------------------------------------------------------------------------------------
+							Partie Administration
+ ------------------------------------------------------------------------------------ */
+
+$('document').ready(function() {
+	$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', function(entretien_list) {
+		var jsonEntretien = eval('(' + entretien_list + ')');
+		afficherEntretiens(jsonEntretien);
+		$('.validation').click(function(){
+			$("#id_entretien").val($(this).attr("id_entretien"));
+		});
+	});
+	return false;
+});
+
+
+// Requete validation d'un entretien
+$('document').ready(function() {
+	$("#formValiderEntretien").submit( function() {
+		var obj = {
+			id_entretien: $('#id_entretien').val()
+		};
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/valider_entretien.cible.php', obj, function() {
+			// Ajouter message ici
+		});
+	});
+});
+
+// Requete refus d'un entretien
+$('document').ready(function() {
+	$("#formRefuserEntretien").submit( function() {
+		var obj = {
+			id_entretien: $('#id_entretien').val()
+		};
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/refuser_entretien.cible.php', obj, function() {
+			// Ajouter message ici
+		});
+	});
+});
+ 
+
+function afficherEntretiens(jsonEntretien){
+	
+	var /* string */ text = "<thead><tr><th>Jour</th><th>Entreprise</th><th>Contact</th><th>Etat</th><th></th></tr></thead><tbody>";
+	for (var /* int */ i in jsonEntretien.entretien){
+		var /*string */ nom = jsonEntretien.entretien[i].nom;
+		text += "<tr><td>"+jsonEntretien.entretien[i].date+"</td>"
+		+			"<td>"+jsonEntretien.entretien[i].nom+"</td>"
+		+			"<td><a href=\"mailto:\""+jsonEntretien.entretien[i].mail+"\">"+jsonEntretien.entretien[i].mail+"</a></td>" // TODO: Mettre le nom prenom du contact a la place
+		+			"<td>"+valide(jsonEntretien.entretien[i].etat)+"</td>";
+		if( jsonEntretien.entretien[i].etat != 0){
+			// On ne met pas de boutton
+			text += "<td><a class=\"validation btn btn-danger\" id_entretien="+jsonEntretien.entretien[i].id_entretien+" data-toggle=\"modal\" href=\"#refuserModal\">Refuser</a></td>";
+		}else{
+			text +=	"<td><a class=\"validation btn btn-success\" id_entretien="+jsonEntretien.entretien[i].id_entretien+" data-toggle=\"modal\" href=\"#accepterModal\">Valider</a>"
+				+ "<a class=\"validation btn btn-danger\" id_entretien="+jsonEntretien.entretien[i].id_entretien+" data-toggle=\"modal\" href=\"#refuersModal\">Refuser</a></td>";
+		}
+		text +=	  "</tr>"
+	}
+	text += "</tbody>";
+	$('.table').html(text);
+}
+
+// Fonction qui analyse l'etat de l'entretien en fonction de l'etat
+function valide(etat){
+	if( etat == 0){
+		return "En attente";
+	}else{
+		return "Valide";
+	}
+}
+
+
+// Requete recuperation creneaux d'un jour
+$('document').ready(function() {
+	$("#formChoixDate").submit( function() {
+		var obj = {
+			date: $('#date_creneaux').val()
+		};
+		
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
+				var jsonCreneau = eval('(' + creneau_list + ')');
+				afficherCreneauxAdmin(jsonCreneau);
+				$('.annulation').click(function(){
+					$("#id_creneau").val($(this).attr("id_creneau"));
+				});
+			});
+		return false;
+	});
+});
 
 
 
+function afficherCreneauxAdmin(jsonCreneau){
+	
+	var /* string */ text = "";
+	for (var /* int */ i in jsonCreneau.creneau){
+		var /*string */ nom = jsonCreneau.creneau[i].nom;
+		text += "<div class=\"accordion-group\"><div class=\"accordion-heading\"><a class=\"accordion-toggle\" data-toggle=\"collapse\""
+		+ "data-parent=\"#accordion_creneau\" href=\"#collapse"+i+"\">"+ jsonCreneau.creneau[i].nom +"</a>"
+		+ "</div>"
+		+	"<div id=\"#collapse"+i+"\" class=\"accordion-body collapse in\">"
+		+	   "<div class=\"accordion-inner\">"
+		+		"<table class=\"table table-striped\">"
+		+		"<thead><tr><th>Debut</th><th>Fin</th><th>Etat</th><th></th></tr></thead>"
+		+		"<tbody><tr>"
+		+			"<td>"+jsonCreneau.creneau[i].debut+"</td>"
+		+			"<td>"+jsonCreneau.creneau[i].fin+"</td>"
+		+			"<td>"+jsonCreneau.creneau[i].id_etudiant+"</td>";
+		if( disponible(jsonCreneau.creneau[i].id_etudiant) != "Disponible"){
+			text +=	"<td><a class=\"annulation btn btn-inverse\" id_creneau="+jsonCreneau.creneau[i].id_creneau+" data-toggle=\"modal\" href=\"#refuserEtudiantModal\">Enlever</a></td>"
+		}else{
+			text +=	"<td><a class=\"reservation btn btn-inverse\" id_creneau="+jsonCreneau.creneau[i].id_creneau+" data-toggle=\"modal\" href=\"#ajouterEtudiantModal\">Ajouter</a></td>"
+		}
+		text +=	  "</tr>"
+		+		  "</tbody></table></div></div></div>";
+	}
+	$('#accordion_creneau').html(text);
+}
+
+// Requete annulation etudiant a un creneau
+$('document').ready(function() {
+	$("#refuserEtudiantModal").submit( function() {
+		var obj = {
+			id_creneau: $('#id_creneau').val()
+		};
+		//TODO: changer url par : /entretien/ajax/inscription_etudiant.cible.php
+		$.post('/S.I/Serveur/web/entretien/ajax/annuler_etudiant.cible.php', obj, function() {
+			// Ajouter message ici
+		});
+	});
+});
+ 
+
+
+function disponible(id_etudiant){
+	//TODO: changer le test ??????????????????
+	if(id_etudiant != "0"){
+		return "Reserve";
+	}else{
+		return "Disponible";
+	}
+}
 
 
 

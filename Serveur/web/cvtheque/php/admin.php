@@ -22,6 +22,8 @@ inclure_fichier('cvtheque', 'admin', 'js');
 
 <div class="alert" style="padding: 20px;">
     <a class='btn btn-primary' href="javascript:ArreterDiffusion();">Arreter la diffusion de tout les cv</a>
+    <a class='btn' href="javascript:MettreNouveau();">Mettre tous les CVs à 'Nouveau'</a>
+    <a class='btn btn-danger' href="javascript:ViderFavorisCV();">Vider la table des CVs favoris</a>
 </div>
 
 

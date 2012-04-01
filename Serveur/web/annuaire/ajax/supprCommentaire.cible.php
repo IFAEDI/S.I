@@ -1,23 +1,23 @@
 <?php
 /**
  * -----------------------------------------------------------
- * UPDATEENTREPRISE - CIBLE PHP
+ * SUPPRCOMMENTAIRE - CIBLE PHP
  * -----------------------------------------------------------
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
- * Cible pour l'ajout/modification d'une entreprise.
+ * Cible pour la suppression d'un comm'.
+ * Est donc appelée par le moteur JS (Ajax) de la page Annuaire quand un comm' est sélectionné.
  * Le principe (repris de Bnj Bouv) est très simple :
  * 1) On récupère l'ensemble des variables qui ont été insérées.
  * 2) On appelle le contrôleur 
  * 3) On renvoit les résultats en JSON
  * Le résultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ id n'est pas présent
-			id : 1 		// ID de l'entreprise ajoutée
+			code : "ok", // ou "error"
 		}
  */
- 
+
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
@@ -35,47 +35,27 @@ if ($authentification->isAuthentifie()) {
 }
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 /*
  * Récupérer et transformer le JSON
  */
-/* string */ $nom_entreprise = NULL;
-/* string */ $secteur_entreprise = NULL;
-/* string */ $desc_entreprise = NULL;
-/* string */ $com_entreprise = NULL;
-/* int */ $id_entreprise = 0;
-
-if (verifierPresent('nom')) {
-	$nom_entreprise = Protection_XSS(urldecode($_POST['nom']));
-}
-if (verifierPresent('secteur')) {
-	$secteur_entreprise = Protection_XSS(urldecode($_POST['secteur']));
-}
-if (verifierPresent('description')) {
-	$desc_entreprise = Protection_XSS(urldecode($_POST['description']));
-}
-if (verifierPresent('commentaire')) {
-	$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
-}
+/* int */ $id = 0;
 if (verifierPresent('id')) {
-	$id_entreprise = intval($_POST['id']);
+	$id = intval($_POST['id']);
 }
 
 /*
  * Appeler la couche du dessous
  */
  
-/* int */ $id = Entreprise::UpdateEntreprise($id_entreprise, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise);
+/* bool */ $codeRet = CommentaireEntreprise::SupprimerCommentaireByID($id);
 
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($id != -1) ? 'ok' : 'error';
+$json['code'] = ($codeRet) ? 'ok' : 'error';
 // FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-if ($id != -1) {
-	$json['id'] = $id;
-}
 echo json_encode($json);
 
 

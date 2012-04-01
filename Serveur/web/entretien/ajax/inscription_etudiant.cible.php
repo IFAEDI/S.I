@@ -16,7 +16,7 @@ inclure_fichier('controleur', 'creneau.class', 'php');
 		$_id_creneau = $_POST['id_creneau'];
 	}
 	
-	//On recupere l'id de l'etudiant
+	//TODO: On recupere l'id de l'etudiant
 	/*if( $authentification->isAuthentifie() ){
 		// On récupère l'objet utilisateur associé
 		$utilisateur = $authentification->getUtilisateur();
@@ -29,8 +29,7 @@ inclure_fichier('controleur', 'creneau.class', 'php');
 	}*/
 	
 	$id_utilisateur = 22;
-	$creneau = new Creneau();
-	$retour = $creneau::ReserverCreneau($_id_creneau, $id_utilisateur);
+	$retour = Creneau::ReserverCreneau($_id_creneau, $id_utilisateur);
 	
 	
 	//Test du retour

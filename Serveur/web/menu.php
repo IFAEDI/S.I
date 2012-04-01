@@ -75,9 +75,9 @@
 			?>
 
 			<li class="divider-vertical"></li>
-			<li class=""><a href="#"><i class="icon-info-sign icon-white"></i> A propos</a></li>
+			<li class=""><a href="index.php?page=A_Propos"><i class="icon-info-sign icon-white"></i> A propos</a></li>
 
-			<li class=""><a href="#"><i class="icon-envelope icon-white"></i> Contact</a></li>
+			<li class=""><a href="index.php?page=Contact"><i class="icon-envelope icon-white"></i> Contact</a></li>
 
 			<li class="divider-vertical"></li>
 		  

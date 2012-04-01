@@ -17,7 +17,7 @@ if ($authentification->isAuthentifie() == false ||
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-if ($utilisateur->getPersonne()->getRole() != Personne::ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getPersonne()->getId()) != 1) {
+if ($utilisateur->getPersonne()->getRole() == Personne::ENTREPRISE && Etudiant::AccesCVtheque($utilisateur->getPersonne()->getId()) != 1) {
     inclure_fichier('', '401', 'php');
     die;
 }

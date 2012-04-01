@@ -107,6 +107,12 @@ if ($_GET['page'] == 'accueil') {
     $nom_module = 'entretien';
     $nom_page = 'entretienEtudiant';
     $titre_module = 'Etudiants';
+} elseif ($_GET['page'] == 'admin_entretien') {
+    $titre_page = 'Administration Entretien';
+    $lien_module = 'index.php?page=admin_entretien';
+    $nom_module = 'entretien';
+    $nom_page = 'admin_entretien';
+    $titre_module = 'Etudiants';
 } elseif ($_GET['page'] == 'rifs') {
     $titre_page = 'Rencontres IF';
     $lien_module = 'index.php?page=rifs';
@@ -134,7 +140,23 @@ if ($_GET['page'] == 'accueil') {
     $nom_module = 'commun';
     $nom_page = 'admin_journal';
     $titre_module = 'Administration';
-} else {
+}
+elseif( $_GET['page'] == 'Contact' ) {
+	$titre_page= 'Contact';
+	$lien_module = '';
+	$nom_module = '';
+	$titre_module = '';
+	$nom_page = 'contact';
+}
+elseif( $_GET['page'] == 'A_Propos' ) {
+        $titre_page= 'A Propos';
+        $lien_module = '';
+        $nom_module = '';
+        $titre_module = '';
+        $nom_page = 'a_propos';
+
+}
+else {
     $titre_page = '404';
     $lien_module = '';
     $nom_module = '';
