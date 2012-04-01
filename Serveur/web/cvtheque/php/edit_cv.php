@@ -17,11 +17,11 @@ if ($authentification->isAuthentifie() == false || (
 
 inclure_fichier('controleur', 'etudiant.class', 'php');
 
-$id_utilisateur = $utilisateur->getId();
+$id_personne = $utilisateur->getPersonne()->getId();
 
 //Récuperation complete du CV de l'étudiant
 $etudiant = new Etudiant();
-$etudiant = Etudiant::GetEtudiantByID($id_utilisateur);
+$etudiant = Etudiant::GetEtudiantByID($id_personne);
 
 
 if ($etudiant == NULL) {
@@ -80,7 +80,7 @@ $liste_certif = $temp;
 
 echo '<script> var liste_certif=$.parseJSON(\'' . json_encode($liste_certif) . '\');</script>';
 echo '<script> var liste_mention=$.parseJSON(\'' . json_encode(Adaptation_tableau($liste_mention)) . '\');</script>';
-echo '<script> var id_etudiant=\'' . $id_utilisateur . '\';</script>';
+echo '<script> var id_etudiant=\'' . $id_personne . '\';</script>';
 ?> 
 <div class="alert " id="div_info">
     <table style="width: 100%;"><tr><td id="text_info">  
