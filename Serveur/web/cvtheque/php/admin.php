@@ -2,7 +2,7 @@
 global $authentification;
 global $utilisateur;
 
-if ($authentification->isAuthentifie() == false || $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN) {
+if ($authentification->isAuthentifie() == false || $utilisateur->getPersonne()->getRole() != Personne::ADMIN) {
     inclure_fichier('', '401', 'php');
     die;
 }
