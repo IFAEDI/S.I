@@ -1,0 +1,19 @@
+p
+{
+	text-indent:20px;
+}
+
+.centre
+{
+	text-align:center;
+}
+
+.comment{
+	font-size:0.9em;
+	color:grey;
+	font-style:italic;
+}
+
+h2{
+	margin-left:1em;
+}

@@ -20,16 +20,18 @@ class Utilisateur {
 	*/
 	public function __construct( $login ) {
         
+		/* Le login est null, on crée un objet vide */
+		if( $login == null ) return;
+
 		$result = $this->_fetchData( $login );
 
 		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
 		if( $result == false ) {
 
-			echo "pouet";
-
 			/* On s'en occupe donc ! */
 			/* Ajout en base */
-			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
+			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(LOGIN, PASSWD, AUTH_SERVICE) VALUES( :login, NULL, :service )', 
+				array( 'login' => $login, 'service' => Authentification::AUTH_CAS ) );
 
 			if( $result == 0 ) {
 				throw new Exception( 'Impossible d\'insérer le nouvel utilisateur en base.' );
@@ -42,8 +44,7 @@ class Utilisateur {
 			}
 		}
 
-		/* Et maintenant on crée l'objet Personne associé */
-		$this->personne = new Personne( $this );
+		$this->personne = null;
 	}
 
 	/**
@@ -59,13 +60,21 @@ class Utilisateur {
 		if( $result == null ) {
 			return false;
 		}
+	
+		$this->_autoComplete( $result );
+		return true;
+	}
+
+	/**
+	* Met à jour les attributs de l'instance avec les données récupérées par la requête
+	* $result : Un result set contenant les résultats d'une requête SELECT
+	*/
+	private function _autoComplete( $result ) {
 
 		$this->id = $result['ID_UTILISATEUR'];
-		$this->login = $result['LOGIN'];
-		$this->service = $result['AUTH_SERVICE'];
-		$this->banni = $result['BANNI'];
-
-		return true;
+                $this->login = $result['LOGIN'];
+                $this->service = $result['AUTH_SERVICE'];
+                $this->banni = $result['BANNI'];
 	}
 
 	/**
@@ -86,6 +95,11 @@ class Utilisateur {
 	* Retourne la personne associée à l'utilisateur
 	*/
 	public function getPersonne() {
+	
+		if( $this->personne == null ) {
+			$this->personne = new Personne( $this );
+		}
+
 		return $this->personne;
 	}
 
@@ -120,17 +134,44 @@ class Utilisateur {
 		$obj = array();
 
 		/* Requête à la base pour récupérer les logins et construire les objets */
-		$result = BD::executeSelect( 'SELECT login FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
+		$result = BD::executeSelect( 'SELECT LOGIN FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
 
 		$i = 0;
 		foreach( $result as $row ) {
 
-			$obj[$i] = new Utilisateur( $row['login'] );
+			$obj[$i] = new Utilisateur( $row['LOGIN'] );
 			$i++;
 		}
 
 		return $obj;
 	}
+
+        /**
+        * Recupère un utilisateur associé à une personne
+        * $id : L'identifiant de l'utilisateur à rechercher
+        * $personne : Une instance de la classe personne (optionnel)
+        * @return Une instance utilisateur si un utilisateur a été trouvé, null sinon
+        */
+        public static function RecupererUtilisateur( $id, $personne = null ) {
+
+		/* Recherche dans la base */
+                $result = BD::executeSelect( 'SELECT LOGIN FROM UTILISATEUR WHERE ID_UTILISATEUR = :id', array( 'id' => $id ) );
+
+                if( $result == null ) {
+                        return null;
+                }
+
+		/* Création de l'utilisateur avec le login */
+		$utilisateur = new Utilisateur( $result['LOGIN'] );
+
+		/* Si une instance de Personne a été passée, on l'associe pour éviter trop de requêtes */
+		if( $personne != null ) {
+			$utilisateur->personne = $personne;
+		}
+
+                return $utilisateur;
+        }
+
 }
 
 ?>

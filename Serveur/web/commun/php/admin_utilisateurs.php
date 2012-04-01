@@ -20,7 +20,7 @@ if( $authentification->isAuthentifie() == false ) {
 }
 else {
 	/* Si l'utilisateur est authentifié mais sans permission, on le dégage avec une 401 */
-	if( $utilisateur->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN ) {
+	if( $utilisateur->getPersonne()->getRole() != Personne::ADMIN ) {
 		inclure_fichier('', '401', 'php');
 	}
 	else {
@@ -33,7 +33,8 @@ else {
 			<div id="erreur" class="alert alert-error hide" style="margin-top: 20px"></div>
 
 			<div style="text-align: right;">
-				<a href="#admin_user_dialog" data-toggle="modal" class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
+				<a href="#" id="raffraichir" class="btn btn-info"><i class="icon-refresh icon-white"></i> Raffraîchir</a>
+				<a href="#" id="ajouter"  class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
 			</div>
 
 			<table class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">
@@ -86,6 +87,7 @@ else {
 
 </div>
 
+<!-- Dialog pour l'édition / ajout -->
 <div class="modal hide fade" id="admin_user_dialog">
    <div class="modal-header">
         <a class="close" data-dismiss="modal" >&times;</a>
@@ -93,14 +95,105 @@ else {
     </div>
     <div class="modal-body" style="text-align: center;">
 
-	<p>Je veux des chips !</p>
+	<div class="control-group">
+		<p>Nom d'utilisateur</p>
+		<div class="controls">
+			<input class="input-medium" style="margin: 0px;" id="login" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<p>Mot de passe</p>
+		<div class="controls">
+			<input class="input-medium" style="margin: 0px;" id="pwd" type="password" />
+		</div>
+	</div>
+	<!--
+	<div class="control-group">
+		<p>Service d'authentification</p>
+		<div class="controls">
+			<select id="service" class="input-medium disabled" disabled="disabled">
+			</select>
+		</div>
+	</div>
+	-->
+	<div class="control-group">
+		<p>Nom</p>
+		<div class="controls">
+			<input class="input-medium" style="margin: 0px;" id="nom" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<p>Prénom</p>
+		<div class="controls">
+			<input class="input-medium" style="margin: 0px;" id="prenom" type="text" />
+		</div>
+	</div>
+	<div class="control-group">
+		<p>Rôle</p>
+		<div class="controls">
+			<select id="role" class="input-medium">
+			</select>
+		</div>
+	</div>
+	 <div class="control-group">
+		<p>Adresse mail</p>
+		<div class="controls">
+			  <div class="input-prepend">
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_mail" type="text" />
+				<span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium mail" type="text" />
+			  </div>
+			  <div class="input-prepend">
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_mail" type="text" />
+				<span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium mail" type="text" />
+			  </div>
+			  <div class="input-prepend">
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_mail" type="text" />
+				<span class="add-on" style="margin-top: -9px;">@</span><input class="input-medium mail" type="text" />
+			  </div>
+		</div>
+	</div>
+
+	<div class="control-group">
+		<p>Téléphone</p>
+		<div class="controls">
+			  <div class="input-prepend">
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_telephone" type="text" />
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-volume-up"></i></span><input class="input-medium telephone" type="text" />
+			  </div>
+			  <div class="input-prepend">
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_telephone" type="text" />
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-volume-up"></i></span><input class="input-medium telephone" type="text" />
+			  </div>
+			  <div class="input-prepend">
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-info-sign"></i></span><input class="input-medium libelle_telephone" type="text" />
+				<span class="add-on" style="margin-top: -9px;"><i class="icon-volume-up"></i></span><input class="input-medium telephone" type="text" />
+			  </div>
+		</div>
+	</div>
 
     </div>
     <div class="modal-footer" style="text-align: center;">
+		<a href="#" class="btn btn-success">Enregistrer</a>
                 <a href="#" data-dismiss="modal" class="btn btn-danger">Annuler</a>
     </div>
 </div>
 
+<!-- Dialog pour la suppression -->
+<div class="modal hide fade" id="admin_del_user_dialog">
+   <div class="modal-header">
+        <a class="close" data-dismiss="modal" >&times;</a>
+        <h3>Suppression d'un utilisateur</h3>
+    </div>
+    <div class="modal-body" style="text-align: center;">
+
+        <p>Êtes-vous sûr de vouloir bannir cette utilisateur?</p>
+
+    </div>
+    <div class="modal-footer" style="text-align: center;">
+                <a href="#" data-dismiss="modal" class="btn btn-primary">Annuler</a>
+                <a href="#" id="confirm" class="btn btn-danger">Confirmer</a>
+    </div>
+</div>
 
 <?php
 

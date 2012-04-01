@@ -16,7 +16,7 @@ $authentification = new Authentification();
 if( $authentification->isAuthentifie() == false ) {
 	die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
 }
-else if( $authentification->getUtilisateur()->getTypeUtilisateur() != Utilisateur::UTILISATEUR_ADMIN ) {
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN ) {
 	die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
 }
 
@@ -45,14 +45,13 @@ if( @isset( $_GET['action'] ) ) {
 
 				$data[$i] = array( 'id' => $current->getId(), 
 						'login' => $current->getLogin(),
-						'nom' => $current->getNom(), 
-						'prenom' => $current->getPrenom(),
+						'nom' => $current->getPersonne()->getNom(), 
+						'prenom' => $current->getPersonne()->getPrenom(),
 						'service' => $current->getService(),
-						'type' => $current->getTypeUtilisateur() );
+						'type' => $current->getPersonne()->getRole() );
 
 				$i++;
 			}
-
 
 			$val = array( 'code' => 'ok', 'utilisateurs' => $data );
 		}
@@ -64,9 +63,57 @@ if( @isset( $_GET['action'] ) ) {
 	else if( $_GET['action'] == "get_labels" ) {
 
 		$service = Authentification::$AUTH_TYPES; 
-		$type    = Utilisateur::$UTILISATEUR_TYPES; 
+		$type    = Personne::$ROLES; 
 
 		$val = array( 'code' => 'ok', 'services' => $service, 'types' => $type );
+	}
+	/* Récupération des informations d'un utilisateur précis */
+	else if( $_GET['action'] == "get_user_info" ) {
+
+		/* On check que l'on a tous les paramètres */
+		if( ! (@isset( $_GET['id'] ) ) ) {
+			$val = array( 'code' => 'error', 'mesg' => 'Variable manquante.' );
+		}
+		else {
+
+			$id = mysql_escape_string( $_GET['id'] );
+
+			try {
+				/* On fait dans les noms de variables cours car faire un tableau associatif, c'est chiant. */
+				$u = Utilisateur::RecupererUtilisateur( $id );
+				if( $u != null ) {
+
+					$p = $u->getPersonne();
+
+					$info = array( 'login' => $u->getLogin(), 'service' => $u->getService(),
+							'nom' => $p->getNom(), 'prenom' => $p->getPrenom(), 'role' => $p->getRole(),
+							'mails' => $p->getMails(), 'telephones' => $p->getTelephones() );
+
+					$val = array( 'code' => 'ok', 'utilisateur' => $info );
+				}
+				else {
+					$val = array( 'code' => 'fail', 'mesg' => 'Utilisateur introuvable.' );
+				}
+			}
+			catch( Exception $e ) {
+				$val = array( 'code' => 'error', 'mesg' => 'Une erreur s\'est produite en interrogeant la base : '.$e->getMessage() );
+			}
+		}
+	}
+	/* Suppression d'un utilisateur */
+	else if( $_GET['action'] == "del_user" ) {
+		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );
+	}
+	/* Edition d'un utilisateur */
+	else if( $_GET['action'] == "edit_user" ) {
+		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );
+	}
+	/** Ajout d'un utilisateur */
+	else if( $_GET['action'] == "add_user" ) {
+		$val = array( 'code' => 'info', 'mesg' => 'Not implemented yet.' );
+	}
+	else {
+		$val = array( 'code' => 'error', 'mesg' => 'Action invalide.' );
 	}
 
 	echo json_encode( $val );

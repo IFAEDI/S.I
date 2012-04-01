@@ -27,6 +27,7 @@ class Personne {
 	private $premiereConnexion;
 	private $role;
 
+	private $idUtilisateur;
 	private $utilisateur;
 
 
@@ -36,24 +37,30 @@ class Personne {
 	* @throws Exception si impossibilité de créer la personne
 	*/
 	public function __construct( $utilisateur ) {
-        
+
 		$this->utilisateur = $utilisateur;
 
-		$result = $this->_fetchData( $this->utilisateur->getId() );
+		/* Avec un utilisateur null, on ira pas loin donc on s'arrête là. */
+		if( $utilisateur == null ) return;
+
+
+		$id_utilisateur = $this->utilisateur->getId();		
+		$result = $this->_fetchDataByUserID( $id_utilisateur );
 
 		/* Si l'objet n'a pas pu être créé, c'est sans doute que c'est une auth via le CAS et que l'user est pas en base */
 		if( $result == false ) {
 
 			/* On s'en occupe donc ! */
 			/* Ajout en base */
-			$result = BD::executeModif( 'INSERT INTO UTILISATEUR(login, nom, service, premiere_connexion) VALUES( :login, :nom, :service, 1 )', array( 'login' => $login, 'nom' => $login, 'service' => Authentification::AUTH_CAS ) );
+			$result = BD::executeModif( 'INSERT INTO PERSONNE(NOM, ID_UTILISATEUR) VALUES( :nom, :id )', 
+					array( 'nom' => $this->utilisateur->getLogin(), 'id' => $id_utilisateur ) );
 
 			if( $result == 0 ) {
 				throw new Exception( 'Impossible d\'insérer le nouvel utilisateur en base.' );
 			} 
 
 			/* Et on rappelle pour fetcher les éléments */
-			$result = $this->_fetchData( $login );
+			$result = $this->_fetchDataByUserID( $id_utilisateur );
 			if( $result == false ) {
 				throw new Exception( 'Impossible de construire l\'utilisateur (erreur de bdd).' );
 			}
@@ -65,7 +72,7 @@ class Personne {
 	* $id : Identifiant de l'utilisateur rattachée à la personne à qui on doit récupérer les données
 	* @return True si tout est ok, false sinon
 	*/
-	private function _fetchData( $id ) {
+	private function _fetchDataByUserID( $id ) {
 
 		/* Requête à la base pour récupérer la bonne personne et construire l'objet */
 		$result = BD::executeSelect( 'SELECT * FROM PERSONNE WHERE ID_UTILISATEUR = :id', array( 'id' => $id ), BD::RECUPERER_UNE_LIGNE );
@@ -73,11 +80,39 @@ class Personne {
 		if( $result == null )
 			return false;
 
+		$this->_autoComplete( $result );
+		return true;
+	}
+
+	/**
+        * Fonction récupérant tous les attributs de la personne
+        * $id : Identifiant de la personne à qui on doit récupérer les données
+        * @return True si tout est ok, false sinon
+        */
+        private function _fetchDataByPersonID( $id ) {
+
+                /* Requête à la base pour récupérer la bonne personne et construire l'objet */
+                $result = BD::executeSelect( 'SELECT * FROM PERSONNE WHERE ID_PERSONNE = :id', array( 'id' => $id ), BD::RECUPERER_UNE_LIGNE );
+
+                if( $result == null )
+                        return false;
+
+                $this->_autoComplete( $result );
+		return true;
+        }
+
+	/**
+	* Recopie le résultat d'une requête SELECT dans les attributs de l'instance
+	* $result : Le result set d'une requête SELECT contenant les informations de la personne
+	*/
+	private function _autoComplete( $result ) {
+
 		$this->id = $result['ID_PERSONNE'];
 		$this->nom = $result['NOM'];
 		$this->prenom = $result['PRENOM'];
 		$this->role = $result['ROLE'];
 		$this->premiereConnexion = $result['PREMIERE_CONNEXION'];
+		$this->idUtilisateur = $result['ID_UTILISATEUR'];
 
 		/* Récupération des adresses mails associées */
 		$result = BD::executeSelect( 'SELECT * FROM MAIL WHERE ID_PERSONNE = :id ORDER BY PRIORITE',
@@ -106,8 +141,6 @@ class Personne {
                                 $i++;
                         }
 		}
-
-		return true;
 	}
 
 	/**
@@ -254,25 +287,76 @@ class Personne {
 	}
 
 	/**
-	* Récupère l'ensemble des utilisateurs en base
+	* Récupérer le compte utilisateur associé
+	*/
+	public function getUtilisateur() {
+
+		/* Si la personne a bien un compte utilisateur associé mais qui n'est pas instancié */
+		if( isset($this->idUtilisateur) && $this->utilisateur == null ) {
+
+			/* On s'occupe de l'instanciation */
+			$this->utilisateur = new Utilisateur( null );
+			$res = $this->utilisateur->recupererUtilisateur( $this->idUtilisateur, $this );
+
+			/* Là il y a un souci donc on cherche pas plus loin... */
+			if( $res == false ) {
+				$this->utilisateur == null;
+			}
+		}
+
+		return $this->utilisateur;
+	}
+
+	/**
+	* Récupère l'ensemble des personnes qui ont le rôle passé en paramètre
 	* @return Un tableau d'instances
 	* @throws Une exception en cas d'erreur
 	*/
-	public static function RecupererTousLesUtilisateurs() {
+	public static function getPersonnesParRole( $role ) {
 
 		$obj = array();
 
-		/* Requête à la base pour récupérer les logins et construire les objets */
-		$result = BD::executeSelect( 'SELECT login FROM UTILISATEUR', array(), BD::RECUPERER_TOUT );
+		/* Requête à la base pour récupérer les  et construire les objets */
+		$result = BD::executeSelect( 'SELECT ID_PERSONNE FROM PERSONNE WHERE ROLE = :role', array( 'role' => $role ), BD::RECUPERER_TOUT );
 
 		$i = 0;
 		foreach( $result as $row ) {
 
-			$obj[$i] = new Utilisateur( $row['login'] );
+			$obj[$i] = new Personne( null );
+			$obj[$i]->_fetchDataByPersonID( $row['ID_PERSONNE'] );
 			$i++;
 		}
 
 		return $obj;
+	}
+
+	/**
+        * Récupère une personne bien précise
+	* $id : L'identifiant de la personne à récupérer
+        * @return L'instance de la personne concernée ou null
+        * @throws Une exception en cas d'erreur
+        */
+    public static function getPersonneParID( $id ) {
+
+		$p = new Personne( null );
+		$p->_fetchDataByPersonID( $id );
+
+        return $p;
+    }
+
+	public function toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
+		$arrayPer = array();
+		$arrayPer['id'] = intval($this->id);
+		$arrayPer['nom'] = $this->nom;
+		$arrayPer['prenom'] = $this->prenom;
+		if ($avecMails) { $arrayPer['mails'] = $this->mails; }
+		if ($avecTels) { $arrayPer['telephones'] = $this->telephones; }
+		if ($avec1ereConnexion) { $arrayPer['premiereConnexion'] = $this->premiereConnexion; }
+		if ($avecRole) { $arrayPer['role'] = $this->role; }
+		if ($avecUtilisateur) { $arrayPer['utilisateur'] = $this->utilisateur; }
+
+
+		return $arrayPer;
 	}
 }
 
