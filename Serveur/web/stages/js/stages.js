@@ -60,7 +60,6 @@ function afficherResultats(json) {
 $('document').ready(function() {
 	$('#fenetre').hide();
 	$('#information').hide();
-
 	/**
 	 * Préparation du comportement d'un clic sur le bouton
 	 * rechercher :
