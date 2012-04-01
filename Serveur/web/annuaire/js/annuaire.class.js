@@ -85,7 +85,7 @@ Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEn
 		callback(donnees);
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		alert( "Request failed: " + textStatus );
+		Annuaire.afficherErreur( "AJAX - Echec de la requête : " + textStatus );
 	});
 
 };
@@ -156,15 +156,15 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 					Annuaire.afficherListeEntreprises(); // Si MAJ du nom, ca et à jour la liste ...
 				}
 				else {
-					alert('Une erreur est survenue (id = '+donnees.id+')' );
+					Annuaire.afficherErreur('Entreprise - Une erreur est survenue (id = '+donnees.id+')' );
 				}
 			}
 			else {
-				alert('Une erreur est survenue ('+donnees.code+')' );
+				Annuaire.afficherErreur('Entreprise - Une erreur est survenue ('+donnees.code+')' );
 			}
 		});
 		requete.fail(function(jqXHR, textStatus) {
-			alert('Une erreur est survenue ('+textStatus+')' );
+			Annuaire.afficherErreur('Entreprise - Une erreur est survenue ('+textStatus+')' );
 		});
 		
 		
@@ -184,6 +184,8 @@ Annuaire.updaterContact = function updaterContact() {
 	// Vérification du formulaire :
 	if ($("#formUpdateContact").validate()) {
 	
+		var idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
+		
 		// Récupération de données complexes :
 		var /* array */ tels = [];
 		$('#formUpdateContactTelGroup ul').children().each(function(){
@@ -203,16 +205,16 @@ Annuaire.updaterContact = function updaterContact() {
 			id_entreprise: parseInt($('#formUpdateContactEntrepriseId').val()),
 			fonction : encodeURIComponent($('#formUpdateContactPoste').val()),
 			personne : {
-				id : parseInt($('#formUpdateContactEntrepriseId').val()),
+				id : parseInt($('#formUpdateContactPersonneId').val()),
 				nom : encodeURIComponent($('#formUpdateContactNom').val()),
 				prenom : encodeURIComponent($('#formUpdateContactPrenom').val()),
 				mails : emails,
 				telephones : tels
 			},
 			ville : {
-				code_postal : encodeURIComponent($('#formUpdateContactEntrepriseId').val()),
-				libelle : encodeURIComponent($('#formUpdateContactEntrepriseId').val()),
-				pays : encodeURIComponent($('#formUpdateContactEntrepriseId').val()),
+				code_postal : encodeURIComponent($('#formUpdateContactVilleCodePostal').val()),
+				libelle : encodeURIComponent($('#formUpdateContactVilleLibelle').val()),
+				pays : encodeURIComponent($('#formUpdateContactVillePays').val()),
 			},
 			commentaire : encodeURIComponent($('#formUpdateContactCom').val()),
 			priorite : parseInt($('#formUpdateContactPriorite').val()),
@@ -231,7 +233,7 @@ Annuaire.updaterContact = function updaterContact() {
 			if (donnees.code == "ok") {
 				if ((donnees.id >= 0) && (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise)) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
 					nouveauContact.id = donnees.id;
-					nouveauContact.personne.id = donnees.personne.id;
+					nouveauContact.personne.id = donnees.id_personne;
 					if (typeof Annuaire.infoEntrepriseCourante.contacts === "undefined") { Annuaire.infoEntrepriseCourante.contacts = []; }
 					nouveauContact.fonction = decodeURIComponent(nouveauContact.fonction);
 					nouveauContact.personne.nom = decodeURIComponent(nouveauContact.personne.nom);
@@ -255,7 +257,7 @@ Annuaire.updaterContact = function updaterContact() {
 				
 				if (donnees.id > 0) { // Ajout d'un contact :
 					// On demande si l'utilisateur veut en ajouter tout de suite d'autres :
-					Annuaire.confirmerAction('Contact ajouté !<br/> Voulez-vous en ajouter tout de suite ?', 'alert-success', function(id) {
+					Annuaire.confirmerAction('Contact ajouté !<br/> Voulez-vous en ajouter d\'autres tout de suite ?', 'alert-success', function(id) {
 						$('#formUpdateContactEntrepriseId').val(id);
 						$('#modalUpdateContact').modal('show');
 					}, donnees.id);
@@ -264,15 +266,15 @@ Annuaire.updaterContact = function updaterContact() {
 				
 				}
 				else {
-					alert('Une erreur est survenue (id = '+donnees.id+')' );
+					Annuaire.afficherErreur('Contact - Une erreur est survenue (id = '+donnees.id+')' );
 				}
 			}
 			else {
-				alert('Une erreur est survenue ('+donnees.code+')' );
+				Annuaire.afficherErreur('Contact - Une erreur est survenue ('+donnees.code+')' );
 			}
 		});
 		requete.fail(function(jqXHR, textStatus) {
-			alert('Une erreur est survenue ('+textStatus+')' );
+			Annuaire.afficherErreur('Contact - Une erreur est survenue ('+textStatus+')' );
 		});
 	}
 };
@@ -330,15 +332,15 @@ Annuaire.ajouterCommentaire = function ajouterCommentaire() {
 					}
 				}
 				else {
-					alert('Une erreur est survenue (id = '+donnees.id+')' );
+					Annuaire.afficherErreur('Commentaire : Une erreur est survenue (id = '+donnees.id+')' );
 				}
 			}
 			else {
-				alert('Une erreur est survenue ('+donnees.code+')' );
+				Annuaire.afficherErreur('Commentaire : Une erreur est survenue ('+donnees.code+')' );
 			}
 		});
 		requete.fail(function(jqXHR, textStatus) {
-			alert('Une erreur est survenue ('+textStatus+')' );
+			Annuaire.afficherErreur('Commentaire : Une erreur est survenue ('+textStatus+')' );
 		});
 		
 		
@@ -373,19 +375,17 @@ Annuaire.supprimerContact = function supprimerContact(id) {
 						Annuaire.infoEntrepriseCourante.contacts.splice(i,1);
 						var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
 						Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
-						$('#contacts').collapse('hide');
-						$('#remarques').collapse('show');
 						break;
 					}
 				}
 			}
 		}
 		else {
-			alert('Une erreur est survenue ('+donnees.code+')' );
+			Annuaire.afficherErreur('Contact - Suppression : Une erreur est survenue ('+donnees.code+')' );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		alert('Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur('Contact - Suppression : Une erreur est survenue ('+textStatus+')' );
 	});
 
 };
@@ -417,17 +417,19 @@ Annuaire.supprimerCommentaire = function supprimerCommentaire(id) {
 						Annuaire.infoEntrepriseCourante.commentaires.splice(i,1);
 						var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
 						Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
+						$('#contacts').collapse('hide');
+						$('#remarques').collapse('show');
 						break;
 					}
 				}
 			}
 		}
 		else {
-			alert('Une erreur est survenue ('+donnees.code+')' );
+			Annuaire.afficherErreur('Commentaire - Suppression : Une erreur est survenue ('+donnees.code+')' );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		alert('Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur('Commentaire - Suppression : Une erreur est survenue ('+textStatus+')' );
 	});
 
 };
@@ -510,6 +512,7 @@ Annuaire.resetFormContact = function resetFormContact() {
 	$('#formUpdateContactId').val(0);
 	$('#formUpdateContactEntrepriseId').val(0);
 	$('#formUpdateContactPersonneId').val(0);
+	$('#formUpdateContactPrioriteDefaut').attr('selected', true);
 }
 
 /** 
@@ -617,6 +620,20 @@ Annuaire.confirmerAction = function confirmerAction(enonceAction, typeMessage, f
 };
 
 /** 
+ * ---- afficherErreur
+ * Affiche une erreur en fenetre modale
+ * Paramètres :
+ *		- erreur : STRING - Enoncé de l'erreur
+ * Retour :
+ *		- RIEN
+ */
+Annuaire.afficherErreur = function afficherErreur(erreur) {
+	// Création :
+	$('#modalErreur .modal-body p').html(erreur);
+	$('#modalErreur').modal('show');
+};
+
+/** 
  * ---- preremplirFormulaireModifEntreprise
  * Préreplit le formulaire de modification d'une entreprise avec les infos déja acquises.
  * Paramètres :
@@ -661,6 +678,12 @@ Annuaire.preremplirFormulaireUpdateContact = function preremplirFormulaireUpdate
 			$('#formUpdateContactNom').val(contact.personne.nom);
 			$('#formUpdateContactPrenom').val(contact.personne.prenom);
 			$('#formUpdateContactPoste').val(contact.fonction);
+			
+			if (typeof contact.ville !== "undefined") {
+				$('#formUpdateContactVilleCodePostal').val(contact.ville.code_postal);
+				$('#formUpdateContactVilleLibelle').val(contact.ville.libelle);
+				$('#formUpdateContactVillePays').val(contact.ville.pays);
+			}
 			
 			/* long */ var idAleatoire;
 			for (/* int */ var i in contact.personne.telephones) {
@@ -760,7 +783,7 @@ Annuaire.traduirePrioriteContactTexte = function traduirePrioriteContactTexte(/*
  * Retour :
  *		- STRING - Texte décrivant la rôle
  */
-Annuaire.traduirePrioriteContactTexte = function traduirePrioriteContactTexte(/* int */ role) {
+Annuaire.traduireRole = function traduireRole(/* int */ role) {
 	if (role == 0) { return 'Etudiant' };
 	if (role == 1) { return "Enseignant" };
 	if (role == 2) { return "Contact" };
@@ -959,9 +982,9 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 
 		for (var /* int */ i in donnees.commentaires) {
 			tableauCommentaires += '<tr> \n'+
-'												<td>'+Annuaire.traduireCategorieCommentaire(donnees.commentaires[i].categorie)+'</td> \n'+
+'												<td class="first"><span style="display: none;">'+donnees.commentaires[i].categorie+'</span>'+Annuaire.traduireCategorieCommentaire(donnees.commentaires[i].categorie)+'</td> \n'+
 '												<td>'+donnees.commentaires[i].personne.prenom +' '+donnees.commentaires[i].personne.nom+'</td> \n'+
-'												<td><small>'+Annuaire.traduirePrioriteContactTexte(donnees.commentaires[i].personne.role)+'</small></td> \n'+
+'												<td><small>'+Annuaire.traduireRole(donnees.commentaires[i].personne.role)+'</small></td> \n'+
 '												<td>'+donnees.commentaires[i].timestamp +'</td>\n'+
 '												<td>'+donnees.commentaires[i].contenu +'</td>';
 			// Bouton modif

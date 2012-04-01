@@ -48,6 +48,7 @@ if (verifierPresent('id')) {
 /*
  * Appeler la couche du dessous
  */
+
  
 /* bool */ $codeRet = Contact::SupprimerContactByID($id);
 
