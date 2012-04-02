@@ -109,7 +109,7 @@ function soumettreFormulaire(){
 			if (this.value != '')
 				prenomIntervenants[index] = this.value;
 		});
-		var typeEntreprise = (document.formInscription.typeEntreprise.value == "autre")
+		var typeEntreprise = (document.formInscription.typeEntreprise.value != "autre")
 			? document.formInscription.typeEntreprise.value:document.formInscription.typeEntrepriseAutre.value;
 
 		for (var i=0; i < document.formInscription.momentPresence.length; i++)
@@ -124,7 +124,7 @@ function soumettreFormulaire(){
 			{
 				var restaurantVal = document.formInscription.restaurant[i].value;
 				if (restaurantVal == 'oui')
-					nbIntervRestaurant = document.formInscription.nomIntervenant.length;
+					nbIntervRestaurant = document.formInscription.nbPers_restaurant.value;
 			}
 		}
 
