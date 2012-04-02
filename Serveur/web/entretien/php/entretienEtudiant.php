@@ -13,7 +13,7 @@ if ($authentification->isAuthentifie() == false || (
 ?>
 <div id="entretiens">
 	<h1>Simulations d'entretiens</h1>
-	<div style="margin-top: 20px;" class="alert alert-block alert-info">
+	<div class="alert alert-block alert-info">
 					<h4 class="alert-heading">Inscription</h4>
 					Afin de faire votre demande d'inscription a des sessions de simulation d'entretiens, vous pouvez choisir la date souhaitee via le calendrier.<br/>
 			Une fois la liste des creneaux disponibles vous pourrez vous inscrire aux sessions encore disponibles. A noter que la validation de votre creneau se
@@ -22,8 +22,8 @@ if ($authentification->isAuthentifie() == false || (
 		
 	<form class="well form-inline" id="formChoixDate" action="#" method="post>
 		<label class="offset1" for="date1">Date</label>
-		<input name="date1" id="date_creneaux" class="input-medium date-pick"/>
-		<button type="submit" class="btn btn-primary offset1">Rechercher <i class="icon-search"></i></button>
+		<input name="date1" id="date_creneaux" class="input-small date-pick"/>
+		<button type="submit" class="btn btn-primary">Rechercher <i class="icon-search"></i></button>
     </form>
 
 				

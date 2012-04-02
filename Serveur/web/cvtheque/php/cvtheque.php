@@ -26,34 +26,52 @@ if ($utilisateur->getPersonne()->getRole() == Personne::ENTREPRISE && Etudiant::
 inclure_fichier('cvtheque', 'cvtheque', 'js');
 ?>
 
-
-<div class="alert alert-success" style="padding: 20px;">
-    <table style="width : 100%;">
-        <tr>
-            <td>
-                Quelle année recherchez vous? 
-                <select id="annee_voulu" style="width: 120px;">
-                    <option value="">Toute</option>
-                    <option value="3">3ème année</option>
-                    <option value="4">4ème année</option>
-                    <option value="5">5ème année</option>
-                    <option value="0">Ingénieur</option>
-                    <option value="-1">Favoris</option>
-                </select> 
-                et/ou un mot clef? <input id="mot_clef_voulu"/>
-            </td>
-            <td style="text-align : right;">
-                <a class="btn btn-primary" href="javascript:Rechercher();">Rechercher</a>
-            </td>
-        </tr>
-    </table>
-</div>
-
-<table style="width: 100%;">
-    <tr valign="top">
-        <td id="div_liste_cv" style="width: 220px; max-height: 500px; overflow: auto; display: inline-block;"></td>
-        <td id="div_cv"></td>
-    </tr>
-</table>
+<div id="module_cv">
+	<h1>CVthèque - Consultation</h1>
+	<div class="row">
+		<div class="span5 columns">
+			<form class="form-horizontal well">
+				<fieldset class="control-group">
+					<div class="control-group">
+						<label class="control-label" for="annee_voulu">Année</label>
+						<div class="controls">
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-list-alt"></i></span><select id="annee_voulu"  class="input-small">
+									<option value="">Toute</option>
+									<option value="3">3ème année</option>
+									<option value="4">4ème année</option>
+									<option value="5">5ème année</option>
+									<option value="0">Ingénieur</option>
+									<option value="-1">Favoris</option>
+								</select> 
+							</div>
+						</div>
+					</div>
+					<div class="control-group">
+						<label class="control-label" for="mot_clef_voulu">Mot-clé</label>
+						<div class="controls">
+							<div class="input-prepend">
+								<span class="add-on"><i class="icon-tag"></i></span><input class="input-medium" id="mot_clef_voulu" type="text"  placeholder="Mot-clé" />
+							</div>
+						</div>
+					</div>
+					<a class="btn btn-primary offset1" href="javascript:Rechercher();">Rechercher <i class="icon-search"></i></a>
+				</fieldset>
+			</form>
+		</div>
+		<div class="span7 columns">
+			<div class="alert alert-block alert-info">
+			<h4 class="alert-heading">Formulaire de sélection</h4>
+			Le formulaire ci-contre a pour but d'affiner vos consultations et recherches au sein de notre CVthèque.<br/>
+			Il vous est ainsi possible de sélectionner l'année d'étude désirée, ou d'entrer un mot-clé.
+			</div>
+		</div>
+	</div>
+	<table style="width: 100%;">
+		<tr valign="top">
+			<td id="div_liste_cv" style="width: 220px; max-height: 500px; overflow: auto; display: inline-block;"></td>
+			<td id="div_cv"></td>
+		</tr>
+	</table>
 
 </div>

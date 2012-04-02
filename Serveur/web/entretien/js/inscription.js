@@ -1,3 +1,11 @@
+// Mise en page :
+
+$('document').ready(function() {
+	$("a.dp-choose-date").addClass('btn');
+	$("a.dp-choose-date").html('<i class="icon-calendar"></i>');
+});
+
+
 function valider(){
 	  var valide = true;
 	  //On test la valeur des champs du formulaire
@@ -77,7 +85,7 @@ $('document').ready(function() {
 			heureDebut: $('#heureDebut').val()+$('#minuteDebut').val(),
 			heureFin: $('#heureFin').val()+$('#minuteFin').val()
 		};
-		$.post('/entretien/ajax/inscription_post.cible.php', obj, function() {
+		$.post('./entretien/ajax/inscription_post.cible.php', obj, function() {
 				//TODO: gèrer le retour de l'insert
 			});
 	}
@@ -123,7 +131,7 @@ $('document').ready(function() {
 		var obj = {
 			id_creneau: $('#id_creneau').val()
 		};
-		$.post('/entretien/ajax/inscription_etudiant.cible.php', obj, function() {
+		$.post('./entretien/ajax/inscription_etudiant.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
@@ -137,7 +145,7 @@ $('document').ready(function() {
 			date: $('#date_creneaux').val()
 		};
 		
-		$.post('/entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
+		$.post('./entretien/ajax/liste_creneaux.cible.php', obj, function(creneau_list) {
 				var jsonCreneau = eval('(' + creneau_list + ')');
 				afficherCreneaux(jsonCreneau);
 				$('.reservation').click(function(){
@@ -194,7 +202,7 @@ function disponible(id_etudiant){
 
  // Affichage liste entretiens
 $('document').ready(function() {
-	$.post('/S.I/Serveur/web/entretien/ajax/liste_entretiens.cible.php', function(entretien_list) {
+	$.post('./entretien/ajax/liste_entretiens.cible.php', function(entretien_list) {
 		var jsonEntretien = eval('(' + entretien_list + ')');
 		afficherEntretiens(jsonEntretien);
 		$('.validation').click(function(){
@@ -211,7 +219,7 @@ $('document').ready(function() {
 		var obj = {
 			id_entretien: $('#id_entretien').val()
 		};
-		$.post('/entretien/ajax/valider_entretien.cible.php', obj, function() {
+		$.post('./entretien/ajax/valider_entretien.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
@@ -223,7 +231,7 @@ $('document').ready(function() {
 		var obj = {
 			id_entretien: $('#id_entretien').val()
 		};
-		$.post('/entretien/ajax/refuser_entretien.cible.php', obj, function() {
+		$.post('./entretien/ajax/refuser_entretien.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
@@ -313,7 +321,7 @@ $('document').ready(function() {
 		var obj = {
 			id_creneau: $('#id_creneau').val()
 		};
-		$.post('/entretien/ajax/annuler_etudiant.cible.php', obj, function() {
+		$.post('./entretien/ajax/annuler_etudiant.cible.php', obj, function() {
 			// Ajouter message ici
 		});
 	});
