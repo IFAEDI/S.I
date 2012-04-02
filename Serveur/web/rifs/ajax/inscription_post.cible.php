@@ -4,8 +4,8 @@
 	function forcerTelechargement($nom, $situation, $poids)
 	{
 		header('Content-Type: application/pdf');
-		header('Content-Length: '. $poids);
-		header('Content-Disposition: attachment; filename='. $nom);
+		header('Content-Length: '.$poids);
+		header('Content-Disposition: attachment; filename='.$nom);
 		header('Pragma: no-cache');
 		header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
 		header('Expires: 0');
@@ -377,12 +377,14 @@
 
 		$pdf->Output('../formulaireInscription/'.$fileName.'.pdf');
 
-		forcerTelechargement($fileName.'.pdf', '../formulaireInscription/'.$fileName.'.pdf', 10000);
+		//forcerTelechargement($fileName.'.pdf', '../formulaireInscription/'.$fileName.'.pdf', 10000);
 
-		echo 'Un formulaire d\'inscription pour les Rencontres IFs a été généré.';
-		echo 'Veuillez l\'imprimer pour nous le renvoyer une fois signé.';
-		echo 'En espérant avoir l\'occasion de partager les Rencontres IFs, nous vous remercions d\'avoir pris le temps de compléter ce formulaire.';
+
 	}
+
+	<p><?php echo htmlentities('Un formulaire d\'inscription pour les Rencontres IFs a été généré.');?></p>
+	<p><?php echo htmlentities('Veuillez l\'imprimer pour nous le renvoyer une fois signé..');?></p>
+	<p><?php echo htmlentities('En espérant avoir l\'occasion de partager les Rencontres IFs, nous vous remercions d\'avoir pris le temps de compléter ce formulaire.');?></p>
 
 	/* TODO
 		Enregistrer en BDD
