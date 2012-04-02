@@ -22,6 +22,10 @@ table.tablesorter thead tr .headerSortDown {
 	background-image: url(../img/symboles/desc.gif);
 }
 
+.module h1 {
+	margin-bottom: 20px;
+}
+
 /* ---------- MODULE ANNUAIRE ---------- */
 
 #annuaire {
@@ -105,6 +109,8 @@ table.tablesorter thead tr .headerSortDown {
 #stages .no-details details summary {
 	display: block;
 }
+
+/* ---------- MODULE ENTRETIENS ---------- */
 
 
 /* ---------- MODULE RIF ---------- */

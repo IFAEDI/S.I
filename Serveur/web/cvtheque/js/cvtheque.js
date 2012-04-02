@@ -12,7 +12,7 @@ function Rechercher(){
     annee=$('#annee_voulu');
     mots_clefs=$('#mot_clef_voulu');
     $('#div_cv').empty();
-    $.post("/cvtheque/ajax/cv.cible.php?action=rechercher_cv", {
+    $.post("./cvtheque/ajax/cv.cible.php?action=rechercher_cv", {
         annee : annee.val(),
         mots_clefs : mots_clefs.val() 
     },function success(retour){
@@ -117,7 +117,7 @@ function Afficher_CV(id_personne){
 
 function Favoris(id_personne){
     if ($("#img"+id_personne).hasClass('unstar')){
-        $.post("/cvtheque/ajax/cv.cible.php?action=star_cv", {
+        $.post("./cvtheque/ajax/cv.cible.php?action=star_cv", {
             id_personne : id_personne
         },function success(retour){
             retour = $.trim(retour);
@@ -129,7 +129,7 @@ function Favoris(id_personne){
             }
         });
     }else{
-        $.post("/cvtheque/ajax/cv.cible.php?action=unstar_cv", {
+        $.post("./cvtheque/ajax/cv.cible.php?action=unstar_cv", {
             id_personne : id_personne
         },function success(retour){
             retour = $.trim(retour);
