@@ -14,8 +14,13 @@ p
 	font-style:italic;
 }
 
+h1{
+	margin-bottom:0.6em;
+}
+
 h2{
 	margin-left:1em;
+	margin-bottom:0.4em;
 }
 
 .link{
@@ -23,4 +28,12 @@ h2{
 	text-decoration:underline;
 	cursor:pointer;
 	margin-left:360px;
+}
+
+.titre{
+	font-size:4em;
+	font-weight:bold;
+	text-align:center;
+	margin-top:0.3em;
+	margin-bottom:1em;
 }

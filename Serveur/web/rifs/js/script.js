@@ -25,40 +25,28 @@ function valider(){
 	  //On test la valeur des champs du formulaire
 
 	  // NOM DE L ENTREPRISE
-	  if(document.formInscription.nomEntreprise.value != ""){
-		var div = document.getElementById("control_nomEntreprise");
-		div.className ="control-group success";
-	  }else{
+	  if(document.formInscription.nomEntreprise.value == ""){
 		  var div = document.getElementById("control_nomEntreprise");
 		  div.className ="control-group error";
 		  valide = false;
 	  }
 
 	// NOM DU RESP.
-	  if(document.formInscription.nomResponsable.value != ""){
+	  if(document.formInscription.nomResponsable.value == ""){
 		var div = document.getElementById("control_nomResponsable");
-		div.className ="control-group success";
-	  }else{
-		  var div = document.getElementById("control_nomResponsable");
-		  div.className ="control-group error";
-		  valide = false;
+		div.className ="control-group error";
+		valide = false;
 	  }
 	  
 	  // PRENOM DU RESP.
-	  if(document.formInscription.prenomResponsable.value != ""){
-		var div = document.getElementById("control_nomResponsable");
-		div.className ="control-group success";
-	  }else{
+	  if(document.formInscription.prenomResponsable.value == ""){
 		var div = document.getElementById("control_nomResponsable");
 		div.className ="control-group error";
 		valide = false;
 	  }
 	  
 	  // TEL DU RESP.
-	  if(document.formInscription.telephone.value != ""){
-		var div = document.getElementById("control_tel");
-		div.className ="control-group success";
-	  }else{
+	  if(document.formInscription.telephone.value == ""){
 		var div = document.getElementById("control_tel");
 		div.className ="control-group error";
 		valide = false;
@@ -110,7 +98,6 @@ function valider(){
 ---------------------------------------------------------------------------------*/
 function soumettreFormulaire(){
 	var result = valider();
-	alert(result);
 	if (result == true){
 		var nomIntervenants = new Array();
 		$('.nomIntervenant').each(function(index) {
