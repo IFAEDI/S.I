@@ -1,10 +1,19 @@
 <?php
 
+
+	function forcerTelechargement($nom, $situation, $poids)
+	{
+		header('Content-Type: application/pdf');
+		header('Content-Length: '. $poids);
+		header('Content-Disposition: attachment; filename='. $nom);
+		header('Pragma: no-cache');
+		header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
+		header('Expires: 0');
+		readfile($situation);
+	}
+
 	// TODO : Vérifier taille du logo
 	
-
-	// TODO :
-	// Générer le pdf, et afficher le lien en html
 	require('../js/fpdf/fpdf.php');
 
 	class PDF extends FPDF
@@ -196,8 +205,8 @@
 	// Nom entreprise
 	if (!isset($_POST['nomEntreprise']) || !is_string($_POST['nomEntreprise'])) {
 		$valide=false;
-	}else{
-		$pdf->ChampTxt('Nom de l\entreprise : ',$_POST["nomEntreprise"]);
+	}else{		
+		$pdf->ChampTxt('Nom de l\'entreprise : ',$_POST["nomEntreprise"]);
 		$pdf->Ln(6);
 	}
 	
@@ -344,27 +353,39 @@
 		$pdf->Ln(6);
 	}
 
-	// Contact AEDI
-	$pdf->SetFont('Arial','',12);
-	$pdf->Cell(116,0,'Pour toutes informations supplementaires, veuillez contacter l\'',0,0);
-	$pdf->SetFont('Arial','B',12);
-	$pdf->Cell(36,0,'equipe Entreprise',0,0);
-	$pdf->SetFont('Arial','',12);
-	$pdf->Cell(0,0,' de l\'AEDI.',0,0);
-	$pdf->Ln(6);
-	$pdf->ChampTxt('Mail : ','aedi.entreprises@gmail.com',20);
-	$pdf->Ln(6);
-	$pdf->ChampTxt('Tel : ','',20);
+	if ($valide)
+	{
+		// Contact AEDI
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(116,0,'Pour toutes informations supplementaires, veuillez contacter l\'',0,0);
+		$pdf->SetFont('Arial','B',12);
+		$pdf->Cell(36,0,'equipe Entreprise',0,0);
+		$pdf->SetFont('Arial','',12);
+		$pdf->Cell(0,0,' de l\'AEDI.',0,0);
+		$pdf->Ln(6);
+		$pdf->ChampTxt('Mail : ','aedi.entreprises@gmail.com',20);
+		$pdf->Ln(6);
+		$pdf->ChampTxt('Tel : ','',20);
 
-	$pdf->Ln(6);
-	// Signature
-	$pdf->ChampTxt(' ','Le ........... a ................',80,70);
-	$pdf->ChampTxt('Signature','');
+		$pdf->Ln(6);
+		// Signature
+		$pdf->ChampTxt(' ','Le ........... a ................',80,70);
+		$pdf->ChampTxt('Signature','');
 
-	$pdf->Output('../formulaireInscription/salut.pdf');
+		$fileName = trim($_POST['nomEntreprise']);
+		$fileName = str_replace(' ','_', $fileName).'-'.date('Y');
 
+		$pdf->Output('../formulaireInscription/'.$fileName.'.pdf');
+
+		forcerTelechargement($fileName.'.pdf', '../formulaireInscription/'.$fileName.'.pdf', 10000);
+
+		echo 'Un formulaire d\'inscription pour les Rencontres IFs a été généré.';
+		echo 'Veuillez l\'imprimer pour nous le renvoyer une fois signé.';
+		echo 'En espérant avoir l\'occasion de partager les Rencontres IFs, nous vous remercions d\'avoir pris le temps de compléter ce formulaire.';
+	}
 
 	/* TODO
 		Enregistrer en BDD
 	*/
+	
 ?>

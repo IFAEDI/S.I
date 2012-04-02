@@ -1,5 +1,5 @@
 <?php inclure_fichier('rifs', 'rifs', 'css'); ?>
-
+<div class="titre">Rencontres IF</div>
 <div class=row-fluid>
 	<div class="span12">
 		<div class="row-fluid">
@@ -14,7 +14,7 @@
 				<div id="conceptRif">
 					<h2>Concept</h2>
 					<p>
-						Une <strong>vingtaine d'entreprises</strong> est invitée au sein du département afin de venir à la <strong>rencontre des étudiants</strong>. Celles-ci y sont accueillies par une équipe composée exclusivement d'étudiants, et la journée, banalisée pour l'évènement, permettra à chacun de venir se renseigner, poser des questions, prendre des contacts, ...<br /> En fin de matinée, l'équipe organisatrice et les intervenants de chaque entreprise seront conviés à un déjeuner de manière à ponctuer l'évènement par une pause conviviale.
+						<strong>Plus d'une vingtaine d'entreprises</strong> est invitée au sein du département afin de venir à la <strong>rencontre des étudiants</strong>. Celles-ci y sont accueillies par une équipe composée exclusivement d'étudiants, et la journée, banalisée pour l'évènement, permettra à chacun de venir se renseigner, poser des questions, prendre des contacts, ...<br /> En fin de matinée, l'équipe organisatrice et les intervenants de chaque entreprise seront conviés à un déjeuner de manière à ponctuer l'évènement par une pause conviviale.
 					</p>
 					<p>
 					Les Rencontres IF sont aussi une occasion idéale pour les étudiants de <strong>trouver un stage ou un éventuel futur premier emploi</strong>. Il est ainsi conseillé aux entreprises de préparer, si elles le désirent, plusieurs propositions adaptées aux différentes promotions.
@@ -24,8 +24,32 @@
 					</p>
 				</div>
 			</div>
-			<div class="span6">
-				<img src="http://i3.kym-cdn.com/photos/images/newsfeed/000/210/370/celebrity-pictures-nicolas-cage-stoic-crazy.jpg" />
+			<div id="myCarousel" class="carousel slide span6">
+				<div class="carousel-inner">
+					<div class="item active">
+						<img src="rifs/img/DSC04323.jpg" width="770px" alt="Rencontres IF - photo">
+						<div class="carousel-caption">
+						<h4>Un entretien</h4>
+						<p></p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="rifs/img/DSC04353.jpg" width="770px" alt="Rencontres IF - Ambiance détendue">
+						<div class="carousel-caption">
+						<h4>Dans une ambiance détendue</h4>
+						<p>Parce que cet évènement ne veut pas se faire dans une ambiance rigide !</p>
+						</div>
+					</div>
+					<div class="item">
+						<img src="rifs/img/DSC04386.jpg" width="770px" alt="Une salle avec toutes ses entreprises">
+						<div class="carousel-caption">
+						<h4>Les discussions vont bon train!</h4>
+						<p></p>
+						</div>
+					</div>
+				</div>
+				<a class="left carousel-control" href="#myCarousel" data-slide="prev">&lsaquo;</a>
+				<a class="right carousel-control" href="#myCarousel" data-slide="next">&rsaquo;</a>
 			</div>
 		</div>
 		<div id="infoRif">
