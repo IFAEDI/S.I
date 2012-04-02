@@ -1,20 +1,8 @@
 <?php
-
-
-	function forcerTelechargement($nom, $situation, $poids)
-	{
-		header('Content-Type: application/pdf');
-		header('Content-Length: '.$poids);
-		header('Content-Disposition: attachment; filename='.$nom);
-		header('Pragma: no-cache');
-		header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
-		header('Expires: 0');
-		readfile($situation);
-	}
-
+	
 	// TODO : Vérifier taille du logo
 	
-	require('../js/fpdf/fpdf.php');
+	require('../js/fpdf/fpdf.php');	
 
 	class PDF extends FPDF
 	{
@@ -391,4 +379,4 @@
 	<p>Un formulaire d'inscription pour les Rencontres IFs a été généré.</p>
 	<p>Veuillez l'imprimer pour nous le renvoyer une fois signé.</p>
 	<p>En espérant avoir l'occasion de partager les Rencontres IFs, nous vous remercions d'avoir pris le temps de compléter ce formulaire.</p>
-	<div class="centre"><a href="dl.php?fileName=<?php echo $fileName?>.pdf" action="_blank" class="btn btn-large btn-primary"><strong>Télécharger le formulaire d'Inscription</strong></a></div>
+	<div class="centre" style="text-align:center;"><a href="rifs/php/dl.php?fileName=<?php echo $fileName?>.pdf" action="_blank" class="btn btn-large btn-primary"><strong>Télécharger le formulaire d'Inscription</strong></a></div>
