@@ -17,3 +17,10 @@ p
 h2{
 	margin-left:1em;
 }
+
+.link{
+	color:blue;
+	text-decoration:underline;
+	cursor:pointer;
+	margin-left:360px;
+}
