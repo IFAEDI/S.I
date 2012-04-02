@@ -127,14 +127,19 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 		requete.done(function(donnees) {
 			if (donnees.code == "ok") {
 				if (donnees.id > 0) { // Ajout d'une entreprise :
+					Annuaire.insererEntrepriseDansListe({id_entreprise: donnees.id, nom: nomEntr});
+					Annuaire.afficherListeEntreprises();
+					description.nom = decodeURIComponent(description.nom );
+					description.secteur = decodeURIComponent(description.secteur );
+					description.description = decodeURIComponent(description.description );
+					Annuaire.infoEntrepriseCourante.description = description;
+					var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
+					Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
 					// On demande si l'utilisateur veut ajouter tout de suite des contacts :
 					Annuaire.confirmerAction('Entreprise ajoutée !<br/> Voulez-vous ajouter des contacts tout de suite ?', 'alert-success', function(id) {
 						$('#formUpdateContactEntrepriseId').val(id);
 						$('#modalUpdateContact').modal('show');
 					}, donnees.id);
-
-					Annuaire.insererEntrepriseDansListe({id_entreprise: donnees.id, nom: nomEntr});
-					Annuaire.afficherListeEntreprises();
 				}
 				else if (donnees.id == 0) { // Edition d'une entreprise :
 					Annuaire.confirmerAction('Entreprise éditée !<br/> Voulez-vous également ajouter de nouveaux contacts ?', 'alert-success', function(id) {
