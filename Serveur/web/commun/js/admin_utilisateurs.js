@@ -33,6 +33,8 @@ $(document).ready( function() {
 
 	$( "#admin_user_dialog #enregistrer" ).click( enregistrerUtilisateur );
 	$( "#admin_del_user_dialog #confirmer" ).click( confirmerSuppressionUtilisateur );
+	
+	
 } );
 
 
@@ -225,6 +227,19 @@ function raffraichirTable() {
 	/* Ajout des triggers */
 	$( "a.edit" ).click( editerUtilisateur );
 	$( "a.del"  ).click( supprimerUtilisateur );
+	
+	// Tri possible sur la table :
+	$("#table_liste_utilisateurs").tablesorter({
+		// On désactive le tri sur la dernière colonne (celle des boutons) 
+		headers: { 
+            0: {sorter: false},
+			1: {sorter: false},
+			2: {sorter: false},
+			3: {sorter: false},
+			4: {sorter: false},
+			10: {sorter: false},
+        }
+	}); 
 }
 
 /**

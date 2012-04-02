@@ -12,6 +12,7 @@ global $authentification;
 <html>
     <head>
         <meta charset="utf-8" />
+		<link rel="shortcut icon" href="./favicon.ico" >
         <?php
         //Application du numéro de thème choisi par l'utilisateur
         if ($theme == 1) {

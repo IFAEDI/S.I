@@ -37,7 +37,7 @@ else {
 				<a href="#" id="ajouter"  class="btn btn-success"><i class="icon-plus-sign icon-white"></i> Ajouter un utilisateur</a>
 			</div>
 
-			<table class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">
+			<table id="table_liste_utilisateurs" class="table table-striped table-bordered table-condensed tablesorter" style="margin-top: 20px;">
 			<thead>
 				<tr>
 				<th></th>
