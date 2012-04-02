@@ -19,7 +19,7 @@ inclure_fichier('stages', 'stages', 'js');
 			<form class="well form" id="form_stages">
 				<fieldset class="control-group form-search">
 					<input type="text" class="input-medium search-query" placeholder="Mots-clés">
-					<button  id="submit_recherche" type="submit" class="btn">Rechercher <i class="icon-search"></i></button>
+					<button  id="submit_recherche" type="submit" class="btn btn-primary">Rechercher <i class="icon-search"></i></button>
 				</fieldset>
 				<fieldset class="control-group">
 					<div class="control-group">
