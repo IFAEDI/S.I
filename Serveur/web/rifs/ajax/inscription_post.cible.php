@@ -382,12 +382,13 @@
 
 	}
 
-	<p><?php echo htmlentities('Un formulaire d\'inscription pour les Rencontres IFs a été généré.');?></p>
-	<p><?php echo htmlentities('Veuillez l\'imprimer pour nous le renvoyer une fois signé..');?></p>
-	<p><?php echo htmlentities('En espérant avoir l\'occasion de partager les Rencontres IFs, nous vous remercions d\'avoir pris le temps de compléter ce formulaire.');?></p>
-
 	/* TODO
 		Enregistrer en BDD
 	*/
 	
 ?>
+
+	<p>Un formulaire d'inscription pour les Rencontres IFs a été généré.</p>
+	<p>Veuillez l'imprimer pour nous le renvoyer une fois signé.</p>
+	<p>En espérant avoir l'occasion de partager les Rencontres IFs, nous vous remercions d'avoir pris le temps de compléter ce formulaire.</p>
+	<div class="centre"><a href="dl.php?fileName=<?php echo $fileName?>.pdf" action="_blank" class="btn btn-large btn-primary"><strong>Télécharger le formulaire d'Inscription</strong></a></div>

@@ -868,10 +868,10 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	// Sorry pour les pavés de cette fonction, dur de faire un compromis entre clarté JS et clarté HTML ...
 	// Si quelqu'un veut refaire ça plus proprement, ca devrait pas être trop difficile.
 
+	if (typeof donnees.entreprise === "undefined") { return; }
 	Annuaire.infoEntrepriseCourante = donnees.entreprise;
 	donnees = donnees.entreprise;
 	if (typeof donnees === "undefined") { return; }
-	if (typeof donnees.entreprise === "undefined") { return; }
 	
 	// Génération des blocs intermédiaires (nécessitant des boucles) :
 	var /* string */ tableauContacts = '';
