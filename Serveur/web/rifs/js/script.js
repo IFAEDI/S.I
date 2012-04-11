@@ -3,22 +3,27 @@ PARTIE JAVASCRIPT
 ---------------------------------------------------------------------------------*/
 function changementTypeEntreprise(champ){
 	if (champ.options[champ.selectedIndex].value == "autre" && $("#autreTypeEntreprise").css("display") == "none")
-	$("#autreTypeEntreprise").show("slow");
+		$("#autreTypeEntreprise").show("slow");
 	else
-	$("#autreTypeEntreprise").hide("slow");
-	}
+		$("#autreTypeEntreprise").hide("slow");
+}
 
-	function ajouterIntervenant(){
+function ajouterIntervenant(){
 	if ($('.nomPrenomResponsable').length < 8){
-	$('#control_participants').append($('.nomPrenomIntervenant').last().clone());
-	$('.nomPrenomIntervenant').last().children('.nomIntervenant').val('');
-	$('.nomPrenomIntervenant').last().children('.prenomIntervenant').val('');
-	if ($('.nomPrenomResponsable').length == 8){
-	// TODO : Mettre un label pour indiquer que l'on ne peut plus ajouter d'intervenants
-	}
+		$('#control_participants').append($('.nomPrenomIntervenant').last().clone());
+		$('.nomPrenomIntervenant').last().children('.nomIntervenant').val('');
+		$('.nomPrenomIntervenant').last().children('.prenomIntervenant').val('');
+		if ($('.nomPrenomResponsable').length == 8){
+		// TODO : Mettre un label pour indiquer que l'on ne peut plus ajouter d'intervenants
+		}
 	}
 	return false;
-	}
+}
+
+function enleverIntervenant(object){
+	object.parentElement.remove();
+	return false;
+}
 
 	function valider(){
 	var valide = true;

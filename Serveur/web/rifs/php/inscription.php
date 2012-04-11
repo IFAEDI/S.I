@@ -78,9 +78,10 @@
 				<div class="nomPrenomIntervenant">
 					<input class="input-medium span nomIntervenant" type="text" id="nomIntervenant[]" placeholder="Nom" />
 					<input class="input-medium span prenomIntervenant" type="text" id="prenomIntervenant[]" placeholder="Prénom" />
+					<i alt="Retirer l'intervenant" class="icon-remove link" onclick="enleverIntervenant(this)"></i>
 				</div>
 			</div>
-			<span onclick="ajouterIntervenant()" class="link" id="ajoutIntervenant">Ajouter un intervenant</span>
+			<span onclick="ajouterIntervenant()" class="link" style="margin-left:360px;" id="ajoutIntervenant">Ajouter un intervenant</span>
 		</div>
 		<div class="control-group" id="control_momentPresence">
 			<label class="control-label">Présence *</label>
