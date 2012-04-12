@@ -31,7 +31,10 @@ function enleverIntervenant(object){
 }
 
 // Indique le nombre de caractère restant sur un objet texte javascript et contrôle du nombre de caractères en fonction de nbCaracMax
-function modifChampTxt(nbCaracMax, object){
+function modifChampTxt(nbCaracMax, IdNbCarac, ObjectTextArea){
+	if (ObjectTextArea.value.length > nbCaracMax)
+		ObjectTextArea.value = ObjectTextArea.value.substring(0, nbCaracMax);
+	$('#'+IdNbCarac).text(nbCaracMax - ObjectTextArea.value.length);
 	return false;
 }
 

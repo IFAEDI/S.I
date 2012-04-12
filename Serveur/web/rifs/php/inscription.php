@@ -66,9 +66,9 @@
 			<label>Description de votre entreprise *</label>
 			<label class="comment">Cette description apparaîtra sur la brochure de l'évènement.</label>
 			<div class="controls row-fluid">
-				<textarea class="input-xxlarge controleNomEntreprise span6" rows="3" id="descriptionEntreprise"></textarea>
+				<textarea class="input-xxlarge controleNomEntreprise span6" onkeydown="modifChampTxt(500,'controleNomEntrepriseNbCarac',this)" rows="3" id="descriptionEntreprise"></textarea>
 				<label class="span3">
-					<span id="controleNomEntrepriseNbCarac" onchange="modifChampTxt(500,this);">500</span> caractères restants.
+					<span id='controleNomEntrepriseNbCarac'>500</span> caractères restants.
 				</label>
 			</div>
 		</div>
@@ -137,8 +137,11 @@
 		<div class="control-group row-fluid">
 			<div class="span8">
 				<label class="control-label" for="infoMatosTechnique">Description du matériel apporté</label>
-				<div class="controls">
-					<textarea class="input-xxlarge" rows="3" id="infoMatosTechnique"></textarea>
+				<div class="controls row-fluid">
+					<textarea onkeydown="modifChampTxt(200,'controleNbCaracInfoMatosTechnique',this);" class="input-xxlarge span6" rows="3" id="infoMatosTechnique"></textarea>
+				<label class="span3">
+					<span id='controleNbCaracInfoMatosTechnique'>200</span> caractères restants.
+				</label>
 				</div>
 			</div>
 			<div class="span3">
@@ -153,14 +156,20 @@
 		<legend>Informations Complémentaires</legend>
 		<div class="control-group" id="control_attente">
 			<label>Quelles sont vos attentes concernant votre participation aux rencontres IF?</label>
-			<div class="controls">
-				<textarea class="input-xxlarge" rows="3" id="attente"></textarea>
+			<div class="controls row-fluid">
+				<textarea class="input-xxlarge span6" onkeydown="modifChampTxt(200,'controleNbCaracAttente',this);" rows="3" id="attente"></textarea>
+				<label class="span3">
+					<span id='controleNbCaracAttente'>200</span> caractères restants.
+				</label>
 			</div>
 		</div>
 		<div class="control-group" id="control_autre">
 			<label>Autres (commentaires, remarques, ...)</label>
-			<div class="controls">
-				<textarea class="input-xxlarge" rows="3" id="autre"></textarea>
+			<div class="controls row-fluid">
+				<textarea class="input-xxlarge span6" onkeydown="modifChampTxt(200,'controleNbCaracAutre',this);" rows="3" id="autre"></textarea>
+				<label class="span3">
+					<span id='controleNbCaracAutre'>200</span> caractères restants.
+				</label>
 			</div>
 		</div>
 	</fieldset>
