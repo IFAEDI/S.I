@@ -62,10 +62,14 @@
 				<span class="help-inline">N'accepte que des fichiers images de taille inférieure à 5 Mo</span>
 			</div>
 		</div>
-		<div class="control-group" id="control_descEntreprise">
-			<label>Description de votre entreprise <em>(description qui apparaîtra sur la brochure de l'évènement) *</em></label>
-			<div class="controls">
-				<textarea class="input-xxlarge controleNomEntreprise" rows="3" id="descriptionEntreprise"></textarea>
+		<div class="control-group row-fluid" id="control_descEntreprise">
+			<label>Description de votre entreprise *</label>
+			<label class="comment">Cette description apparaîtra sur la brochure de l'évènement.</label>
+			<div class="controls row-fluid">
+				<textarea class="input-xxlarge controleNomEntreprise span6" rows="3" id="descriptionEntreprise"></textarea>
+				<label class="span3">
+					<span id="controleNomEntrepriseNbCarac" onchange="modifChampTxt(500,this);">500</span> caractères restants.
+				</label>
 			</div>
 		</div>
 	</fieldset>
@@ -78,7 +82,7 @@
 				<div class="nomPrenomIntervenant">
 					<input class="input-medium span nomIntervenant" type="text" id="nomIntervenant[]" placeholder="Nom" />
 					<input class="input-medium span prenomIntervenant" type="text" id="prenomIntervenant[]" placeholder="Prénom" />
-					<i alt="Retirer l'intervenant" class="icon-remove link" onclick="enleverIntervenant(this)"></i>
+					<i alt="Retirer l'intervenant" class="icon-remove link enleverIntervenant" style="display:none" onclick="enleverIntervenant(this)"></i>
 				</div>
 			</div>
 			<span onclick="ajouterIntervenant()" class="link" style="margin-left:360px;" id="ajoutIntervenant">Ajouter un intervenant</span>

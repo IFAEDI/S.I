@@ -91,7 +91,10 @@
 	<div id="inscriptionRif">
 		<h1>Inscription</h1>
 		<p>
-			Pour vous inscrire aux Rencontres IF du prochain mois de Janvier veuillez remplir le formulaire accessible par le lien ci-dessous. Suite à celui-ci l'équipe Entreprise de l'AEDI se chargera de vous répondre et de vous informer sur la suite des démarches.
+			Pour vous inscrire aux Rencontres IF du prochain mois de Janvier veuillez remplir le formulaire accessible par le lien ci-dessous. 
+		</p>
+		<p>
+			Si celui-ci est valide un fichier PDF sera généré. Il devra être signé par le responsable de l'entreprise puis nous être renvoyé afin de compléter l'inscription aux Rencontres IF. 
 		</p>
 
 	<div class="centre"><a href="index.php?page=inscriptionRIFs" class="btn btn-large btn-primary"><strong>Formulaire d'inscription aux Rencontres IF</strong></a></div>

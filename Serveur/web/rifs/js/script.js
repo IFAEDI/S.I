@@ -1,6 +1,7 @@
 /*---------------------------------------------------------------------------------
 PARTIE JAVASCRIPT
 ---------------------------------------------------------------------------------*/
+// Apparition ou disparition du champ texte 'Autre' en fonction du type d'entreprise sélectionné
 function changementTypeEntreprise(champ){
 	if (champ.options[champ.selectedIndex].value == "autre" && $("#autreTypeEntreprise").css("display") == "none")
 		$("#autreTypeEntreprise").show("slow");
@@ -8,11 +9,13 @@ function changementTypeEntreprise(champ){
 		$("#autreTypeEntreprise").hide("slow");
 }
 
+// Ajoute des champs pour ajouter un intervenant
 function ajouterIntervenant(){
-	if ($('.nomPrenomResponsable').length < 8){
+	if ($('.nomPrenomResponsable').length < 8){	// Nombre d'intervenants limités à 8
 		$('#control_participants').append($('.nomPrenomIntervenant').last().clone());
 		$('.nomPrenomIntervenant').last().children('.nomIntervenant').val('');
 		$('.nomPrenomIntervenant').last().children('.prenomIntervenant').val('');
+		$('.nomPrenomIntervenant').last().children('.enleverIntervenant').show();
 		if ($('.nomPrenomResponsable').length == 8){
 		// TODO : Mettre un label pour indiquer que l'on ne peut plus ajouter d'intervenants
 		}
@@ -20,12 +23,20 @@ function ajouterIntervenant(){
 	return false;
 }
 
+// Fonction enlevant les champs texte d'un intervenant après avoir cliqué sur l'icône supprimer.
 function enleverIntervenant(object){
-	object.parentElement.remove();
+	object.parentElement.setAttribute('id','objetASupprimer');	//L'élément n'a pas d'id, difficile de le supprimer sans !
+	$('#objetASupprimer').remove();
 	return false;
 }
 
-	function valider(){
+// Indique le nombre de caractère restant sur un objet texte javascript et contrôle du nombre de caractères en fonction de nbCaracMax
+function modifChampTxt(nbCaracMax, object){
+	return false;
+}
+
+// Valide les champs d'entrée du formulaire qui doivent être controlés
+function valider(){
 	var valide = true;
 	//On test la valeur des champs du formulaire
 
@@ -101,15 +112,17 @@ function verifMail(champ)
 /*---------------------------------------------------------------------------------
 PARTIE AJAX
 ---------------------------------------------------------------------------------*/
+
+// Soumet le formulaire en contrôlant celui-ci, et charge la page générant le pdf
 function soumettreFormulaire(){
 	var result = valider();
 	if (result == true){
-		var nomIntervenants = new Array();
+		var nomIntervenants = new Array();	// Remplissage d'un tableau contenant les noms d'intervenants
 		$('.nomIntervenant').each(function(index) {
 			if (this.value != '')
 				nomIntervenants[index] = this.value;
 		});
-		var prenomIntervenants = new Array();
+		var prenomIntervenants = new Array();	// Remplissage d'un tableau contenant les prénoms d'intervenants
 		$('.prenomIntervenant').each(function(index) {
 			if (this.value != '')
 				prenomIntervenants[index] = this.value;
@@ -117,7 +130,7 @@ function soumettreFormulaire(){
 		var typeEntreprise = (document.formInscription.typeEntreprise.value != "autre")
 			? document.formInscription.typeEntreprise.value:document.formInscription.typeEntrepriseAutre.value;
 
-		for (var i=0; i < document.formInscription.momentPresence.length; i++)
+		for (var i=0; i < document.formInscription.momentPresence.length; i++)	// Retrait du checkbox 'momentPresence'
 		{
 			if (document.formInscription.momentPresence[i].checked) {var momentPresenceVal = document.formInscription.momentPresence[i].value;}
 		}
@@ -139,6 +152,7 @@ function soumettreFormulaire(){
 				{var TA = document.formInscription.TA[i].value;}
 		}
 
+		// On n'utilise pas la fonction serialize car des champs ont besoin d'être traités
 		$.post("rifs/ajax/inscription_post.cible.php",
 		{
 			nomEntreprise : document.formInscription.nomEntreprise.value,
@@ -160,9 +174,9 @@ function soumettreFormulaire(){
 			autre : document.formInscription.autre.value,
 		},
 		function success(retour){
-			$(".module").html(retour);
+			$(".module").html(retour); // On charge la page affichée par 'inscription_post.cible.php'
 		});
 	}
-	window.scrollTo(0,0);
+	window.scrollTo(0,0);	// Retour en haut de page
 	return false;
 }
