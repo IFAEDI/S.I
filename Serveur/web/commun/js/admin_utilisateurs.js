@@ -228,6 +228,7 @@ function raffraichirTable() {
 	$( "a.edit" ).click( editerUtilisateur );
 	$( "a.del"  ).click( supprimerUtilisateur );
 	
+	/*
 	// Tri possible sur la table :
 	$("#table_liste_utilisateurs").tablesorter({
 		// On désactive le tri sur la dernière colonne (celle des boutons) 
@@ -240,6 +241,7 @@ function raffraichirTable() {
 			10: {sorter: false},
         }
 	}); 
+	*/
 }
 
 /**

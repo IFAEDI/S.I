@@ -1,4 +1,9 @@
 <?php
+/***************************************************
+* Script contenant le header et le footer et incluant les différentes pages
+* en fonction de la demande et de l'analyse du script d'index.
+***************************************************/
+
 global $titre_page;
 global $nom_module;
 global $lien_module;
@@ -14,33 +19,25 @@ global $authentification;
         <meta charset="utf-8" />
 		<link rel="shortcut icon" href="./favicon.ico" >
         <?php
-        //Application du numéro de thème choisi par l'utilisateur
-        if ($theme == 1) {
-            inclure_fichier('commun', 'bootstrap.min', 'css');
-            inclure_fichier('commun', 'bootstrap-responsive.min', 'css');
-            inclure_fichier('commun', 'style', 'css');
-            inclure_fichier('commun', 'ui-lightness/jquery-ui', 'css');
-        } else {
-            //Si le numero est invalide application du thème par defaut
-            inclure_fichier('commun', 'bootstrap.min', 'css');
-            inclure_fichier('commun', 'bootstrap-responsive.min', 'css');
-            inclure_fichier('commun', 'style', 'css');
-            inclure_fichier('commun', 'ui-lightness/jquery-ui', 'css');
-        }
-        
+        inclure_fichier('commun', 'bootstrap.min', 'css');
+        inclure_fichier('commun', 'bootstrap-responsive.min', 'css');
+        inclure_fichier('commun', 'style', 'css');
+        inclure_fichier('commun', 'ui-lightness/jquery-ui', 'css');
+
         inclure_fichier('commun', 'jquery.min', 'js');
         inclure_fichier('commun', 'jquery-ui.min', 'js');
         inclure_fichier('commun', 'bootstrap.min', 'js');
         inclure_fichier('commun', 'datepicker.fr', 'js');
         inclure_fichier('commun', 'json2', 'js');
         inclure_fichier('commun', 'utils', 'js');
-		inclure_fichier('commun', 'jquery.tablesorter.min', 'js');
+	inclure_fichier('commun', 'jquery.tablesorter.min', 'js');
 		
 		
 	inclure_fichier('commun', 'login', 'js');
 	inclure_fichier('commun', 'SHA1', 'js');
         ?>
-        <title>AEDI - <?php echo $titre_page ?></title>
+
+        <title>AEDI - <?php echo $titre_page; ?></title>
     </head>
 
     <body>
@@ -48,15 +45,16 @@ global $authentification;
 	inclure_fichier('', 'menu', 'php'); 
 	inclure_fichier('', 'login', 'php' ); 
 
+	/* Si on a un module, on affiche le breadcrumb, sinon ce n'est pas nécessaire */
         if ($nom_module != '') { ?>
             <ul class="breadcrumb" >
                 <li>
-                    <a href="index.php?page=accueil"><i class="icon-home"></i></a> <span class="divider">/</span>
+                    <a href="index.php?page=Accueil"><i class="icon-home"></i></a> <span class="divider">/</span>
                 </li>
                 <li>
-                    <a href="<?php echo $lien_module ?>" ><?php echo $titre_module ?></a> <span class="divider">/</span>
+                    <?php echo $titre_module; ?> <span class="divider">/</span>
                 </li>
-                <li class="active"><?php echo $titre_page ?></li>
+                <li class="active"><?php echo $titre_page; ?></li>
             </ul>
         <?php } ?>
 

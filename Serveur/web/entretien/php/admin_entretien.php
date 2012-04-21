@@ -21,7 +21,7 @@ Vous pouvez accepter ou refuser celles qui ne sont pas encore inscrite.
 
 <p> Si vous souhaitez ajouter manuellement une entreprise, utilisez le boutton ci-dessous afin de renseigner les informations necessaires. 
 </p>
-<a class="reservation btn btn-primary offset5" href="index.php?page=inscription">Ajouter Entretien</a>
+<a class="reservation btn btn-primary offset5" href="index.php?page=Entretiens_Entreprise">Ajouter Entretien</a>
 
 
 <br />
@@ -35,7 +35,7 @@ Vous pouvez accepter ou refuser celles qui ne sont pas encore inscrite.
 </p>
 		<br />
 		<div class="control-group" id="control_date">
-		<label class="offset1 control-label">Date</label>
+		<label class="offset1 control-label" style="margin-right: 10px;">Date</label>
 		<div class="controls">
 		  <input name="date1" id="date_creneaux" class="input-medium date-pick"/>
 		<button type="submit" class="btn btn-primary offset1">Rechercher</button>

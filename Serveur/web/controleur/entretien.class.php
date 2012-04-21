@@ -16,7 +16,7 @@ class Entretien {
     // Récuperation de l'objet Entretien par l'ID
     public static function GetEntretienByID($_id) {
         if (is_numeric($_id)) {
-            return BD::Prepare('SELECT * FROM Entretien WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
+            return BD::Prepare('SELECT * FROM ENTRETIEN WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
         }
         return NULL;
     }
@@ -24,7 +24,7 @@ class Entretien {
 	// Récuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
         return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, m.mail
-			FROM Entretien et, Contact_entreprise c, Entreprise e, Personne p, Mail m
+			FROM ENTRETIEN et, Contact_entreprise c, ENTREPRISE e, PERSONNE p, MAIL m
 			WHERE et.id_contact = c.id_contact
 			AND c.id_personne = p.id_personne
 			AND m.id_personne = p.id_personne
@@ -34,19 +34,19 @@ class Entretien {
 	// Récuperation des entretiens valides par l'administration
 	public static function GetListeEntretiensValides() {
 		$_etat = 1;
-        return BD::Prepare('SELECT * FROM Entretien where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM ENTRETIEN where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
     }
 	
 	// Récuperation des entretiens NON valides
 	public static function GetListeEntretiensNonValides() {
 		$_etat = 0;
-        return BD::Prepare('SELECT * FROM Entretien where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
+        return BD::Prepare('SELECT * FROM ENTRETIEN where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
     }
 	
 	// Suppression d'un entretien par ID
     public static function SupprimerEntretienByID($_id) {
         if (is_numeric($_id)) {
-            BD::Prepare('DELETE FROM Entretien WHERE ID_ENTRETIEN = :id', array('id' => $_id));
+            BD::Prepare('DELETE FROM ENTRETIEN WHERE ID_ENTRETIEN = :id', array('id' => $_id));
         }
     }
 
@@ -62,7 +62,7 @@ class Entretien {
 		
         if( $_id > 0 ) {
             //Si l'etudiant à déjà un CV
-            BD::executeModif('UPDATE Entretien SET 
+            BD::executeModif('UPDATE ENTRETIEN SET 
 					ID_CONTACT = :id_contact,
                     DATE = :date,
                     ETAT = :etat
@@ -71,7 +71,7 @@ class Entretien {
 			return $_id;
         } else {
 			
-            $retour = BD::executeModif('INSERT INTO Entretien SET 
+            $retour = BD::executeModif('INSERT INTO ENTRETIEN SET 
 					ID_ENTRETIEN = :id,
 					ID_CONTACT = :id_contact,
                     DATE = :date,
@@ -97,7 +97,7 @@ class Entretien {
 			'id'=> $_id,
 			'etat'=> $etat,
 		);
-		BD::executeModif('UPDATE Entretien SET 
+		BD::executeModif('UPDATE ENTRETIEN SET 
 				ETAT = :etat
 				WHERE ID_ENTRETIEN = :id', $info);
 		  BD::MontrerErreur();
@@ -113,7 +113,7 @@ class Entretien {
 			'id'=> $_id,
 			'etat'=> $etat,
 		);
-		BD::executeModif('UPDATE Entretien SET 
+		BD::executeModif('UPDATE ENTRETIEN SET 
 				ETAT = :etat
 				WHERE ID_ENTRETIEN = :id', $info);
 		  BD::MontrerErreur();

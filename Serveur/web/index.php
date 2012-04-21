@@ -1,4 +1,9 @@
 <?php
+/*****************************************************************************************************
+* Page d'index
+* Authentification de l'utilisateur et redirection vers la bonne page en fonction de la variable 'page'
+*****************************************************************************************************/
+
 
 require_once dirname(__FILE__) . '/commun/php/base.inc.php';
 
@@ -28,112 +33,86 @@ if ($authentification->isAuthentifie()) {
     }
 }
 
-/* * ***************************************** THEME *************************************** */
-
-/* Définition du theme */
-if (isset($_POST['theme']) && is_numeric($_POST['theme'])) {
-    $_SESSION['theme'] = $_POST['theme'];
-}
-
-if (isset($_SESSION['theme'])) {
-    $theme = $_SESSION['theme'];
-} else {
-    $theme = 0;
-}
+/*******************************************************************************/
 
 
-/* * ***************************************************************************** */
-
-//Inclusion d'utils des le debut de la page d'index car necessaire pour la cvtheque
-
-
-
-if (!isset($_GET['page'])) {
-    header("location: index.php?page=accueil");
-}
-
-
-if ($_GET['page'] == 'accueil') {
+/* Accueil */
+if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == 'Accueil') {
     $titre_page = 'Accueil';
-    $lien_module = '';
     $nom_module = '';
     $titre_module = '';
     $nom_page = 'accueil';
-} elseif ($_GET['page'] == 'accueil_cv') {
+/* CV Etudiant */
+} elseif ($_GET['page'] == 'CV_Etudiant') {
     $titre_page = 'Accueil CV';
-    $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'accueil';
     $titre_module = 'Etudiants';
+/* Edition CV */
 } elseif ($_GET['page'] == 'edit_cv') {
     $titre_page = 'Edition CV';
-    $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'edit_cv';
     $titre_module = 'Etudiants';
-} elseif ($_GET['page'] == 'cvtheque') {
+/* CV Entreprise */
+} elseif ($_GET['page'] == 'CV_Entreprise') {
     $titre_page = 'CV';
-    $lien_module = 'index.php?page=accueil_cv';
     $nom_module = 'cvtheque';
     $nom_page = 'cvtheque';
     $titre_module = 'Entreprises';
-} elseif ($_GET['page'] == 'admincv') {
+/* Administration CV */
+} elseif ($_GET['page'] == 'Administration_CV') {
     $titre_page = 'Administration CV';
-    $lien_module = 'index.php?page=admincv';
     $nom_module = 'cvtheque';
     $nom_page = 'admin';
     $titre_module = 'Administration';
-} elseif ($_GET['page'] == 'testcv') {
-    $titre_page = 'Administration CV';
-    $lien_module = 'index.php?page=testcv';
-    $nom_module = 'cvtheque';
-    $nom_page = 'test';
-    $titre_module = 'TEST';
-} elseif ($_GET['page'] == 'annuaire') {
+/* Administration Annuaire */
+} elseif ($_GET['page'] == 'Administration_Annuaire') {
     $titre_page = 'Annuaire';
-    $lien_module = 'index.php?page=annuaire';
     $nom_module = 'annuaire';
     $nom_page = 'annuaire';
     $titre_module = 'AEDI';
-} elseif ($_GET['page'] == 'inscription') {
+/* Simulation Entreprise */
+} elseif ($_GET['page'] == 'Entretiens_Entreprise') {
     $titre_page = 'Inscription Entretien';
-    $lien_module = 'index.php?page=inscription';
     $nom_module = 'entretien';
     $nom_page = 'inscription';
     $titre_module = 'Entreprises';
-} elseif ($_GET['page'] == 'entretienEtudiant') {
+/* Simulation Etudiant */
+} elseif ($_GET['page'] == 'Entretiens_Etudiant') {
     $titre_page = 'Entretien';
-    $lien_module = 'index.php?page=entretienEtudiant';
     $nom_module = 'entretien';
     $nom_page = 'entretienEtudiant';
     $titre_module = 'Etudiants';
-} elseif ($_GET['page'] == 'admin_entretien') {
+/* Administration Entretiens */
+} elseif ($_GET['page'] == 'Administration_Entretiens') {
     $titre_page = 'Administration Entretien';
-    $lien_module = 'index.php?page=admin_entretien';
     $nom_module = 'entretien';
     $nom_page = 'admin_entretien';
-    $titre_module = 'Etudiants';
-} elseif ($_GET['page'] == 'rifs') {
+    $titre_module = 'Administration';
+/* RIFs Entreprise */
+} elseif ($_GET['page'] == 'RIFs_Entreprise') {
     $titre_page = 'Rencontres IF';
-    $lien_module = 'index.php?page=rifs';
     $nom_module = 'rifs';
     $nom_page = 'rifs';
-} elseif ($_GET['page'] == 'inscriptionRIFs') {
+/* RIFs Inscription */
+} elseif ($_GET['page'] == 'RIFs_Inscription') {
     $titre_page = 'Inscription aux Rencontres IF';
-    $lien_module = 'index.php?page=inscriptionRIFs';
     $nom_module = 'rifs';
     $nom_page = 'inscription';
-} elseif ($_GET['page'] == 'stages') {
+/* Stages Etudiant */
+} elseif ($_GET['page'] == 'Stages_Etudiant') {
     $titre_page = "Recherche de Stages";
-    $lien_module = 'index.php?page=stages';
     $nom_module = 'stages';
     $nom_page = 'stages';
+    $titre_module = 'Etudiants';
+/* Administration Utilisateurs */
 } elseif ($_GET['page'] == 'Administration_Utilisateurs') {
     $titre_page = 'Administration des Utilisateurs';
-    $lien_module = 'index.php?page=Administration_Utilisateurs';
     $nom_module = 'commun';
     $nom_page = 'admin_utilisateurs';
     $titre_module = 'Administration';
+/* Administration Journal */
 } elseif ($_GET['page'] == 'Administration_Journal') {
     $titre_page = 'Journal d\'activité';
     $lien_module = 'index.php?page=Administration_Journal';
@@ -163,6 +142,8 @@ else {
     $nom_page = '404';
     $titre_module = '';
 }
+
+
 
 inclure_fichier('', 'layout', 'php');
 ?>

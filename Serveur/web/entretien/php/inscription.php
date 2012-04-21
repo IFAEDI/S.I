@@ -17,9 +17,9 @@ $entreprises = Entreprise::GetListeEntreprises();
 $list_entreprises = "\"";
 for( $i = 0; $i < sizeof($entreprises) ; $i++) {
     if( $list_entreprises != "\""){
-		$list_entreprises .= "\",\"".$entreprises[$i]->nom;
+		$list_entreprises .= "\",\"".$entreprises[$i]->getNom();
 	}else{
-		$list_entreprises .= $entreprises[$i]->nom;
+		$list_entreprises .= $entreprises[$i]->getNom();
 	}
 }
 $list_entreprises =  $list_entreprises."\"";

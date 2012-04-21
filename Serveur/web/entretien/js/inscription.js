@@ -85,9 +85,22 @@ $('document').ready(function() {
 			heureDebut: $('#heureDebut').val()+$('#minuteDebut').val(),
 			heureFin: $('#heureFin').val()+$('#minuteFin').val()
 		};
-		$.post('./entretien/ajax/inscription_post.cible.php', obj, function() {
+
+		$.ajax( {
+			async: false,
+			type: 'post',
+			url: './entretien/ajax/inscription_post.cible.php',
+			data: obj,
+			dataType: 'json',
+			success: function( msg ) {
+
+				alert( 'ok' );
 				//TODO: gèrer le retour de l'insert
-			});
+			},
+			error: function( obj, ex, msg ) {
+				alert( ex + ' - ' + msg + '\n' + obj.responseText );
+			}
+		} );
 	}
 		return false;
 	});

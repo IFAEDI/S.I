@@ -1025,8 +1025,12 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	}
 	
 	// Génération du bloc entier :
-	$(".module .hero-unit").html('<h1>'+donnees.description.nom+' <small>'+donnees.description.secteur+'&#09;'+btnModifEntreprise+'</small></h1>'+
-'							<p>'+donnees.description.description+'</p> \n'+
+	var content = '<h1>'+donnees.description.nom+' <small>'+donnees.description.secteur+'&#09;'+btnModifEntreprise+'</small></h1>';
+	if( donnees.description.description ) {
+		content +=
+'							<p>'+donnees.description.description+'</p> \n';
+	}
+	content +=
 '							\n'+
 '							<div class="accordion" id="accordion2">\n'+
 '								<div class="accordion-group">\n'+
@@ -1065,7 +1069,9 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 '								</div>\n'+
 '							</div>\n'+
 '							</div>\n'+
-'						</div> ');
+'						</div> ';
+
+	$(".module .hero-unit").html( content );
 
 	// Possibilité de trier les tables :
 	$("#contacts table").tablesorter({ 

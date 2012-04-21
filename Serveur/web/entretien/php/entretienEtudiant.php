@@ -1,11 +1,24 @@
 <?php
+/**********************************************
+* Vue pour l'inscription aux simulations d'entretiens
+* Partie étudiante
+* Auteur : Daniel Baudry
+***********************************************/
+
 global $authentification;
 global $utilisateur;
 
-if ($authentification->isAuthentifie() == false || (
-        $utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
+if( $authentification->isAuthentifie() == false ) {
+        ?>
+                <div class="alert" style="text-align: center;">
+                        <p>Merci de prendre le temps de vous identifier en cliquant <a data-toggle="modal" href="#login_dialog">ici</a>.</p>
+                </div>
+        <?php
+	die;
+}
+else if($utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
         $utilisateur->getPersonne()->getRole() != Personne::AEDI &&
-        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT)) {
+        $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT) {
     inclure_fichier('', '401', 'php');
     die;
 }
@@ -15,15 +28,14 @@ if ($authentification->isAuthentifie() == false || (
 	<h1>Simulations d'entretiens</h1>
 	<div class="alert alert-block alert-info">
 					<h4 class="alert-heading">Inscription</h4>
-					Afin de faire votre demande d'inscription a des sessions de simulation d'entretiens, vous pouvez choisir la date souhaitee via le calendrier.<br/>
-			Une fois la liste des creneaux disponibles vous pourrez vous inscrire aux sessions encore disponibles. A noter que la validation de votre creneau se
-			fera ulterieurement par l'administration.
+					Afin de faire votre demande d'inscription à des sessions de simulation d'entretiens, vous pouvez choisir la date souhaitée via le calendrier.<br/>
+			Une fois la liste des créneaux disponibles, vous pourrez vous inscrire aux sessions encore disponibles. A noter que la validation de votre creneau se fera ultérieurement par l'administration.
 	</div>
 		
-	<form class="well form-inline" id="formChoixDate" action="#" method="post>
+	<form class="well form-inline" id="formChoixDate" action="#" method="post">
 		<label class="offset1" for="date1">Date</label>
 		<input name="date1" id="date_creneaux" class="input-small date-pick"/>
-		<button type="submit" class="btn btn-primary">Rechercher <i class="icon-search"></i></button>
+		<button type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
     </form>
 
 				
@@ -35,7 +47,7 @@ if ($authentification->isAuthentifie() == false || (
 
 	<div class="modal hide fade" id="myModal">
 		<div class="modal-header">
-		<a class="close" data-dismiss="modal">�</a>
+		<a class="close" data-dismiss="modal">×</a>
 		<h3>Entretien</h3>
 		</div>
 		<div class="modal-body">

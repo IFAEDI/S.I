@@ -1,4 +1,8 @@
 ﻿<?php
+/**************************************
+* Script définissiant la barre de navigation supérieur
+**************************************/
+
 	global $authentification;
 	global $utilisateur;
 ?>
@@ -22,15 +26,27 @@
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Etudiants <b class="caret"></b></a>
 				<ul class="dropdown-menu">
 					<li class="nav-header"><i class="icon-road"></i> Espace Pro.</li>
-					<li><a href="index.php?page=entretienEtudiant">Simulations d'entretiens</a></li>
-					<li><a href="index.php?page=stages">Stages</a></li>
-					<li><a href="index.php?page=accueil_cv">CV</a></li>
+					<li><a href="index.php?page=Entretiens_Etudiant">Simulations d'entretiens</a></li>
+					<li><a href="index.php?page=Stages_Etudiant">Stages</a></li>
+					<li><a href="index.php?page=CV_Etudiant">CV</a></li>
 
 					<li class="divider"></li>
 
-					<li class="nav-header"><i class="icon-glass"></i> Espace Détente</li>
-					<li><a href="#">Evénements</a></li>
-					<li><a href="#">Souvenirs</a></li>
+					<li class="nav-header"><i class="icon-pencil"></i> Outils</li>
+					<li><a href="http://shareif.insa-lyon.fr/redmine" target="_blank">Redmine</a></li>
+					<li><a href="http://shareif.insa-lyon.fr/" target="_blank">Share IF</a></li>
+
+					<li class="divider"></li>
+
+					<li class="nav-header"><i class="icon-glass"></i> Evènements</li>
+					<li><a href="#">Concert IF</a></li>
+					<li><a href="#">Conférence Métier</a></li>
+					<li><a href="#">Intégration</a></li>
+					<li><a href="#">Rencontres Anciens</a></li>
+					<li><a href="#">Rencontres-IF</a></li>
+					<li><a href="#">Salle détente</a></li>
+					<li><a href="#">Soirée de fin d'année</a></li>
+					<li><a href="#">Week-end Ski</a></li>
 				</ul>
 			</li>
 			<li class="divider-vertical"></li>
@@ -39,13 +55,14 @@
 				<ul class="dropdown-menu">
 					<li class="nav-header"><i class="icon-search"></i> Informations</li>
 					<li><a href="#">Nos offres</a></li>
-					<li><a href="index.php?page=cvtheque">CVtheque</a></li>
+					<li><a href="#">Devenir parrain de promotion</a></li>
+					<li><a href="index.php?page=CV_Entreprise">CV des étudiants</a></li>
 
 					<li class="divider"></li>
 
 					<li class="nav-header"><i class="icon-star"></i> Evénements</li>
-					<li><a href="index.php?page=rifs">Rencontres IF</a></li>
-					<li><a href="index.php?page=inscription">Simulations d'entretiens</a></li>
+					<li><a href="index.php?page=RIFs_Entreprise">Rencontres IF</a></li>
+					<li><a href="index.php?page=Entretiens_Entreprise">Simulations d'entretiens</a></li>
 				</ul>
 			</li>
 			<?php
@@ -65,10 +82,10 @@
 							<li class="divider"></li>
 
 							<li class="nav-header"><i class="icon-cog"></i> Modules</li>
-							<li><a href="index.php?page=annuaire">Annuaire Entreprises</a></li>
-							<li><a href="index.php?page=admincv">CV</a></li>
-							<li><a href="#">RIFs</a></li>
-							<li><a href="#">Simulations d'entretiens</a></li>
+							<li><a href="index.php?page=Administration_Annuaire">Annuaire Entreprises</a></li>
+							<li><a href="index.php?page=Administration_CV">CV</a></li>
+							<li><a href="index.php?page=Administration_RIFs">RIFs</a></li>
+							<li><a href="index.php?page=Administration_Entretiens">Simulations d'entretiens</a></li>
 						</ul>
 					</li>
 				<?php

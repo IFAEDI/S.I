@@ -77,9 +77,10 @@ table.tablesorter thead tr .headerSortDown {
 	margin-bottom: 10px;
 }
 
-#stages #form_stages {
-	min-height: 170px;
-}	
+#stages input, select {
+	margin-right: 20px;
+	width: 150px;
+}
 
 /* Simulation des balises details et summary */
 #stages details, summary {

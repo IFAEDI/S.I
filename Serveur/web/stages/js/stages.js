@@ -6,6 +6,7 @@
 function afficherResultats(json) {
 	$('#fenetre').show();
 	$('#information').show();
+	$('#description').slideUp();
 
 	if (json.code === 'error') {
 		$('#information').text('Impossible de récupérer le résultat ' +
@@ -26,7 +27,7 @@ function afficherResultats(json) {
 	}
 
 	var pluriel = (resultats.length > 1) ? 's' : '';
-	$('#information').text(resultats.length  + ' résultat' + pluriel + ' trouvé' + pluriel + '.');
+	$('#information').text(resultats.length  + ' résultat' + pluriel + ' trouvé' + pluriel + '. Cliquez sur la ligne pour avoir plus d\'info.');
 	for (var i = 0; i < resultats.length; ++i) {
 		var resultat = resultats[i];
 		
@@ -38,23 +39,37 @@ function afficherResultats(json) {
 			resultat.description = "Pas de description, voir fichier joint.";
 		}
 
-		// Affichage sous forme d'une liste de définitions
-		affichage += '<li class="offre"><div class="info">' +
-			'<details><summary>' + resultat.titre + '</summary>' +
-			'<dl class="dl-horizontal">' +
-			'<dt>Stage de</dt><dd>' + resultat.annee + 'ème année</dd>' +
-			'<dt>Description</dt><dd>' + resultat.description + '</dd>';
-		if (resultat.contact) {
-			affichage += '<dt>Contact</dt><dd>' + resultat.contact + '</dd>'; 
+		/* Affichage dans le tableau */
+		affichage += '<tr>'
+		affichage += '<td>' + (i+1) + '</td>';
+		affichage += '<td>' + resultat.titre + '</td>';
+		affichage += '<td>' + resultat.entreprise + '</td>';
+		affichage += '<td>' + resultat.lieu + '</td>';
+		affichage += '<td>' + resultat.annee + 'ème année</td>';
+		affichage += '</tr>';
+
+		affichage += '<tr class="hide">';
+		affichage += '<td></td>';
+		affichage += '<td colspan="4">';
+		affichage +=  '<p>' + resultat.description + '</p>';
+		if( resultat.contact ) {
+			affichage += '<p><b>Contact</b> : ' + resultat.contact + '</p>';
 		}
-		affichage += '<dt>Lieu</dt><dd>' + resultat.lieu + '</dd> ' +
-			'<dt>Entreprise</dt><dd>' + resultat.entreprise + '</dd>' +
-			'<dt>Document</dt><dd><a href="' +
-			'https://intranet-if.insa-lyon.fr/stages/descriptif/' +
-		       	resultat.lien_fichier + '">cliquez ici</a></dd>' +
-			'</dl></details></div></li>';	
+		affichage +=  '<a href="https://intranet-if.insa-lyon.fr/stages/descriptif/' + resultat.lien_fichier + '">Plus d\'info</a>';
+		affichage += '</td>';
+		affichage += '</tr>';
 	}
 	$('#resultats').html(affichage);
+
+	/* Ajout de la gestion du clique */
+	$('#resultats tr').click( function() {
+		if( $(this).next().is( ':visible' ) ) {
+			$(this).next().slideUp();
+		}
+		else {
+			$(this).next().slideDown();
+		}
+	} );
 }
 
 $('document').ready(function() {
