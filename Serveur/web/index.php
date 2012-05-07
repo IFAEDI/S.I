@@ -15,11 +15,12 @@ $authentification = new Authentification();
 $utilisateur = null;
 
 /* Si on reçoit une demande pour le CAS */
-if (isset($_REQUEST['action'])) {
+if (@isset($_REQUEST['action'])) {
     if ($_POST['action'] == "login_cas") {
         $authentification->authentificationCAS();
     } else if ($_GET['action'] == "logout") {
         $authentification->forcerDeconnexion();
+	header( 'location: index.php' );
     }
 }
 
