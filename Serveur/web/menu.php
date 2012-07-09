@@ -34,7 +34,7 @@
 
 					<li class="nav-header"><i class="icon-pencil"></i> Outils</li>
 					<li><a href="http://shareif.insa-lyon.fr/redmine" target="_blank">Redmine</a></li>
-					<li><a href="http://shareif.insa-lyon.fr/" target="_blank">Share IF</a></li>
+					<li><a href="https://shareif.insa-lyon.fr/" target="_blank">Share IF</a></li>
 
 					<li class="divider"></li>
 
