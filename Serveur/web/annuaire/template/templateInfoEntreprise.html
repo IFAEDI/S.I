@@ -1,0 +1,277 @@
+﻿<script id="templateInfoEntreprise" type="text/x-handlebars-template">
+	<h1>
+		{{description.nom}} 
+		<small>{{description.secteur}}&#09;
+			{{# droitModification}}
+				<a title="Editer Entreprise" data-toggle="modal" href="#modalUpdateEntreprise" class="btn  btn-mini btn-modifEntreprise"><i class="icon-pencil" ></i></a>
+			{{/ droitModification}}
+		</small>
+	</h1>
+
+	{{# description}}
+	<p>{{description}}</p> 
+	{{/ description}}
+
+	<div class="accordion" id="accordion2">
+		<div class="accordion-group">
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#contacts"> 
+					<h2>Contacts</h2> 
+				</a>
+			</div>
+			<div id="contacts" class="accordion-body collapse in"> 
+				<div class="accordion-inner">
+					 {{^contacts}}
+						Aucun contact.
+						{{#droitModification}}
+							<a data-toggle="modal" href="#modalUpdateContact" title="Ajouter Contact" class="btn  btn-mini btn-ajoutContact"><i class="icon-plus"></i></a>
+						{{/droitModification}}
+					{{/contacts}}
+					{{#if contacts}}
+						<table class="table table-stripped tablesorter"> 
+							<thead>
+								<tr> 
+									<th>Nom</th>
+									<th>Prénom</th>
+									<th>Poste</th> 
+									<th>Email</th> 
+									<th>Tel</th>
+									<th class="first">Lieu</th>
+									<th>Priorité</th>
+									<th>
+										{{#droitModification}}
+											<a data-toggle="modal" href="#modalUpdateContact" title="Ajouter Contact" class="btn  btn-mini btn-ajoutContact"><i class="icon-plus"></i></a>
+										{{/droitModification}}
+									</th>
+							</thead>
+							<tbody>
+								{{#each contacts}}
+									<tr>
+										<td><strong>{{this.personne.nom}}</strong></td>
+										<td>{{personne.prenom}}</td>
+										<td><em>{{fonction}}</em></td> 
+										<td>
+											{{#personne.mails}}
+													{{afficherEmail this}}
+											{{/personne.mails}}
+										</td>
+										<td>
+											{{#personne.telephones}}
+													{{afficherTel this}}
+											{{/personne.telephones}}
+										</td>
+										<td class="first">
+											{{#ville}}
+													<span style="display: none;">{{code_postal}}</span>
+													<a rel="popover" data-content="{{code_postal}} - {{libelle}}, {{pays}}" data-placement="bottom" data-original-title="Adresse" href="http://maps.google.com/maps?q={{code_postal}}+{{libelle}},{{pays}}">
+														<i class="icon-map-marker"></i>
+													</a>
+											{{/ville}}
+										</td>
+										<td>
+											{{#if commentaire}}
+												<span rel="popover" data-content="{{commentaire}}" data-placement="bottom" data-original-title="Remarque" class="btn btn-mini btn-{{traduireCouleur priorite}}">{{traduirePrioriteContactTexte priorite}}</span>
+											{{/if}}
+											{{#unless commentaire}}
+												<span class="btn btn-mini btn-{{traduireCouleur priorite}}">{{traduirePrioriteContactTexte priorite}}</span>
+											{{/unless}}
+										</td>
+										{{#if ../droitModification}}
+											<td>
+												<a title="Editer Contact" id-contact={{id_contact}} data-toggle="modal" href="#modalUpdateContact" class="btn  btn-mini btn-modifContact">
+													<i class="icon-pencil"></i>
+												</a>
+												<a title="Supprimer Contact" id-contact={{id_contact}} class="btn btn-danger btn-mini btnSupprContact">
+													<i class="icon-remove"></i>
+												</a>
+											</td>
+										{{/if}}
+									</tr>
+								{{/each}}
+							</tbody>
+						</table>
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		<div class="accordion-group"> 
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#relations">
+					<h2>Relations</h2>
+				</a>
+			</div>
+			<div id="relations" class="accordion-body collapse">
+				<div class="accordion-inner">
+					{{^relations}}
+						Aucune relation.
+					{{/relations}}
+					{{#if relations}}
+						<table class="table table-stripped tablesorter">
+							<tbody>
+								{{^parrainage}}
+									<tr>
+										<th>Parrainage</th>
+										<td>/</td>
+										<td>
+											<span class="label label-default">Jamais</span>
+										</td>
+									</tr>
+								{{/parrainage}}
+								{{#if parrainage}}
+									<tr>
+										<th rowspan={{this.length}}>Parrainage</th>
+										<td>Promo {{this.0.annee}}</td>
+										<td>
+											<span class="label label-{{traduireCouleur this.0.couleur}}">{{this.0.commentaire}}</span>
+										</td>
+									</tr>
+									{{#each this}}
+										'<tr>
+											<td>Promo {{annee}}</td>
+											<td>
+												<span class="label label-{{traduireCouleur this.0.couleur}}">{{commentaire}}</span>
+											</td>
+										</tr>
+									{{/each}}
+								{{/if}}
+								
+								{{^rif}}
+									<tr>
+										<th>RIF</th>
+										<td>/</td>
+										<td>
+											<span class="label label-default">Jamais</span>
+										</td>
+									</tr>
+								{{/rif}}
+								{{#if rif}}
+									<tr>
+										<<th rowspan={{this.length}}>RIF</th>
+										<td>Promo {{this.0.annee}}</td>
+										<td>
+											<span class="label label-{{traduireCouleur this.0.couleur}}">{{this.0.commentaire}}</span>
+										</td>
+									</tr>
+									{{#each this}}
+										'<tr>
+											<td>Promo {{annee}}</td>
+											<td>
+												<span class="label label-{{traduireCouleur this.0.couleur}}">{{commentaire}}</span>
+											</td>
+										</tr>
+									{{/each}}
+								{{/if}}
+								
+								{{^stages}}
+									<tr>
+										<th>Stages</th>
+										<td>/</td>
+										<td>
+											<span class="label label-default">Jamais</span>
+										</td>
+									</tr>
+								{{/stages}}
+								{{#if stages}}
+									<tr>
+										<<th rowspan={{this.length}}>Stages</th>
+										<td>Promo {{this.0.annee}}</td>
+										<td>
+											<span class="label label-{{traduireCouleur this.0.couleur}}">{{this.0.nbSujets}} sujet(s)</span>
+										</td>
+									</tr>
+									{{#each this}}
+										'<tr>
+											<td>Promo {{annee}}</td>
+											<td>
+												<span class="label label-{{traduireCouleur this.0.couleur}}">{{nbSujets}} sujet(s)</span>
+											</td>
+										</tr>
+									{{/each}}
+								{{/if}}
+								
+								{{^entretiens}}
+									<tr>
+										<th>Entretiens</th>
+										<td>/</td>
+										<td>
+											<span class="label label-default">Jamais</span>
+										</td>
+									</tr>
+								{{/entretiens}}
+								{{#if entretiens}}
+									<tr>
+										<<th rowspan={{this.length}}>Entretiens</th>
+										<td>Promo {{this.0.annee}}</td>
+										<td>
+											<span class="label label-{{traduireCouleur this.0.couleur}}">{{this.0.nbSessions}} session(s)</span>
+										</td>
+									</tr>
+									{{#each this}}
+										'<tr>
+											<td>Promo {{annee}}</td>
+											<td>
+												<span class="label label-{{traduireCouleur this.0.couleur}}">{{nbSessions}} session(s)</span>
+											</td>
+										</tr>
+									{{/each}}
+								{{/if}}
+								
+							</tbody>
+						</table>
+					{{/if}}
+				</div>
+			</div>
+		</div>
+		<div class="accordion-group"> 
+			<div class="accordion-heading">
+				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#remarques">
+					<h2>Remarques</h2>
+				</a>
+			</div>
+			<div id="remarques" class="accordion-body collapse">
+				<div class="accordion-inner">
+					{{^commentaires}}
+						Aucun commentaire. <a data-toggle="modal" href="#modalAjoutCommentaire" title="Ajouter Commentaire" class="btn  btn-mini"><i class="icon-plus"></i></a>
+					{{/commentaires}}
+					{{#if commentaires}}
+						<table class="table table-stripped tablesorter">
+							<thead>
+								<tr> 
+									<th class="first"></th>
+									<th>Auteur</th>
+									<th class="first">Poste</th>
+									<th>Date</th>
+									<th>Commentaires</th>
+									<th>
+										{{#droitModification}}
+											<a data-toggle="modal" href="#modalAjoutCommentaire" title="Ajouter Commentaire" class="btn  btn-mini btn-ajoutCommentaire"><i class="icon-plus"></i></a>
+										{{/droitModification}}
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								{{#each commentaires}}
+										<tr>
+											<td class="first">
+												<span style="display: none;">{{categorie}}</span>{{traduireCategorieCommentaire categorie}}
+											</td> 
+											<td>{{personne.prenom}} {{personne.nom}}</td> 
+											<td><small>{{traduireRole personne.role}}</small></td> 
+											<td>{{timestamp}}</td>
+											<td>{{contenu}}</td>
+											{{#if ../droitModification}}
+												<td>
+													<a title="Supprimer Commentaire" id-commentaire={{id_commentaire}} class="btn btn-danger btn-mini btnSupprCommentaire"><i class="icon-remove"></i></a>
+												</td>
+											{{/if}}											
+										</tr>
+								{{/each}}
+							</tbody>
+						</table>
+					{{/if}}
+				</div>
+			</div>
+		</div>
+	</div>
+
+</script>

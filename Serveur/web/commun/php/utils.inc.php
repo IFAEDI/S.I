@@ -50,6 +50,7 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
     $module = trim( $_module );
     $nom_fichier = trim( $_nom_fichier );
     $type = trim( $_type );
+	$path = "";
 
     if ($type == 'php') {
         if ($module == '') {
@@ -86,6 +87,17 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
 
         if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
             echo "<script type=\"text/javascript\" src=\"$path\"></script>";
+            return;
+        }
+    } else if ($type == 'template') {
+        if ($module == '') {
+            $path = "$module/$nom_fichier.html";
+        } else {
+            $path = "$module/template/$nom_fichier.html";
+        }
+
+        if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
+            require_once($path);
             return;
         }
     }

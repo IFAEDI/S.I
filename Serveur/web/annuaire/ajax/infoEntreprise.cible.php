@@ -81,39 +81,51 @@ inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 if (verifierPresent('id')) {
 	$id_entreprise = intval($_POST['id']);
+	
+	/*
+	 * Appeler la couche du dessous
+	 */
+	/* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
+	if (gettype($entreprise) == "int" && $entreprise == Entreprise::getErreurExecRequete()) {
+		$json['code'] = 'errorBDD';
+	}
+	else {
+		/* objet */ $contacts = NULL;
+		/* objet */ $commentaires = NULL;
+		if ($entreprise != NULL) {
+			$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
+			$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
+
+			$json['entreprise']['description'] = $entreprise->toArrayObject();
+			if (gettype($contacts) == 'array') {
+				$json['entreprise']['contacts'] = Array();
+				foreach( $contacts as $contact ) {
+					array_push($json['entreprise']['contacts'], $contact->toArrayObject(false, true, true, true, false, false, false));
+				}
+			}
+			if (gettype($commentaires) == 'array') {
+				$json['entreprise']['commentaires'] = Array();
+				foreach( $commentaires as $commentaire ) {
+					array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
+				}
+			}
+			
+			$json['code'] = 'ok';
+		}
+		else {
+			$json['code'] = 'noEntr';
+		}
+	}
+}
+else {
+	$json['code'] = 'errorChamp';
 }
 
-/*
- * Appeler la couche du dessous
- */
-/* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
-/* objet */ $contacts = NULL;
-/* objet */ $commentaires = NULL;
-if ($entreprise != NULL) {
-	$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
-	$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
-}
+
 
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($entreprise != NULL) ? 'ok' : 'error';
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-if ($entreprise != NULL) {
-	$json['entreprise']['description'] = $entreprise->toArrayObject();
-	if (gettype($contacts) == 'array') {
-		$json['entreprise']['contacts'] = Array();
-		foreach( $contacts as $contact ) {
-			array_push($json['entreprise']['contacts'], $contact->toArrayObject(false, true, true, true, false, false, false));
-		}
-	}
-	if (gettype($commentaires) == 'array') {
-		$json['entreprise']['commentaires'] = Array();
-		foreach( $commentaires as $commentaire ) {
-			array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
-		}
-	}
-}
 echo json_encode($json);
 
 

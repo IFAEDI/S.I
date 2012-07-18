@@ -58,8 +58,8 @@ if (verifierPresent('description')) {
 if (verifierPresent('commentaire')) {
 	$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
 }
-if (verifierPresent('id')) {
-	$id_entreprise = intval($_POST['id']);
+if (verifierPresent('id_entreprise')) {
+	$id_entreprise = intval($_POST['id_entreprise']);
 }
 
 /*
@@ -71,10 +71,15 @@ if (verifierPresent('id')) {
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($id != -1) ? 'ok' : 'error';
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-if ($id != -1) {
-	$json['id'] = $id;
+if ($id === 0) {
+	$json['code'] = 'errorChamp';
+}
+elseif ($id === Entreprise::getErreurExecRequete()) {
+	$json['code'] = 'errorBDD';
+}
+else {
+	$json['code'] = 'ok';
+	$json['id'] = ($id_entreprise != 0)?0:$id;
 }
 echo json_encode($json);
 

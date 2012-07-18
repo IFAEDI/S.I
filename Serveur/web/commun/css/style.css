@@ -32,13 +32,22 @@ table.tablesorter thead tr .headerSortDown {
 	margin-top: 20px;
 }
 
-#annuaire .liste_entreprises {
+#annuaire #liste{
 	height: 500px;
 	overflow: scroll;
 }
 
+#annuaire #recherche{
+	height: 100px;
+}
+
 #annuaire table .first{
 	width: 20px;
+}
+
+#annuaire #formSearchContactButton{
+	text-align:center;
+	margin:10px;
 }
 
 #annuaire .entreprise:hover{
@@ -64,6 +73,10 @@ table.tablesorter thead tr .headerSortDown {
 	float:right;
 	margin-top: 10px;
 	margin-left:5px;
+}
+
+#text-centered .text-centered {
+	text-align: middle;
 }
 
 /* ---------- MODULE STAGE ---------- */

@@ -18,6 +18,13 @@ inclure_fichier('controleur', 'entreprise.class', 'php');
 
 class Contact {
 
+	//****************  Constantes  ******************//
+	private static $ERREUR_EXEC_REQUETE = -10;
+	public static function getErreurExecRequete() { return self::$ERREUR_EXEC_REQUETE; }
+	
+	private static $ERREUR_CHAMP_INCONNU = -20;
+	public static function getErreurChampInconnu() { return self::$ERREUR_CHAMP_INCONNU; }
+	
 	//****************  Attributs  ******************//
 	private $ID_CONTACT;
 	private $ID_ENTREPRISE;
@@ -70,20 +77,20 @@ class Contact {
 
 		$obj = array();
 
-                /* Tentative de sélection de tous les ID ordonnés par priorité */
-                $result = BD::executeSelect( 'SELECT ID_CONTACT FROM CONTACT_ENTREPRISE ORDER BY PRIORITE', array(), BD::RECUPERER_TOUT );
-                if( $result == null ) {
-                        return null;
-                }
+		/* Tentative de sélection de tous les ID ordonnés par priorité */
+		$result = BD::executeSelect( 'SELECT ID_CONTACT FROM CONTACT_ENTREPRISE ORDER BY PRIORITE', array(), BD::RECUPERER_TOUT );
+		if( $result == null ) {
+				return null;
+		}
 
-                /* Pour chacun, on construit l'objet */
-                $i = 0;
-                foreach( $result as $row ) {
-                        $obj[$i] = self::GetContactByID( $row['ID_CONTACT'] );
-                        $i++;
-                }
+		/* Pour chacun, on construit l'objet */
+		$i = 0;
+		foreach( $result as $row ) {
+				$obj[$i] = self::GetContactByID( $row['ID_CONTACT'] );
+				$i++;
+		}
 
-                return $obj;
+		return $obj;
 	}
 	
 	/**
@@ -115,6 +122,149 @@ class Contact {
 	}
 
 	/**
+	 * Recherche des contacts appropriés selon des mots clés donnés.
+	 *
+	 * $listeElementsRecherche : Tableau contenant les mots clés et les champs auquels chacun s'applique (si ce champ vaut "*", alors le mot-clé doit être appliqué à tous les champs possibles)
+	 *
+	 * @return Une liste de contact triés par entreprise si la requête s'est bien passée, une erreur sinon.
+	 */
+
+	static function Rechercher($listeElementsRecherche) {
+
+		$requete = 'SELECT ID_CONTACT FROM CONTACT_ENTREPRISE c 
+			 LEFT OUTER JOIN ENTREPRISE e ON c.ID_ENTREPRISE = e.ID_ENTREPRISE
+			 LEFT OUTER JOIN VILLE v ON c.ID_VILLE = v.ID_VILLE
+			 LEFT OUTER JOIN PERSONNE p ON c.ID_PERSONNE = p.ID_PERSONNE
+			 LEFT OUTER JOIN MAIL m ON m.ID_PERSONNE = p.ID_PERSONNE
+			 LEFT OUTER JOIN TELEPHONE t ON t.ID_PERSONNE = p.ID_PERSONNE
+			 WHERE 1=1';
+			
+		$clauseWhere = array();
+		$parametres = array();
+		
+		$i = 0;
+		foreach( $listeElementsRecherche as $el ) {
+			$champConcerne = $el['champ'];
+			$val = $el['val'];
+			$valLike = '%'.$val.'%';
+			if (isset($champConcerne)) { // Si ce champs est non-nul, alors on limite la recherche à celui-ci, sauf s'il vaut '*' :
+				if ($champConcerne == 'nom' ) {
+					array_push($clauseWhere, 'p.NOM LIKE :nom'.$i);
+					$parametres['nom'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'prénom') {
+					array_push($clauseWhere, 'p.PRENOM LIKE :prenom'.$i);
+					$parametres['prenom'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'job') {
+					array_push($clauseWhere, 'c.FONCTION LIKE :poste'.$i);
+					$parametres['poste'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'entr') {
+					array_push($clauseWhere, 'e.NOM LIKE :entr'.$i);
+					$parametres['entr'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'entr') {
+					array_push($clauseWhere, 'e.NOM LIKE :entr'.$i);
+					$parametres['entr'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'email') {
+					array_push($clauseWhere, 'm.MAIL LIKE :email'.$i);
+					$parametres['email'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'tel') {
+					array_push($clauseWhere, 't.NUMERO LIKE :tel'.$i);
+					$parametres['tel'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'ville') {
+					array_push($clauseWhere, 'v.LIBELLE_VILLE LIKE :ville'.$i);
+					$parametres['ville'.$i] = $valLike;
+				}else if ($champConcerne == 'cp') {
+					array_push($clauseWhere, 'v.CP_VILLE LIKE :cp'.$i);
+					$parametres['cp'.$i] = $valLike;
+				}else if ($champConcerne == 'pays') {
+					array_push($clauseWhere, 'v.PAYS_VILLE LIKE :pays'.$i);
+					$parametres['pays'.$i] = $valLike;
+				}else if ($champConcerne == 'rem') {
+					array_push($clauseWhere, 'c.COMMENTAIRE LIKE :rem'.$i);
+					$parametres['rem'.$i] = $valLike;
+				}
+				else if ($champConcerne == 'prio') {
+					array_push($clauseWhere, 'c.PRIORITE LIKE :prio'.$i);
+					$parametres['prio'.$i] = $valLike;
+				}
+				else if ($champConcerne == '*') { // On porte la comparaison sur tous les champs prévus :
+				array_push($clauseWhere, '(p.NOM LIKE :nom'.$i. ' OR p.PRENOM LIKE :prenom'.$i.' OR c.FONCTION LIKE :poste'.$i.' OR e.NOM LIKE :entr'.$i.' OR m.MAIL LIKE :email'.$i.' OR t.NUMERO LIKE :tel'.$i.' OR v.LIBELLE_VILLE LIKE :ville'.$i.' OR v.CP_VILLE LIKE :cp'.$i.' OR v.PAYS_VILLE LIKE :pays'.$i.' OR c.COMMENTAIRE LIKE :rem'.$i.' OR c.PRIORITE LIKE :prio'.$i.')');
+				$parametres['nom'.$i] = $valLike;
+				$parametres['prenom'.$i] = $valLike;
+				$parametres['poste'.$i] = $valLike;
+				$parametres['email'.$i] = $valLike;
+				$parametres['tel'.$i] = $valLike;
+				$parametres['entr'.$i] = $valLike;
+				$parametres['ville'.$i] = $valLike;
+				$parametres['cp'.$i] = $valLike;
+				$parametres['pays'.$i] = $valLike;
+				$parametres['rem'.$i] = $valLike;
+				$parametres['prio'.$i] = $valLike;
+				}
+				else return Contact::getErreurChampInconnu();
+			}
+			
+			$i++;
+		}
+
+		$nbCond = count($clauseWhere);
+		for ($i = 0; $i < $nbCond; $i++) {
+			$requete .= ' AND '.$clauseWhere[$i];
+		}
+		
+		$requete .= ' ORDER BY e.NOM asc';
+		
+		try {
+			$result = BD::executeSelect( $requete, $parametres, BD::RECUPERER_TOUT );
+		}
+		catch (Exception $e) {
+			return Contact::getErreurExecRequete();
+		}
+		if( $result == null ) {
+				return null;
+		}
+
+		/* Pour chacun, on construit l'objet */
+		$i = 0;
+		foreach( $result as $row ) {
+				$obj[$i] = self::GetContactByID( $row['ID_CONTACT'] );
+				$i++;
+		}
+
+		return $obj;
+	}
+	
+	/**
+	* Récuperation des noms de poste/fonction des contacts en BDD
+	* @return Un tableau de postes (String)
+	* @throws Une exception en cas d'erreur au niveau des requêtes
+	*/
+	public static function GetListeFonctions() {
+
+		$obj = array();
+
+		/* Tentative de sélection de tous les ID ordonnés par nom */
+		$result = BD::executeSelect( 'SELECT DISTINCT FONCTION FROM CONTACT_ENTREPRISE', array(), BD::RECUPERER_TOUT );
+
+		if( $result == null ) {
+			return null;
+		}
+
+		/* On consturit une réponse lisible (fonction BD::executeSelect à améiorer pour ça ...) */
+		foreach( $result as $row ) {
+			array_push($obj, $row['FONCTION']);
+		}
+
+		return $obj;
+	}
+
+	/**
 	* Suppression d'un contact par son ID
 	* $_id : L'identifiant du contact à supprimer
 	* @return True si tout est ok, false sinon
@@ -122,16 +272,16 @@ class Contact {
 	*/
 	public static function SupprimerContactByID(/* int */ $_id) {
 
-		if( !is_numeric($_id) ) {
-			return false;
+		$result = 0;
+		try {
+			$result = BD::executeModif( 'DELETE FROM CONTACT_ENTREPRISE WHERE ID_CONTACT = :id', array('id' => $_id));
+		}
+		catch (Exception $e) {
+			return Entreprise::getErreurExecRequete();;
 		}
 
-		$result = BD::executeModif( 'DELETE FROM CONTACT_ENTREPRISE WHERE ID_CONTACT = :id', array('id' => $_id));
-		if( $result == 0 ) {
-			return false;
-		}
+		return $result;
 
-		return true;
 	}
 
 	/**
@@ -146,30 +296,30 @@ class Contact {
 
 		/* Il faut impérativement une instance entreprise et une instance de personne passée en paramètre */
 		if( $_entreprise == null || $_personne == null ) {
-			return -1;
+			return Contact::getErreurChampInconnu();
 		}
-
+		$result=0;
+		
 		/* Mise à jour du contact */
 		if( $_id > 0 ) {
 	
 			/* Préparation du tableau associatif */
 			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
-
+		
 			/* Execution de la requête */
-			$result = BD::executeModif( 'UPDATE CONTACT_ENTREPRISE SET
-				ID_PERSONNE = :idPersonne,
-				ID_ENTREPRISE = :idEntreprise,
-				ID_VILLE = :idVille,
-				FONCTION = :fonction,
-				COMMENTAIRE = :commentaire,
-				PRIORITE = :priorite
-				WHERE ID_CONTACT = :id', $info );
-
-			if( $result == 0 ) {
-				return -1;
+			try {
+				$result = BD::executeModif( 'UPDATE CONTACT_ENTREPRISE SET
+					ID_PERSONNE = :idPersonne,
+					ID_ENTREPRISE = :idEntreprise,
+					ID_VILLE = :idVille,
+					FONCTION = :fonction,
+					COMMENTAIRE = :commentaire,
+					PRIORITE = :priorite
+					WHERE ID_CONTACT = :id', $info );
 			}
-			
-			return 0;
+			catch (Exception $e) {
+				return Contact::getErreurExecRequete();;
+			}
 		}
 		/* Ajout d'un nouveau contact */
 		else {
@@ -177,18 +327,21 @@ class Contact {
 			/* Préparation du tableau associatif */
 			$info = array( 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 
 				'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
-
+			
 			/* Execution de la requête */
-			$result = BD::executeModif( 'INSERT INTO CONTACT_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
-			if( $result == 0 ) {
-				return -1;
+			try {
+				$result = BD::executeModif( 'INSERT INTO CONTACT_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
+				if ($result != 0) {
+					/* Récupération de l'identifiant du nouveau contact */
+					$result = BD::getConnection()->lastInsertId();
+				}
 			}
-
-			/* Récupération de l'identifiant du nouveau contact */
-			$_id = BD::getConnection()->lastInsertId();
+			catch (Exception $e) {
+				return Contact::getErreurExecRequete();;
+			}
 		}
 
-		return $_id;
+		return $result;
 	}
 
     //****************  Fonctions  ******************//

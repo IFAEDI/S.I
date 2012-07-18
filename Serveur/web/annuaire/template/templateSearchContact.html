@@ -1,0 +1,72 @@
+<script id="templateSearchContact" type="text/x-handlebars-template" >
+	<div id="search-contacts">
+		{{^entreprises}}
+			Aucun contact correspondant.
+		{{/entreprises}}
+		{{#if entreprises}}
+			<table class="table table-stripped tablesorter"> 
+				<thead>
+					<tr> 
+						<th>Entreprise</th>
+						<th>Nom</th>
+						<th>Prénom</th>
+						<th>Poste</th> 
+						<th>Email</th> 
+						<th>Tel</th>
+						<th class="first">Lieu</th>
+						<th>Priorité</th>
+						<th></th>
+				</thead>
+				<tbody>
+					{{#each entreprises}}
+						{{#each contacts}}
+							<tr>
+								<td class="entr"><a id-entreprise='{{../id}}' href="#{{../nom}}"><strong>{{../nom}}</strong></td>
+								<td class="nom"><strong>{{this.personne.nom}}</strong></td>
+								<td class="prénom">{{personne.prenom}}</td>
+								<td class="job"><em>{{fonction}}</em></td> 
+								<td class="mail">
+									{{#personne.mails}}
+											{{afficherEmail this}}
+									{{/personne.mails}}
+								</td>
+								<td class="tel">
+									{{#personne.telephones}}
+											{{afficherTel this}}
+									{{/personne.telephones}}
+								</td>
+								<td class="first ville cp pays">
+									{{#ville}}
+											<span style="display: none;">{{code_postal}}</span>
+											<a rel="popover" data-content="{{code_postal}} - {{libelle}}, {{pays}}" data-placement="bottom" data-original-title="Adresse" href="http://maps.google.com/maps?q={{code_postal}}+{{libelle}},{{pays}}">
+												<i class="icon-map-marker"></i>
+											</a>
+									{{/ville}}
+								</td>
+								<td class="rem prio">
+									{{#if commentaire}}
+										<span rel="popover" data-content="{{commentaire}}" data-placement="bottom" data-original-title="Remarque" class="btn btn-mini btn-{{traduireCouleur priorite}}">{{traduirePrioriteContactTexte priorite}}</span>
+									{{/if}}
+									{{#unless commentaire}}
+										<span class="btn btn-mini btn-{{traduireCouleur priorite}}">{{traduirePrioriteContactTexte priorite}}</span>
+									{{/unless}}
+									
+								</td>
+								{{#if ../../droitModification}}
+									<td>
+										<a title="Editer Contact" id-contact={{id_contact}} data-toggle="modal" href="#modalUpdateContact" class="btn  btn-mini btn-modifContact">
+											<i class="icon-pencil"></i>
+										</a>
+										<a title="Supprimer Contact" id-contact={{id_contact}} class="btn btn-danger btn-mini btnSupprContact">
+											<i class="icon-remove"></i>
+										</a>
+									</td>
+								{{/if}}
+							</tr>
+						{{/each}}
+					{{/each}}
+				</tbody>
+			</table>
+		{{/if}}
+	</div>
+</script>

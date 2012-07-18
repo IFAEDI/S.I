@@ -56,9 +56,14 @@ if (verifierPresent('idVille')) {
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($id != NULL) ? 'ok' : 'error';
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
+if ($id == 0) {
+	$json['code'] = 'errorChamp';
+}
+else if ($id == Entreprise::getErreurExecRequete()) {
+	$json['code'] = 'errorBDD';
+}
 if ($id != NULL) {
+	$json['code'] = 'ok';
 	$json['id'] = $id;
 }
 echo json_encode($json);
