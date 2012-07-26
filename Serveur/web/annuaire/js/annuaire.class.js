@@ -24,8 +24,28 @@ Annuaire.infoEntrepriseCourante = {};
 // Array contenant la liste des noms d'entreprise par ID
 Annuaire.listeEntreprises = [];
 
+// Array contenant la liste des secteurs déja entrés, servant ainsi pour l'autocomplétion.
+Annuaire.listeSecteurs = [];
+
+// Array contenant la liste des postes déja entrés, servant ainsi pour l'autocomplétion.
+Annuaire.listePostes = [];
+
 // Info sur l'utilisateur :
 Annuaire.utilisateur = {};
+
+// Templates HTML (Handlebars) :
+Annuaire.templates = {};
+
+// -------------------------- CONSTANTES -------------------------- //
+Annuaire.Erreurs = {
+	AJAX_INVALIDE : 'erreurRequete',
+	SQL_INVALIDE : 'errorBDD',
+	CHAMP_INVALIDE : 'erreurChamp'
+};
+
+Annuaire.Colors = {
+	SEARCH_RESULTS_BACKGROUND : '#BED2FF'
+};
 
 // ------------------------ REQUETAGE AJAX ------------------------ //
 
@@ -91,6 +111,70 @@ Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEn
 };
 
 /** 
+ * ---- chercherContacts
+ * Interroge le serveur pour récupérer l'ensemble des contacts correspondant au mots-clés donnés - Requétage Ajax
+ * Paramètres :
+ *		- RIEN
+ * Retour :
+ *		- OBJET - Informations sur les contacts organisés par entreprise
+ *		Structure/Exemple de l'objet réponse :
+			[
+				{
+					nom: "Atos",
+					id : 1,
+					contacts: [
+						{id: 1, nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
+						{id: 2, nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+				]},
+				{
+					nom: "Fiducial",
+					id : 2,
+					contacts: [
+						{id: 1, nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
+						{id: 2, nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+				]},
+				
+			]
+ */
+Annuaire.chercherContacts = function chercherContacts() {
+	// Vérification du formulaire :
+	var /* string */ unprocessedKeywords = $('#formSearchContactKeywords').val();
+	if (unprocessedKeywords == null || unprocessedKeywords == '') { Annuaire.afficherEmail('Veuillez entrer des mots-clés pour votre recherche.'); return; }
+	
+	// Traitement des keywords :
+	// -- Etape 1) Séparation des couples et/ou mots-clés seuls.	ex : "entr:Atos nom:Black, postier Lyon" , Paris" devient ["entr: Atos", "nom:Black", "postier", Lyon"]
+	var splittedKeywords = unprocessedKeywords.split(/[\s,;]+/);
+	
+	// -- Etape 2) Isolation du champs et de la valeur dans les couples.	ex : ["entr:Atos", "nom:Black", "postier", Lyon"] devient [["entr", Atos"], ["nom", "Black"], [null, "postier"], [null, "Lyon"]]
+	var processedKeywords = new Array();
+	for (var k in splittedKeywords) {
+		var splittedCouple = splittedKeywords[k].split(/:/);
+		if ( splittedCouple.length == 2) {
+			processedKeywords.push({'champ':splittedCouple[0], 'val':splittedCouple[1]});
+		}
+		else {
+			processedKeywords.push({'champ':'*', 'val':splittedCouple[0]});
+		}
+	}
+	
+	// Requête Ajax :
+	var /* objet */ requete = $.ajax({
+		url: "./annuaire/ajax/searchContact.cible.php",
+		type: "POST",
+		data: {keywords : processedKeywords},
+		dataType: "json"
+	});
+
+	requete.done(function(donnees) {
+		Annuaire.afficherResultatRechercheContacts(donnees, processedKeywords);
+	});
+	requete.fail(function(jqXHR, textStatus) {
+		Annuaire.afficherErreur( "AJAX - Echec de la requête : " + textStatus );
+	});
+
+};
+
+/** 
  * ---- updaterEntreprise
  * Valide le formulaire d'ajout/modification d'une entreprise & transmet les informations à la cible PHP.
  * Paramètres :
@@ -101,80 +185,89 @@ Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEn
 Annuaire.updaterEntreprise = function updaterEntreprise() {
 	// Vérification du formulaire :
 	var /* string */ nomEntr = $('#formUpdateEntrepriseNom').val();
-	
-	if ($("#formUpdateEntreprise").validate()) {
-	
-		/* int */ var idEntrepriseActuelle = -1
-		if ($('#formUpdateEntrepriseId').val() != "0") {
-			idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
-		}
 		
-		// Envoi :
-		var description = {id: parseInt($('#formUpdateEntrepriseId').val()), nom : encodeURIComponent(nomEntr), secteur: encodeURIComponent($('#formUpdateEntrepriseSecteur').val()), description: encodeURIComponent($('#formUpdateEntrepriseDescription').val())};
-		var /* objet */ requete = $.ajax({
-			url: "./annuaire/ajax/updateEntreprise.cible.php",
-			type: "POST",
-			data: description,
-			dataType: "json"
+	/* int */ var idEntrepriseActuelle = -1
+	if ($('#formUpdateEntrepriseId').val() != "0") {
+		idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
+	}
+	
+	// Envoi :
+	var description = {id_entreprise: parseInt($('#formUpdateEntrepriseId').val()), nom : encodeURIComponent(nomEntr), secteur: encodeURIComponent($('#formUpdateEntrepriseSecteur').val()), description: encodeURIComponent($('#formUpdateEntrepriseDescription').val())};
+	var /* objet */ requete = $.ajax({
+		url: "./annuaire/ajax/updateEntreprise.cible.php",
+		type: "POST",
+		data: description,
+		dataType: "json"
+	});
+	
+	// Ajout du secteur à la liste si nouveau.
+	if ($.inArray($('#formUpdateEntrepriseSecteur').val(), Annuaire.listeSecteurs) == -1) {
+		Annuaire.listeSecteurs.push($('#formUpdateEntrepriseSecteur').val());
+		$('#formUpdateEntrepriseSecteur').typeahead({
+			source: Annuaire.listeSecteurs
 		});
-		
-		// RAZ du form :
-		$('#modalUpdateEntreprise').modal('hide');
-		resetForm($('#formUpdateEntreprise'));
-		$('#formUpdateEntrepriseDescription').val('');
-		$('#formUpdateEntrepriseId').val(0);
+	}
+	
+	// RAZ du form :
+	$('#modalUpdateEntreprise').modal('hide');
+	resetForm($('#formUpdateEntreprise'));
+	$('#formUpdateEntrepriseDescription').val('');
+	$('#formUpdateEntrepriseId').val(0);
 
-		requete.done(function(donnees) {
-			if (donnees.code == "ok") {
-				if (donnees.id > 0) { // Ajout d'une entreprise :
-					Annuaire.insererEntrepriseDansListe({id_entreprise: donnees.id, nom: nomEntr});
-					Annuaire.afficherListeEntreprises();
+	requete.done(function(donnees) {
+		if (donnees.code == "ok") {
+			if (donnees.id > 0) { // Ajout d'une entreprise :
+				Annuaire.insererEntrepriseDansListe({id_entreprise: donnees.id, nom: nomEntr});
+				Annuaire.afficherListeEntreprises();
+				description.nom = decodeURIComponent(description.nom );
+				description.secteur = decodeURIComponent(description.secteur );
+				description.description = decodeURIComponent(description.description );
+				container = {'description' : description};
+				Annuaire.infoEntrepriseCourante = container;
+				var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
+				Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
+				// On demande si l'utilisateur veut ajouter tout de suite des contacts :
+				Annuaire.confirmerAction('Entreprise ajoutée !<br/> Voulez-vous ajouter des contacts tout de suite ?', 'alert-success', function(id) {
+					$('#formUpdateContactEntrepriseId').val(id);
+					$('#modalUpdateContact').modal('show');
+				}, donnees.id);
+			}
+			else if (donnees.id == 0) { // Edition d'une entreprise :
+				Annuaire.confirmerAction('Entreprise éditée !<br/> Voulez-vous également ajouter de nouveaux contacts ?', 'alert-success', function(id) {
+					$('#formUpdateContactEntrepriseId').val(id);
+					$('#modalUpdateContact').modal('show');
+				}, Annuaire.infoEntrepriseCourante.description.id_entreprise);
+				
+				if (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise) {
 					description.nom = decodeURIComponent(description.nom );
 					description.secteur = decodeURIComponent(description.secteur );
 					description.description = decodeURIComponent(description.description );
 					Annuaire.infoEntrepriseCourante.description = description;
 					var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
 					Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
-					// On demande si l'utilisateur veut ajouter tout de suite des contacts :
-					Annuaire.confirmerAction('Entreprise ajoutée !<br/> Voulez-vous ajouter des contacts tout de suite ?', 'alert-success', function(id) {
-						$('#formUpdateContactEntrepriseId').val(id);
-						$('#modalUpdateContact').modal('show');
-					}, donnees.id);
 				}
-				else if (donnees.id == 0) { // Edition d'une entreprise :
-					Annuaire.confirmerAction('Entreprise éditée !<br/> Voulez-vous également ajouter de nouveaux contacts ?', 'alert-success', function(id) {
-						$('#formUpdateContactEntrepriseId').val(id);
-						$('#modalUpdateContact').modal('show');
-					}, Annuaire.infoEntrepriseCourante.description.id_entreprise);
-					
-					if (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise) {
-						description.nom = decodeURIComponent(description.nom );
-						description.secteur = decodeURIComponent(description.secteur );
-						description.description = decodeURIComponent(description.description );
-						Annuaire.infoEntrepriseCourante.description = description;
-						var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
-						Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
-					}
-					// Si MAJ du nom, ca et à jour la liste ...
-					Annuaire.retirerEntrepriseDeListe(description.id);
-					Annuaire.insererEntrepriseDansListe({id_entreprise: description.id, nom: nomEntr});
-					Annuaire.afficherListeEntreprises(); // Si MAJ du nom, ca et à jour la liste ...
-				}
-				else {
-					Annuaire.afficherErreur('Entreprise - Une erreur est survenue (id = '+donnees.id+')' );
-				}
+				// Si MAJ du nom, ca met à jour la liste ...
+				Annuaire.retirerEntrepriseDeListe(description.id_entreprise);
+				Annuaire.insererEntrepriseDansListe({id_entreprise: description.id, nom: nomEntr});
+				Annuaire.afficherListeEntreprises(); // Si MAJ du nom, ca met à jour la liste ...
 			}
 			else {
-				Annuaire.afficherErreur('Entreprise - Une erreur est survenue ('+donnees.code+')' );
+				Annuaire.afficherErreur('Entreprise - Une erreur est survenue (id = '+donnees.id+')' );
 			}
-		});
-		requete.fail(function(jqXHR, textStatus) {
-			Annuaire.afficherErreur('Entreprise - Une erreur est survenue ('+textStatus+')' );
-		});
-		
-		
-		
-	}
+		}
+		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
+			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
+		}
+		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
+			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
+		}
+		else {
+			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+		}
+	});
+	requete.fail(function(jqXHR, textStatus) {
+		Annuaire.afficherErreur('Entreprise - Une erreur est survenue ('+textStatus+')' );
+	});
 };
 
 /** 
@@ -186,118 +279,129 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
  *		- RIEN (Page directement modifiée)
  */
 Annuaire.updaterContact = function updaterContact() {
-	// Vérification du formulaire :
-	if ($("#formUpdateContact").validate()) {
+
+	var idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
 	
-		var idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
-		
-		// Récupération de données complexes :
-		var /* array */ tels = [];
-		$('#formUpdateContactTelGroup ul').children().each(function(){
-			tels.push([$(this).find('.labelVal').attr('title'), $(this).find('.val').text()]);
-		});
-		if ($('#formUpdateContactTel').val() != '') { tels.push([encodeURIComponent($('#formUpdateContactTelLabel option:selected').val()), encodeURIComponent($('#formUpdateContactTel').val())]); }
-		
-		var /* array */ emails = [];
-		$('#formUpdateContactEmailGroup ul').children().each(function(){
-			emails.push([$(this).find('.labelVal').attr('title'), $(this).find('.val').text()]);
-		});
-		if ($('#formUpdateContactEmail').val() != '') { emails.push([encodeURIComponent($('#formUpdateContactEmailLabel option:selected').val()), encodeURIComponent($('#formUpdateContactEmail').val())]); }
-		
-		// Envoi :
-		var /* objet */ nouveauContact = {
-			id: parseInt($('#formUpdateContactId').val()),
-			id_entreprise: parseInt($('#formUpdateContactEntrepriseId').val()),
-			fonction : encodeURIComponent($('#formUpdateContactPoste').val()),
-			personne : {
-				id : parseInt($('#formUpdateContactPersonneId').val()),
-				nom : encodeURIComponent($('#formUpdateContactNom').val()),
-				prenom : encodeURIComponent($('#formUpdateContactPrenom').val()),
-				mails : emails,
-				telephones : tels
-			},
-			ville : {
-				code_postal : encodeURIComponent($('#formUpdateContactVilleCodePostal').val()),
-				libelle : encodeURIComponent($('#formUpdateContactVilleLibelle').val()),
-				pays : encodeURIComponent($('#formUpdateContactVillePays').val()),
-			},
-			commentaire : encodeURIComponent($('#formUpdateContactCom').val()),
-			priorite : parseInt($('#formUpdateContactPriorite').val()),
-		};
-		var /* objet */ requete = $.ajax({
-			url: "./annuaire/ajax/updateContact.cible.php",
-			type: "POST",
-			data: nouveauContact,
-			dataType: "json"
-		});
-		
-		$('#modalUpdateContact').modal('hide');
-		Annuaire.resetFormContact();
-
-		requete.done(function(donnees) {
-			if (donnees.code == "ok") {
-				var idNouvContact = parseInt(donnees.id);
-				if ((idNouvContact >= 0) && (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise)) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
-				
-					nouveauContact.personne.id = donnees.id_personne;
-					if (typeof Annuaire.infoEntrepriseCourante.contacts === "undefined") { Annuaire.infoEntrepriseCourante.contacts = []; }					
-					nouveauContact.fonction = decodeURIComponent(nouveauContact.fonction);
-					nouveauContact.personne.nom = decodeURIComponent(nouveauContact.personne.nom);
-					nouveauContact.personne.prenom = decodeURIComponent(nouveauContact.personne.prenom);
-					for (var i in nouveauContact.personne.mails) {
-						nouveauContact.personne.mails[i][0] = decodeURIComponent(nouveauContact.personne.mails[i][0]);
-						nouveauContact.personne.mails[i][1] = decodeURIComponent(nouveauContact.personne.mails[i][1]);
-					}
-					for (var i in nouveauContact.personne.telephones) {
-						nouveauContact.personne.telephones[i][0] = decodeURIComponent(nouveauContact.personne.telephones[i][0]);
-						nouveauContact.personne.telephones[i][1] = decodeURIComponent(nouveauContact.personne.telephones[i][1]);
-					}
-					nouveauContact.ville.code_postal = decodeURIComponent(nouveauContact.ville.code_postal);
-					nouveauContact.ville.libelle = decodeURIComponent(nouveauContact.ville.libelle);
-					nouveauContact.ville.pays = decodeURIComponent(nouveauContact.ville.pays);
-					nouveauContact.commentaire = decodeURIComponent(nouveauContact.commentaire);
-
-					// On met à jour l'ancien contact ou ajoute le nouveau :
-					if (idNouvContact == 0) {
-						for (var i in Annuaire.infoEntrepriseCourante.contacts) {
-							if (Annuaire.infoEntrepriseCourante.contacts[i].id_contact == nouveauContact.id) {
-								Annuaire.infoEntrepriseCourante.contacts[i] = nouveauContact;
-								break;
-							}
-						}
-						
-					}
-					else {
-						nouveauContact.id = donnees.id;
-						Annuaire.infoEntrepriseCourante.contacts.push(nouveauContact);
-					}
-
-					var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
-					Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
-				}
-				
-				if (donnees.id > 0) { // Ajout d'un contact :
-					// On demande si l'utilisateur veut en ajouter tout de suite d'autres :
-					Annuaire.confirmerAction('Contact ajouté !<br/> Voulez-vous en ajouter d\'autres tout de suite ?', 'alert-success', function(id) {
-						$('#formUpdateContactEntrepriseId').val(id);
-						$('#modalUpdateContact').modal('show');
-					}, donnees.id);
-				}
-				else if (donnees.id == 0) { // Edition d'un contact :
-				
-				}
-				else {
-					Annuaire.afficherErreur('Contact - Une erreur est survenue (id = '+donnees.id+')' );
-				}
-			}
-			else {
-				Annuaire.afficherErreur('Contact - Une erreur est survenue ('+donnees.code+')' );
-			}
-		});
-		requete.fail(function(jqXHR, textStatus) {
-			Annuaire.afficherErreur('Contact - Une erreur est survenue ('+textStatus+')' );
+	// Récupération de données complexes :
+	var /* array */ tels = [];
+	$('#formUpdateContactTelGroup ul').children().each(function(){
+		tels.push([$(this).find('.labelVal').attr('title'), $(this).find('.val').text()]);
+	});
+	if ($('#formUpdateContactTel').val() != '') { tels.push([encodeURIComponent($('#formUpdateContactTelLabel option:selected').val()), encodeURIComponent($('#formUpdateContactTel').val())]); }
+	
+	var /* array */ emails = [];
+	$('#formUpdateContactEmailGroup ul').children().each(function(){
+		emails.push([$(this).find('.labelVal').attr('title'), $(this).find('.val').text()]);
+	});
+	if ($('#formUpdateContactEmail').val() != '') { emails.push([encodeURIComponent($('#formUpdateContactEmailLabel option:selected').val()), encodeURIComponent($('#formUpdateContactEmail').val())]); }
+	
+	// Envoi :
+	var /* objet */ nouveauContact = {
+		id_contact: parseInt($('#formUpdateContactId').val()),
+		id_entreprise: parseInt($('#formUpdateContactEntrepriseId').val()),
+		fonction : encodeURIComponent($('#formUpdateContactPoste').val()),
+		personne : {
+			id : parseInt($('#formUpdateContactPersonneId').val()),
+			nom : encodeURIComponent($('#formUpdateContactNom').val()),
+			prenom : encodeURIComponent($('#formUpdateContactPrenom').val()),
+			mails : emails,
+			telephones : tels
+		},
+		ville : {
+			code_postal : encodeURIComponent($('#formUpdateContactVilleCodePostal').val()),
+			libelle : encodeURIComponent($('#formUpdateContactVilleLibelle').val()),
+			pays : encodeURIComponent($('#formUpdateContactVillePays').val()),
+		},
+		commentaire : encodeURIComponent($('#formUpdateContactCom').val()),
+		priorite : parseInt($('#formUpdateContactPriorite').val()),
+	};
+	var /* objet */ requete = $.ajax({
+		url: "./annuaire/ajax/updateContact.cible.php",
+		type: "POST",
+		data: nouveauContact,
+		dataType: "json"
+	});
+	
+	// Ajout du poste à la liste si nouveau.
+	if ($.inArray($('#formUpdateContactPoste').val(), Annuaire.listePostes) == -1) {
+		Annuaire.listePostes.push($('#formUpdateContactPoste').val());
+		$('#formUpdateContactPoste').typeahead({
+			source: Annuaire.listePostes
 		});
 	}
+	
+	$('#modalUpdateContact').modal('hide');
+	Annuaire.resetFormContact();
+
+	requete.done(function(donnees) {
+		if (donnees.code == "ok") {
+			var idNouvContact = parseInt(donnees.id);
+			if ((idNouvContact >= 0) && (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise)) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
+			
+				nouveauContact.personne.id = donnees.id_personne;
+				if (typeof Annuaire.infoEntrepriseCourante.contacts === "undefined") { Annuaire.infoEntrepriseCourante.contacts = []; }					
+				nouveauContact.fonction = decodeURIComponent(nouveauContact.fonction);
+				nouveauContact.personne.nom = decodeURIComponent(nouveauContact.personne.nom);
+				nouveauContact.personne.prenom = decodeURIComponent(nouveauContact.personne.prenom);
+				for (var i in nouveauContact.personne.mails) {
+					nouveauContact.personne.mails[i][0] = decodeURIComponent(nouveauContact.personne.mails[i][0]);
+					nouveauContact.personne.mails[i][1] = decodeURIComponent(nouveauContact.personne.mails[i][1]);
+				}
+				for (var i in nouveauContact.personne.telephones) {
+					nouveauContact.personne.telephones[i][0] = decodeURIComponent(nouveauContact.personne.telephones[i][0]);
+					nouveauContact.personne.telephones[i][1] = decodeURIComponent(nouveauContact.personne.telephones[i][1]);
+				}
+				nouveauContact.ville.code_postal = decodeURIComponent(nouveauContact.ville.code_postal);
+				nouveauContact.ville.libelle = decodeURIComponent(nouveauContact.ville.libelle);
+				nouveauContact.ville.pays = decodeURIComponent(nouveauContact.ville.pays);
+				nouveauContact.commentaire = decodeURIComponent(nouveauContact.commentaire);
+
+				// On met à jour l'ancien contact ou ajoute le nouveau :
+				if (idNouvContact == 0) {
+					for (var i in Annuaire.infoEntrepriseCourante.contacts) {
+						if (Annuaire.infoEntrepriseCourante.contacts[i].id_contact == nouveauContact.id_contact) {
+							Annuaire.infoEntrepriseCourante.contacts[i] = nouveauContact;
+							break;
+						}
+					}
+					
+				}
+				else {
+					nouveauContact.id_contact = donnees.id;
+					Annuaire.infoEntrepriseCourante.contacts.push(nouveauContact);
+				}
+
+				var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
+				Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
+			}
+			
+			if (donnees.id > 0) { // Ajout d'un contact :
+				// On demande si l'utilisateur veut en ajouter tout de suite d'autres :
+				Annuaire.confirmerAction('Contact ajouté !<br/> Voulez-vous en ajouter d\'autres tout de suite ?', 'alert-success', function(id) {
+					$('#formUpdateContactEntrepriseId').val(id);
+					$('#modalUpdateContact').modal('show');
+				}, donnees.id);
+			}
+			else if (donnees.id == 0) { // Edition d'un contact :
+			
+			}
+			else {
+				Annuaire.afficherErreur('Contact - Une erreur est survenue (id = '+donnees.id+')' );
+			}
+		}
+		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
+			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
+		}
+		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
+			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
+		}
+		else {
+			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+		}
+	});
+	requete.fail(function(jqXHR, textStatus) {
+		Annuaire.afficherErreur('Contact - Une erreur est survenue ('+textStatus+')' );
+	});
 };
 
 /** 
@@ -309,64 +413,64 @@ Annuaire.updaterContact = function updaterContact() {
  *		- RIEN (Page directement modifiée)
  */
 Annuaire.ajouterCommentaire = function ajouterCommentaire() {
-	
-	// Vérification du formulaire :
-	if ($("#formAjoutCommentaire").validate()) {
-	
-		/* int */ var idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
-		
-		// Envoi :
-		var categorie = $('#formAjoutCommentaire .formAjoutCommentaireCateg:checked');
-		var /* objet */ nouveauCommentaire = {
-			'id_entreprise': idEntrepriseActuelle,
-			'contenu' : encodeURIComponent($('#formAjoutCommentaireContenu').val()),
-			'categorie' : parseInt(categorie.val())
-		};
-		var /* objet */ requete = $.ajax({
-			url: "./annuaire/ajax/ajoutCommentaire.cible.php",
-			type: "POST",
-			data: nouveauCommentaire,
-			dataType: "json"
-		});
-		
-		// RAZ du form :
-		$('#modalAjoutCommentaire').modal('hide');
-		resetForm($('#formAjoutCommentaire'));
-		$('#formAjoutCommentaireContenu').val('');
-		$('#formAjoutCommentaireCategorie1').attr('checked', true);
 
-		requete.done(function(donnees) {
-			if (donnees.code == "ok") {
-				if (donnees.id >= 0) {
-					if (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
-						nouveauCommentaire.id = donnees.id;
-						if (typeof Annuaire.infoEntrepriseCourante.commentaires === "undefined") { Annuaire.infoEntrepriseCourante.commentaires = []; }
-						nouveauCommentaire.contenu = encodeURIComponent(nouveauCommentaire.contenu);
-						nouveauCommentaire.personne = Annuaire.utilisateur.personne;
-						nouveauCommentaire.timestamp = new Date();
-						nouveauCommentaire.timestamp = nouveauCommentaire.timestamp.format('yyyy-mm-dd hh:mm:ss');
-						Annuaire.infoEntrepriseCourante.commentaires.push(nouveauCommentaire);
-						var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
-						Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
-						$('#contacts').collapse('hide');
-						$('#remarques').collapse('show');
-					}
-				}
-				else {
-					Annuaire.afficherErreur('Commentaire : Une erreur est survenue (id = '+donnees.id+')' );
+	/* int */ var idEntrepriseActuelle = Annuaire.infoEntrepriseCourante.description.id_entreprise;
+	
+	// Envoi :
+	var categorie = $('#formAjoutCommentaire .formAjoutCommentaireCateg:checked');
+	var /* objet */ nouveauCommentaire = {
+		'id_entreprise': idEntrepriseActuelle,
+		'contenu' : encodeURIComponent($('#formAjoutCommentaireContenu').val()),
+		'categorie' : parseInt(categorie.val())
+	};
+	var /* objet */ requete = $.ajax({
+		url: "./annuaire/ajax/ajoutCommentaire.cible.php",
+		type: "POST",
+		data: nouveauCommentaire,
+		dataType: "json"
+	});
+	
+	// RAZ du form :
+	$('#modalAjoutCommentaire').modal('hide');
+	resetForm($('#formAjoutCommentaire'));
+	$('#formAjoutCommentaireContenu').val('');
+	$('#formAjoutCommentaireCategorie1').attr('checked', true);
+
+	requete.done(function(donnees) {
+		if (donnees.code == "ok") {
+			if (donnees.id >= 0) {
+				if (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
+					nouveauCommentaire.id_commentaire = donnees.id;
+					if (typeof Annuaire.infoEntrepriseCourante.commentaires === "undefined") { Annuaire.infoEntrepriseCourante.commentaires = []; }
+					nouveauCommentaire.contenu = decodeURIComponent(nouveauCommentaire.contenu);
+					nouveauCommentaire.personne = Annuaire.utilisateur.personne;
+					nouveauCommentaire.timestamp = new Date();
+					nouveauCommentaire.timestamp = nouveauCommentaire.timestamp.format('yyyy-mm-dd hh:mm:ss');
+					Annuaire.infoEntrepriseCourante.commentaires.push(nouveauCommentaire);
+					var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
+					Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
+					$('#contacts').collapse('hide');
+					$('#remarques').collapse('show');
 				}
 			}
 			else {
-				Annuaire.afficherErreur('Commentaire : Une erreur est survenue ('+donnees.code+')' );
+				Annuaire.afficherErreur('Commentaire : Une erreur est survenue (id = '+donnees.id+')' );
 			}
-		});
-		requete.fail(function(jqXHR, textStatus) {
-			Annuaire.afficherErreur('Commentaire : Une erreur est survenue ('+textStatus+')' );
-		});
-		
-		
-		
-	}
+		}
+		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
+			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
+		}
+		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
+			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
+		}
+		else {
+			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+		}
+	});
+	requete.fail(function(jqXHR, textStatus) {
+		Annuaire.afficherErreur('Commentaire : Une erreur est survenue ('+textStatus+')' );
+	});
+
 };
 
 /** 
@@ -401,8 +505,14 @@ Annuaire.supprimerContact = function supprimerContact(id) {
 				}
 			}
 		}
+		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
+			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
+		}
+		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
+			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
+		}
 		else {
-			Annuaire.afficherErreur('Contact - Suppression : Une erreur est survenue ('+donnees.code+')' );
+			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
@@ -445,8 +555,14 @@ Annuaire.supprimerCommentaire = function supprimerCommentaire(id) {
 				}
 			}
 		}
+		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
+			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
+		}
+		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
+			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
+		}
 		else {
-			Annuaire.afficherErreur('Commentaire - Suppression : Une erreur est survenue ('+donnees.code+')' );
+			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
@@ -669,6 +785,7 @@ Annuaire.preremplirFormulaireModifEntreprise = function preremplirFormulaireModi
 		$('#formUpdateEntrepriseSecteur').val(Annuaire.infoEntrepriseCourante.description.secteur);
 		$('#formUpdateEntrepriseDescription').val(Annuaire.infoEntrepriseCourante.description.description);
 	}
+	$('.type-action').text("Edition d'une entreprise");
 };
 
 /** 
@@ -732,6 +849,52 @@ Annuaire.preremplirFormulaireUpdateContact = function preremplirFormulaireUpdate
 // ------------------------ AFFICHAGE ------------------------ //
 
 /** 
+ * ---- initialiserTemplates
+ * Intialise le template qui servira à l'affichage des données Info Entreprise
+ * Paramètres :
+ *		- RIEN
+ * Retour :
+ *		- RIEN (Page maj)
+ */
+Annuaire.initialiserTemplates = function initialiserTemplates() {
+
+	Handlebars.registerHelper('traduirePrioriteContactTexte', function (value)
+		{ return new Handlebars.SafeString(Annuaire.traduirePrioriteContactTexte(value)); }
+		);
+	Handlebars.registerHelper('afficherLibelle', function (value) 
+		{ return new Handlebars.SafeString(Annuaire.afficherLibelle(value, '')); }
+		);
+	Handlebars.registerHelper('traduireCategorieCommentaire', function (value) 
+		{ 
+			return new Handlebars.SafeString(Annuaire.traduireCategorieCommentaire(value));
+		});
+	Handlebars.registerHelper('traduirePrioriteContactTexte', function (value) 
+		{ 
+			return new Handlebars.SafeString(Annuaire.traduirePrioriteContactTexte(value));
+		});
+	Handlebars.registerHelper('traduireRole', function (value) 
+		{ 
+			return new Handlebars.SafeString(Annuaire.traduireRole(value));
+		});
+	Handlebars.registerHelper('traduireCouleur', function (value) 
+		{ 
+			return new Handlebars.SafeString(Annuaire.traduireCouleur(value));
+		});
+	Handlebars.registerHelper('afficherEmail', function (mail) 
+		{ 
+			return new Handlebars.SafeString('<table><tr><td><a href="mailto:'+mail[1]+'">'+mail[1]+'</a></td><td>'+Annuaire.afficherLibelle(mail[0], '')+'</td></tr></table>');
+		});
+	Handlebars.registerHelper('afficherTel', function (tel) 
+		{ 
+			return new Handlebars.SafeString('<table><tr><td>'+tel[1]+'</td><td>'+Annuaire.afficherLibelle(tel[0], '')+'</td></tr></table>');
+		});
+
+	Annuaire.templates['InfoEntreprise'] = Handlebars.compile($("#templateInfoEntreprise").html());
+	Annuaire.templates['SearchContact'] = Handlebars.compile($("#templateSearchContact").html());
+}
+
+
+/** 
  * ---- afficherListeEntreprises
  * Affiche la liste des noms d'entreprise
  * Paramètres :
@@ -777,8 +940,7 @@ Annuaire.afficherListeEntreprises = function afficherListeEntreprises() {
 	// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
 	$('.entreprise').click(function(event){Annuaire.chercherInfoEntreprise(parseInt(event.target.getAttribute('id-entreprise')), Annuaire.afficherInfoEntreprise)});
 };
-
-
+ 
 /** 
  * ---- traduirePrioriteContactTexte
  * Traduit textuellement une priorité numérique, selon la convention définie (voir code directement - explicite).
@@ -841,7 +1003,7 @@ Annuaire.traduireCouleur = function traduireCouleur(/* int */ num) {
 Annuaire.afficherLibelle = function afficherLibelle(/* string */ libelle, classesSup) {
 	if (libelle == 'Pro') { return '<span title="Pro" class="label '+classesSup+'"><i class="icon-book"></i></span>' };
 	if (libelle == 'Perso') { return '<span title="Perso" class="label '+classesSup+'"><i class="icon-home"></i></span>' };
-	if (libelle == 'Bureau') { return '<span title="Bureau" class="label '+classesSup+'"><i class="icon-home"></i></span>' };
+	if (libelle == 'Bureau') { return '<span title="Bureau" class="label '+classesSup+'"><i class="icon-book"></i></span>' };
 	if (libelle == 'Fixe') { return '<span title="Fixe" class="label '+classesSup+'"><i class="icon-home"></i></span>' };
 	if (libelle == 'Mobile') { return '<span title="Mobile" class="label '+classesSup+'"><i class="icon-road"></i></span>' };
 	return '<span title="'+libelle+'" class="label '+classesSup+'"><i class="icon-question-sign"></i></span>';
@@ -865,213 +1027,28 @@ Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/*
  * ---- afficherInfoEntreprise
  * Affiche dans l'hero-unit les informations de l'entreprise demandée 
  * Paramètres :
- *		- idEntreprise : INT - ID de l'entreprise voulue
+ *		- donnees : Objet - Données retournées par le serveur (voir fonction de requétage)
  * Retour :
  *		- RIEN (Page directement modifiée)
  */
 Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ donnees) {
-	// Sorry pour les pavés de cette fonction, dur de faire un compromis entre clarté JS et clarté HTML ...
-	// Si quelqu'un veut refaire ça plus proprement, ca devrait pas être trop difficile.
 
-	if (typeof donnees.entreprise === "undefined") { return; }
+	// Gestion des erreurs :
+	if (donnees.code == Annuaire.Erreurs.AJAX_INVALIDE) {
+		Annuaire.afficherErreur( "AJAX - Requête invalide. Êtes-vous sûr d'avoir utilisé le formulaire ? Si le problème persiste, contactez un Admin." );
+	}
+	else if (donnees.code == Annuaire.Erreurs.SQL_INVALIDE) {
+		Annuaire.afficherErreur( "BDD - Requête invalide. Si le problème persiste, contactez un Admin." );
+	}
+
+	if (typeof donnees.entreprise === "undefined") { Annuaire.afficherErreur( "Désolé, cette entreprise n'est pas en BDD." ); return; }
 	Annuaire.infoEntrepriseCourante = donnees.entreprise;
 	donnees = donnees.entreprise;
-	if (typeof donnees === "undefined") { return; }
+	if (typeof donnees === "undefined") { Annuaire.afficherErreur( "Désolé, cette entreprise n'est pas en BDD." ); return; }
 	
-	// Génération des blocs intermédiaires (nécessitant des boucles) :
-	var /* string */ tableauContacts = '';
-	if ((typeof donnees.contacts === "undefined") || (donnees.contacts.length == 0)) {
-		tableauContacts = 'Aucun contact. '+(Annuaire.droitModification?'<a data-toggle="modal" href="#modalUpdateContact" title="Ajouter Contact" class="btn  btn-mini btn-ajoutContact"><i class="icon-plus"></i></a>':'');
-	} else {
-		tableauContacts = '<table class="table table-stripped tablesorter"> \n'+
-'										<thead>\n'+
-'											<tr> \n'+
-'												<th>Nom</th>\n'+
-'												<th>Prénom</th>\n'+
-'												<th>Poste</th> \n'+
-'												<th>Email</th> \n'+
-'												<th>Tel</th>\n'+
-'												<th class="first">Lieu</th>\n'+
-'												<th>Priorité</th>\n'+
-'												<th>'+(Annuaire.droitModification?'<a data-toggle="modal" href="#modalUpdateContact" title="Ajouter Contact" class="btn  btn-mini btn-ajoutContact"><i class="icon-plus"></i></a>':'')+'</th>\n'+
-'										</thead> \n'+
-'										<tbody>\n';
-		for (var /* int */ i in donnees.contacts) {
-			// Nom + Prenom + Fonction
-			tableauContacts += '			<tr> \n'+
-	'												<td><strong>'+donnees.contacts[i].personne.nom+'</strong></td>\n'+
-	'												<td>'+donnees.contacts[i].personne.prenom+'</td>\n'+
-	'												<td><em>'+donnees.contacts[i].fonction+'</em></td> \n'+
-	'												<td><table>';
-			// Mails
-			for (var /* int */ j in donnees.contacts[i].personne.mails) {
-				tableauContacts += '<tr><td><a href="mailto:'+donnees.contacts[i].personne.mails[j][1]+'">'+donnees.contacts[i].personne.mails[j][1]+'</a></td><td>'+Annuaire.afficherLibelle(donnees.contacts[i].personne.mails[j][0], '')+'</td></tr>';
-			}
-			
-			tableauContacts += '</table></td><td><table>\n';
-			
-			// Tel
-			for (var /* int */ j in donnees.contacts[i].personne.telephones) {
-				tableauContacts += '<tr><td>'+donnees.contacts[i].personne.telephones[j][1]+'</td><td>'+Annuaire.afficherLibelle(donnees.contacts[i].personne.telephones[j][0], '')+'</td></tr>';
-			}
-			// Lieu
-			tableauContacts += '</table></td><td class="first"><span style="display: none;">'+donnees.contacts[i].ville.code_postal+'</span><a target="_blank" title="'+donnees.contacts[i].ville.code_postal+' - '+donnees.contacts[i].ville.libelle+', '+donnees.contacts[i].ville.pays+'" href="http://maps.google.com/maps?q='+donnees.contacts[i].ville.code_postal+'+'+donnees.contacts[i].ville.libelle+',+'+donnees.contacts[i].ville.pays+'"><i class="icon-map-marker"></i></a></td> ';
-			// Remarque + Priorité
-			tableauContacts += '</td><td><span href="#" title="'+donnees.contacts[i].commentaire+'" class="label label-'+Annuaire.traduireCouleur(donnees.contacts[i].priorite)+'">'+Annuaire.traduirePrioriteContactTexte(donnees.contacts[i].priorite)+'</span></td> ';
-			
-			// Bouton modif
-			if (Annuaire.droitModification) { // Ajout des boutons de modifications d'un contact :
-				tableauContacts += '												<td><a title="Editer Contact" id-contact='+donnees.contacts[i].id_contact+' data-toggle="modal" href="#modalUpdateContact" class="btn  btn-mini btn-modifContact"><i class="icon-pencil"></i></a><a title="Supprimer Contact" id-contact='+donnees.contacts[i].id_contact+' class="btn btn-danger btn-mini btnSupprContact"><i class="icon-remove"></i></a></td>\n'
-			}
-			tableauContacts += '											</tr>';
-		}
-		
-		tableauContacts += '</tbody></table> \n';
-	}
-	
-	var /* string */ tableauRelations = '';
-	
-	if (typeof donnees.relations !== "undefined") {
-		var /* string */ tableauParrainage = '';
-		var /* string */ tableauRIF = '';
-		var /* string */ tableauStages = '';
-		var /* string */ tableauEntretiens = '';
-		
-		tableauRelations = '<table class="table table-stripped tablesorter"><tbody>';
-		
-		// Parrainage
-		if ((typeof donnees.relations.parrainage !== "undefined") || (donnees.relations.parrainage.length == 0)) { // Aucun parrainage avec
-			tableauParrainage = '<tr><th>Parrainage</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-		} else {
-			tableauParrainage = '<tr><th rowspan='+donnees.relations.parrainage.length+'>Parrainage</th><td>Promo '+donnees.relations.parrainage[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.parrainage[0].couleur)+'">'+donnees.relations.parrainage[0].commentaire+'</span></td></tr>';
-			for (var /* int */ i = 1; i < donnees.relations.parrainage.length; i++) {
-				tableauParrainage += '<tr><td>Promo '+donnees.relations.parrainage[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.parrainage[i].couleur)+'">'+donnees.relations.parrainage[i].commentaire+'</span></td></tr>';
-			}
-		}
-		
-		// RIF
-		if ((typeof donnees.relations.rif === "undefined") || (donnees.relations.rif.length == 0)) {
-			tableauRIF = '<tr><th>RIF</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-		} else {
-			tableauRIF = '<tr><th rowspan='+donnees.relations.rif.length+'>RIF</th><td>'+donnees.relations.rif[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.rif[0].couleur)+'">'+donnees.relations.rif[0].commentaire+'</span></td></tr>';
-			for (var /* int */ i = 1; i < donnees.relations.rif.length; i++) {
-				tableauRIF += '<tr><td>'+donnees.relations.rif[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(donnees.relations.rif[i].couleur)+'">'+donnees.relations.rif[i].commentaire+'</span></td></tr>';
-			}
-		}	
-		
-		// Stages
-		if ((typeof donnees.relations.stages === "undefined") || (donnees.relations.stages.length == 0)) {
-			tableauStages = '<tr><th>Stages</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-		} else {
-			tableauStages = '<tr><th rowspan='+donnees.relations.stages.length+'>Stages</th><td>'+donnees.relations.stages[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.stages[0].nbSujets+' sujets</span></td></tr>';
-			for (var /* int */ i = 1; i < donnees.relations.stages.length; i++) {
-				tableauStages += '<tr><td>'+donnees.relations.stages[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.stages[i].nbSujets+' sujets</span></td></tr>';
-			}
-		}
-		
-		// Entretiens
-		if ((typeof donnees.relations.entretiens === "undefined") || (donnees.relations.entretiens.length == 0)) {
-			tableauEntretiens = '<tr><th>Entretien</th><td>/</td><td><span class="label label-default">Jamais</span></td></tr> ';
-		} else {
-			tableauEntretiens = '<tr><th rowspan='+donnees.relations.entretiens.length+'>Entretiens</th><td>'+donnees.relations.entretiens[0].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.entretiens[0].nbSessions+' sessions</span></td></tr>';
-			for (var /* int */ i = 1; i < donnees.relations.entretiens.length; i++) {
-				tableauEntretiens += '<tr><td>'+donnees.relations.entretiens[i].annee+'</td><td><span class="label label-'+Annuaire.traduireCouleur(1)+'">'+donnees.relations.entretiens[i].nbSessions+' sessions</span></td></tr>';
-			}
-		}
-		
-		tableauRelations += tableauParrainage+'\n'+
-'							'+tableauRIF+'\n'+
-'							'+tableauStages+'\n'+
-'							'+tableauEntretiens+'\n'+'</tbody></table>';
-	} else {
-		tableauRelations = 'Aucune relation.';
-	}
-
-	var /* string */ tableauCommentaires = '';
-	if (typeof donnees.commentaires === "undefined") {
-		tableauCommentaires = 'Aucun commentaire. <a data-toggle="modal" href="#modalAjoutCommentaire" title="Ajouter Commentaire" class="btn  btn-mini"><i class="icon-plus"></i></a>';
-	} else {
-		tableauCommentaires = '<table class="table table-stripped tablesorter">\n'+
-'										<thead>\n'+
-'											<tr> \n'+
-'												<th class="first"></th>\n'+
-'												<th>Auteur</th>\n'+
-'												<th class="first">Poste</th>\n'+
-'												<th>Date</th>\n'+
-'												<th>Commentaires</th>\n'+
-'												<th>'+(Annuaire.droitModification?'<a data-toggle="modal" href="#modalAjoutCommentaire" title="Ajouter Commentaire" class="btn  btn-mini btn-ajoutCommentaire"><i class="icon-plus"></i></a>':'')+'</th></thead> \n'+
-'										<tbody>';
-
-		for (var /* int */ i in donnees.commentaires) {
-			tableauCommentaires += '<tr> \n'+
-'												<td class="first"><span style="display: none;">'+donnees.commentaires[i].categorie+'</span>'+Annuaire.traduireCategorieCommentaire(donnees.commentaires[i].categorie)+'</td> \n'+
-'												<td>'+donnees.commentaires[i].personne.prenom +' '+donnees.commentaires[i].personne.nom+'</td> \n'+
-'												<td><small>'+Annuaire.traduireRole(donnees.commentaires[i].personne.role)+'</small></td> \n'+
-'												<td>'+donnees.commentaires[i].timestamp +'</td>\n'+
-'												<td>'+donnees.commentaires[i].contenu +'</td>';
-			// Bouton modif
-			if (Annuaire.droitModification) { // Ajout des boutons de supression d'un comm' :
-				tableauCommentaires += '												<td><a title="Supprimer Commentaire" id-commentaire='+donnees.commentaires[i].id_commentaire+' class="btn btn-danger btn-mini btnSupprCommentaire"><i class="icon-remove"></i></a></td>\n';
-			}
-			tableauCommentaires += '</tr>';
-		}
-
-		tableauEntretiens = '</tbody></table>';
-	}
-	
-	var btnModifEntreprise = '';
-	if (Annuaire.droitModification) { // Ajout des boutons de modifications d'un contact :
-		btnModifEntreprise += '<a title="Editer Entreprise" data-toggle="modal" href="#modalUpdateEntreprise" class="btn  btn-mini btn-modifEntreprise"><i class="icon-pencil" ></i></a>';
-	}
-	
-	// Génération du bloc entier :
-	var content = '<h1>'+donnees.description.nom+' <small>'+donnees.description.secteur+'&#09;'+btnModifEntreprise+'</small></h1>';
-	if( donnees.description.description ) {
-		content +=
-'							<p>'+donnees.description.description+'</p> \n';
-	}
-	content +=
-'							\n'+
-'							<div class="accordion" id="accordion2">\n'+
-'								<div class="accordion-group">\n'+
-'								<div class="accordion-heading">\n'+
-'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#contacts"> \n'+
-'								<h2>Contacts</h2> \n'+
-'								</a>\n'+
-'							</div>\n'+
-'							<div id="contacts" class="accordion-body collapse in"> \n'+
-'								<div class="accordion-inner">\n'+
-'									 '+tableauContacts+'\n'+
-'								</div>\n'+
-'							</div>\n'+
-'							</div>\n'+
-'							<div class="accordion-group"> \n'+
-'							<div class="accordion-heading">\n'+
-'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#relations">\n'+
-'								<h2>Relations</h2>\n'+
-'								</a>\n'+
-'							</div>\n'+
-'							<div id="relations" class="accordion-body collapse">\n'+
-'								<div class="accordion-inner">\n'+
-'									 '+tableauRelations+'\n'+
-'								</div>\n'+
-'							</div>\n'+
-'							</div>\n'+
-'							<div class="accordion-group"> \n'+
-'							<div class="accordion-heading">\n'+
-'								<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#remarques">\n'+
-'								<h2>Remarques</h2>\n'+
-'								</a>\n'+
-'							</div>\n'+
-'							<div id="remarques" class="accordion-body collapse">\n'+
-'								<div class="accordion-inner">\n'+
-'									'+tableauCommentaires+' \n'+
-'								</div>\n'+
-'							</div>\n'+
-'							</div>\n'+
-'						</div> ';
-
-	$(".module .hero-unit").html( content );
+	// Génération du html par templating :
+	donnees.droitModification = Annuaire.droitModification;
+	$(".module .hero-unit").html( Annuaire.templates['InfoEntreprise'](donnees) );
 
 	// Possibilité de trier les tables :
 	$("#contacts table").tablesorter({ 
@@ -1115,4 +1092,90 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	$('.btn-ajoutContact').click(Annuaire.preremplirFormulaireUpdateContactId);
 	// Préremplissage du formulaire de modification de l'entreprise :
 	$('.btn-modifEntreprise').click(function(event){Annuaire.preremplirFormulaireModifEntreprise(event)});
+	
+	// Popover :
+	$("a[rel=popover], span[rel=popover]").popover();
+	$("span[rel=popover]").popover();
+};
+
+/** 
+ * ---- afficherResultatRechercheContacts
+ * Paramètres :
+ *		- donnees : Objet - Données retournées par le serveur (voir fonction de requétage)
+		- processedKeywords : Array - Liste des mots-clés + champs en entrée
+ * Retour :
+ *		- RIEN (Page directement modifiée)
+ */
+Annuaire.afficherResultatRechercheContacts = function afficherResultatRechercheContacts(/* objet */ donnees, /* array */ processedKeywords) {
+
+	// Gestion des erreurs :
+	if (donnees.code == Annuaire.Erreurs.AJAX_INVALIDE) {
+		Annuaire.afficherErreur( "AJAX - Requête invalide. Êtes-vous sûr d'avoir utilisé le formulaire ? Si le problème persiste, contactez un Admin." );
+	}
+	else if (donnees.code == Annuaire.Erreurs.SQL_INVALIDE) {
+		Annuaire.afficherErreur( "BDD - Requête invalide. Si le problème persiste, contactez un Admin." );
+	}
+	else if (donnees.code == Annuaire.Erreurs.CHAMP_INVALIDE) {
+		Annuaire.afficherErreur( "Un des champs entrés n'est pas reconnu. Merci de vérifier votre recherche." );
+	}
+	
+	// Génération du html par templating :
+	donnees.droitModification = Annuaire.droitModification;
+	$(".module .hero-unit").html( Annuaire.templates['SearchContact'](donnees) );
+
+	// Possibilité de trier les tables :
+	$("#search-contacts table").tablesorter({ 
+        headers: {         
+            8: { 
+                // On désactive le tri sur la dernière colonne (celle des boutons) 
+                sorter: false 
+            } 
+        } 
+    }); 
+	
+	// Ajout de l'étape de confirmation à certaines actions :
+	$('.btnSupprContact').click( function(event) {
+		if (event.target.children.length == 0)
+			{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
+		var idContact = parseInt(event.target.getAttribute('id-contact'));
+		Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce contact ?', '', function(id) { Annuaire.supprimerContact(id); }, idContact);
+	});
+
+	// Préremplissage du formulaire de modification/ajout d'un contact :
+	$('.btn-modifContact').click(function(event){Annuaire.preremplirFormulaireUpdateContact(event)});
+	$('.btn-ajoutContact').click(Annuaire.preremplirFormulaireUpdateContactId);
+	
+	// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
+	$('.entreprise').click(function(event){Annuaire.chercherInfoEntreprise(parseInt(event.target.getAttribute('id-entreprise')), Annuaire.afficherInfoEntreprise)});
+	
+	// Surlignage des occurences des mots-clés :
+	for (var i = 0; i < processedKeywords.length; i++) {
+		var regexKeyword = new RegExp(processedKeywords[i]['val'], "i");
+		if (processedKeywords[i]['champ'] != '*') {
+			$('#search-contacts tbody .'+processedKeywords[i]['champ']).highlight(processedKeywords[i]['val']);
+			$('#search-contacts tbody .'+processedKeywords[i]['champ']+' a[rel=popover], #search-contacts tbody .'+processedKeywords[i]['champ']+' span[rel=popover]').each(function(index) {
+				var contentPopover = $(this).attr('data-content');
+				contentPopover.replace(regexKeyword, highlightContentPopover);
+				$(this).attr('data-content', contentPopover);
+			});
+		}
+		else {
+			$('#search-contacts tbody').highlight(processedKeywords[i]['val']);
+			$("a[rel=popover], span[rel=popover]").each(function(index) {
+				var contentPopover = $(this).attr('data-content');
+				contentPopover = contentPopover.replace(regexKeyword, highlightContentPopover);
+				$(this).attr('data-content', contentPopover);
+			});
+		}
+	}
+	// Définition de la couleur de surlignage pour les résultats de la recherche :
+	$(".highlight").css({ backgroundColor: "#BED2FF" });
+	
+	// Popover :
+	$("a[rel=popover], span[rel=popover]").popover();
+	$("span[rel=popover]").popover();
+	
+	function highlightContentPopover(match, offset, string) {
+		return '<span class="highlight" style="background-color: '+Annuaire.Colors['SEARCH_RESULTS_BACKGROUND']+';">'+match+'</span>';
+	}
 };

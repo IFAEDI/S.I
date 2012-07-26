@@ -11,8 +11,14 @@
  
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
+inclure_fichier('commun', 'requete.inc', 'php'); // Ajouter dans base.inc ?
 
 class Entreprise {
+
+	//****************  Constantes  ******************//
+	private static $ERREUR_EXEC_REQUETE = -10;
+	public static function getErreurExecRequete() { return self::$ERREUR_EXEC_REQUETE; }
+	
 
 	//****************  Attributs  ******************//
 	private $ID_ENTREPRISE;
@@ -29,13 +35,18 @@ class Entreprise {
 	* @throws Une exception en cas d'erreur
 	*/
 	public static function GetEntrepriseByID($_id) {
-
+		$result = NULL;
 		if (is_numeric($_id)) {
-			return BD::executeSelect('SELECT * FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', 
-						array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__ );
+			try {
+				$result = BD::executeSelect('SELECT * FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', 
+							array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__ );
+			}
+			catch (Exception $e) {
+				return Entreprise::getErreurExecRequete();
+			}
 		}
 
-		return NULL;
+		return $result;
 	}
 
 	/**
@@ -63,6 +74,57 @@ class Entreprise {
 
 		return $obj;
 	}
+	
+	/**
+	* Récuperation des noms de secteur des entreprises en BDD
+	* @return Un tableau de secteurs (String)
+	* @throws Une exception en cas d'erreur au niveau des requêtes
+	*/
+	public static function GetListeSecteurs() {
+
+		$obj = array();
+
+		/* Tentative de sélection de tous les ID ordonnés par nom */
+		$result = NULL;
+		try {
+			$result = BD::executeSelect( 'SELECT DISTINCT SECTEUR FROM ENTREPRISE', array(), BD::RECUPERER_TOUT );
+		}
+		catch (Exception $e) {
+			return Entreprise::getErreurExecRequete();
+		}
+		
+		if( $result == null ) {
+			return null;
+		}
+
+		/* On consturit une réponse lisible (fonction BD::executeSelect à améiorer pour ça ...) */
+		foreach( $result as $row ) {
+			array_push($obj, $row["SECTEUR"]);
+		}
+
+		return $obj;
+	}
+	
+	/**
+	* Retourne vrai si le nom donné correspond à celui d'une entreprise en BDD.
+	* @param name Nom demandé
+	* @return Booléen
+	* @throws Une exception en cas d'erreur au niveau des requêtes
+	*/
+	public static function ExistsName($name) {
+		$requete = new Requete("SELECT 1 FROM ENTREPRISE");
+		$requete->ajouterCondition('NOM = :name', 'name', $name);
+
+		$result = NULL;
+		try {
+			$result = $requete->lire();;
+		}
+		catch (Exception $e) {
+			return false;
+		}
+		
+		return ($result!=null);
+	}
 
 	/**
 	* Suppression d'une entreprise par ID
@@ -72,17 +134,15 @@ class Entreprise {
 	*/
 	public static function SupprimerEntrepriseByID($_id) {
 
-		if(! is_numeric($_id) ) {
-			return false;
+		$result = 0;
+		try {
+			$result = BD::executeModif('DELETE FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', array('id' => $_id));
+		}
+		catch (Exception $e) {
+			return Entreprise::getErreurExecRequete();;
 		}
 
-		$result = BD::executeModif('DELETE FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', array('id' => $_id));
-		/* S'il y a 0 champs modifiés, bizarre... */
-		if( $result == 0 ) {
-			return false;
-		}
-
-		return true;
+		return $result;
 	}
 
 	/**
@@ -91,7 +151,7 @@ class Entreprise {
 	* @throws Une exception en cas d'erreur venant de la base
 	*/
 	public static function UpdateEntreprise( $_id, $_nom, $_desc, $_secteur, $_com ) {
-
+		$result = 0;
 		/* $_id > 0, on est dans le cas de la mise à jour d'une entreprise */
 		if( $_id > 0 ) {
 
@@ -99,13 +159,19 @@ class Entreprise {
 			$info = array( 'id' => $_id, 'nom' => $_nom, 'desc' => $_desc, 'secteur' => $_secteur, 'commentaire' => $_com );
 
 			/* On execute notre requête */
-			$result = BD::executeModif( 'UPDATE ENTREPRISE SET NOM = :nom, DESCRIPTION = :desc, SECTEUR = :secteur, COMMENTAIRE = :commentaire WHERE ID_ENTREPRISE = :id', $info );
-
-			if( $result == 0 ) {
-				return -1;
+			
+			try {
+				$result = BD::executeModif( 'UPDATE ENTREPRISE SET NOM = :nom, DESCRIPTION = :desc, SECTEUR = :secteur, COMMENTAIRE = :commentaire WHERE ID_ENTREPRISE = :id', $info );
+				if ($result === true) {
+					$result = $_id;
+				}
+				else {
+					$result = 0;
+				}
 			}
-			return 0;
-
+			catch (Exception $e) {
+				return Entreprise::getErreurExecRequete();
+			}
 		}
 		/* Sinon on est dans le cas de l'ajout */
 		else {
@@ -113,18 +179,18 @@ class Entreprise {
 			$info = array( 'nom' => $_nom, 'desc' => $_desc, 'secteur' => $_secteur, 'commentaire' => $_com );
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'INSERT INTO ENTREPRISE( NOM, DESCRIPTION, SECTEUR, COMMENTAIRE) VALUES ( :nom, :desc, :secteur, :commentaire )', $info);
-
-			if( $result == 0 ) {
-				return -1;
+			try {
+				$result = BD::executeModif( 'INSERT INTO ENTREPRISE( NOM, DESCRIPTION, SECTEUR, COMMENTAIRE) VALUES ( :nom, :desc, :secteur, :commentaire )', $info);
+			}
+			catch (Exception $e) {
+				return Entreprise::getErreurExecRequete();
 			}
 
-			/* On récupère l'ID qui a été affecté */
-			$_id = BD::GetConnection()->lastInsertId();
-			
+			$result = BD::GetConnection()->lastInsertId();
+
 		}
 
-		return $_id;
+		return $result;
 	}
 
 	//****************  Getters & Setters  ******************//

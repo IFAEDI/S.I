@@ -37,26 +37,32 @@ inclure_fichier('commun', 'personne.class', 'php');
 /* string */ $commentaire = '';
 /* int */ $priorite = 0;
 
-if (verifierPresent('id')) {
-	$id = intval($_POST['id']);
+if (verifierPresent('id_contact')) {
+	$id = intval($_POST['id_contact']);
 }
 if (verifierPresent('id_entreprise')) {
 	$id_entreprise = intval($_POST['id_entreprise']);
 }
 if (verifierPresent('fonction')) {
-	$fonction = Protection_XSS($_POST['fonction']);
+	$fonction = Protection_XSS(urldecode($_POST['fonction']));
 }
 if (verifierPresentObjet('personne')) {
 	$personne = $_POST['personne'];
 	$personne['nom'] = Protection_XSS(urldecode($personne['nom']));
 	$personne['prenom'] = Protection_XSS(urldecode($personne['prenom']));
 	$personne['id'] = intval($personne['id']);
-	$compteur = count($personne['mails']);
-	foreach( $personne['telephones'] as $tel ) {
-		$tel[0] = Protection_XSS(urldecode($tel[0]));
-		$tel[1] = Protection_XSS(urldecode($tel[1]));
+	$compteur = 0;
+	if (array_key_exists('telephones', $personne)) {
+		$compteur = count($personne['telephones']);
 	}
-	$compteur = count($personne['mails']);
+	for($i = 0; $i < $compteur; $i++) {
+		$personne['telephones'][$i][0] = Protection_XSS(urldecode($personne['telephones'][$i][0]));
+		$personne['telephones'][$i][1] = Protection_XSS(urldecode($personne['telephones'][$i][1]));
+	}
+	$compteur = 0;
+	if (array_key_exists('mails', $personne)) {
+		$compteur = count($personne['mails']);
+	}
 	for($i = 0; $i < $compteur; $i++) {
 		$personne['mails'][$i][0] = Protection_XSS(urldecode($personne['mails'][$i][0]));
 		$personne['mails'][$i][1] = Protection_XSS(urldecode($personne['mails'][$i][1]));
@@ -86,13 +92,18 @@ else {
 	$personneObj = Personne::AjouterPersonne($personne['nom'], $personne['prenom'], Personne::ENTREPRISE);
 }
 	
- /* obj Ville */ $villeObj = new Ville(Etudiant::GetVilleOrAdd($ville['libelle'], $ville['code_postal'], $ville['pays']));
+	
+  /* obj Ville */ $villeObj = new Ville(Etudiant::GetVilleOrAdd($ville['libelle'], $ville['code_postal'], $ville['pays']));
   /* obj Entreprise */ $entrepriseObj = Entreprise::GetEntrepriseByID($id_entreprise);
  if (($personneObj != null) && ($entrepriseObj != null) && ($villeObj != null) && ($fonction != null)) {
  
 	// Ajout des tels & emails :
-	$personneObj->changeTelephones( $personne['telephones'] );
-	$personneObj->changeMails( $personne['mails'] );
+	if (array_key_exists('telephones', $personne)) {
+		$personneObj->changeTelephones( $personne['telephones'] );
+	}
+	if (array_key_exists('mails', $personne)) {
+		$personneObj->changeMails( $personne['mails'] );
+	}
 	$personneObj->changeInfo( $personne['nom'],  $personne['prenom']);
 	
 	 /* int */ $idContact = Contact::UpdateContact( $id, $personneObj, $entrepriseObj, $villeObj, $fonction, $commentaire, $priorite );
@@ -100,15 +111,21 @@ else {
 	 /*
 	 * Renvoyer le JSON
 	 */
-	$json['code'] = ($idContact >= 0) ? 'ok' : 'error';
-	// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-	if ($idContact >= 0) {
-		$json['id'] = $idContact;
+	if ($idContact === 0 || $idContact === Contact::getErreurChampInconnu()) {
+		$json['code'] = 'errorChamp';
+	}
+	elseif ($idContact === Contact::getErreurExecRequete()) {
+		$json['code'] = 'errorBDD';
+	}
+	else {
+		$json['code'] = 'ok';
+		$json['id'] = ($id != 0)?0:$idContact;
 		$json['id_personne'] = $personneObj->getId();
 	}
+
  }
  else {
-	$json['code'] ='Donnees_manquantes';
+	$json['code'] ='erreurChamp';
  }
 echo json_encode($json);
 
