@@ -18,6 +18,13 @@ inclure_fichier('controleur', 'entreprise.class', 'php');
 
 class CommentaireEntreprise {
 
+	//****************  Constantes  ******************//
+	private static $ERREUR_EXEC_REQUETE = -10;
+	public static function getErreurExecRequete() { return self::$ERREUR_EXEC_REQUETE; }
+	
+	private static $ERREUR_CHAMP_INCONNU = -20;
+	public static function getErreurChampInconnu() { return self::$ERREUR_CHAMP_INCONNU; }
+	
 	//****************  Attributs  ******************//
 	private $ID_COMMENTAIRE;
 	private $ID_PERSONNE;
@@ -112,12 +119,14 @@ class CommentaireEntreprise {
 			return false;
 		}
 
-		$result = BD::executeModif( 'DELETE FROM COMMENTAIRE_ENTREPRISE WHERE ID_COMMENTAIRE = :id', array('id' => $_id));
-		if( $result == 0 ) {
-			return false;
+		try {
+			$result = BD::executeModif( 'DELETE FROM COMMENTAIRE_ENTREPRISE WHERE ID_COMMENTAIRE = :id', array('id' => $_id));
+		}
+		catch (Exception $e) {
+			return CommentaireEntreprise::getErreurExecRequete();
 		}
 
-		return true;
+		return $result;
 	}
 
 	/**
@@ -132,9 +141,10 @@ class CommentaireEntreprise {
 
 		/* Il faut impérativement une instance entreprise et une instance de personne passée en paramètre */
 		if( $_entreprise == null || $_personne == null ) {
-			return false;
+			return CommentaireEntreprise::getErreurChampInconnu();
 		}
-
+		$result = 0;
+		
 		/* Mise à jour du commentaire */
 		if( $_id > 0 ) {
 	
@@ -143,10 +153,11 @@ class CommentaireEntreprise {
 				'contenu' => $_contenu, 'categorie' => $_categorie, 'date' => $_date);
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'UPDATE COMMENTAIRE_PERSONNE SET ID_PERSONNE = :idPersonne, ID_ENTREPRISE = idEntreprise, CONTENU = :contenu, CATEGORIE = :categorie, DATE = :date WHERE ID_COMMENTAIRE = :id', $info );
-
-			if( $result == 0 ) {
-				return false;
+			try {
+				$result = BD::executeModif( 'UPDATE COMMENTAIRE_PERSONNE SET ID_PERSONNE = :idPersonne, ID_ENTREPRISE = idEntreprise, CONTENU = :contenu, CATEGORIE = :categorie, DATE = :date WHERE ID_COMMENTAIRE = :id', $info );
+			}
+			catch (Exception $e) {
+				return CommentaireEntreprise::getErreurExecRequete();
 			}
 		}
 		/* Ajout d'un nouveau commentaire */
@@ -157,16 +168,18 @@ class CommentaireEntreprise {
 				'contenu' => $_contenu, 'categorie' => $_categorie);
 
 			/* Execution de la requête */
-			$result = BD::executeModif( 'INSERT INTO COMMENTAIRE_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, CONTENU, CATEGORIE) VALUES( :idPersonne, :idEntreprise, :contenu, :categorie)', $info );
-			if( $result == 0 ) {
-				return false;
+			try {
+				$result = BD::executeModif( 'INSERT INTO COMMENTAIRE_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, CONTENU, CATEGORIE) VALUES( :idPersonne, :idEntreprise, :contenu, :categorie)', $info );
+			}
+			catch (Exception $e) {
+				return CommentaireEntreprise::getErreurExecRequete();
 			}
 
-			/* Récupération de l'identifiant du nouveau commentaire */
-			$_id = BD::getConnection()->lastInsertId();
+			$result = BD::GetConnection()->lastInsertId();
+
 		}
 
-		return $_id;
+		return $result;
 	}
 
     //****************  Fonctions  ******************//

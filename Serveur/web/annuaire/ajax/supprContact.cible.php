@@ -55,7 +55,17 @@ if (verifierPresent('id')) {
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($codeRet) ? 'ok' : 'error';
+ if ($codeRet === 0) {
+	$json['code'] = 'errorChamp';
+}
+elseif ($codeRet === Contact::getErreurExecRequete()) {
+	$json['code'] = 'errorBDD';
+}
+else {
+	$json['code'] = 'ok';
+
+}
+
 // FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
 echo json_encode($json);
 

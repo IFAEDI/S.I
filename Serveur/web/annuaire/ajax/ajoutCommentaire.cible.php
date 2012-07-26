@@ -70,12 +70,16 @@ if ($etatVerif == 2) {
 	/*
 	 * Renvoyer le JSON
 	 */
-	$json['code'] = ($id != -1) ? 'ok' : 'error';
-	// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-	if ($id != -1) {
+	 if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
+		$json['code'] = 'errorChamp';
+	}
+	elseif ($id === CommentaireEntreprise::getErreurExecRequete()) {
+		$json['code'] = 'errorBDD';
+	}
+	else {
+		$json['code'] = 'ok';
 		$json['id'] = $id;
 	}
-
 }
 else {
 	$json['code'] = 'Donnees_manquantes'.$etatVerif;

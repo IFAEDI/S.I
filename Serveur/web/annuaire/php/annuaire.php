@@ -21,21 +21,64 @@ if (($authentification->isAuthentifie() == false) ||
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
 inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('controleur', 'contact.class', 'php');
 inclure_fichier('annuaire', 'annuaire.class', 'js');
-inclure_fichier('commun', 'jquery.validate.min', 'js');
+inclure_fichier('commun', 'validate', 'js');
 inclure_fichier('commun', 'dateFormat', 'js');
+inclure_fichier('commun', 'handlebars-1.0.0.beta.6', 'js');
+inclure_fichier('commun', 'jquery.highlight', 'js');
+inclure_fichier('annuaire', 'templateInfoEntreprise', 'template');
+inclure_fichier('annuaire', 'templateSearchContact', 'template');
 
 // TEST :
 $droitEdition = true;
 
 // Récupération de la liste des noms d'entreprises :
 $listeEntreprises = Entreprise::GetListeEntreprises();
+$listeSecteurs = Entreprise::GetListeSecteurs();
+$listePostes = Contact::GetListeFonctions();
 ?>
 
+
+
 <div id="annuaire" class="row">
+	<script type="text/javascript">
+		<?php
+			// Génération de la liste des noms d'entreprises :								
+			/* int */ $nb_entreprises = count($listeEntreprises);	
+			for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
+				echo 'Annuaire.listeEntreprises['.$i.'] = ['.$listeEntreprises[$i]->getId().', "'.$listeEntreprises[$i]->getNom().'"];';
+			}
+
+			// On en profite pour passer au JS des info sur l'utilisateur :
+			echo 'Annuaire.utilisateur = {personne:{prenom:"'.$utilisateur->getPersonne()->getPrenom().'", nom:"'.$utilisateur->getPersonne()->getNom().'", role:'.$utilisateur->getPersonne()->getRole().'}};';
+							
+			// Génération de la liste des secteurs déja en BDD :
+			/* int */ $nb_secteurs = count($listeSecteurs);
+			for (/* int */ $i = 0; $i < $nb_secteurs; $i++) {
+				echo 'Annuaire.listeSecteurs['.$i.'] = "'.$listeSecteurs[$i].'";';
+			}
+			
+			// Génération de la liste des fonctions déja en BDD :
+			/* int */ $nb_postes = count($listePostes);
+			for (/* int */ $i = 0; $i < $nb_postes; $i++) {
+				echo 'Annuaire.listePostes['.$i.'] = "'.$listePostes[$i].'";';
+			}
+		?>
+	</script>
+	<div id="rechercheHelp" style="display:none;">
+		<h5>Mots-clés</h5>
+		<p>Plusieurs mots-clés (mots complets ou fragments, nombres, ...) peuvent être entrés lors de la recherche, séparés par des espaces et/ou virgules. La recherche retournera alors les contacts contenant l'ensemble des mots-clés donnés dans leurs attributs.<br/>
+			<small><em>Ex : "SociétéX Jean,Mart , 0453"</em></small>
+		</p>
+		<h5>Champs</h5>
+		<p>Il est possible de limiter la porter d'un mot-clé à un attribut précis, avec la syntaxe suivante : <em>attr:keyword</em> (pas d'espace avant ou après le point-virgule). Les attributs disponibles sont : <em>nom, prénom, entr, poste, email, tel, ville, cp, pays & rem.</em><br/>
+			<small><em>Ex : "entr:SociétéX Jean,nom:Mart , 0453"</em></small>
+		</p>
+	</div>
 	<input type="hidden" id="inputModif" name="inputModif" value=<?php echo ($droitEdition? 1:0); ?> />
 	<div class="span2 columns">
-		<div class="liste_entreprises">
+		<div id="controleur">
 			<div class="tabbable">
 				<div id="boutonAjoutEntrepriseListe">
 					<?php
@@ -46,32 +89,23 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 				</div>
 				<ul class="nav nav-tabs">
 					  <li class="active"><a title="Liste" href="#liste" data-toggle="tab"><i class="icon-list-alt"></i></a></li>
-					  <li><a title="Recherche" href="#recherche" data-toggle="tab"><i class="icon-search"></i></a></li>
+					  <li><a id="recherche-tab" title="Recherche" href="#recherche" data-toggle="tab"><i class="icon-search"></i></a></li>
 				</ul>
 				<div class="tab-content">
 						<div class="tab-pane active" id="liste">
 							<table id="listeEntreprises" class="table table-stripped">
 								<tbody>
-									<?php
-										// Génération de la liste des noms d'entreprises :
-										
-										/* int */ $nb_entreprises = count($listeEntreprises);
-										
-										echo '<script type="text/javascript">';
-										for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
-											echo 'Annuaire.listeEntreprises['.$i.'] = ['.$listeEntreprises[$i]->getId().', "'.$listeEntreprises[$i]->getNom().'"];';
-										}
-										echo 'Annuaire.afficherListeEntreprises();';
-										
-										// On en profite pour passer au JS des info sur l'utilisateur :
-										echo 'Annuaire.utilisateur = {personne:{prenom:"'.$utilisateur->getPersonne()->getPrenom().'", nom:"'.$utilisateur->getPersonne()->getNom().'", role:'.$utilisateur->getPersonne()->getRole().'}};</script>';
-										
-									?>
 								</tbody>
 							</table>
 						</div>
 					<div class="tab-pane" id="recherche">
-						<p>Non-implémenté</p>
+						<form id="formSearchContact">
+							<input id="formSearchContactKeywords" type="text" class="span2 search-query" placeholder="Mots-clés">
+							<div id="formSearchContactButton">
+								<button id="formSearchContactSubmit" type="submit" class="btn btn-primary"><i class="icon-search icon-white"></i> Rechercher</button>
+								<button id="formSearchContactHelp" rel="popover" data-placement="right" data-original-title='<i class=\"icon-question-sign"></i> Recherche - Aide' class="btn btn-info"><i class="icon-question-sign icon-white"></i></button>
+							  </div>
+						</form>
 					</div>
 				</div>
 			</div> <!-- /tabbable -->
@@ -104,35 +138,35 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 	
 	<div id="ensembleModal" style="display:hidden;">
 		<div class="modal hide fade in" id="modalUpdateEntreprise">
-			<form id="formUpdateEntreprise" class="form-horizontal" target="ajoutEntreprise.cible.php">
+			<form id="formUpdateEntreprise" name="formUpdateEntreprise" class="form-horizontal" target="#">
 				<div class="modal-header">
 					<a class="close reset" data-dismiss="modal">×</a>
-					<h3>Ajout d'une entreprise - Description générale</h3>
+					<h3><span class="type-action">Ajout d'une entreprise</span> - Description générale</h3>
 				</div>
 				<input id="formUpdateEntrepriseId" value=0 type="hidden"/>
 				<div class="modal-body">
 										
 				<fieldset class="control-group">
 					<div class="control-group">
-						<label class="control-label" for="formUpdateEntrepriseNom">Nom <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateEntrepriseNom">Nom <i class="icon-asterisk"></i> <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-flag"></i></span><input class="input-large required" id="formUpdateEntrepriseNom" type="text" minlength="2" placeholder="Nom" />
+								<span class="add-on"><i class="icon-flag"></i></span><input class="input-large required" name="formUpdateEntrepriseNom" id="formUpdateEntrepriseNom" type="text" minlength="2" placeholder="Nom" autofocus />
 							</div>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="formUpdateEntrepriseSecteur">Secteur <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateEntrepriseSecteur">Secteur <i class="icon-asterisk"></i> <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-tag"></i></span><input class="input-large required" id="formUpdateEntrepriseSecteur" type="text" minlength="2" placeholder="Secteur" />
+								<span class="add-on"><i class="icon-tag"></i></span><input class="input-large required" name="formUpdateEntrepriseSecteur" id="formUpdateEntrepriseSecteur" type="text" minlength="2" placeholder="Secteur" data-provide="typeahead" data-items="4" data-source="" autocomplete="off"/>
 							</div>
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="formUpdateEntrepriseDescription">Description <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateEntrepriseDescription">Description <i class="icon-asterisk"></i> <span class="error"></span></label>
 						<div class="controls">
-							<textarea class="input-xlarge required" id="formUpdateEntrepriseDescription" rows="3"  placeholder="Description" ></textarea>
+							<textarea class="input-xlarge required" name="formUpdateEntrepriseDescription" id="formUpdateEntrepriseDescription" rows="3"  placeholder="Description" ></textarea>
 						</div>
 					</div>
 				</fieldset>
@@ -141,7 +175,7 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 				<div class="modal-footer form-actions">
 					<a href="#" class="btn reset" data-dismiss="modal">Annuler</a>
 					<a class="btn reset">RAZ</a>
-					<a id="btnValiderUpdateEntreprise" href="#" class="btn btn-primary">Continuer</a>
+					<button type="submit" id="btnValiderUpdateEntreprise" class="btn btn-primary">Continuer</button>
 				</div> 
 			</form>
 		</div>
@@ -160,28 +194,28 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 				<fieldset class="control-group">
 					<div class="control-group">
 						
-						<label class="control-label" for="formUpdateContactNom">Nom & Prénom <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateContactNom">Nom & Prénom <i class="icon-asterisk"></i> <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-user"></i></span><input class="input-small required" id="formUpdateContactNom" type="text" placeholder="Nom" minlength="2" />
+								<span class="add-on"><i class="icon-user"></i></span><input class="input-small required" name="formUpdateContactNom" id="formUpdateContactNom" type="text" placeholder="Nom" minlength="2" autofocus />
 							</div>
 							
-							<input class="input-medium required" id="formUpdateContactPrenom" type="text" placeholder="Prénom" minlength="2" />
+							<input class="input-medium required" name="formUpdateContactPrenom" id="formUpdateContactPrenom" type="text" placeholder="Prénom" minlength="2" />
 						</div>
 					</div>
 					<div class="control-group">
-						<label class="control-label" for="formUpdateContactPoste">Fonction <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateContactPoste">Fonction <i class="icon-asterisk"></i> <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-tag"></i></span><input class="input-xlarge required" id="formUpdateContactPoste" type="text" minlength="2" />
+								<span class="add-on"><i class="icon-tag"></i></span><input class="input-xlarge required" name="formUpdateContactPoste" id="formUpdateContactPoste" type="text" minlength="2" data-provide="typeahead" data-items="4" data-source="" autocomplete="off"/>
 							</div>
 						</div>
 					</div>
 					<div id="formUpdateContactTelGroup" class="control-group">
-						<label class="control-label" for="formUpdateContactTel">Téléphone <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateContactTel">Téléphone <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on">#</span><input class="input-medium required number" id="formUpdateContactTel" placeholder="N° Téléphone"type="text" minlength="8" />
+								<span class="add-on">#</span><input class="input-medium required number" name="formUpdateContactTel" id="formUpdateContactTel" placeholder="N° Téléphone"type="text" minlength="8" />
 							</div>
 							 <select id="formUpdateContactTelLabel" name="formUpdateContactTelLabel" class="input-small">
 								<option value="Bureau" >Bureau</option>
@@ -193,10 +227,10 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 						</div>
 					</div>
 					<div  id="formUpdateContactEmailGroup" class="control-group">
-						<label class="control-label" for="formUpdateContactEmail">Email <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateContactEmail">Email <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on">@</span><input class="input-medium required email" id="formUpdateContactEmail" placeholder="Email" type="text" minlength="6" />
+								<span class="add-on">@</span><input class="input-medium required email" name="formUpdateContactEmail" id="formUpdateContactEmail" placeholder="Email" type="text" minlength="6" />
 							</div>
 							<select id="formUpdateContactEmailLabel" name="formUpdateContactEmailLabel" class="input-small">
 								<option value="Pro" >Pro</option>
@@ -207,18 +241,18 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 						</div>
 					</div>
 					<div  id="formUpdateContactVilleGroup" class="control-group">
-						<label class="control-label" for="formUpdateContactVille">Ville <i class="icon-asterisk"></i></label>
+						<label class="control-label" for="formUpdateContactVille">Ville <span class="error"></span></label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-map-marker"></i></span><input class="input-medium required" id="formUpdateContactVilleLibelle" placeholder="Ville" type="text" minlength="2" />
+								<span class="add-on"><i class="icon-map-marker"></i></span><input class="input-medium required" name="formUpdateContactVilleLibelle" id="formUpdateContactVilleLibelle" placeholder="Ville" type="text" minlength="2" />
 							</div>
-							<input class="input-mini required" id="formUpdateContactVilleCodePostal" placeholder="Code" type="text" minlength="2" />
-							<input class="input-small required" id="formUpdateContactVillePays" placeholder="Pays" type="text" minlength="3" />
+							<input class="input-mini required" name="formUpdateContactVilleCodePostal" id="formUpdateContactVilleCodePostal" placeholder="Code" type="text" minlength="2" />
+							<input class="input-small required" name="formUpdateContactVillePays" id="formUpdateContactVillePays" placeholder="Pays" type="text" minlength="3" />
 						</div>
 					</div>
 					
 					<div class="control-group">
-						<label class="control-label" for="formUpdateContactPriorite">Priorité & Commentaire</label>
+						<label class="control-label" for="formUpdateContactPriorite">Priorité & Commentaire <span class="error"></span></label>
 						<div class="controls">
 							<select id="formUpdateContactPriorite" name="formUpdateContactPriorite" class="input-medium">
 								<option value=3 >3 - Prioritaire</option>
@@ -228,7 +262,7 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 								<option value=-1 >X - Déconseillée</option>
 							</select>
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-comment"></i></span><input class="input-medium" id="formUpdateContactCom" type="text" placeholder="Commentaire"/>
+								<span class="add-on"><i class="icon-comment"></i></span><input class="input-medium" name="formUpdateContactCom" id="formUpdateContactCom" type="text" placeholder="Commentaire"/>
 							</div>
 						</div>
 					</div>
@@ -238,7 +272,7 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 				<div class="modal-footer form-actions">
 					<a href="#" class="btn" data-dismiss="modal">Annuler</a>
 					<a type="reset" class="btn">RAZ</a>
-					<a id="btnValiderUpdateContact" href="#" class="btn btn-primary">Continuer</a>
+					<button type="submit" id="btnValiderUpdateContact" class="btn btn-primary">Continuer</button>
 				</div> 
 			</form>
 		</div>
@@ -279,9 +313,9 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 							</div>
 						</div>
 						<div class="control-group">
-							<label class="control-label" for="formAjoutCommentaireContenu">Commentaire <i class="icon-asterisk"></i></label>
+							<label class="control-label" for="formAjoutCommentaireContenu">Commentaire <i class="icon-asterisk"></i> <span class="error"></span></label>
 							<div class="controls">
-								<textarea class="input-xlarge required" id="formAjoutCommentaireContenu" rows="3"  placeholder="Commentaire" ></textarea>
+								<textarea class="input-xlarge required"  name="formAjoutCommentaireContenu" id="formAjoutCommentaireContenu" rows="3"  placeholder="Commentaire" autofocus ></textarea>
 							</div>
 						</div>
 					</fieldset>
@@ -290,7 +324,7 @@ $listeEntreprises = Entreprise::GetListeEntreprises();
 				<div class="modal-footer form-actions">
 					<a href="#" class="btn reset" data-dismiss="modal">Annuler</a>
 					<a class="btn reset">RAZ</a>
-					<a id="btnValiderAjoutCommentaire" href="#" class="btn btn-primary">Continuer</a>
+					<button type="submit" id="btnValiderAjoutCommentaire" class="btn btn-primary">Continuer</button>
 				</div> 
 			</form>
 		</div>
