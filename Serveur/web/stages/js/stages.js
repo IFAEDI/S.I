@@ -8,12 +8,13 @@ function afficherResultats(json) {
 	$('#information').show();
 	$('#description').slideUp();
 
-	if (json.code === 'error') {
-		$('#information').text('Impossible de récupérer le résultat ' +
-				'suite à une erreur côté serveur. Merci de ' +
-				'réessayer ou de contacter un administrateur.');
+	if (json.code != 'ok') {
+		$('#information').html('Impossible de récupérer le résultat.' +
+				'Merci de réessayer ultérieurement ou de contacter un administrateur.<br />' +
+				'Le serveur a renvoyé : <i>"' + json.mesg + '"</i>.' );
 		$('#fenetre').hide();
 		$('#resultats').html('');
+
 		return;
 	}
 

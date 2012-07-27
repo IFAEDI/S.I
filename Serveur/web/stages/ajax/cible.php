@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'stages.class', 'php');
+inclure_fichier( 'commun', 'authentification.class', 'php' );
 
 /**
  * Ce fichier sert de cible à la recherche de stages. C'est celui qui
@@ -13,6 +14,19 @@ inclure_fichier('controleur', 'stages.class', 'php');
  *
  * Auteur : benjamin.bouvier@gmail.com (2011/2012)
  */
+
+
+/* Avant tout, on vérifie que l'on a bien le niveau d'accréditation nécessaire ! */
+$authentification = new Authentification();
+
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ETUDIANT &&
+	 $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+}
+
 
 /*
  * Récupérer et transformer le JSON
