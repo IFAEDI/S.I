@@ -73,7 +73,7 @@ $resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu,
  * Renvoyer le JSON
  */
 $json['code'] = ($resultats != Stages::ERROR) ? 'ok' : 'error';
-$json['msg'] = $resultats;
+$json['mesg'] = $resultats;
 echo json_encode($json);
 
 

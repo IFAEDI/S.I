@@ -19,7 +19,7 @@ function afficherResultats(json) {
 	}
 
 	var affichage = '';
-	var resultats = json.msg;
+	var resultats = json.mesg;
 	if(!resultats || resultats.length === 0) {
 		$('#information').text('Aucun résultat n\'a été trouvé.');
 		$('#fenetre').hide();

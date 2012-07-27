@@ -36,7 +36,7 @@ class Stages {
 				$lieu, $entreprise) {
 
 		$requete = new Requete("SELECT titre, annee, description, " .
-		"duree, lieu, entreprise, contact, lien_fichier FROM Stage");
+		"duree, lieu, entreprise, contact, lien_fichier FROM STAGE");
 
 		if ( isset($annee) ) {
 			switch($annee) {
