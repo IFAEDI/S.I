@@ -17,6 +17,12 @@ class Stages {
 	const ERROR = -1; 
 
 	/**
+	 * Variable stockant le message d'erreur de la dernière erreur survenue
+	 */
+	private static $last_error = "";
+	
+
+	/**
 	 * Recherche des stages appropriés selon les paramètres donnés.
 	 *
 	 * $mots_cles : tableau contenant les mots clés sous forme de
@@ -56,7 +62,6 @@ class Stages {
 					break;
 			}
 			$requete->ajouterCondition($condition);
-			// $requete->ajouterConditionEgale('annee', $annee);	
 		}
 
 		/* TODO durée encore non prise en compte */
@@ -84,6 +89,7 @@ class Stages {
 		try {
 			$resultats = $requete->lire();
 			$nb_resultats = count($resultats);
+
 			for ($i = 0; $i < $nb_resultats; ++$i) {
 				// Reformater les années correctement.
 				if ($resultats[$i]->annee == 7) {
@@ -92,10 +98,20 @@ class Stages {
 					$resultats[$i]->annee = '4 et 5';
 				}
 			}
+
 			return $resultats; 
 		} catch (Exception $e) {
+			Stages::$last_error = $e->getMessage();
 			return self::ERROR;
 		}
+	}
+
+	/**
+	 * Récupère La dernière erreur qui a eu lieu
+	 * @return Le descriptif de l'erreur (String)
+	 */
+	static function getLastError() {
+		return Stages::$last_error;
 	}
 }
 

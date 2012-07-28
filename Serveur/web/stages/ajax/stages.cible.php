@@ -65,15 +65,22 @@ if (verifierPresent('entreprise')) {
 /*
  * Appeler la couche du dessous
  */
-$resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu, 
-       			$entreprise);
+$resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu, $entreprise);
 
 
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($resultats != Stages::ERROR) ? 'ok' : 'error';
-$json['mesg'] = $resultats;
+$json = array();
+if( $resultats == Stages::ERROR ) {
+	$json['code'] = 'error';
+	$json['mesg'] = Stages::getLastError();
+}
+else {
+	$json['code'] = 'ok';
+	$json['stages'] = $resultats;
+}
+
 echo json_encode($json);
 
 
