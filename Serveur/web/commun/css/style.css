@@ -26,6 +26,23 @@ table.tablesorter thead tr .headerSortDown {
 	margin-bottom: 20px;
 }
 
+.hero_motcle {
+	font-weight: bold;
+	font-size: 1.2em;
+	color: #049cdb;
+}
+
+.centre
+{
+	text-align:center;
+}
+
+.comment{
+	font-size:0.9em;
+	color:grey;
+	font-style:italic;
+}
+
 /* ---------- MODULE ANNUAIRE ---------- */
 
 #annuaire {
@@ -148,12 +165,6 @@ table.tablesorter thead tr .headerSortDown {
     text-align: right;
 }
 
-#accueil .hero_motcle {
-	font-weight: bold;
-	font-size: 1.2em;
-	color: #049cdb;
-}
-
 #accueil #network {
 	margin-top: 30px;
 }
@@ -164,17 +175,16 @@ table.tablesorter thead tr .headerSortDown {
 	margin: 11px;
 }
 
-#rif p:first-letter
-{
-	padding-left:20px;
+#rifs p {
+	text-align:justify;
 }
 
-#rif .centre
+#rifs .centre
 {
 	text-align:center;
 }
 
-#rif .comment{
+#rifs .comment{
 	font-size:0.9em; 
 	color:grey; 
 	font-style:italic;

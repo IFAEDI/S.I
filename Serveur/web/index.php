@@ -96,11 +96,13 @@ if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == '
     $titre_page = 'Rencontres IF';
     $nom_module = 'rifs';
     $nom_page = 'rifs';
+	$titre_module = 'Entreprises';
 /* RIFs Inscription */
 } elseif ($_GET['page'] == 'RIFs_Inscription') {
     $titre_page = 'Inscription aux Rencontres IF';
     $nom_module = 'rifs';
     $nom_page = 'inscription';
+	$titre_module = 'Entreprises';
 /* Stages Etudiant */
 } elseif ($_GET['page'] == 'Stages_Etudiant') {
     $titre_page = "Recherche de Stages";

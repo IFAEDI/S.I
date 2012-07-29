@@ -36,7 +36,7 @@ inclure_fichier('cvtheque', 'cvtheque', 'js');
 						<label class="control-label" for="annee_voulu">Année</label>
 						<div class="controls">
 							<div class="input-prepend">
-								<span class="add-on"><i class="icon-list-alt"></i></span><select id="annee_voulu"  class="input-small">
+								<span class="add-on"><i class="icon-list-alt"></i></span><select id="annee_voulu" class="input-small">
 									<option value="">Toute</option>
 									<option value="3">3ème année</option>
 									<option value="4">4ème année</option>
@@ -55,7 +55,7 @@ inclure_fichier('cvtheque', 'cvtheque', 'js');
 							</div>
 						</div>
 					</div>
-					<a class="btn btn-primary offset1" href="javascript:Rechercher();">Rechercher <i class="icon-search"></i></a>
+					<a class="btn btn-primary offset1" href="javascript:Rechercher();"><i class="icon-search icon-white"></i> Rechercher</a>
 				</fieldset>
 			</form>
 		</div>
