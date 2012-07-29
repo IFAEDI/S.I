@@ -12,7 +12,7 @@ $limite_taille_titre = 40; // caractères
 // Suppression de toutes les lignes déjà présentes en BDD.
 // TODO améliorer ça ?
 $connexion = BD::GetConnection();
-BD::Prepare('DELETE FROM Stage', NULL);
+BD::Prepare('DELETE FROM STAGE', NULL);
 
 // On compte d'abord le nombre de lignes pour être sûr de ne pas en oublier.
 $nombre_lignes_total = 0;
@@ -57,7 +57,7 @@ if ($fichier = fopen($chemin, 'r')) {
 				$lien_fichier = $ligne[9];
 
 		// Préparation de la requête d'insertion.
-                $requete = 'INSERT INTO `Stage` (`titre`, `annee`, 
+                $requete = 'INSERT INTO `STAGE` (`titre`, `annee`, 
                 `description`, `lien_fichier`, `lieu`, `entreprise`, `contact`) VALUES ';
                 $requete .= '(:titre, :annee, :description, :lien_fichier,
                 :lieu, :entreprise, :contact)';

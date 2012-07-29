@@ -141,6 +141,10 @@ table.tablesorter thead tr .headerSortDown {
 	display: block;
 }
 
+#stages #form_stages {
+	padding-bottom: 0px;
+}
+
 /* ---------- MODULE ENTRETIENS ---------- */
 
 

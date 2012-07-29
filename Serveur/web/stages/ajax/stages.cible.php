@@ -2,6 +2,7 @@
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'stages.class', 'php');
+inclure_fichier( 'commun', 'authentification.class', 'php' );
 
 /**
  * Ce fichier sert de cible à la recherche de stages. C'est celui qui
@@ -13,6 +14,19 @@ inclure_fichier('controleur', 'stages.class', 'php');
  *
  * Auteur : benjamin.bouvier@gmail.com (2011/2012)
  */
+
+
+/* Avant tout, on vérifie que l'on a bien le niveau d'accréditation nécessaire ! */
+$authentification = new Authentification();
+
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ETUDIANT &&
+	 $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+}
+
 
 /*
  * Récupérer et transformer le JSON
@@ -51,15 +65,22 @@ if (verifierPresent('entreprise')) {
 /*
  * Appeler la couche du dessous
  */
-$resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu, 
-       			$entreprise);
+$resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu, $entreprise);
 
 
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($resultats != Stages::ERROR) ? 'ok' : 'error';
-$json['msg'] = $resultats;
+$json = array();
+if( $resultats == Stages::ERROR ) {
+	$json['code'] = 'error';
+	$json['mesg'] = Stages::getLastError();
+}
+else {
+	$json['code'] = 'ok';
+	$json['stages'] = $resultats;
+}
+
 echo json_encode($json);
 
 
