@@ -6,7 +6,7 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
- * Controleur associé à la table Contact
+ * Controleur associÃ© Ã  la table Contact
  */
  
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
@@ -41,8 +41,8 @@ class Contact {
 
 	//****************  Fonctions statiques  ******************//
 	/**
-	* Récuperation de l'objet Contact par l'ID
-	* $_id : L'identifiant du contact à récupérer
+	* RÃ©cuperation de l'objet Contact par l'ID
+	* $_id : L'identifiant du contact Ã  rÃ©cupÃ©rer
 	* @return L'instance du contact, ou null
 	* @throws Une exeception si une erreur est survenue au niveau de la base
 	*/
@@ -69,7 +69,7 @@ class Contact {
 	
 
 	/**
-	* Récuperation l'ensemble des Contacts, ordonnés par priorité
+	* RÃ©cuperation l'ensemble des Contacts, ordonnÃ©s par prioritÃ©
 	* @return Un tableau d'instance ou null
 	* @throws Une exception en cas d'erreur provenant de la base.
 	*/
@@ -77,7 +77,7 @@ class Contact {
 
 		$obj = array();
 
-		/* Tentative de sélection de tous les ID ordonnés par priorité */
+		/* Tentative de sÃ©lection de tous les ID ordonnÃ©s par prioritÃ© */
 		$result = BD::executeSelect( 'SELECT ID_CONTACT FROM CONTACT_ENTREPRISE ORDER BY PRIORITE', array(), BD::RECUPERER_TOUT );
 		if( $result == null ) {
 				return null;
@@ -94,9 +94,9 @@ class Contact {
 	}
 	
 	/**
-	* Récuperation des données de l'ensemble des Contacts, ordonné alphabétiquement par priorité, pour une entreprise donnée
+	* RÃ©cuperation des donnÃ©es de l'ensemble des Contacts, ordonnÃ© alphabÃ©tiquement par prioritÃ©, pour une entreprise donnÃ©e
 	* $_idEntreprise : l'identifiant de l'entreprise 
-	* $_entreprise : instance de l'entreprise qui sera associée au contact (optionnel)
+	* $_entreprise : instance de l'entreprise qui sera associÃ©e au contact (optionnel)
 	* @return Un tableau d'instance
 	* @throws Une exception en cas d'erreur de la part de la BD
 	*/
@@ -114,7 +114,7 @@ class Contact {
 		foreach( $result as $row ) {
 
 			$obj[$i] = self::GetContactByID( $row['ID_CONTACT'] );
-			$obj[$i]->entreprise = $_entreprise; // On fixe l'entreprise, comme ça, ça évitera de faire de la requête plus tard
+			$obj[$i]->entreprise = $_entreprise; // On fixe l'entreprise, comme Ã§a, Ã§a Ã©vitera de faire de la requÃªte plus tard
 			$i++;
 		}
 
@@ -122,11 +122,11 @@ class Contact {
 	}
 
 	/**
-	 * Recherche des contacts appropriés selon des mots clés donnés.
+	 * Recherche des contacts appropriÃ©s selon des mots clÃ©s donnÃ©s.
 	 *
-	 * $listeElementsRecherche : Tableau contenant les mots clés et les champs auquels chacun s'applique (si ce champ vaut "*", alors le mot-clé doit être appliqué à tous les champs possibles)
+	 * $listeElementsRecherche : Tableau contenant les mots clÃ©s et les champs auquels chacun s'applique (si ce champ vaut "*", alors le mot-clÃ© doit Ãªtre appliquÃ© Ã  tous les champs possibles)
 	 *
-	 * @return Une liste de contact triés par entreprise si la requête s'est bien passée, une erreur sinon.
+	 * @return Une liste de contact triÃ©s par entreprise si la requÃªte s'est bien passÃ©e, une erreur sinon.
 	 */
 
 	static function Rechercher($listeElementsRecherche) {
@@ -147,12 +147,12 @@ class Contact {
 			$champConcerne = $el['champ'];
 			$val = $el['val'];
 			$valLike = '%'.$val.'%';
-			if (isset($champConcerne)) { // Si ce champs est non-nul, alors on limite la recherche à celui-ci, sauf s'il vaut '*' :
+			if (isset($champConcerne)) { // Si ce champs est non-nul, alors on limite la recherche Ã  celui-ci, sauf s'il vaut '*' :
 				if ($champConcerne == 'nom' ) {
 					array_push($clauseWhere, 'p.NOM LIKE :nom'.$i);
 					$parametres['nom'.$i] = $valLike;
 				}
-				else if ($champConcerne == 'prénom') {
+				else if ($champConcerne == 'prÃ©nom') {
 					array_push($clauseWhere, 'p.PRENOM LIKE :prenom'.$i);
 					$parametres['prenom'.$i] = $valLike;
 				}
@@ -193,7 +193,7 @@ class Contact {
 					array_push($clauseWhere, 'c.PRIORITE LIKE :prio'.$i);
 					$parametres['prio'.$i] = $valLike;
 				}
-				else if ($champConcerne == '*') { // On porte la comparaison sur tous les champs prévus :
+				else if ($champConcerne == '*') { // On porte la comparaison sur tous les champs prÃ©vus :
 				array_push($clauseWhere, '(p.NOM LIKE :nom'.$i. ' OR p.PRENOM LIKE :prenom'.$i.' OR c.FONCTION LIKE :poste'.$i.' OR e.NOM LIKE :entr'.$i.' OR m.MAIL LIKE :email'.$i.' OR t.NUMERO LIKE :tel'.$i.' OR v.LIBELLE_VILLE LIKE :ville'.$i.' OR v.CP_VILLE LIKE :cp'.$i.' OR v.PAYS_VILLE LIKE :pays'.$i.' OR c.COMMENTAIRE LIKE :rem'.$i.' OR c.PRIORITE LIKE :prio'.$i.')');
 				$parametres['nom'.$i] = $valLike;
 				$parametres['prenom'.$i] = $valLike;
@@ -241,22 +241,22 @@ class Contact {
 	}
 	
 	/**
-	* Récuperation des noms de poste/fonction des contacts en BDD
+	* RÃ©cuperation des noms de poste/fonction des contacts en BDD
 	* @return Un tableau de postes (String)
-	* @throws Une exception en cas d'erreur au niveau des requêtes
+	* @throws Une exception en cas d'erreur au niveau des requÃªtes
 	*/
 	public static function GetListeFonctions() {
 
 		$obj = array();
 
-		/* Tentative de sélection de tous les ID ordonnés par nom */
+		/* Tentative de sÃ©lection de tous les ID ordonnÃ©s par nom */
 		$result = BD::executeSelect( 'SELECT DISTINCT FONCTION FROM CONTACT_ENTREPRISE', array(), BD::RECUPERER_TOUT );
 
 		if( $result == null ) {
 			return null;
 		}
 
-		/* On consturit une réponse lisible (fonction BD::executeSelect à améiorer pour ça ...) */
+		/* On consturit une rÃ©ponse lisible (fonction BD::executeSelect Ã  amÃ©iorer pour Ã§a ...) */
 		foreach( $result as $row ) {
 			array_push($obj, $row['FONCTION']);
 		}
@@ -266,7 +266,7 @@ class Contact {
 
 	/**
 	* Suppression d'un contact par son ID
-	* $_id : L'identifiant du contact à supprimer
+	* $_id : L'identifiant du contact Ã  supprimer
 	* @return True si tout est ok, false sinon
 	* @throws Une exception en cas d'erreur au niveau de la BDD
 	*/
@@ -285,28 +285,28 @@ class Contact {
 	}
 
 	/**
-	* Ajout ($_id <= 0) ou édition ($_id > 0) d'un Contact
-	* $_id : L'identifiant du contact à mettre à jour ( ou <= 0 si il doit être créé )
-	* $_personne : Instance d'une personne à attacher
-	* $_entreprise : Instance d'une entreprise à attacher
+	* Ajout ($_id <= 0) ou Ã©dition ($_id > 0) d'un Contact
+	* $_id : L'identifiant du contact Ã  mettre Ã  jour ( ou <= 0 si il doit Ãªtre crÃ©Ã© )
+	* $_personne : Instance d'une personne Ã  attacher
+	* $_entreprise : Instance d'une entreprise Ã  attacher
 	* @return Le nouvel identifiant si tout est ok, false sinon
 	* @throws Une exception si une erreur est survenue au niveau de la BDD
 	*/
 	public static function UpdateContact( $_id, $_personne, $_entreprise, $_ville, $_fonction, $_com = '', $_priorite = 0) {
 
-		/* Il faut impérativement une instance entreprise et une instance de personne passée en paramètre */
+		/* Il faut impÃ©rativement une instance entreprise et une instance de personne passÃ©e en paramÃ¨tre */
 		if( $_entreprise == null || $_personne == null ) {
 			return Contact::getErreurChampInconnu();
 		}
 		$result=0;
 		
-		/* Mise à jour du contact */
+		/* Mise Ã  jour du contact */
 		if( $_id > 0 ) {
 	
-			/* Préparation du tableau associatif */
+			/* PrÃ©paration du tableau associatif */
 			$info = array( 'id' => $_id, 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
 		
-			/* Execution de la requête */
+			/* Execution de la requÃªte */
 			try {
 				$result = BD::executeModif( 'UPDATE CONTACT_ENTREPRISE SET
 					ID_PERSONNE = :idPersonne,
@@ -324,15 +324,15 @@ class Contact {
 		/* Ajout d'un nouveau contact */
 		else {
 			
-			/* Préparation du tableau associatif */
+			/* PrÃ©paration du tableau associatif */
 			$info = array( 'idPersonne' => $_personne->getId(), 'idEntreprise' => $_entreprise->getId(), 
 				'idVille' => $_ville->getId(), 'fonction' => $_fonction, 'commentaire' => $_com, 'priorite' => $_priorite );
 			
-			/* Execution de la requête */
+			/* Execution de la requÃªte */
 			try {
 				$result = BD::executeModif( 'INSERT INTO CONTACT_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, ID_VILLE, FONCTION, COMMENTAIRE, PRIORITE) VALUES( :idPersonne, :idEntreprise, :idVille, :fonction, :commentaire, :priorite )', $info );
 				if ($result != 0) {
-					/* Récupération de l'identifiant du nouveau contact */
+					/* RÃ©cupÃ©ration de l'identifiant du nouveau contact */
 					$result = BD::getConnection()->lastInsertId();
 				}
 			}
@@ -366,7 +366,7 @@ class Contact {
 
     public function getEntreprise() {
 
-	/* Si l'objet n'est pas instancié, on le fait */
+	/* Si l'objet n'est pas instanciÃ©, on le fait */
 	if( $this->entreprise == null ) {
 		$this->entreprise = Entreprise::GetEntrepriseByID( $this->ID_ENTREPRISE );
 	}
@@ -376,7 +376,7 @@ class Contact {
 	
     public function getPersonne() {
 
-	/* Si l'objet n'est pas instancié, on le fait */
+	/* Si l'objet n'est pas instanciÃ©, on le fait */
 	if( $this->personne == null ) {
 		$this->personne = Personne::GetPersonneParID( $this->ID_PERSONNE );
 	}
@@ -386,7 +386,7 @@ class Contact {
 
     public function getVille() {
 
-	/* Si l'objet n'est pas instancié, même rangaine */
+	/* Si l'objet n'est pas instanciÃ©, mÃªme rangaine */
 	if( $this->ville == null ) {
 		$this->ville = new Ville( $this->ID_VILLE );
 	}

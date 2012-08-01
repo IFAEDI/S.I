@@ -14,7 +14,7 @@ class Entretien {
 
 
     //****************  Fonctions statiques  ******************//
-    // RÈcuperation de l'objet Intervenant par l'ID
+    // R√©cuperation de l'objet Intervenant par l'ID
     public static function GetIntervenantByID($_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM Entretien_contact WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
@@ -22,12 +22,12 @@ class Entretien {
         return NULL;
     }
 
-	// RÈcuperation de l'ensemble des intervenants d'une journÈe passÈe en paramËtre (ex: 27/03/2012)
+	// R√©cuperation de l'ensemble des intervenants d'une journ√©e pass√©e en param√®tre (ex: 27/03/2012)
 	public static function GetListeIntervenantByDate(date) {
         return BD::Prepare('SELECT * FROM Entretien_contact WHERE id = (SELECT c.id FROM Entretien_creneau c, Entretien e WHERE c.id_entretien=e.id AND e.date ="'date'"'), array(), BD::RECUPERER_TOUT);
     }
 
-	// Ajout ($_id <= 0) ou Èdition ($_id > 0) d'un intervenant
+	// Ajout ($_id <= 0) ou √©dition ($_id > 0) d'un intervenant
     public static function UpdateIntervenant($_id, $_nom $_prenom, $_mail, $_tel){
 
 		$info = array(
@@ -40,7 +40,7 @@ class Entretien {
 		
         if ($_id > 0 && is_numeric($_id)) {
 
-            //Si l'etudiant ‡ dÈj‡ un CV
+            //Si l'etudiant √† d√©j√† un CV
             BD::Prepare('UPDATE Entretien_contact SET 
                     NOM = :nom,
                     PRENOM = :prenom,
