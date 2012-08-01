@@ -62,7 +62,7 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
         }
 
         if (file_exists($path)) {
-            require_once($path);
+            require_once $path;
             return;
         }
     } else if ($type == 'css') {
@@ -214,8 +214,5 @@ function verifierHoraire($horaire) {
 	}
 }
 
-
-
-
-
 ?>
+
