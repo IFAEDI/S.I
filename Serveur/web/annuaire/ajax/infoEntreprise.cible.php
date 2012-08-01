@@ -6,25 +6,25 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
- * Cible pour la récupération d'informations sur une entreprise.
- * Est donc appelée par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sélectionnée dans la liste des noms.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Cible pour la rÃ©cupÃ©ration d'informations sur une entreprise.
+ * Est donc appelÃ©e par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sÃ©lectionnÃ©e dans la liste des noms.
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ entreprise n'est pas présent
+			code : "ok", // ou "error" - si error, le champ entreprise n'est pas prÃ©sent
 			entreprise : {
 				description: {
 					nom: "Atos",
-					description: "Société française recrutant des tonnes de 4IF.",
+					description: "SociÃ©tÃ© franÃ§aise recrutant des tonnes de 4IF.",
 					secteur: "SSII",
 					commentaire: "",
 				},
 				contacts: [
 					{nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
-					{nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+					{nom: "Chucky", prenom: "Norissette", metier: "DÃ©esse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vÃ©rifier"}
 				],
 				relation: {
 					parrainage : [
@@ -53,14 +53,14 @@
  */
  
  
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
 $authentification = new Authentification();
 $utilisateur = null;
 if ($authentification->isAuthentifie()) {
 
-    /* On récupère l'objet utilisateur associé */
+    /* On rÃ©cupÃ¨re l'objet utilisateur associÃ© */
     $utilisateur = $authentification->getUtilisateur();
     if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
         $authentification->forcerDeconnexion();
@@ -75,7 +75,7 @@ inclure_fichier('controleur', 'contact.class', 'php');
 inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* int */ $id_entreprise = NULL;
 

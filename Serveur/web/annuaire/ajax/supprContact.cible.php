@@ -7,25 +7,25 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour la suppression d'un contact.
- * Est donc appelée par le moteur JS (Ajax) de la page Annuaire quand un contact est sélectionné.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Est donc appelÃ©e par le moteur JS (Ajax) de la page Annuaire quand un contact est sÃ©lectionnÃ©.
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
 			code : "ok", // ou "error"
 		}
  */
 
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
 $authentification = new Authentification();
 $utilisateur = null;
 if ($authentification->isAuthentifie()) {
 
-    /* On récupère l'objet utilisateur associé */
+    /* On rÃ©cupÃ¨re l'objet utilisateur associÃ© */
     $utilisateur = $authentification->getUtilisateur();
     if (($utilisateur == null) || ($utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
         $authentification->forcerDeconnexion();
@@ -38,7 +38,7 @@ require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'contact.class', 'php');
 
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* int */ $id = 0;
 if (verifierPresent('id')) {
@@ -66,7 +66,7 @@ else {
 
 }
 
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
+// FIXME comment distinguer s'il n'y a pas de rÃ©sultats ou une erreur ?
 echo json_encode($json);
 
 
