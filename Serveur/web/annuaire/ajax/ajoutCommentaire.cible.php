@@ -7,38 +7,39 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour l'ajout d'un commentaire.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ id n'est pas présent
-			id : 1 		// ID de du commentaire ajouté
+			code : "ok", // ou "error" - si error, le champ id n'est pas prÃ©sent
+			id : 1 		// ID de du commentaire ajoutÃ©
 		}
  */
  
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
-
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
-}
-
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        echo json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'Ãªtes pas authentifiÃ©.' ) );
+	die();
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN && 
+	$authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+	die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'Ãªtes pas autorisÃ© Ã  effectuer cette action.' ) ) );
+}
+
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
+
+
+
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 
 /* int */ $categorie = 0;

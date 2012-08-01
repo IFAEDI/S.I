@@ -7,15 +7,15 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour l'ajout d'un contact.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, les champs id n'est pas présent
-			id : 1 		// ID du contact ajouté
-			id_personne : 1 		// ID de la personne associée
+			code : "ok", // ou "error" - si error, les champs id n'est pas prÃ©sent
+			id : 1 		// ID du contact ajoutÃ©
+			id_personne : 1 		// ID de la personne associÃ©e
 		}
  */
 
@@ -27,7 +27,7 @@ inclure_fichier('controleur', 'etudiant.class', 'php');
 inclure_fichier('commun', 'personne.class', 'php');
 		
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* int */ $id = 0;
 /* int */ $id_entreprise = 0;

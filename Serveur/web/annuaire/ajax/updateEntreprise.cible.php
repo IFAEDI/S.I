@@ -7,25 +7,25 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour l'ajout/modification d'une entreprise.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ id n'est pas présent
-			id : 1 		// ID de l'entreprise ajoutée
+			code : "ok", // ou "error" - si error, le champ id n'est pas prÃ©sent
+			id : 1 		// ID de l'entreprise ajoutÃ©e
 		}
  */
  
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
 $authentification = new Authentification();
 $utilisateur = null;
 if ($authentification->isAuthentifie()) {
 
-    /* On récupère l'objet utilisateur associé */
+    /* On rÃ©cupÃ¨re l'objet utilisateur associÃ© */
     $utilisateur = $authentification->getUtilisateur();
     if (($utilisateur == null) || ($utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
         $authentification->forcerDeconnexion();
@@ -38,7 +38,7 @@ require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
 
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* string */ $nom_entreprise = NULL;
 /* string */ $secteur_entreprise = NULL;

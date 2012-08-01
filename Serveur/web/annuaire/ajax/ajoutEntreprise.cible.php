@@ -7,15 +7,15 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour l'ajout d'une entreprise.
- * Est donc appelée par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sélectionnée dans la liste des noms.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Est donc appelÃ©e par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sÃ©lectionnÃ©e dans la liste des noms.
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ id n'est pas présent
-			id : 1 		// ID de l'entreprise ajoutée
+			code : "ok", // ou "error" - si error, le champ id n'est pas prÃ©sent
+			id : 1 		// ID de l'entreprise ajoutÃ©e
 		}
  */
 
@@ -23,7 +23,7 @@ require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
 
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* string */ $nom_entreprise = NULL;
 /* string */ $secteur_entreprise = NULL;

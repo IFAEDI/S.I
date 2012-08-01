@@ -8,28 +8,28 @@
  * ---------------------
  * Cible pour la recherche de contacts.
  * Le principe est le suivant :
- * 1) On récupère l'ensemble des mots-clés demandés et des champs associés, et on les sécurise.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * 1) On rÃ©cupÃ¨re l'ensemble des mots-clÃ©s demandÃ©s et des champs associÃ©s, et on les sÃ©curise.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "errorBDD" ou "erreurChamp" ou "erreurRequete" - si erreur, les champs contact n'est pas présent
+			code : "ok", // ou "errorBDD" ou "erreurChamp" ou "erreurRequete" - si erreur, les champs contact n'est pas prÃ©sent
 			entreprises : [{
 				nom: "Atos",
 				id : 1,
 				contacts: [
 					{nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
-					{nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+					{nom: "Chucky", prenom: "Norissette", metier: "DÃ©esse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vÃ©rifier"}
 				]},
 				
 				nom: "Fiducial",
 				id : 2,
 				contacts: [
 					{nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
-					{nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+					{nom: "Chucky", prenom: "Norissette", metier: "DÃ©esse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vÃ©rifier"}
 				]},
 				...],
-			champ : "XXX" // présent seulement si code = "erreurChamp" - Nom du champ invalide
+			champ : "XXX" // prÃ©sent seulement si code = "erreurChamp" - Nom du champ invalide
 		}
  */
 
@@ -38,7 +38,7 @@ inclure_fichier('controleur', 'contact.class', 'php');
 
 		
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* Array */ $keywords = array();
 /* Array */ $json = array();
