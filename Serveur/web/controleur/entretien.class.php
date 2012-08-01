@@ -13,7 +13,7 @@ class Entretien {
 
 
     //****************  Fonctions statiques  ******************//
-    // RÈcuperation de l'objet Entretien par l'ID
+    // R√©cuperation de l'objet Entretien par l'ID
     public static function GetEntretienByID($_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM ENTRETIEN WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
@@ -21,7 +21,7 @@ class Entretien {
         return NULL;
     }
 
-	// RÈcuperation des ids et noms de l'ensemble des entretien
+	// R√©cuperation des ids et noms de l'ensemble des entretien
 	public static function GetListeEntretien() {
         return BD::Prepare('SELECT et.id_entretien, et.date, et.etat, e.nom, m.mail
 			FROM ENTRETIEN et, Contact_entreprise c, ENTREPRISE e, PERSONNE p, MAIL m
@@ -31,13 +31,13 @@ class Entretien {
 			AND c.id_entreprise = e.id_entreprise', array(), BD::RECUPERER_TOUT);
     }
 
-	// RÈcuperation des entretiens valides par l'administration
+	// R√©cuperation des entretiens valides par l'administration
 	public static function GetListeEntretiensValides() {
 		$_etat = 1;
         return BD::Prepare('SELECT * FROM ENTRETIEN where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
     }
 	
-	// RÈcuperation des entretiens NON valides
+	// R√©cuperation des entretiens NON valides
 	public static function GetListeEntretiensNonValides() {
 		$_etat = 0;
         return BD::Prepare('SELECT * FROM ENTRETIEN where ETAT = :etat', array('etat' => $_etat), BD::RECUPERER_TOUT);
@@ -50,7 +50,7 @@ class Entretien {
         }
     }
 
-	// Ajout ($_id <= 0) ou Èdition ($_id > 0) d'un entretien
+	// Ajout ($_id <= 0) ou √©dition ($_id > 0) d'un entretien
     public static function UpdateEntretien($_id, $_id_contact, $_date, $_etat){
 
 		$info = array(
@@ -61,7 +61,7 @@ class Entretien {
 		);
 		
         if( $_id > 0 ) {
-            //Si l'etudiant ‡ dÈj‡ un CV
+            //Si l'etudiant √† d√©j√† un CV
             BD::executeModif('UPDATE ENTRETIEN SET 
 					ID_CONTACT = :id_contact,
                     DATE = :date,

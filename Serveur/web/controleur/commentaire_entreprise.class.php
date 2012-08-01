@@ -6,7 +6,7 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Commentaire - benjamin.planche@aldream.net
  * ---------------------
- * Controleur associé à la table Commentaire
+ * Controleur associÃ© Ã  la table Commentaire
  */
  
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
@@ -39,8 +39,8 @@ class CommentaireEntreprise {
 
 	//****************  Fonctions statiques  ******************//
 	/**
-	* Récuperation de l'objet CommentaireEntreprise par l'ID
-	* $_id : L'identifiant du CommentaireEntreprise à récupérer
+	* RÃ©cuperation de l'objet CommentaireEntreprise par l'ID
+	* $_id : L'identifiant du CommentaireEntreprise Ã  rÃ©cupÃ©rer
 	* @return L'instance du CommentaireEntreprise, ou null
 	* @throws Une exeception si une erreur est survenue au niveau de la base
 	*/
@@ -55,7 +55,7 @@ class CommentaireEntreprise {
 	}
 
 	/**
-	* Récuperation l'ensemble des CommentaireEntreprise, ordonnés par date décroissante
+	* RÃ©cuperation l'ensemble des CommentaireEntreprise, ordonnÃ©s par date dÃ©croissante
 	* @return Un tableau d'instance ou null
 	* @throws Une exception en cas d'erreur provenant de la base.
 	*/
@@ -63,7 +63,7 @@ class CommentaireEntreprise {
 
 		$obj = array();
 
-                /* Tentative de sélection de tous les ID ordonnés par date décroissante */
+                /* Tentative de sÃ©lection de tous les ID ordonnÃ©s par date dÃ©croissante */
                 $result = BD::executeSelect( 'SELECT ID_COMMENTAIRE FROM COMMENTAIRE_ENTREPRISE ORDER BY DATE DESC', array(), BD::RECUPERER_TOUT );
                 if( $result == null ) {
                         return null;
@@ -80,9 +80,9 @@ class CommentaireEntreprise {
 	}
 	
 	/**
-	* Récuperation des données de l'ensemble des Commentaires, ordonné alphabétiquement par date décroissante, pour une entreprise donnée
+	* RÃ©cuperation des donnÃ©es de l'ensemble des Commentaires, ordonnÃ© alphabÃ©tiquement par date dÃ©croissante, pour une entreprise donnÃ©e
 	* $_idEntreprise : l'identifiant de l'entreprise 
-	* $_entreprise : instance de l'entreprise qui sera associée au commentaire (optionnel)
+	* $_entreprise : instance de l'entreprise qui sera associÃ©e au commentaire (optionnel)
 	* @return Un tableau d'instance
 	* @throws Une exception en cas d'erreur de la part de la BD
 	*/
@@ -100,7 +100,7 @@ class CommentaireEntreprise {
 		foreach( $result as $row ) {
 
 			$obj[$i] = self::GetCommentaireByID( $row['ID_COMMENTAIRE'] );
-			$obj[$i]->entreprise = $_entreprise; // On fixe l'entreprise, comme ça, ça évitera de faire de la requête plus tard
+			$obj[$i]->entreprise = $_entreprise; // On fixe l'entreprise, comme Ã§a, Ã§a Ã©vitera de faire de la requÃªte plus tard
 			$i++;
 		}
 
@@ -109,7 +109,7 @@ class CommentaireEntreprise {
 
 	/**
 	* Suppression d'un commentaire par son ID
-	* $_id : L'identifiant du commentaire à supprimer
+	* $_id : L'identifiant du commentaire Ã  supprimer
 	* @return True si tout est ok, false sinon
 	* @throws Une exception en cas d'erreur au niveau de la BDD
 	*/
@@ -130,29 +130,29 @@ class CommentaireEntreprise {
 	}
 
 	/**
-	* Ajout ($_id <= 0) ou édition ($_id > 0) d'un Commentaire
-	* $_id : L'identifiant du commentaire à mettre à jour ( ou <= 0 si il doit être créé )
-	* $_personne : ID d'une personne à attacher
-	* $_entreprise : ID d'une entreprise à attacher
+	* Ajout ($_id <= 0) ou Ã©dition ($_id > 0) d'un Commentaire
+	* $_id : L'identifiant du commentaire Ã  mettre Ã  jour ( ou <= 0 si il doit Ãªtre crÃ©Ã© )
+	* $_personne : ID d'une personne Ã  attacher
+	* $_entreprise : ID d'une entreprise Ã  attacher
 	* @return Le nouvel identifiant si tout est ok, false sinon
 	* @throws Une exception si une erreur est survenue au niveau de la BDD
 	*/
 	public static function UpdateCommentaire( $_id, $_personne, $_entreprise, $_contenu, $_categorie, $_date) {
 
-		/* Il faut impérativement une instance entreprise et une instance de personne passée en paramètre */
+		/* Il faut impÃ©rativement une instance entreprise et une instance de personne passÃ©e en paramÃ¨tre */
 		if( $_entreprise == null || $_personne == null ) {
 			return CommentaireEntreprise::getErreurChampInconnu();
 		}
 		$result = 0;
 		
-		/* Mise à jour du commentaire */
+		/* Mise Ã  jour du commentaire */
 		if( $_id > 0 ) {
 	
-			/* Préparation du tableau associatif */
+			/* PrÃ©paration du tableau associatif */
 			$info = array( 'id' => $_id, 'idPersonne' => $_personne, 'idEntreprise' => $_entreprise, 
 				'contenu' => $_contenu, 'categorie' => $_categorie, 'date' => $_date);
 
-			/* Execution de la requête */
+			/* Execution de la requÃªte */
 			try {
 				$result = BD::executeModif( 'UPDATE COMMENTAIRE_PERSONNE SET ID_PERSONNE = :idPersonne, ID_ENTREPRISE = idEntreprise, CONTENU = :contenu, CATEGORIE = :categorie, DATE = :date WHERE ID_COMMENTAIRE = :id', $info );
 			}
@@ -163,11 +163,11 @@ class CommentaireEntreprise {
 		/* Ajout d'un nouveau commentaire */
 		else {
 			
-			/* Préparation du tableau associatif */
+			/* PrÃ©paration du tableau associatif */
 			$info = array('idPersonne' => $_personne, 'idEntreprise' => $_entreprise, 
 				'contenu' => $_contenu, 'categorie' => $_categorie);
 
-			/* Execution de la requête */
+			/* Execution de la requÃªte */
 			try {
 				$result = BD::executeModif( 'INSERT INTO COMMENTAIRE_ENTREPRISE(ID_PERSONNE, ID_ENTREPRISE, CONTENU, CATEGORIE) VALUES( :idPersonne, :idEntreprise, :contenu, :categorie)', $info );
 			}
@@ -204,7 +204,7 @@ class CommentaireEntreprise {
 
     public function getEntreprise() {
 
-	/* Si l'objet n'est pas instancié, on le fait */
+	/* Si l'objet n'est pas instanciÃ©, on le fait */
 	if( $this->entreprise == null ) {
 		$this->entreprise = Entreprise::GetEntrepriseByID( $this->ID_ENTREPRISE );
 	}
@@ -214,7 +214,7 @@ class CommentaireEntreprise {
 	
     public function getPersonne() {
 
-	/* Si l'objet n'est pas instancié, on le fait */
+	/* Si l'objet n'est pas instanciÃ©, on le fait */
 	if( $this->personne == null ) {
 		$this->personne = Personne::GetPersonneParID( $this->ID_PERSONNE );
 	}
