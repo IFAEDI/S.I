@@ -19,8 +19,25 @@
 		}
  */
 
+header( 'Content-Type: application/json' );
+
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+inclure_fichier('commun', 'authentification.class', 'php');
 inclure_fichier('controleur', 'entreprise.class', 'php');
+
+/* Vérification que l'utilisateur est bien auhtentifié et autorisé à ajouter une entreprise */
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
+        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+}
+
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
+
 
 /*
  * Récupérer et transformer le JSON
@@ -31,6 +48,7 @@ inclure_fichier('controleur', 'entreprise.class', 'php');
 /* string */ $com_entreprise = NULL;
 /* int */ $idVille_entreprise = 0;
 
+/* TODO : better check */
 if (verifierPresent('nom')) {
 	$nom_entreprise = Protection_XSS($_POST['nom']);
 }
@@ -55,6 +73,7 @@ if (verifierPresent('idVille')) {
 
 /*
  * Renvoyer le JSON
+ * TODO : Améliorer les rescodes
  */
 if ($id == 0) {
 	$json['code'] = 'errorChamp';

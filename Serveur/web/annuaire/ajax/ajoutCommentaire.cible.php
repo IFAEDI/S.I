@@ -17,6 +17,9 @@
 			id : 1 		// ID de du commentaire ajouté
 		}
  */
+
+
+header('Content-Type: application/json');
  
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
@@ -25,8 +28,7 @@ inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 $authentification = new Authentification();
 if( $authentification->isAuthentifie() == false ) {
-        echo json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) );
-	die();
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
 }
 else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN && 
 	$authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
@@ -72,9 +74,11 @@ if ($etatVerif == 2) {
 	 * Renvoyer le JSON
 	 */
 	 if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
+		/* TODO : améliorer le retour */
 		$json['code'] = 'errorChamp';
 	}
 	elseif ($id === CommentaireEntreprise::getErreurExecRequete()) {
+		/* TODO : améliorer le retour */
 		$json['code'] = 'errorBDD';
 	}
 	else {
@@ -83,6 +87,7 @@ if ($etatVerif == 2) {
 	}
 }
 else {
+	/* TODO : améliorer le retour */
 	$json['code'] = 'Donnees_manquantes'.$etatVerif;
 }
 echo json_encode($json);

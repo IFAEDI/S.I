@@ -56,23 +56,24 @@
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
-
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
-}
-
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
 inclure_fichier('controleur', 'contact.class', 'php');
 inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
+
+inclure_fichier('commun', 'authentification.class', 'php');
+inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
+
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
+        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+}
+
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
 
 /*
  * Récupérer et transformer le JSON
@@ -96,6 +97,7 @@ if (verifierPresent('id')) {
 			$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
 			$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
 
+			/* TODO : Normaliser JSON */
 			$json['entreprise']['description'] = $entreprise->toArrayObject();
 			if (gettype($contacts) == 'array') {
 				$json['entreprise']['contacts'] = Array();
@@ -118,6 +120,7 @@ if (verifierPresent('id')) {
 	}
 }
 else {
+	/* TODO : Normaliser */
 	$json['code'] = 'errorChamp';
 }
 

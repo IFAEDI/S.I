@@ -35,8 +35,22 @@
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'contact.class', 'php');
+inclure_fichier('commun', 'authentification.class', 'php');
 
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
+        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+}
+
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
 		
+/* TODO : normaliser JSON */
+
 /*
  * Récupérer et transformer le JSON
  */

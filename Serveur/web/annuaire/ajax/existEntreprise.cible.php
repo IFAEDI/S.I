@@ -13,27 +13,26 @@
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
+inclure_fichier('controleur', 'entreprise.class', 'php');
 
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
+        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
 }
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'entreprise.class', 'php');
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
 
 /*
  * Récupérer et transformer le JSON
  */
 /* int */ $nom_entreprise = NULL;
 
+/* TODO : better check */
 if (verifierPresent('name')) {
 	$nom_entreprise = Protection_XSS(urldecode($_POST['name']));
 }
@@ -45,6 +44,7 @@ if (verifierPresent('name')) {
 
 /*
  * Renvoyer le JSON
+ * TODO : Normaliser le retour
  */
 $json['answer'] = $existsName;
 echo json_encode($json);
