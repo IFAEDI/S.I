@@ -15,26 +15,51 @@
 	<div id="contact-unit" class="span7 columns">
 		<div class="hero-unit">
 			<h1>Contact</h1>
-			<p style="text-align:justify;">Vous souhaitez obtenir des informations sur les évènements organisés, entamer un partenariat, ou tout simplement nous dire bonjour ? Voici nos coordonnées !</p>
+			<p style="text-align:justify;">Vous souhaitez obtenir des informations sur les évènements organisés, entamer un partenariat, ou tout simplement nous dire bonjour ? <span class="hero_motcle" style="margin-left:10px;">L'échange est notre priorité !</span><br/>
+			Voici nos coordonnées :</p>
 			<h2>Emails</h2>
-			<ul>
-				<li>Bureau de l'Association : <a href="#" e-name="aedi.bureau" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
-					<i class="icon-eye-open icon-white"></i> Afficher Email</a></li>
-				<li>Relations avec les Entreprises :
-					<a href="#" e-name="aedi.entreprise.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
-						<i class="icon-eye-open icon-white"></i> Afficher Email
-					</a>
-				</li>
-			</ul>
+			<table id="contact-mails">
+				<tr>
+					<td>Bureau de l'Association : </td>
+					<td>
+						<a href="#" e-name="aedi.bureau" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+						<i class="icon-eye-open icon-white"></i> Afficher Email</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Relations avec les Entreprises : </td>
+					<td>
+						<a href="#" e-name="aedi.entreprise.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+							<i class="icon-eye-open icon-white"></i> Afficher Email
+						</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Animation : </td>
+					<td>
+						<a href="#" e-name="aedi.anim.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+							<i class="icon-eye-open icon-white"></i> Afficher Email
+						</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Communications : </td>
+					<td>
+						<a href="#" e-name="aedi.com.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+							<i class="icon-eye-open icon-white"></i> Afficher Email
+						</a>
+					</td>
+				</tr>
+			</table>
 			<h2>Téléphone</h2>
-			<ul>
-				<li>XX XX XX XX XX</li>
-			</ul>
+			<p>+33 (0)4 78 896 902</p>
+			
 			<h2>Adresse</h2>
 			<address>
-				XX, rue XXXXXXXXXXXXX<br />
-				Campus de la Doua<br />
-				69100 Villeurbanne<br />
+				AEDI - INSA de Lyon<br />
+				Département Informatique, Bat. 502<br />
+				20, av. Albert Einstein<br />
+				69621 Villeurbanne Cedex - France
 			</address>
 		</div>
 	</div>
