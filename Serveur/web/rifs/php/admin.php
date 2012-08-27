@@ -1,4 +1,15 @@
 <?php
+/**
+ * -----------------------------------------------------------
+ * Vue - RIFS, Administration
+ * -----------------------------------------------------------
+ * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+ *          Contact - benjamin.planche@aldream.net
+ * ---------------------
+ * Page d'administration des inscriptions aux RIF (à compléter !).
+ */
+?>
+<?php
 
 global $authentification;
 global $utilisateur;
@@ -27,33 +38,13 @@ else {
 		/* Sinon on peut commencer à faire notre tambouille */
 		?>
 
-		<div>
-			<h2>Journalisation</h2>
+		<div id="rifs">
+			<h2>Administration des RIFs</h2>
 
 			<div id="erreur" class="alert alert-error" style="margin-top: 20px; text-align: center;"> TODO </div>
-
-			<div style="text-align: right;">
-				<a href="#" id="raffraichir" class="btn btn-info"><i class="icon-refresh icon-white"></i> Rafraîchir</a>
-			</div>
-
-			<table id="table_liste_utilisateurs" class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">
-			<thead>
-				<tr>
-				<th>Date</th>
-				<th>Script</th>
-				<th>Informations</th>
-				<th>IP</th>
-				</tr>
-			</thead>
-			<tbody id="liste_utilisateurs">
-			</tbody>
-			</table>
-
-			<div class="pagination" style="text-align: center;">
-			<ul>
-			</ul>
-			</div>
-
+			
+			<p class="centre">Lien vers le formulaire d'inscription <small>(à communiquer aux entreprises sélectionnées)</small> :<br/>
+			<a class="btn btn-large btn-primary" href="index.php?page=RIFs_Inscription">index.php?page=RIFs_Inscription</a></p>
 		</div>
 
 	<?php

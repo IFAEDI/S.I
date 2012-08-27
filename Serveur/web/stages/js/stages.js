@@ -7,7 +7,7 @@
 * Initialisation de l'espace de nom
 */
 var Stages = {};
-
+Stages.templatesResultatsRecherche = {}
 /**
  * Met à jour les résultats en écrivant le code HTML à la main.
  * Pour chaque résultat présent, un item de liste est inséré avec
@@ -30,62 +30,48 @@ Stages.afficherResultats = function afficherResultats(json) {
 	}
 
 	/* Formattage des résutats (s'il y en a) */
-	var affichage = '';
-	var resultats = json.stages;
-	if(!resultats || resultats.length === 0) {
-		$('#information').text('Aucun résultat n\'a été trouvé.');
-		$('#fenetre').hide();
-		$('#resultats').html('');
-		return;
-	}
+	var pluriel = (json.stages.length > 1) ? 's' : '';
+	$('#information').text(json.stages.length  + ' résultat' + pluriel + ' trouvé' + pluriel + '. Cliquez sur le bouton à gauche pour avoir plus d\'info sur le stage.');
 
-	/* Gestion des offres au pluriel */
-	var pluriel = (resultats.length > 1) ? 's' : '';
-	$('#information').text(resultats.length  + ' résultat' + pluriel + ' trouvé' + pluriel + '. Cliquez sur la ligne pour avoir plus d\'info.');
-
-	for (var i = 0; i < resultats.length; ++i) {
-		var resultat = resultats[i];
-		
-		// Ajout des informations primordiales éventuellement manquantes
-		if (!resultat.titre) {
-			resultat.titre = "Offre de stage";
-		}
-		if (!resultat.description) {
-			resultat.description = "Pas de description, voir fichier joint.";
-		}
-
-		/* Affichage dans le tableau */
-		affichage += '<tr>'
-		affichage += '<td>' + (i+1) + '</td>';
-		affichage += '<td>' + resultat.titre + '</td>';
-		affichage += '<td>' + resultat.entreprise + '</td>';
-		affichage += '<td>' + resultat.lieu + '</td>';
-		affichage += '<td>' + resultat.annee + 'ème année</td>';
-		affichage += '</tr>';
-
-		affichage += '<tr class="hide">';
-		affichage += '<td></td>';
-		affichage += '<td colspan="4">';
-		affichage +=  '<p>' + resultat.description + '</p>';
-		if( resultat.contact ) {
-			affichage += '<p><b>Contact</b> : ' + resultat.contact + '</p>';
-		}
-		affichage +=  '<a href="https://intranet-if.insa-lyon.fr/stages/descriptif/' + resultat.lien_fichier + '">Plus d\'info</a>';
-		affichage += '</td>';
-		affichage += '</tr>';
-	}
-
-	$('#resultats').html(affichage);
+	$('#resultats').html(Stages.templatesResultatsRecherche(json));
 
 	/* Ajout de la gestion du clique permettant d'afficher plus d'infos */
-	$('#resultats tr').click( function() {
-		if( $(this).next().is( ':visible' ) ) {
-			$(this).next().slideUp();
+	$('#resultats .bouton button').click( function() {
+		var ligneCiblee = $(this).closest('tr');
+		if (ligneCiblee.attr('deploye') == 0) { // Non-déployé
+			var tr = $('<tr class="temp"></tr>');
+			var td = $('<td colspan=5"></td>');
+			td.html(ligneCiblee.find('.desc-stage').html());
+			tr.html(td);
+			ligneCiblee.after(tr);
+			ligneCiblee.attr('deploye', 1);
+			$(this).html('<i class="icon-chevron-up icon-white">');
+			$(this).removeClass('btn-info');
+			$(this).addClass('btn-inverse');
 		}
 		else {
-			$(this).next().slideDown();
+			ligneCiblee.next().remove();
+			ligneCiblee.attr('deploye', 0);
+			$(this).html('<i class="icon-chevron-down icon-white">');
+			$(this).removeClass('btn-inverse');
+			$(this).addClass('btn-info');
 		}
 	} );
+	
+	/* Ajout de la gestion du tri : */
+	$("#fenetre").tablesorter({
+		headers: {         
+            0: { 
+                // On désactive le tri sur la 1ere colonne (celle des boutons) 
+                sorter: false 
+            } 
+        }
+	}); 
+	$("#fenetre").bind("sortStart",function() { 
+		$(".temp").prev().attr('deploye', 0);
+        $(".temp").remove(); 
+	});
+	$("#fenetre th:nth-child(2)").trigger('click');
 }
 
 
@@ -96,7 +82,9 @@ $('document').ready(function() {
 	$('#fenetre').hide();
 	$('#information').hide();
 
-
+	// Préparation du template pour les résultats :
+	Stages.templatesResultatsRecherche = Handlebars.compile($("#templateSearchStages").html());
+		
 	/**
 	 * Préparation du comportement d'un clic sur le bouton
 	 * rechercher :

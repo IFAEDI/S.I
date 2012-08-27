@@ -1,36 +1,89 @@
 <?php
-/*************************************************
-* Author : sebastien.meriot@gmail.com            *
-* Date : 01.04.2012                              *
-* Description : Page affichant comment contacter *
-* les équipes de l'AEDI                          *
-*************************************************/
-
+/**
+ * -----------------------------------------------------------
+ * Vue - CONTACT
+ * -----------------------------------------------------------
+ * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
+ *          Contact - benjamin.planche@aldream.net
+ * ---------------------
+ * Page affichant les coordonnées de l'AEDI (emails des équipes, adresse, ...).
+ */
 ?>
 
 <div id="contact" class="row" style="margin-top: 20px;">
 
-        <div class="span6 columns">
-                <div>
-	
-			<h2>Comment nous contacter ?</h2>
-
-                        <p style="text-align:justify; margin-top: 15px;">
-			Vous souhaitez avoir des informations sur les évènements que nous organisons, ou vous souhaitez entamer un partenariat avec nous? Nos 4 équipes disposent chacune d'une adresse mail commune pour les joindre et s'efforcera de vous répondre dans un délais raisonnable.</p>
-
-			<p style="text-align: justify;">
-			Voici la liste des adresses pour chacune des équipes. Ces adresses doivent être complétées de <i>@listes.insa-lyon.fr</i> pour être valides.</p>
-                <ul style="margin-top: 35px;">
-			<li>Bureau de l'Association : aedi.bureau</li>
-			<li>Relations avec les Entreprises : aedi.entreprises.asso</li>
-			<li>Animations : /</li>
-			<li>Communication : /</li>
-                </ul>
-                </div>
-        </div>
-        <div class="span4 columns">
-                        <img src="http://www.tumblr.com/photo/1280/bonjourlesifs/10800337619/1/tumblr_ls6yl1PbAi1qbvwm2" width="530px" alt="Conf�rence AEDI">
+	<div id="contact-unit" class="span7 columns">
+		<div class="hero-unit">
+			<h1>Contact</h1>
+			<p style="text-align:justify;">Vous souhaitez obtenir des informations sur les évènements organisés, entamer un partenariat, ou tout simplement nous dire bonjour ? <span class="hero_motcle" style="margin-left:10px;">L'échange est notre priorité !</span><br/>
+			Voici nos coordonnées :</p>
+			<h2>Emails</h2>
+			<table id="contact-mails">
+				<tr>
+					<td>Bureau de l'Association : </td>
+					<td>
+						<a href="#" e-name="aedi.bureau" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+						<i class="icon-eye-open icon-white"></i> Afficher Email</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Relations avec les Entreprises : </td>
+					<td>
+						<a href="#" e-name="aedi.entreprise.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+							<i class="icon-eye-open icon-white"></i> Afficher Email
+						</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Animation : </td>
+					<td>
+						<a href="#" e-name="aedi.anim.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+							<i class="icon-eye-open icon-white"></i> Afficher Email
+						</a>
+					</td>
+				</tr>
+				<tr>
+					<td>Communications : </td>
+					<td>
+						<a href="#" e-name="aedi.com.asso" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr">
+							<i class="icon-eye-open icon-white"></i> Afficher Email
+						</a>
+					</td>
+				</tr>
+			</table>
+			<h2>Téléphone</h2>
+			<p>+33 (0)4 78 896 902</p>
+			
+			<h2>Adresse</h2>
+			<address>
+				AEDI - INSA de Lyon<br />
+				Département Informatique, Bat. 502<br />
+				20, av. Albert Einstein<br />
+				69621 Villeurbanne Cedex - France
+			</address>
+		</div>
 	</div>
-
+	<div class="span5 columns">
+					<iframe style="border-radius:5px" id="gmap" class="width5" width="470" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.fr/maps?f=q&amp;source=s_q&amp;hl=fr&amp;geocode=&amp;q=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;aq=&amp;sll=45.781172,4.881234&amp;sspn=0.020202,0.052314&amp;ie=UTF8&amp;hq=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;t=m&amp;ll=45.781038,4.87278&amp;spn=0.004115,0.005032&amp;z=17&amp;output=embed"></iframe>
+					
+					<p style="margin-top:10px; text-align:right;">
+						<a id="gmap-lien" class="btn-primary btn" href="https://maps.google.fr/maps?f=q&amp;source=embed&amp;hl=fr&amp;geocode=&amp;q=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;aq=&amp;sll=45.781172,4.881234&amp;sspn=0.020202,0.052314&amp;ie=UTF8&amp;hq=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;t=m&amp;ll=45.781038,4.87278&amp;spn=0.004115,0.005032&amp;z=17">
+							<i class="icon-map-marker icon-white"></i> Agrandir le plan
+						</a>
+					</p>
+	</div>
+	
+	<script>
+		// Image resizing :
+		$('.width5').attr('width', ($('#contact').width() / 12 * 5 - 30)+'px');
+		// Caroussels :
+		$('#photoCarousel').carousel({
+			interval: 10000
+		})
+		
+		$('#gmap').attr('height', ($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
+		
+		
+	</script>
 
 </div>

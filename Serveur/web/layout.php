@@ -51,12 +51,16 @@ global $authentification;
                 <li>
                     <a href="index.php?page=Accueil"><i class="icon-home"></i></a> <span class="divider">/</span>
                 </li>
-                <li>
-                    <?php echo $titre_module; ?> <span class="divider">/</span>
-                </li>
+				<?php
+				if ($titre_module != '') { ?>
+					<li>
+						<?php echo $titre_module; ?> <span class="divider">/</span>
+					</li>
+				<?php } ?>
                 <li class="active"><?php echo $titre_page; ?></li>
             </ul>
-        <?php } ?>
+        <?php }
+		if ($nom_module == 'accueil') { $nom_module = ''; } ?>
 
         <div class="container">
             <div class="module">   

@@ -26,6 +26,296 @@ table.tablesorter thead tr .headerSortDown {
 	margin-bottom: 20px;
 }
 
+.module .hero-unit h1 {
+	margin-bottom: 0px;
+}
+
+.hero_motcle {
+	font-weight: bold;
+	font-size: 1.2em;
+	color: #049cdb;
+}
+
+.centre
+{
+	text-align:center;
+}
+
+.justify
+{
+	text-align:justify;
+}
+
+.comment{
+	font-size:0.9em;
+	color:grey;
+	font-style:italic;
+}
+
+.module_entr div h2 {
+	position:relative;
+    width: 97%;  
+    font-size: 1.5em;  
+    font-weight: bold;  
+    color: #fff;  
+    -webkit-box-shadow: 0px 2px 4px #888;  
+    -moz-box-shadow: 0px 2px 4px #888;  
+    box-shadow: 0px 2px 4px #888;  
+}
+
+.module_entr div h2 {
+    padding: 5px 2% 5px 3%;  
+    margin: 5px 3% 15px -3%;  
+    -webkit-border-radius: 0px 5px 5px 0px;  
+    -moz-border-radius: 0px 5px 5px 0px;   
+    border-radius: 0px 5px 5px 0px;
+	background-color: #049cdb;
+}
+
+.module_entr div h2:before {
+    content: "";
+    position:absolute;
+    top:2.4em;
+    left:0;
+	z-index: -1;
+	border-right:2.4em solid #0169a8;
+    border-bottom:1.2em solid #fff;
+}
+.module_entr div h2~p {
+	background-color: #fff;
+	padding: 10px;
+	margin-left: 10px;
+	margin-top: -15px;
+}
+.module_entr div h2~h3 {
+	background-color: #fff;
+	margin-top: -15px;
+	padding: 10px;
+}
+
+.module_entr div h2 i  {
+	vertical-align:middle;
+	margin-right:10px;
+}
+
+/* ----------- PAGE CONTACT ------------ */
+#contact-mails td {
+	padding-right: 20px;
+}
+
+/* ----------- PAGE A-PROPOS ------------ */
+#about-team h2, #about-site .accordion-heading h2, #about-asso div h2 {
+	position:relative;
+    width: 97%;  
+    font-size: 1.5em;  
+    font-weight: bold;  
+    color: #fff;  
+    -webkit-box-shadow: 0px 2px 4px #888;  
+    -moz-box-shadow: 0px 2px 4px #888;  
+    box-shadow: 0px 2px 4px #888;  
+}
+
+#about-team .row:nth-child(even) h2 {
+	text-align: right;
+    padding: 5px 10% 5px 5%;  
+    margin: 5px 10% 10px -5%;  
+    -webkit-border-radius: 5px 0px 0px 5px;  
+    -moz-border-radius: 5px 0px 0px 5px;   
+    border-radius: 5px 0px 0px 5px; 	
+}
+
+#about-team .row:nth-child(odd) h2 {
+    padding: 5px 5% 5px 10%;  
+    margin: 5px 18% 15px -7%;  
+    -webkit-border-radius: 0px 5px 5px 0px;  
+    -moz-border-radius: 0px 5px 5px 0px;   
+    border-radius: 0px 5px 5px 0px;
+	background-color: #049cdb;
+}
+
+#about-site .accordion-heading h2, #about-asso div h2 {
+    padding: 5px 5% 5px 6%;  
+    margin: 5px 18% 15px -6%;  
+    -webkit-border-radius: 0px 5px 5px 0px;  
+    -moz-border-radius: 0px 5px 5px 0px;   
+    border-radius: 0px 5px 5px 0px;
+	background-color: #049cdb;
+}
+
+#about-team .row:nth-child(odd) h2:before, #about-site h2:before, #about-asso div h2:before {
+    content: "";
+    position:absolute;
+    top:2.4em;
+    left:0;
+	z-index: -1;
+	border-right:2.4em solid #0169a8;
+    border-bottom:1.2em solid #fff;
+}
+
+#about-team .row:nth-child(even) h2:after {
+    content: "";
+    position:absolute;
+    top:2.4em;
+    right:0;
+	z-index: -1;
+    border-left:2em solid #009;
+    border-bottom:1em solid #fff;
+}
+
+#about-team .bleuBur {
+	background-color: #049cdb;
+}
+#about-team .row:nth-child(even) .bleuBur:after {
+    border-left-color: #0169a8;
+}
+
+#about-team .bleuEntr {
+	background-color: #32b;
+}
+#about-team .row .bleuEntr:before {
+    border-right-color: #108;
+}
+
+#about-team .bleuAnim {
+	background-color: #03b2c9;
+}
+#about-team .row:nth-child(even) .bleuAnim:after {
+    border-left-color: #018096;
+}
+
+#about-team .bleuCom {
+	background-color: #24c;
+}
+#about-team .row .bleuCom:before {
+    border-right-color: #119;
+}
+
+#about-site .row h2 {
+	margin-bottom: 20px;
+}
+
+#about-site h2 i, #about-asso h2 i  {
+	vertical-align:middle;
+	position:relative;
+	left:-4%;
+	margin-right:-20px;
+}
+#about-team .row:nth-child(odd) h2 i  {
+	vertical-align:middle;
+	position:relative;
+	left:-8%;
+}
+#about-team .row:nth-child(even) h2 i  {
+	vertical-align:middle;
+	position:relative;
+	right:-8%;
+}
+
+#about-team .row .span6 {
+	background-color: #eeeeff;
+	border-radius: 5px;
+	margin-left: 10px;
+	padding:10px;
+}
+
+#about-site .categ-services .span4 div {
+	background-color: #049cdb;
+	border-radius:5px;
+	padding:10px;
+	margin-bottom: 20px;
+	-webkit-box-shadow: 0px 2px 4px #888;  
+    -moz-box-shadow: 0px 2px 4px #888;  
+    box-shadow: 0px 2px 4px #888;  
+}
+#about-site #services-entreprise .categ-services .span4 div, #about-site .accordion-heading .bleuEntr {
+	background-color: #269;
+}
+
+#about-site .accordion-heading .bleuEntr:before {
+    border-right-color: #047;
+}
+#about-site .categ-services  .span4 div h4 {
+	color: #ddf;
+	text-align: center;
+}
+#about-site .categ-services  .span4 div p {
+	color: #fff;
+}
+
+
+#about-site .accordion-heading {
+	background-color: white;
+}
+
+/* ---------- PRESENTATION EVENEMENTS ---------- */
+#evenements h2{
+	position:relative;
+    width: 97%;  
+    font-size: 1.5em;  
+    font-weight: bold;  
+    color: #fff;  
+    -webkit-box-shadow: 0px 2px 4px #888;  
+    -moz-box-shadow: 0px 2px 4px #888;  
+    box-shadow: 0px 2px 4px #888;  
+}
+
+#evenements .row:nth-child(even) h2 {
+	text-align: right;
+    padding: 5px 10% 5px 5%;  
+    margin: 5px 10% 10px -5%;  
+    -webkit-border-radius: 5px 0px 0px 5px;  
+    -moz-border-radius: 5px 0px 0px 5px;   
+    border-radius: 5px 0px 0px 5px;
+	background-color: #049cdb;
+}
+
+#evenements div .row:nth-child(odd) h2 {
+    padding: 5px 5% 5px 10%;  
+    margin: 5px 18% 15px -7%;  
+    -webkit-border-radius: 0px 5px 5px 0px;  
+    -moz-border-radius: 0px 5px 5px 0px;   
+    border-radius: 0px 5px 5px 0px;
+	background-color: #049cdb;
+}
+
+#evenements div .row:nth-child(odd) h2:before{
+    content: "";
+    position:absolute;
+    top:2.4em;
+    left:0;
+	z-index: -1;
+	border-right:2.4em solid #0169a8;
+    border-bottom:1.2em solid #fff;
+}
+
+#evenements .row:nth-child(even) h2:after {
+    content: "";
+    position:absolute;
+    top:2.4em;
+    right:0;
+	z-index: -1;
+    border-left:2em solid #0169a8;
+    border-bottom:1em solid #fff;
+}
+
+#evenements div .row:nth-child(odd) h2 i  {
+	vertical-align:middle;
+	position:relative;
+	left:-6%;
+}
+#evenements .row:nth-child(even) h2 i  {
+	vertical-align:middle;
+	position:relative;
+	right:-6%;
+}
+
+#evenements .row .presentation {
+	background-color: #eeeeff;
+	border-radius: 5px;
+	margin-left: 10px;
+	padding:10px;
+}
+
 /* ---------- MODULE ANNUAIRE ---------- */
 
 #annuaire {
@@ -152,12 +442,6 @@ table.tablesorter thead tr .headerSortDown {
     text-align: right;
 }
 
-#accueil .hero_motcle {
-	font-weight: bold;
-	font-size: 1.2em;
-	color: #049cdb;
-}
-
 #accueil #network {
 	margin-top: 30px;
 }
@@ -168,18 +452,11 @@ table.tablesorter thead tr .headerSortDown {
 	margin: 11px;
 }
 
-#rif p:first-letter
-{
-	padding-left:20px;
+#rifs p {
+	text-align:justify;
 }
 
-#rif .centre
+#rifs .centre
 {
 	text-align:center;
-}
-
-#rif .comment{
-	font-size:0.9em; 
-	color:grey; 
-	font-style:italic;
 }
