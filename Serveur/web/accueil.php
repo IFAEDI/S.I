@@ -14,12 +14,9 @@
 	<div class="row" style="margin-top: 20px;">
 		<div class="span4">
 			<div class="row">
-				<p class="span4" style="text-align:left; color: rgb(0,128,204); font-size:2.4em; line-height:100%">
-					<img style="float:left; margin-right:7%;" src="commun/img/logo_aedi.png" width="120px" alt="AEDI">
-					Association des<br/>
-					Etudiants du<br/>
-					Département<br/>
-					Informatique<br/>
+				<p class="span4">
+					<img id="logo" style="float:left; margin-left:10%;" src="commun/img/logo_aedi.png" width="120px" alt="AEDI">
+					<img style="float:right; margin-right:10%;" id="nom_aedi" src="commun/img/nom_aedi.png" alt="AEDI" class="width1-5" >
 				</p>
 			</div>
 			<div class="well">
@@ -84,19 +81,19 @@
 	</div>
 	<div class="row" style="text-align:center;">
 		<p class="span2">
-			<a href="http://www.insa-lyon.fr/" title="INSA-Lyon"><img src="./commun/img/insa_logo.png" alt="INSA-Lyon"></a>
+			<a href="http://www.insa-lyon.fr/" title="INSA-Lyon"><img class="width1" src="./commun/img/insa_logo.png" alt="INSA-Lyon"></a>
 		</p>
 		<p class="span2">
-			<a href="http://if.insa-lyon.fr/" title="Département Informatique"><img src="./commun/img/if_logo.png" alt="Département Informatique"></a>
+			<a href="http://if.insa-lyon.fr/" title="Département Informatique"><img class="width1" src="./commun/img/if_logo.png" alt="Département Informatique"></a>
 		</p>
 		<p class="span3">
-			<a href="http://www.altran.fr/" title="Altran - Parrain Promo 2013"><img class="width3" height="100px" src="./commun/img/parrains_caroussel/altran.png" alt="Altran"></a>
+			<a href="http://www.altran.fr/" title="Altran - Parrain Promo 2013"><img class="width2" src="./commun/img/parrains_caroussel/altran.png" alt="Altran"></a>
 		</p>
 		<p class="span2">
-			<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img height="100px" src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
+			<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img class="width0-5 height1" src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
 		</p>
 		<p class="span3">
-			<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="width3" height="100px" src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
+			<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="width2" src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
 		</p>
 	</div>
 
@@ -117,8 +114,14 @@
 		
 		// Image resizing :
 		$('.width8').attr('width', ($('#accueil').width() / 12 * 8)+'px');
-		$('.width3').attr('width', ($('#accueil').width() / 12 * 3)+'px');
-		$('.width2').attr('width', ($('#accueil').width() / 12 * 2)+'px');
+		$('.width3').attr('width', ($('#accueil').width() / 4)+'px');
+		$('.width2').attr('width', ($('#accueil').width() / 6)+'px');
+		$('.width1-5').attr('width', ($('#accueil').width() / 8)+'px');
+		$('.width1').attr('width', ($('#accueil').width() / 10)+'px');
+		$('.width0-5').attr('width', ($('#accueil').width() / 20)+'px');
+		
+		$('.height2').attr('height', ($('#accueil').width() / 12)+'px');
+		$('.height1').attr('height', ($('#accueil').width() / 20)+'px');
 		// Caroussels :
 		$('#photoCarousel').carousel({
 			interval: 10000
