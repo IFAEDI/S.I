@@ -33,7 +33,7 @@ else {
 			<div id="erreur" class="alert alert-error" style="margin-top: 20px; text-align: center;"> TODO </div>
 
 			<div style="text-align: right;">
-				<a href="#" id="raffraichir" class="btn btn-info"><i class="icon-refresh icon-white"></i> Raffraîchir</a>
+				<a href="#" id="raffraichir" class="btn btn-info"><i class="icon-refresh icon-white"></i> Rafraîchir</a>
 			</div>
 
 			<table id="table_liste_utilisateurs" class="table table-striped table-bordered table-condensed" style="margin-top: 20px;">

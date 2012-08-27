@@ -55,11 +55,17 @@ if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == '
     $nom_module = 'cvtheque';
     $nom_page = 'edit_cv';
     $titre_module = 'Etudiants';
-/* CV Entreprise */
+/* CV Entreprise - Consultation */
 } elseif ($_GET['page'] == 'CV_Entreprise') {
-    $titre_page = 'CV';
+    $titre_page = 'CVthèque - Consultation';
     $nom_module = 'cvtheque';
     $nom_page = 'cvtheque';
+    $titre_module = 'Entreprises';
+/* CV Entreprise - Présentation */
+} elseif ($_GET['page'] == 'CV_Info') {
+    $titre_page = 'CVthèque - Présentation';
+    $nom_module = 'cvtheque';
+    $nom_page = 'presentation';
     $titre_module = 'Entreprises';
 /* Administration CV */
 } elseif ($_GET['page'] == 'Administration_CV') {
@@ -73,9 +79,15 @@ if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == '
     $nom_module = 'annuaire';
     $nom_page = 'annuaire';
     $titre_module = 'AEDI';
-/* Simulation Entreprise */
+/* Simulation Entreprise - Présentation */
 } elseif ($_GET['page'] == 'Entretiens_Entreprise') {
-    $titre_page = 'Inscription Entretien';
+    $titre_page = 'Simulations d\'Entretiens - Présentation';
+    $nom_module = 'entretien';
+    $nom_page = 'presentation';
+    $titre_module = 'Entreprises';
+/* Simulation Entreprise - Inscription */
+} elseif ($_GET['page'] == 'Entretiens_Entreprise_Inscription') {
+    $titre_page = 'Simulations d\'Entretiens - Inscription';
     $nom_module = 'entretien';
     $nom_page = 'inscription';
     $titre_module = 'Entreprises';
@@ -103,6 +115,12 @@ if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == '
     $nom_module = 'rifs';
     $nom_page = 'inscription';
 	$titre_module = 'Entreprises';
+/* RIFs Administration */
+} elseif ($_GET['page'] == 'Administration_RIFs') {
+    $titre_page = 'Administration des Rencontres IF';
+    $nom_module = 'rifs';
+    $nom_page = 'admin';
+	$titre_module = 'Administration';
 /* Stages Etudiant */
 } elseif ($_GET['page'] == 'Stages_Etudiant') {
     $titre_page = "Recherche de Stages";
@@ -122,21 +140,45 @@ if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == '
     $nom_module = 'commun';
     $nom_page = 'admin_journal';
     $titre_module = 'Administration';
+
+/* Conférences */
+} elseif ($_GET['page'] == 'Conferences') {
+    $titre_page = 'Conférences';
+    $nom_module = 'conferences';
+    $nom_page = 'presentation';
+    $titre_module = 'Entreprises';
 }
+/* Parrainage */
+elseif( $_GET['page'] == 'Evenements_Etudiant' ) {
+	$titre_page= 'Evénements - Présentation';
+	$lien_module = 'index.php?page=Evenements_Etudiant';
+	$nom_module = 'evenements';
+	$titre_module = 'Etudiants';
+	$nom_page = 'presentation';
+}
+/* Evénements Etudiants */
+elseif( $_GET['page'] == 'Parrainage' ) {
+	$titre_page= 'Parrainage - Présentation';
+	$lien_module = 'index.php?page=Parrainage';
+	$nom_module = 'parrainage';
+	$titre_module = 'Entreprises';
+	$nom_page = 'presentation';
+}
+/* Contact */
 elseif( $_GET['page'] == 'Contact' ) {
 	$titre_page= 'Contact';
-	$lien_module = '';
-	$nom_module = '';
+	$lien_module = 'index.php?page=Accueil';
+	$nom_module = 'accueil';
 	$titre_module = '';
 	$nom_page = 'contact';
 }
+/* A Propos */
 elseif( $_GET['page'] == 'A_Propos' ) {
-        $titre_page= 'A Propos';
-        $lien_module = '';
-        $nom_module = '';
-        $titre_module = '';
-        $nom_page = 'a_propos';
-
+    $titre_page= 'A Propos';
+	$lien_module = 'index.php?page=Accueil';
+	$nom_module = 'accueil';
+	$titre_module = '';
+    $nom_page = 'a_propos';
 }
 else {
     $titre_page = '404';
