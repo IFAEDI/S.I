@@ -1,0 +1,32 @@
+<script id="templateSearchStages" type="text/x-handlebars-template" >
+	{{#each stages}}
+		<tr deploye=0>
+			<td class="bouton"><button class="btn btn-info btn-mini"><i class="icon-chevron-down icon-white"></i></button></td>
+			<td>
+				{{#if titre}}
+					{{titre}}
+				{{else}}
+					Offre de stage
+				{{/if}}
+			</td>
+			<td>{{this.entreprise}}</td>
+			<td>{{this.lieu}}</td>
+			<td>{{this.annee}}ème année</td>
+			<td class="desc-stage" style="display:none;">
+				<p>
+					{{#if description}}
+						{{description}}
+					{{else}}
+						Pas de description, voir fichier joint.
+					{{/if}}
+				</p>
+				{{#if contact}}
+					<p><b>Contact</b> : {{this.contact}}</p>
+				{{/if}}
+				<p>
+					<a href="https://intranet-if.insa-lyon.fr/stages/descriptif/{{this.lien_fichier}}">Plus d'info</a>
+				</p>
+			</td>
+		</tr>;
+	{{/each}}
+</script>
