@@ -19,6 +19,8 @@ else if( $utilisateur->getPersonne()->getRole() != Personne::ETUDIANT && $utilis
 }
 
 inclure_fichier('stages', 'stages', 'js');
+inclure_fichier('stages', 'templateSearchStages', 'template');
+inclure_fichier('commun', 'handlebars-1.0.0.beta.6', 'js');
 ?>
 
 <div id="stages">
@@ -65,13 +67,14 @@ inclure_fichier('stages', 'stages', 'js');
 			</ul>
 			-->
 
-	<table id="fenetre" class="table table-striped table-bordered table-condensed">
+	<table id="fenetre" class="table table-striped table-bordered tablesorter">
 		<thead>
-			<th>#</th>
+			<th style="text-align:center;"><i class="icon-th-list"></th>
 			<th>Titre</th>
 			<th>Entreprise</th>
 			<th>Lieu</th>
 			<th>Année(s)</th>
+			<th style="display:none;">Description</th>
 		</thead>
 		<tbody id="resultats">
 		</tbody>
