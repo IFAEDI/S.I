@@ -48,21 +48,16 @@ $utilisateur = $authentification->getUtilisateur();
 /* string */ $com_entreprise = NULL;
 /* int */ $idVille_entreprise = 0;
 
-/* TODO : better check */
-if (verifierPresent('nom')) {
+if (verifierPresent('nom') && verifierPresent('secteur') && verifierPresent('description') && verifierPresent('commentaire') && verifierPresent('idVille')) {
 	$nom_entreprise = Protection_XSS($_POST['nom']);
-}
-if (verifierPresent('secteur')) {
 	$secteur_entreprise = Protection_XSS($_POST['secteur']);
-}
-if (verifierPresent('description')) {
 	$desc_entreprise = Protection_XSS($_POST['description']);
-}
-if (verifierPresent('commentaire')) {
 	$com_entreprise = Protection_XSS($_POST['commentaire']);
-}
-if (verifierPresent('idVille')) {
 	$idVille_entreprise = intval($_POST['idVille']);
+}
+else {
+	$json['code'] = 'errorChamp';
+	$json['mesg'] = 'Veuillez vérifier que les champs sont correctement renseignés.';
 }
 
 /*
@@ -71,21 +66,18 @@ if (verifierPresent('idVille')) {
  
 /* int */ $id = Entreprise::UpdateEntreprise(0, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise, $idVille_entreprise);
 
-/*
- * Renvoyer le JSON
- * TODO : Améliorer les rescodes
- */
 if ($id == 0) {
 	$json['code'] = 'errorChamp';
 }
 else if ($id == Entreprise::getErreurExecRequete()) {
 	$json['code'] = 'errorBDD';
 }
+
 if ($id != NULL) {
 	$json['code'] = 'ok';
 	$json['id'] = $id;
 }
-echo json_encode($json);
 
+echo json_encode($json);
 
 ?>

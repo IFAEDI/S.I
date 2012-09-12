@@ -74,11 +74,9 @@ if ($etatVerif == 2) {
 	 * Renvoyer le JSON
 	 */
 	 if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
-		/* TODO : améliorer le retour */
 		$json['code'] = 'errorChamp';
 	}
 	elseif ($id === CommentaireEntreprise::getErreurExecRequete()) {
-		/* TODO : améliorer le retour */
 		$json['code'] = 'errorBDD';
 	}
 	else {
@@ -87,7 +85,6 @@ if ($etatVerif == 2) {
 	}
 }
 else {
-	/* TODO : améliorer le retour */
 	$json['code'] = 'Donnees_manquantes'.$etatVerif;
 }
 echo json_encode($json);
