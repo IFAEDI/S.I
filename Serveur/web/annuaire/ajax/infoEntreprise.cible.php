@@ -63,6 +63,8 @@ inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 inclure_fichier('commun', 'authentification.class', 'php');
 inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
+header( 'Content-Type: application/json' );
+
 $authentification = new Authentification();
 if( $authentification->isAuthentifie() == false ) {
         die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
@@ -97,7 +99,7 @@ if (verifierPresent('id')) {
 			$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
 			$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
 
-			/* TODO : Normaliser JSON */
+			$json['code'] = 'ok';
 			$json['entreprise']['description'] = $entreprise->toArrayObject();
 			if (gettype($contacts) == 'array') {
 				$json['entreprise']['contacts'] = Array();
@@ -111,8 +113,6 @@ if (verifierPresent('id')) {
 					array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
 				}
 			}
-			
-			$json['code'] = 'ok';
 		}
 		else {
 			$json['code'] = 'noEntr';
@@ -120,11 +120,8 @@ if (verifierPresent('id')) {
 	}
 }
 else {
-	/* TODO : Normaliser */
 	$json['code'] = 'errorChamp';
 }
-
-
 
 /*
  * Renvoyer le JSON

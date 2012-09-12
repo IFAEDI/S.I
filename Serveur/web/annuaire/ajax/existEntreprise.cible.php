@@ -32,21 +32,19 @@ $utilisateur = $authentification->getUtilisateur();
  */
 /* int */ $nom_entreprise = NULL;
 
-/* TODO : better check */
 if (verifierPresent('name')) {
 	$nom_entreprise = Protection_XSS(urldecode($_POST['name']));
+
+	/* booléen */ $existsName = Entreprise::ExistsName($nom_entreprise);
+	$json['code'] = 'ok';
+	$json['answer'] = $existsName;
+}
+else {
+	$json['code'] = 'erreurChamp';
+	$json['answer'] = false;
 }
 
-/*
- * Appeler la couche du dessous
- */
-/* booléen */ $existsName = Entreprise::ExistsName($nom_entreprise);
 
-/*
- * Renvoyer le JSON
- * TODO : Normaliser le retour
- */
-$json['answer'] = $existsName;
 echo json_encode($json);
 
 ?>

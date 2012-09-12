@@ -54,29 +54,29 @@ if (verifierPresent('nom') && verifierPresent('secteur') && verifierPresent('des
 	$desc_entreprise = Protection_XSS($_POST['description']);
 	$com_entreprise = Protection_XSS($_POST['commentaire']);
 	$idVille_entreprise = intval($_POST['idVille']);
+
+	/* int */ $id = Entreprise::UpdateEntreprise(0, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise, $idVille_entreprise);
+
+	if ($id == 0) {
+		$json['code'] = 'errorChamp';
+	}
+	/* TODO : Check de la fonction - Pas très claire => Exception ?! */
+	else if ($id == Entreprise::getErreurExecRequete()) {
+		$json['code'] = 'errorBDD';
+	}
+	else if ($id != NULL) {
+		$json['code'] = 'ok';
+		$json['id'] = $id;
+	}
+	else {
+		$json['code'] = 'errorBDD';
+	}
 }
 else {
 	$json['code'] = 'errorChamp';
 	$json['mesg'] = 'Veuillez vérifier que les champs sont correctement renseignés.';
 }
 
-/*
- * Appeler la couche du dessous
- */
- 
-/* int */ $id = Entreprise::UpdateEntreprise(0, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise, $idVille_entreprise);
-
-if ($id == 0) {
-	$json['code'] = 'errorChamp';
-}
-else if ($id == Entreprise::getErreurExecRequete()) {
-	$json['code'] = 'errorBDD';
-}
-
-if ($id != NULL) {
-	$json['code'] = 'ok';
-	$json['id'] = $id;
-}
 
 echo json_encode($json);
 
