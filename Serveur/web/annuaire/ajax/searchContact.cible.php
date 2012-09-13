@@ -33,6 +33,8 @@
 		}
  */
 
+header( 'Content-Type: application/json' );
+
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'contact.class', 'php');
 inclure_fichier('commun', 'authentification.class', 'php');
@@ -49,8 +51,6 @@ else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Person
 // Conservation de l'utilisateur
 $utilisateur = $authentification->getUtilisateur();
 		
-/* TODO : normaliser JSON */
-
 /*
  * Récupérer et transformer le JSON
  */
@@ -105,6 +105,5 @@ if (verifierPresentObjet('keywords')) {
 }
 
 echo json_encode($json);
-
 
 ?>
