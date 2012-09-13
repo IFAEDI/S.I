@@ -18,24 +18,27 @@
 		}
  */
 
+header( 'Content-Type: application/json' );
+
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
+inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || ($utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
+header( 'Content-Type: application/json' );
+
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
+        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
 }
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
+
 
 /*
  * Récupérer et transformer le JSON
@@ -43,27 +46,30 @@ inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 /* int */ $id = 0;
 if (verifierPresent('id')) {
 	$id = intval($_POST['id']);
-}
 
-/*
- * Appeler la couche du dessous
- */
- 
-/* bool */ $codeRet = CommentaireEntreprise::SupprimerCommentaireByID($id);
+	/* bool */ $codeRet = CommentaireEntreprise::SupprimerCommentaireByID($id);
 
-/*
- * Renvoyer le JSON
- */
- if ($codeRet === 0) {
-	$json['code'] = 'errorChamp';
-}
-elseif ($codeRet === CommentaireEntreprise::getErreurExecRequete()) {
-	$json['code'] = 'errorBDD';
+	/*
+	 * Renvoyer le JSON
+	 */
+	 if ($codeRet === 0) {
+		$json['code'] = 'errorChamp';
+		$json['mesg'] = 'Veuillez vérifier les champs renseignés.';
+	}
+	elseif ($codeRet === CommentaireEntreprise::getErreurExecRequete()) {
+		$json['code'] = 'errorBDD';
+		$json['mesg'] = 'Une erreur est survenue.';
+	}
+	else {
+		$json['code'] = 'ok';
+		$json['mesg'] = 'Commentaire supprimé.';
+	}
 }
 else {
-	$json['code'] = 'ok';
+	$json['code'] = 'errorChamp';
+	$json['mesg'] = 'Veuillez vérifier les champs renseignés.';
 }
-echo json_encode($json);
 
+echo json_encode($json);
 
 ?>
