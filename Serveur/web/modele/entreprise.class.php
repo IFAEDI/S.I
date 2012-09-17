@@ -6,7 +6,7 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
- * Controleur associé à la table Entreprise
+ * Modèle associé à la table Entreprise
  */
  
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
@@ -16,7 +16,7 @@ inclure_fichier('commun', 'requete.inc', 'php'); // Ajouter dans base.inc ?
 class Entreprise {
 
 	//****************  Constantes  ******************//
-	private static $ERREUR_EXEC_REQUETE = -10;
+	public static $ERREUR_EXEC_REQUETE = -10;
 	public static function getErreurExecRequete() { return self::$ERREUR_EXEC_REQUETE; }
 	
 

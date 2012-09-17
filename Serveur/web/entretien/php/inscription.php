@@ -10,7 +10,7 @@ if ($authentification->isAuthentifie() == false || (
     die;
 }
 
-inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('modele', 'entreprise.class', 'php');
 
 $entreprises = Entreprise::GetListeEntreprises();
 // On construit la liste de recherche des entreprises

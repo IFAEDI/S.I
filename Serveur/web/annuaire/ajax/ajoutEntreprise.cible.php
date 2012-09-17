@@ -23,7 +23,7 @@ header( 'Content-Type: application/json' );
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
-inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('modele', 'entreprise.class', 'php');
 
 /* Vérification que l'utilisateur est bien auhtentifié et autorisé à ajouter une entreprise */
 $authentification = new Authentification();

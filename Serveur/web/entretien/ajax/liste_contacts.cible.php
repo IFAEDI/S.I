@@ -1,6 +1,6 @@
 <?php
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'contact.class', 'php');
+inclure_fichier('modele', 'contact.class', 'php');
 
 	if( empty($_POST) ) {
         die;
