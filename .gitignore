@@ -3,3 +3,4 @@
 Serveur/web/commun/php/config.inc.php
 Serveur/web/nbproject
 Serveur/web/db_schema
+Serveur/web/logs/*
