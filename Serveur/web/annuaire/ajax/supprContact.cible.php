@@ -21,21 +21,21 @@
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
+inclure_fichier('controleur', 'contact.class', 'php');
 
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || ($utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
+
+$authentification = new Authentification();
+if( $authentification->isAuthentifie() == false ) {
+        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+}
+else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
+        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
+        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
 }
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'contact.class', 'php');
+// Conservation de l'utilisateur
+$utilisateur = $authentification->getUtilisateur();
+
 
 /*
  * Récupérer et transformer le JSON
@@ -43,31 +43,19 @@ inclure_fichier('controleur', 'contact.class', 'php');
 /* int */ $id = 0;
 if (verifierPresent('id')) {
 	$id = intval($_POST['id']);
-}
 
-/*
- * Appeler la couche du dessous
- */
-
- 
-/* bool */ $codeRet = Contact::SupprimerContactByID($id);
-
-/*
- * Renvoyer le JSON
- */
- if ($codeRet === 0) {
-	$json['code'] = 'errorChamp';
-}
-elseif ($codeRet === Contact::getErreurExecRequete()) {
-	$json['code'] = 'errorBDD';
+	/* bool */ $codeRet = Contact::SupprimerContactByID($id);
+	if ($codeRet === Contact::getErreurExecRequete()) {
+		$json['code'] = 'errorBDD';
+	}
+	else {
+		$json['code'] = 'ok';
+	}
 }
 else {
-	$json['code'] = 'ok';
-
+	$json['code'] = 'errorChamp';
 }
 
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
 echo json_encode($json);
-
 
 ?>
