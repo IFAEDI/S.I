@@ -22,7 +22,7 @@ header( 'Content-Type: application/json' );
  
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('modele', 'entreprise.class', 'php');
 inclure_fichier('commun', 'authentification.class', 'php');
 
 $authentification = new Authentification();

@@ -22,11 +22,11 @@
 header( 'Content-Type: application/json' );
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'entreprise.class', 'php');
-inclure_fichier('controleur', 'contact.class', 'php');
-inclure_fichier('controleur', 'ville.class', 'php');
-inclure_fichier('controleur', 'etudiant.class', 'php');
-inclure_fichier('commun', 'personne.class', 'php');
+inclure_fichier('modele', 'entreprise.class', 'php');
+inclure_fichier('modele', 'contact.class', 'php');
+inclure_fichier('modele', 'ville.class', 'php');
+// inclure_fichier('controleur', 'etudiant.class', 'php');
+// inclure_fichier('commun', 'personne.class', 'php');
 inclure_fichier('commun', 'authentification.class', 'php');
 
 

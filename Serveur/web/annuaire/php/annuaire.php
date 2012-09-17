@@ -20,8 +20,8 @@ if (($authentification->isAuthentifie() == false) ||
 // Inclusion des fichiers nécessaires (beurk, des includes en plein milieu de page ...) :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 
-inclure_fichier('controleur', 'entreprise.class', 'php');
-inclure_fichier('controleur', 'contact.class', 'php');
+inclure_fichier('modele', 'entreprise.class', 'php');
+inclure_fichier('modele', 'contact.class', 'php');
 inclure_fichier('annuaire', 'annuaire.class', 'js');
 inclure_fichier('commun', 'validate', 'js');
 inclure_fichier('commun', 'dateFormat', 'js');
