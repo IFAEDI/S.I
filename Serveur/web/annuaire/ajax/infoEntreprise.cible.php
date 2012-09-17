@@ -57,10 +57,9 @@
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('controleur', 'entreprise.class', 'php');
 inclure_fichier('controleur', 'contact.class', 'php');
-inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
+inclure_fichier('modele', 'commentaire_entreprise.class', 'php');
 
 inclure_fichier('commun', 'authentification.class', 'php');
-inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 header( 'Content-Type: application/json' );
 

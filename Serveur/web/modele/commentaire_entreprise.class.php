@@ -6,7 +6,7 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Commentaire - benjamin.planche@aldream.net
  * ---------------------
- * Controleur associé à la table Commentaire
+ * Modèle associé à la table Commentaire
  */
  
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
@@ -19,10 +19,10 @@ inclure_fichier('controleur', 'entreprise.class', 'php');
 class CommentaireEntreprise {
 
 	//****************  Constantes  ******************//
-	private static $ERREUR_EXEC_REQUETE = -10;
+	public static $ERREUR_EXEC_REQUETE = -10;
 	public static function getErreurExecRequete() { return self::$ERREUR_EXEC_REQUETE; }
 	
-	private static $ERREUR_CHAMP_INCONNU = -20;
+	public static $ERREUR_CHAMP_INCONNU = -20;
 	public static function getErreurChampInconnu() { return self::$ERREUR_CHAMP_INCONNU; }
 	
 	//****************  Attributs  ******************//

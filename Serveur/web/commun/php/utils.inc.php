@@ -57,6 +57,9 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
             $path = dirname(__FILE__) . "/../../$nom_fichier.$type";
         } elseif ($module == 'controleur'){
             $path = dirname(__FILE__) . "/../../$module/$nom_fichier.$type";
+	}
+	elseif( $module === 'modele' ) {
+		$path = dirname( __FILE__ ) . "/../../$module/$nom_fichier.$type";
         }else{
             $path = dirname(__FILE__) . "/../../$module/php/$nom_fichier.$type";
         }
@@ -102,6 +105,7 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
         }
     }
 
+	/* TODO : WTF */
     echo "<br>Fichier non trouvé :  $path<br>";
     echo "Parametres :<br>";
     echo "Module : $module<br>";
@@ -215,4 +219,3 @@ function verifierHoraire($horaire) {
 }
 
 ?>
-
