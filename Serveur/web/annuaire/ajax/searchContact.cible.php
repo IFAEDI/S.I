@@ -37,19 +37,13 @@ header( 'Content-Type: application/json' );
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('modele', 'contact.class', 'php');
-inclure_fichier('commun', 'authentification.class', 'php');
 
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
-        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
+$logger = Logger::getLogger("Annuaire.searchContact");
 
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
+
+
 		
 /*
  * Récupérer et transformer le JSON
@@ -71,6 +65,7 @@ if (verifierPresentObjet('keywords')) {
 		$contacts = Contact::Rechercher($keywords);
 		if ($contacts == Contact::getErreurExecRequete()) {
 			$json['code'] = 'errorBDD';
+			$logger->error( 'Une erreur est survenue.' );
 		}
 		else if ($contacts == Contact::getErreurChampInconnu()) {
 			$json['code'] = 'erreurChamp';

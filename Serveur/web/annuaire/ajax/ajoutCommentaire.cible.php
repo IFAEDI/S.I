@@ -23,20 +23,12 @@ header('Content-Type: application/json');
  
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('commun', 'authentification.class', 'php');
 inclure_fichier('modele', 'commentaire_entreprise.class', 'php');
 
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN && 
-	$authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-	die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
+$logger = Logger::getLogger("Annuaire.ajoutCommentaire");
 
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 
 
@@ -51,42 +43,36 @@ $utilisateur = $authentification->getUtilisateur();
 
 /* int */ $etatVerif = 0;
 
-if (verifierPresent('categorie')) {
-	$categorie = Protection_XSS($_POST['categorie']);
-}
-if (verifierPresent('contenu')) {
+/* Vérification des champs indispensables */
+if (verifierPresent('contenu') && verifierPresent('id_entreprise')) {
 	$contenu = Protection_XSS(urldecode($_POST['contenu']));
-	$etatVerif++;
-}
-if (verifierPresent('id_entreprise')) {
-	$id_entreprise = Protection_XSS($_POST['id_entreprise']);
-	$etatVerif++;
-}
 
-if ($etatVerif == 2) {
-	/*
-	 * Appeler la couche du dessous
-	 */
-	 
+	$id_entreprise = Protection_XSS($_POST['id_entreprise']);
+
+	/* Vérification du champ optionnel */
+	if (verifierPresent('categorie')) {
+		$categorie = Protection_XSS($_POST['categorie']);
+	}
+
 	/* int */ $id = CommentaireEntreprise::UpdateCommentaire(0, $id_personneCom, $id_entreprise, $contenu, $categorie, 0);
 
-	/*
-	 * Renvoyer le JSON
-	 */
-	 if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
-		$json['code'] = 'errorChamp';
+	if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
+		$json['code'] = 'erreurChamp';
 	}
 	elseif ($id === CommentaireEntreprise::getErreurExecRequete()) {
+		$logger->error( 'Une erreur est survenue.' );
 		$json['code'] = 'errorBDD';
 	}
 	else {
+		$logger->info( '"'.$utilisateur->getLogin().'" a ajouté un commentaire à l\'entreprise #'.$id_entreprise.'.' );
 		$json['code'] = 'ok';
 		$json['id'] = $id;
 	}
 }
 else {
-	$json['code'] = 'Donnees_manquantes'.$etatVerif;
+	$json['code'] = 'erreurChamp';
 }
+
 echo json_encode($json);
 
 ?>

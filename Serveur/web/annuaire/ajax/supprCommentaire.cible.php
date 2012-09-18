@@ -23,20 +23,11 @@ header( 'Content-Type: application/json' );
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('modele', 'commentaire_entreprise.class', 'php');
-inclure_fichier('commun', 'authentification.class', 'php');
 
+$logger = Logger::getLogger("Annuaire.supprCommentaire");
 
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
-        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
-
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 
 /*
@@ -52,20 +43,24 @@ if (verifierPresent('id')) {
 	 * Renvoyer le JSON
 	 */
 	 if ($codeRet === 0) {
-		$json['code'] = 'errorChamp';
+		$json['code'] = 'erreurChamp';
 		$json['mesg'] = 'Veuillez vérifier les champs renseignés.';
 	}
 	elseif ($codeRet === CommentaireEntreprise::getErreurExecRequete()) {
 		$json['code'] = 'errorBDD';
 		$json['mesg'] = 'Une erreur est survenue.';
+
+		$logger->error( 'Une erreur est survenue.' );
 	}
 	else {
 		$json['code'] = 'ok';
 		$json['mesg'] = 'Commentaire supprimé.';
+
+		$logger->info( '"'.$utilisateur->getLogin().'" a supprimé le commentaire #'.$id.'.' );
 	}
 }
 else {
-	$json['code'] = 'errorChamp';
+	$json['code'] = 'erreurChamp';
 	$json['mesg'] = 'Veuillez vérifier les champs renseignés.';
 }
 
