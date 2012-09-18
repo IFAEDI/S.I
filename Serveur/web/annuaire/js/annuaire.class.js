@@ -903,39 +903,42 @@ Annuaire.initialiserTemplates = function initialiserTemplates() {
  *		- RIEN (Page maj)
  */
 Annuaire.afficherListeEntreprises = function afficherListeEntreprises() {
-	var /* char */ premiere_lettrePrec;
-	for (var /* int */ i in Annuaire.listeEntreprises) {
-		premiere_lettrePrec = Annuaire.listeEntreprises[i][1].charAt(0);
-		break;
-	}
-	var /* char */ premiere_lettreSuiv = premiere_lettrePrec;
-	var /* int */ compteur = 0;
-	var /* string */ lignes = '';
-	var /* string */ listeFinale = '';
 	
-	for (var /* int */ i in Annuaire.listeEntreprises) {
-		premiere_lettreSuiv = Annuaire.listeEntreprises[i][1].charAt(0);
-		if (premiere_lettrePrec != premiere_lettreSuiv) { // On passe à la lettre suivante dans l'alphabet :
-			// On ajoute la colonne affichant la lettre, et on affiche le tout :
-			lignes = '<tr><td  class="first" rowspan="'+compteur+'">'+premiere_lettrePrec+'</td>'+lignes;
-			listeFinale += lignes;
-			lignes = '';
-			compteur = 0;
-			premiere_lettrePrec = premiere_lettreSuiv;
+	if( Annuaire.listeEntreprises.length > 0 ) {
+		var /* char */ premiere_lettrePrec;
+		for (var /* int */ i in Annuaire.listeEntreprises) {
+			premiere_lettrePrec = Annuaire.listeEntreprises[i][1].charAt(0);
+			break;
+		}
+		var /* char */ premiere_lettreSuiv = premiere_lettrePrec;
+		var /* int */ compteur = 0;
+		var /* string */ lignes = '';
+		var /* string */ listeFinale = '';
+		
+		for (var /* int */ i in Annuaire.listeEntreprises) {
+			premiere_lettreSuiv = Annuaire.listeEntreprises[i][1].charAt(0);
+			if (premiere_lettrePrec != premiere_lettreSuiv) { // On passe à la lettre suivante dans l'alphabet :
+				// On ajoute la colonne affichant la lettre, et on affiche le tout :
+				lignes = '<tr><td  class="first" rowspan="'+compteur+'">'+premiere_lettrePrec+'</td>'+lignes;
+				listeFinale += lignes;
+				lignes = '';
+				compteur = 0;
+				premiere_lettrePrec = premiere_lettreSuiv;
+			}
+		
+			// On génère les lignes :
+			compteur++;
+			if (lignes != '') {
+				lignes += '<tr>';
+			}
+			lignes += '<td class="entreprise" id-entreprise='+Annuaire.listeEntreprises[i][0]+' ><a id-entreprise='+Annuaire.listeEntreprises[i][0]+' href="#'+Annuaire.listeEntreprises[i][1]+'">'+Annuaire.listeEntreprises[i][1]+'</a></td></tr>';
 		}
 		
-		// On génère les lignes :
-		compteur++;
-		if (lignes != '') {
-			lignes += '<tr>';
-		}
-		lignes += '<td class="entreprise" id-entreprise='+Annuaire.listeEntreprises[i][0]+' ><a id-entreprise='+Annuaire.listeEntreprises[i][0]+' href="#'+Annuaire.listeEntreprises[i][1]+'">'+Annuaire.listeEntreprises[i][1]+'</a></td></tr>';
+		// On affiche le dernier contenu générer :
+		listeFinale += '<tr><td  class="first" rowspan="'+compteur+'">'+premiere_lettrePrec+'</td>'+lignes;
+		
+		$('#listeEntreprises tbody').html(listeFinale);
 	}
-	
-	// On affiche le dernier contenu générer :
-	listeFinale += '<tr><td  class="first" rowspan="'+compteur+'">'+premiere_lettrePrec+'</td>'+lignes;
-	
-	$('#listeEntreprises tbody').html(listeFinale);
 	
 	// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
 	$('.entreprise').click(function(event){Annuaire.chercherInfoEntreprise(parseInt(event.target.getAttribute('id-entreprise')), Annuaire.afficherInfoEntreprise)});
