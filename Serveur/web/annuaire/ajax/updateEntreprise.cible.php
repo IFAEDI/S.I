@@ -23,23 +23,15 @@ header( 'Content-Type: application/json' );
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('modele', 'entreprise.class', 'php');
-inclure_fichier('commun', 'authentification.class', 'php');
 
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
-        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
+$logger = Logger::getLogger("Annuaire.updateEntreprise");
 
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 
 /*
- * Récupérer et transformer le JSON
+ * Vérification que les champs requis sont bien renseignés
  */
 /* string */ $nom_entreprise = NULL;
 /* string */ $secteur_entreprise = NULL;
@@ -47,40 +39,37 @@ $utilisateur = $authentification->getUtilisateur();
 /* string */ $com_entreprise = NULL;
 /* int */ $id_entreprise = 0;
 
-if (verifierPresent('nom')) {
+if (verifierPresent('nom') && verifierPresent('secteur') && verifierPresent('description')) {
 	$nom_entreprise = Protection_XSS(urldecode($_POST['nom']));
-}
-if (verifierPresent('secteur')) {
 	$secteur_entreprise = Protection_XSS(urldecode($_POST['secteur']));
-}
-if (verifierPresent('description')) {
 	$desc_entreprise = Protection_XSS(urldecode($_POST['description']));
-}
-if (verifierPresent('commentaire')) {
-	$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
-}
-if (verifierPresent('id_entreprise')) {
-	$id_entreprise = intval($_POST['id_entreprise']);
-}
 
-/*
- * Appeler la couche du dessous
- */
- 
-/* int */ $id = Entreprise::UpdateEntreprise($id_entreprise, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise);
+	/* Vérification des champs optionnels */
+	if (verifierPresent('commentaire')) {
+		$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
+	}
+	if (verifierPresent('id_entreprise')) {
+		$id_entreprise = intval($_POST['id_entreprise']);
+	}
 
-/*
- * Renvoyer le JSON
- */
-if ($id === 0) {
-	$json['code'] = 'erreurChamp';
-}
-elseif ($id === Entreprise::getErreurExecRequete()) {
-	$json['code'] = 'errorBDD';
+	/* int */ $id = Entreprise::UpdateEntreprise($id_entreprise, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise);
+
+	/* Vérification des erreurs */
+	if ($id === 0) {
+		$json['code'] = 'erreurChamp';
+	}
+	elseif ($id === Entreprise::getErreurExecRequete()) {
+		$logger->error( 'Une erreur est survenue (Login: '.$utilisateur->getLogin().').' );
+		$json['code'] = 'errorBDD';
+	}
+	else {
+		$logger->info( '"'.$utilisateur->getLogin().'" a modifié l\'entreprise "'.$nom_entreprise.'" ('.$id.').' );
+		$json['code'] = 'ok';
+		$json['id'] = ($id_entreprise != 0) ? 0 : $id;
+	}
 }
 else {
-	$json['code'] = 'ok';
-	$json['id'] = ($id_entreprise != 0) ? 0 : $id;
+	$json['code'] = 'erreurChamp';
 }
 
 echo json_encode($json);

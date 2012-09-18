@@ -218,4 +218,41 @@ function verifierHoraire($horaire) {
 	}
 }
 
+/**
+ * Vérification d'un utilisateur est authentifié et autorisé à accèder à une ressource
+ * @param logger Instance log4php
+ * @param roles	Tableau des roles devant être vérifiés
+ * @return L'utilisateur actuellement authentifié
+ */
+inclure_fichier('commun', 'authentification.class', 'php');
+function controlerAuthentificationJSON($logger, $roles) {
+
+	$authentification = new Authentification();
+	/* Vérification que l'utilisateur est authentifié */
+	if( $authentification->isAuthentifie() == false ) {
+		$logger->error( "Utilisateur non authentifié." );
+		die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+	}
+
+	/* Vérification des accréditations */
+	$user_role = $authentification->getUtilisateur()->getPersonne()->getRole();
+
+	/* bool */ $authorized = false;
+	foreach ($roles as $r) {
+		if( $user_role == $r ) {
+			$authorized = true;
+			break;
+		}
+	}
+
+	/* Non authorisé, on die */
+	if( !$authorized ) {
+		$logger->fatal( "Utilisateur non autorisé. [Login: ".$authentification->getUtilisateur()->getLogin()."]" );
+		die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+	}
+
+	// Retour de l'utilisateur courant
+	return $authentification->getUtilisateur();
+}
+
 ?>
