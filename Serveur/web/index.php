@@ -47,25 +47,25 @@ if ( !isset($_GET['page']) || strlen( $_GET['page'] ) == 0 || $_GET['page'] == '
 } elseif ($_GET['page'] == 'CV_Etudiant') {
     $titre_page = 'Accueil CV';
     $nom_module = 'cvtheque';
-    $nom_page = 'accueil';
+    $nom_page = 'presentationTemp';
     $titre_module = 'Etudiants';
 /* Edition CV */
-} elseif ($_GET['page'] == 'edit_cv') {
-    $titre_page = 'Edition CV';
-    $nom_module = 'cvtheque';
-    $nom_page = 'edit_cv';
-    $titre_module = 'Etudiants';
+// } elseif ($_GET['page'] == 'edit_cv') {
+    // $titre_page = 'Edition CV';
+    // $nom_module = 'cvtheque';
+    // $nom_page = 'edit_cv';
+    // $titre_module = 'Etudiants';
 /* CV Entreprise - Consultation */
-} elseif ($_GET['page'] == 'CV_Entreprise') {
-    $titre_page = 'CVthèque - Consultation';
-    $nom_module = 'cvtheque';
-    $nom_page = 'cvtheque';
-    $titre_module = 'Entreprises';
+// } elseif ($_GET['page'] == 'CV_Entreprise') {
+    // $titre_page = 'CVthèque - Consultation';
+    // $nom_module = 'cvtheque';
+    // $nom_page = 'cvtheque';
+    // $titre_module = 'Entreprises';
 /* CV Entreprise - Présentation */
 } elseif ($_GET['page'] == 'CV_Info') {
     $titre_page = 'CVthèque - Présentation';
     $nom_module = 'cvtheque';
-    $nom_page = 'presentation';
+    $nom_page = 'presentationTemp';
     $titre_module = 'Entreprises';
 /* Administration CV */
 } elseif ($_GET['page'] == 'Administration_CV') {

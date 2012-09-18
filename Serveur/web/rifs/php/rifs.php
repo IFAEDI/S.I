@@ -66,13 +66,9 @@
 			<div id="inscriptionRif">
 				<h2><i class="icon icon-pencil icon-white"></i> Inscription</h2>
 				<p>
-					Pour vous inscrire aux prochaines Rencontres IF, veuillez remplir le formulaire accessible via le lien ci-dessous. 
+					Pour vous inscrire aux prochaines Rencontres IF, merci de nous contacter le plus rapidement possible. Nous étudierons alors votre demande, et vous répondrons dans les plus brefs délais. 
 				</p>
-				<p>
-					Si celui-ci est valide, un fichier PDF sera généré. Il devra être signé par le responsable de l'entreprise puis nous être renvoyé afin de compléter l'inscription. 
-				</p>
-
-				<p class="centre"><a href="index.php?page=RIFs_Inscription" class="btn btn-large btn-primary"><strong>Formulaire d'inscription aux Rencontres IF</strong></a></p>
+				<p class="centre"><a href="#" e-name="aedi.entreprise.asso" class="e-noBot btn btn-large btn-info" e-domain="listes.insa-lyon.fr"><strong><i class="icon-eye-open icon-white"></i> Nous Contacter</strong></a></p>
 			</div>
 		</div>
 	</div>
