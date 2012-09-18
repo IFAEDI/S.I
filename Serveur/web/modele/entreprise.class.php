@@ -135,12 +135,7 @@ class Entreprise {
 	public static function SupprimerEntrepriseByID($_id) {
 
 		$result = 0;
-		try {
-			$result = BD::executeModif('DELETE FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', array('id' => $_id));
-		}
-		catch (Exception $e) {
-			return Entreprise::getErreurExecRequete();;
-		}
+		$result = BD::executeModif('DELETE FROM ENTREPRISE WHERE ID_ENTREPRISE = :id', array('id' => $_id));
 
 		return $result;
 	}

@@ -45,7 +45,7 @@ $('document').ready(function() {
 	}, {
 		name: 'formUpdateEntrepriseSecteur',
 		display: 'Secteur', 
-		rules: 'required|alpha_dash'
+		rules: 'required'
 	}, {
 		name: 'formUpdateEntrepriseDescription',
 		display: 'Description', 
@@ -157,6 +157,13 @@ $('document').ready(function() {
 		return (value != '');
 	}).setMessage('validate_nom', 'Les champs Nom & Prénom sont requis.');
 	
+	// -- Suppression entreprise
+	$('#btnSupprimerEntreprise').click( function() {
+		var id_entreprise = $('#formUpdateEntrepriseId').val();
+		Annuaire.supprimerEntreprise(id_entreprise);
+
+	} );
+
 	// ---- Désactivation de l'envoi au serveur :
 	$('#formUpdateContact').submit(function() {
 		return false;
@@ -175,7 +182,6 @@ $('document').ready(function() {
 		$('#formUpdateContactNom').focus();
 	})
 	
-
 	// -- Update/Création Comm'
 	var validatorCommentaire = new FormValidator('formAjoutCommentaire', [{
 		name: 'formAjoutCommentaireContenu',

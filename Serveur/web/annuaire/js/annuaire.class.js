@@ -174,6 +174,31 @@ Annuaire.chercherContacts = function chercherContacts() {
 
 };
 
+/**
+ * Suppression d'une entreprise de la base de données.
+ * id_entreprise : L'id de l'entreprise à supprimer
+ */
+Annuaire.supprimerEntreprise = function supprimerEntreprise(id_entreprise) {
+	$.ajax( {
+		url: "./annuaire/ajax/supprEntreprise.cible.php",
+		type: "POST",
+		async: false,
+		data: { "id_entreprise" : id_entreprise },
+		dataType: "json",
+		success : function(resp) {
+			if( resp.code == 'ok' ) {
+				window.location.reload();
+			}
+			else {
+				alert( resp.mesg );
+			}
+		},
+		error :  function() {
+			alert( 'Une erreur est survenue lors de l\'envoi de la requête au serveur.' );
+		}
+	} );
+};
+
 /** 
  * ---- updaterEntreprise
  * Valide le formulaire d'ajout/modification d'une entreprise & transmet les informations à la cible PHP.

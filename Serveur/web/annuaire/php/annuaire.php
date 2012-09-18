@@ -173,6 +173,7 @@ $listePostes = Contact::GetListeFonctions();
 		 
 				</div>
 				<div class="modal-footer form-actions">
+					<a href="#" id="btnSupprimerEntreprise" class="btn btn-danger" data-dismiss="modal">Supprimer</button>
 					<a href="#" class="btn reset" data-dismiss="modal">Annuler</a>
 					<a class="btn reset">RAZ</a>
 					<button type="submit" id="btnValiderUpdateEntreprise" class="btn btn-primary">Continuer</button>
