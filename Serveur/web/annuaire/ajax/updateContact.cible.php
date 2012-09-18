@@ -25,22 +25,12 @@ require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('modele', 'entreprise.class', 'php');
 inclure_fichier('modele', 'contact.class', 'php');
 inclure_fichier('modele', 'ville.class', 'php');
-// inclure_fichier('controleur', 'etudiant.class', 'php');
-// inclure_fichier('commun', 'personne.class', 'php');
-inclure_fichier('commun', 'authentification.class', 'php');
 
+$logger = Logger::getLogger("Annuaire.updateContact");
 
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
-        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
 
 		
 /*
@@ -118,8 +108,12 @@ if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifie
 	/* 
 	 * A partir des	informations fournies, on récupère la ville et l'entreprise attachées au contact
 	 */
+	$id_ville = Ville::VilleExiste( $ville['code_postal'], $ville['libelle'], $ville['pays'] );
+	if( $id_ville == false ) {
+		$id_ville = Ville::AjouterVille( $ville['code_postal'], $ville['libelle'], $ville['pays'] );
+	}
 
-	/* obj Ville */ $villeObj = new Ville(Etudiant::GetVilleOrAdd($ville['libelle'], $ville['code_postal'], $ville['pays']));
+	/* obj Ville */ $villeObj = new Ville($id_ville);
 	/* obj Entreprise */ $entrepriseObj = Entreprise::GetEntrepriseByID($id_entreprise);
 	if (($personneObj != null) && ($entrepriseObj != null) && ($villeObj != null) && ($fonction != null)) {
  
@@ -142,11 +136,15 @@ if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifie
 		}
 		elseif ($idContact === Contact::getErreurExecRequete()) {
 			$json['code'] = 'errorBDD';
+
+			$logger->error( 'Une erreur est survenue' );
 		}
 		else {
 			$json['code'] = 'ok';
 			$json['id'] = ($id != 0) ? 0 : $idContact;
 			$json['id_personne'] = $personneObj->getId();
+
+			$logger->info( '"'.$utilisateur->getLogin().'" a modifié le contact "'.$personne['prenom'].' '.$personne['nom'].'".' );
 		}
 	}
 	else {
