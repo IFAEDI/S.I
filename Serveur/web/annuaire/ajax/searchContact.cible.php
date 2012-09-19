@@ -42,19 +42,7 @@ $logger = Logger::getLogger("Annuaire.searchContact");
 
 $utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
 $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
-
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
-        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
-
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
-		
+	
 /*
  * Récupérer et transformer le JSON
  */
