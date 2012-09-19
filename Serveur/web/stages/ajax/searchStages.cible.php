@@ -3,7 +3,7 @@
 header( 'Content-Type: application/json' );
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'stages.class', 'php');
+inclure_fichier('modele', 'stages.class', 'php');
 
 /**
  * Ce fichier sert de cible à la recherche de stages. C'est celui qui
