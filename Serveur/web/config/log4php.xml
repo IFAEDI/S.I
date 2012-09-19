@@ -7,6 +7,10 @@
         <param name="append" value="true" />
     </appender>
     <root>
+<<<<<<< HEAD
+=======
+        <level value="DEBUG" />
+>>>>>>> upstream/master
         <appender_ref ref="default" />
     </root>
 </configuration>

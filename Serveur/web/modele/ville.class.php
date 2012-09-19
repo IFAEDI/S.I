@@ -34,6 +34,40 @@ class Ville {
 		$this->pays		= $result['PAYS_VILLE'];
 	}
 
+	/**
+	 * Ajoute une nouvelle ville en base
+	 * @return Retourne l'ID de la ville nouvellement ajouté
+	 */
+	public static function AjouterVille( $cp, $ville, $pays ) {
+
+		$result = BD::executeModif( "INSERT INTO VILLE (CP_VILLE, LIBELLE_VILLE, PAYS_VILLE) VALUES (:cp, :ville, :pays)",
+					array( 'cp' => $cp, 'ville' => $ville, 'pays' => $pays ) );
+
+		return BD::getDernierID();
+
+	}
+
+	/**
+	 * Détermine si une ville existe dans la base
+	 * @return false si la ville n'existe pas, son ID unique si elle existe.
+	 */
+	public static function VilleExiste( $cp, $ville, $pays ) {
+
+		$result = BD::executeSelect( 'SELECT ID_VILLE FROM VILLE WHERE CP_VILLE LIKE :cp AND LIBELLE_VILLE LIKE :ville AND PAYS_VILLE LIKE :pays',
+					array( 'cp' => $cp, 'ville' => $ville, 'pays' => $pays ) );
+
+		/* La ville n'existe pas */
+		if( $result == null ) {
+			return false;
+		}
+
+		/* La ville existe, on retourne l'ID */
+		return $result['ID_VILLE'];
+	}
+
+
+
+	/* Getter / Setter */
 	public function getId() {
 		return $this->id;
 	}

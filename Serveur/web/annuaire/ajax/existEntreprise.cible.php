@@ -9,23 +9,17 @@
  * Cible recevant en entrée un nom d'entreprise et renvoyant un booléen à true si cette entreprise existe en BDD et false sinon.
  */
  
+header( 'Content-Type: application/json' );
  
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('commun', 'authentification.class', 'php');
+
 inclure_fichier('modele', 'entreprise.class', 'php');
 
-$authentification = new Authentification();
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN &&
-        $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::AEDI) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
+$logger = Logger::getLogger("Annuaire.existEntreprise");
 
-// Conservation de l'utilisateur
-$utilisateur = $authentification->getUtilisateur();
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 /*
  * Récupérer et transformer le JSON

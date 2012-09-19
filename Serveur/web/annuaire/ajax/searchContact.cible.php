@@ -37,7 +37,11 @@ header( 'Content-Type: application/json' );
 
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
 inclure_fichier('modele', 'contact.class', 'php');
-inclure_fichier('commun', 'authentification.class', 'php');
+
+$logger = Logger::getLogger("Annuaire.searchContact");
+
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 $authentification = new Authentification();
 if( $authentification->isAuthentifie() == false ) {
@@ -71,6 +75,7 @@ if (verifierPresentObjet('keywords')) {
 		$contacts = Contact::Rechercher($keywords);
 		if ($contacts == Contact::getErreurExecRequete()) {
 			$json['code'] = 'errorBDD';
+			$logger->error( 'Une erreur est survenue.' );
 		}
 		else if ($contacts == Contact::getErreurChampInconnu()) {
 			$json['code'] = 'erreurChamp';
