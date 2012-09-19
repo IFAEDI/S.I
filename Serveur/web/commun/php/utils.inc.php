@@ -218,6 +218,8 @@ function verifierHoraire($horaire) {
 	}
 }
 
+<<<<<<< HEAD
+=======
 /**
  * Vérification d'un utilisateur est authentifié et autorisé à accèder à une ressource
  * @param logger Instance log4php
@@ -255,4 +257,5 @@ function controlerAuthentificationJSON($logger, $roles) {
 	return $authentification->getUtilisateur();
 }
 
+>>>>>>> upstream/master
 ?>

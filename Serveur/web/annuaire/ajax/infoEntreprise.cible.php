@@ -65,7 +65,6 @@ $logger = Logger::getLogger("Annuaire.infoEntreprise");
 $utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
 $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
-
 /*
  * Récupérer et transformer le JSON
  */

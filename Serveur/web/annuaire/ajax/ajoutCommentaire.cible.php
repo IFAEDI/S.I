@@ -23,14 +23,13 @@ header('Content-Type: application/json');
  
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+
 inclure_fichier('modele', 'commentaire_entreprise.class', 'php');
 
 $logger = Logger::getLogger("Annuaire.ajoutCommentaire");
 
 $utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
 $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
-
-
 
 /*
  * Récupérer et transformer le JSON
