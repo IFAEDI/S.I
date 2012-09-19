@@ -255,4 +255,18 @@ function controlerAuthentificationJSON($logger, $roles) {
 	return $authentification->getUtilisateur();
 }
 
+/**
+ * Permet de générer une réponse standardisée JSON
+ * @param code	Code de la réponse (ok, fail, ...)
+ * @param mesg 	Message associée à la réponse
+ * @return Un tableau contenant les données standardisées.
+ */
+function genererReponseStdJSON($code, $mesg) {
+
+	$json['code'] = $code;
+	$json['mesg'] = $mesg;
+
+	return $json;
+}
+
 ?>
