@@ -56,20 +56,21 @@ if (verifierPresent('nom') && verifierPresent('secteur') && verifierPresent('des
 
 	/* Vérification des erreurs */
 	if ($id === 0) {
-		$json['code'] = 'erreurChamp';
+		$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 	}
 	elseif ($id === Entreprise::getErreurExecRequete()) {
 		$logger->error( 'Une erreur est survenue (Login: '.$utilisateur->getLogin().').' );
-		$json['code'] = 'errorBDD';
+		$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenu lors de l\'enregistrement des données.' );
 	}
 	else {
 		$logger->info( '"'.$utilisateur->getLogin().'" a modifié l\'entreprise "'.$nom_entreprise.'" ('.$id.').' );
+
 		$json['code'] = 'ok';
 		$json['id'] = ($id_entreprise != 0) ? 0 : $id;
 	}
 }
 else {
-	$json['code'] = 'erreurChamp';
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 echo json_encode($json);

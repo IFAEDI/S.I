@@ -34,18 +34,16 @@ if (verifierPresent('id_entreprise')) {
 		Entreprise::SupprimerEntrepriseByID($id_entreprise);
 	
 		$logger->info( '"'.$utilisateur->getLogin().'" a supprimé l\'entreprise #'.$id_entreprise.'.' );
-		$json['code'] = 'ok';
-		$json['mesg'] = 'Entreprise supprimée.';
+		$json = genererReponseStdJSON( 'ok', 'Entreprise supprimée.' );
 	}
 	catch( Exception $e ) {
 		$logger->error( "Une erreur est survenue. [".$e->getMessage()."]" );
-		$json['code'] = 'error';
-		$json['mesg'] = 'Une erreur interne est survenue lors de la suppression.';
+		$json = genererReponseStdJSON( 'error', 'Une erreur interne est survenue lors de la suppression.' );
 	}
 }
 else {
-	$json['code'] = 'erreurChamp';
-	$json['mesg'] = 'Le champ "id_entreprise" n\'est pas renseigné.';
+	$json = genererReponseStdJSON( 'erreurChamp', 'Le champ "id_entreprise" n\'est pas renseigné.' );
+
 }
 
 

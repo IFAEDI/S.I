@@ -89,9 +89,15 @@ $('document').ready(function() {
 				data: {name : value},
 				dataType: "json",
 				success : function(donnees) {
-					nomNonPris = !donnees.answer;
+					if( donnees.code == 'ok' ) {
+						nomNonPris = !donnees.answer;
+					}
+					else {
+						Annuaire.afficherErreur( donnees.mesg );
+					}
 				},
 				error :  function() {
+					Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur." );
 				}
 			});
 		}
