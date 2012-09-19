@@ -99,9 +99,24 @@ $('document').ready(function() {
 			annee: $('#annee').val()
 		};
 
-		$.post('stages/ajax/stages.cible.php', obj, function(d,t,j) {
-			Stages.afficherResultats(JSON.parse(d));	
+		$.ajax({
+			url: "stages/ajax/searchStages.cible.php",
+			type: "POST",
+			data: obj,
+			dataType: "json",
+			success: function( data ) {
+				if( data.code == 'ok' ) {
+					Stages.afficherResultats( data );
+				}
+				else {
+					alert( data.mesg );
+				}
+			},
+			error: function() {
+				alert( 'Une erreur est survenue lors de l\'envoi de la requête au serveur.' );
+			}
 		});
+
 
 		return false; // évite que l'évènement soit propagé, ie
 			      // que le formulaire essaie d'atteindre l'action.
