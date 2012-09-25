@@ -56,7 +56,7 @@
 					
 					<li class="nav-header"><i class="icon-book"></i> CVthèque</li>
 					<li><a href="index.php?page=CV_Info">Offre</a></li>
-					<li><a href="index.php?page=CV_Entreprise">Consultation</a></li>
+					<!-- <li><a href="index.php?page=CV_Entreprise">Consultation</a></li> -->
 					
 					<li class="divider"></li>
 					

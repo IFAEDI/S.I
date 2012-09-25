@@ -218,6 +218,7 @@ function verifierHoraire($horaire) {
 	}
 }
 
+
 /**
  * Vérification d'un utilisateur est authentifié et autorisé à accèder à une ressource
  * @param logger Instance log4php

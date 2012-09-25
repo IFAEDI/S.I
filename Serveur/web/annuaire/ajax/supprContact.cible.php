@@ -20,14 +20,13 @@
 
  // Vérification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
+
 inclure_fichier('modele', 'contact.class', 'php');
 
 $logger = Logger::getLogger("Annuaire.supprContact");
 
 $utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
 $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
-
-
 
 /*
  * Récupérer et transformer le JSON
