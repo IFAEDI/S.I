@@ -79,7 +79,7 @@ if (verifierPresent('id')) {
 	/* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
 	if (gettype($entreprise) == "int" && $entreprise == Entreprise::getErreurExecRequete()) {
 		$logger->error( 'Une erreur est survenue.' );
-		$json['code'] = 'errorBDD';
+                $json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'interrogation de la BDD.' );
 	}
 	else {
 		/* objet */ $contacts = NULL;
@@ -104,12 +104,13 @@ if (verifierPresent('id')) {
 			}
 		}
 		else {
-			$json['code'] = 'noEntr';
+			$json = genererReponseStdJSON( 'noEntr', 'L\'entreprise n\'a pas été trouvée.' );
 		}
 	}
 }
 else {
-	$json['code'] = 'errorChamp';
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
+
 }
 
 /*

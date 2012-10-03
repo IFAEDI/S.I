@@ -37,17 +37,21 @@ if (verifierPresent('id')) {
 
 	/* bool */ $codeRet = Contact::SupprimerContactByID($id);
 	if ($codeRet === Contact::getErreurExecRequete()) {
+<<<<<<< HEAD
 		$json['code'] = 'errorBDD';
 
+=======
+>>>>>>> upstream/master
 		$logger->error( 'Une erreur est survenue.' );
+		$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'enregistrement des données.' );
 	}
 	else {
-		$json['code'] = 'ok';
+		$json = genererReponseStdJSON( 'ok', 'Contact supprimé.' );
 		$logger->info( '"'.$utilisateur->getLogin().'" a supprimé le contact #'.$id.'.' );
 	}
 }
 else {
-	$json['code'] = 'errorChamp';
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 echo json_encode($json);

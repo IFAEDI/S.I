@@ -56,11 +56,11 @@ if (verifierPresent('contenu') && verifierPresent('id_entreprise')) {
 	/* int */ $id = CommentaireEntreprise::UpdateCommentaire(0, $id_personneCom, $id_entreprise, $contenu, $categorie, 0);
 
 	if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
-		$json['code'] = 'erreurChamp';
+		$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 	}
 	elseif ($id === CommentaireEntreprise::getErreurExecRequete()) {
 		$logger->error( 'Une erreur est survenue.' );
-		$json['code'] = 'errorBDD';
+		$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'enregistrement des données.' );
 	}
 	else {
 		$logger->info( '"'.$utilisateur->getLogin().'" a ajouté un commentaire à l\'entreprise #'.$id_entreprise.'.' );
@@ -69,7 +69,7 @@ if (verifierPresent('contenu') && verifierPresent('id_entreprise')) {
 	}
 }
 else {
-	$json['code'] = 'erreurChamp';
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 echo json_encode($json);

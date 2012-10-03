@@ -62,11 +62,11 @@ if (verifierPresentObjet('keywords')) {
 		
 		$contacts = Contact::Rechercher($keywords);
 		if ($contacts == Contact::getErreurExecRequete()) {
-			$json['code'] = 'errorBDD';
 			$logger->error( 'Une erreur est survenue.' );
+			$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'interrogation de la BDD.' );
 		}
 		else if ($contacts == Contact::getErreurChampInconnu()) {
-			$json['code'] = 'erreurChamp';
+			$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 		}
 		else {
 			$json['code'] = 'ok';
@@ -95,6 +95,9 @@ if (verifierPresentObjet('keywords')) {
 			}
 		}
 	}
+}
+else {
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 echo json_encode($json);

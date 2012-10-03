@@ -1,8 +1,9 @@
 <?php
 
+header( 'Content-Type: application/json' );
+
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'stages.class', 'php');
-inclure_fichier( 'commun', 'authentification.class', 'php' );
+inclure_fichier('modele', 'stages.class', 'php');
 
 /**
  * Ce fichier sert de cible à la recherche de stages. C'est celui qui
@@ -15,17 +16,11 @@ inclure_fichier( 'commun', 'authentification.class', 'php' );
  * Auteur : benjamin.bouvier@gmail.com (2011/2012)
  */
 
+$logger = Logger::getLogger("Stages.searchStages");
 
 /* Avant tout, on vérifie que l'on a bien le niveau d'accréditation nécessaire ! */
-$authentification = new Authentification();
-
-if( $authentification->isAuthentifie() == false ) {
-        die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
-}
-else if( $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ETUDIANT &&
-	 $authentification->getUtilisateur()->getPersonne()->getRole() != Personne::ADMIN) {
-        die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
-}
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::ETUDIANT ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 
 /*
@@ -74,7 +69,7 @@ $resultats = Stages::rechercher($mots_cles, $annee, $duree, $lieu, $entreprise);
 $json = array();
 if( $resultats == Stages::ERROR ) {
 	$json['code'] = 'error';
-	$json['mesg'] = Stages::getLastError();
+	$json = genererReponseStdJSON( 'error', Stages::getLastError() );
 }
 else {
 	$json['code'] = 'ok';

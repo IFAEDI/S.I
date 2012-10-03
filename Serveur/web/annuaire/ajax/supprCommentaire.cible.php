@@ -41,26 +41,20 @@ if (verifierPresent('id')) {
 	/*
 	 * Renvoyer le JSON
 	 */
-	 if ($codeRet === 0) {
-		$json['code'] = 'erreurChamp';
-		$json['mesg'] = 'Veuillez vérifier les champs renseignés.';
+	if ($codeRet === 0) {
+		$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 	}
 	elseif ($codeRet === CommentaireEntreprise::getErreurExecRequete()) {
-		$json['code'] = 'errorBDD';
-		$json['mesg'] = 'Une erreur est survenue.';
-
+		$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'enregistrement des données.' );
 		$logger->error( 'Une erreur est survenue.' );
 	}
 	else {
-		$json['code'] = 'ok';
-		$json['mesg'] = 'Commentaire supprimé.';
-
+		$json = genererReponseStdJSON( 'ok', 'Commentaire supprimé.' );
 		$logger->info( '"'.$utilisateur->getLogin().'" a supprimé le commentaire #'.$id.'.' );
 	}
 }
 else {
-	$json['code'] = 'erreurChamp';
-	$json['mesg'] = 'Veuillez vérifier les champs renseignés.';
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 echo json_encode($json);

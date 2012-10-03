@@ -105,7 +105,7 @@ Annuaire.chercherInfoEntreprise = function chercherInfoEntreprise(/* int */ idEn
 		callback(donnees);
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur( "AJAX - Echec de la requête : " + textStatus );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 
 };
@@ -169,7 +169,7 @@ Annuaire.chercherContacts = function chercherContacts() {
 		Annuaire.afficherResultatRechercheContacts(donnees, processedKeywords);
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur( "AJAX - Echec de la requête : " + textStatus );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 
 };
@@ -190,11 +190,11 @@ Annuaire.supprimerEntreprise = function supprimerEntreprise(id_entreprise) {
 				window.location.reload();
 			}
 			else {
-				alert( resp.mesg );
+				Annuaire.afficherErreur( resp.mesg );
 			}
 		},
-		error :  function() {
-			alert( 'Une erreur est survenue lors de l\'envoi de la requête au serveur.' );
+		error :  function(jqXHR, textStatus) {
+			Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 		}
 	} );
 };
@@ -277,21 +277,15 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 				Annuaire.afficherListeEntreprises(); // Si MAJ du nom, ca met à jour la liste ...
 			}
 			else {
-				Annuaire.afficherErreur('Entreprise - Une erreur est survenue (id = '+donnees.id+')' );
+				Annuaire.afficherErreur('Une erreur est survenue (id = '+donnees.id+')' );
 			}
 		}
-		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
-			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
-		}
-		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
-			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
-		}
 		else {
-			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+			Annuaire.afficherErreur( donnees.mesg );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur('Entreprise - Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 };
 
@@ -414,18 +408,12 @@ Annuaire.updaterContact = function updaterContact() {
 				Annuaire.afficherErreur('Contact - Une erreur est survenue (id = '+donnees.id+')' );
 			}
 		}
-		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
-			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
-		}
-		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
-			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
-		}
 		else {
-			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+			Annuaire.afficherErreur( donnees.mesg );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur('Contact - Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 };
 
@@ -482,18 +470,12 @@ Annuaire.ajouterCommentaire = function ajouterCommentaire() {
 				Annuaire.afficherErreur('Commentaire : Une erreur est survenue (id = '+donnees.id+')' );
 			}
 		}
-		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
-			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
-		}
-		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
-			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
-		}
 		else {
-			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+			Annuaire.afficherErreur( donnees.mesg );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur('Commentaire : Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 
 };
@@ -530,18 +512,12 @@ Annuaire.supprimerContact = function supprimerContact(id) {
 				}
 			}
 		}
-		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
-			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
-		}
-		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
-			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
-		}
 		else {
-			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+			Annuaire.afficherErreur( donnees.mesg );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur('Contact - Suppression : Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 
 };
@@ -580,18 +556,12 @@ Annuaire.supprimerCommentaire = function supprimerCommentaire(id) {
 				}
 			}
 		}
-		else if (donnees.code == Annuaire.Erreurs['SQL_INVALIDE']){
-			Annuaire.afficherErreur('BDD - Une erreur est survenue. Si celle-ci persiste, merci de contacter un Admin.' );
-		}
-		else if (donnees.code == Annuaire.Erreurs['CHAMP_INVALIDE']){
-			Annuaire.afficherErreur('Erreur - L\'opération demandée n\'a générée aucune modification. Êtes-vous bien passé par le formulaire adéquat ? Si l\'erreur persiste, merci de contacter un admin.' );
-		}
 		else {
-			Annuaire.afficherErreur('Une erreur est survenue : '+donnees.code );
+			Annuaire.afficherErreur( donnees.mesg );
 		}
 	});
 	requete.fail(function(jqXHR, textStatus) {
-		Annuaire.afficherErreur('Commentaire - Suppression : Une erreur est survenue ('+textStatus+')' );
+		Annuaire.afficherErreur( "Une erreur est survenue lors de l'envoi de la requête au serveur : " + textStatus );
 	});
 
 };
@@ -1062,11 +1032,9 @@ Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/*
 Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ donnees) {
 
 	// Gestion des erreurs :
-	if (donnees.code == Annuaire.Erreurs.AJAX_INVALIDE) {
-		Annuaire.afficherErreur( "AJAX - Requête invalide. Êtes-vous sûr d'avoir utilisé le formulaire ? Si le problème persiste, contactez un Admin." );
-	}
-	else if (donnees.code == Annuaire.Erreurs.SQL_INVALIDE) {
-		Annuaire.afficherErreur( "BDD - Requête invalide. Si le problème persiste, contactez un Admin." );
+	if (donnees.code != 'ok' ) {
+		Annuaire.afficherErreur( donnees.mesg );
+		return;
 	}
 
 	if (typeof donnees.entreprise === "undefined") { Annuaire.afficherErreur( "Désolé, cette entreprise n'est pas en BDD." ); return; }
@@ -1137,14 +1105,9 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 Annuaire.afficherResultatRechercheContacts = function afficherResultatRechercheContacts(/* objet */ donnees, /* array */ processedKeywords) {
 
 	// Gestion des erreurs :
-	if (donnees.code == Annuaire.Erreurs.AJAX_INVALIDE) {
-		Annuaire.afficherErreur( "AJAX - Requête invalide. Êtes-vous sûr d'avoir utilisé le formulaire ? Si le problème persiste, contactez un Admin." );
-	}
-	else if (donnees.code == Annuaire.Erreurs.SQL_INVALIDE) {
-		Annuaire.afficherErreur( "BDD - Requête invalide. Si le problème persiste, contactez un Admin." );
-	}
-	else if (donnees.code == Annuaire.Erreurs.CHAMP_INVALIDE) {
-		Annuaire.afficherErreur( "Un des champs entrés n'est pas reconnu. Merci de vérifier votre recherche." );
+	if (donnees.code != 'ok' ) {
+		Annuaire.afficherErreur( donnees.mesg );
+		return;
 	}
 	
 	// Génération du html par templating :

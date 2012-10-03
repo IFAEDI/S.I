@@ -130,12 +130,11 @@ if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifie
 		 * Préparation du JSON
 		 */
 		if ($idContact === 0 || $idContact === Contact::getErreurChampInconnu()) {
-			$json['code'] = 'erreurChamp';
+			$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 		}
 		elseif ($idContact === Contact::getErreurExecRequete()) {
-			$json['code'] = 'errorBDD';
-
 			$logger->error( 'Une erreur est survenue' );
+			$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de la mise à jour.' );
 		}
 		else {
 			$json['code'] = 'ok';
@@ -146,11 +145,11 @@ if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifie
 		}
 	}
 	else {
-		$json['code'] ='erreurChamp';
+		$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 	}
 }
 else {
-	$json['code'] = "erreurChamp";
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 

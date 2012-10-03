@@ -34,8 +34,7 @@ if (verifierPresent('name')) {
 	$json['answer'] = $existsName;
 }
 else {
-	$json['code'] = 'erreurChamp';
-	$json['answer'] = false;
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
 
