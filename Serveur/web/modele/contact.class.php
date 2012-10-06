@@ -12,7 +12,7 @@
 require_once dirname(__FILE__) . '/../commun/php/base.inc.php';
 inclure_fichier('commun', 'bd.inc', 'php');
 
-inclure_fichier('commun', 'personne.class', 'php');
+inclure_fichier('modele', 'personne.class', 'php');
 inclure_fichier('modele', 'ville.class', 'php');
 inclure_fichier('modele', 'entreprise.class', 'php');
 

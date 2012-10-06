@@ -1,7 +1,7 @@
 <?php
 
 require_once dirname(__FILE__) . '/base.inc.php';
-inclure_fichier('commun', 'personne.class', 'php');
+inclure_fichier('modele', 'personne.class', 'php');
 
 class Utilisateur {
 

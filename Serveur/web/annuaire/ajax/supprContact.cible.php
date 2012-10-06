@@ -38,8 +38,11 @@ if (verifierPresent('id')) {
 	/* bool */ $codeRet = Contact::SupprimerContactByID($id);
 	if ($codeRet === Contact::getErreurExecRequete()) {
 <<<<<<< HEAD
+<<<<<<< HEAD
 		$json['code'] = 'errorBDD';
 
+=======
+>>>>>>> upstream/master
 =======
 >>>>>>> upstream/master
 		$logger->error( 'Une erreur est survenue.' );

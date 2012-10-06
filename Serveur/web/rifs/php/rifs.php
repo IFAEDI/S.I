@@ -39,7 +39,12 @@
 				La date précise des prochaines Rencontres IF n'est pas encore décidée, mais elle a généralement lieu au mois de Janvier.<br />
 			</p>
 
+			
 			<h3>Tarifs</h3>
+			<p>
+				Les tarifs sont étudiés afin de remercier les entreprises qui s'investissent en faveur du département informatique. Voici le récapitulatif de la grille tarifaire :
+			</p>
+			
 			<div class="row-fluid">
 				<div class="span7">
 					<ul>
@@ -51,13 +56,14 @@
 				<div class="span3">
 					<ul class="unstyled">
 						<li>Invitée</li>
-						<li>900€</li>
-						<li>1150€</li>
+						<li>Tarif Réduit</li>
+						<li>Plein Tarif</li>
 					</ul>
 				</div>
 			</div>
+			
 			<p class="comment">
-				Ces tarifs sont uniquement à titre indécatifs, ceux-ci n'étant fixés qu'en Septembre.
+				Pour connaître les tarifs exacts, n'hésitez pas à nous contacter afin de vous renseigner au mieux.
 			</p>
 			
 			<h3>Questions</h3>

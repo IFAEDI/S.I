@@ -16,6 +16,7 @@
 			<div class="hero-unit">
 				<h1>CVthèque (projet)</h1>
 				<p>
+				  <br/>
 					Dynamique et innovative, notre association cherche toujours à améliorer sa gamme de service à destination des étudiants et entreprises.<br/>
 					Nous sommes ainsi actuellement en train de réfléchir à la mise en place d'une CVthèque représentant tous les étudiants volontaires du Département. Une telle offre offrirait aux étudiants un gain en visibilité indéniable, tandis que les entreprises recevront l'opportunité d'étudier de plus près les profils intéressants.<br/>
 				</p>
