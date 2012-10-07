@@ -42,7 +42,7 @@
 			
 			<h3>Tarifs</h3>
 			<p>
-				Les tarifs sont étudiés afin de remercier les entreprises qui s'investissent en faveur du département informatique. Voici le récapitulatif de la grille tarifaire :
+				Les tarifs sont étudiés afin de remercier les entreprises qui s'investissent en faveur du département informatique. Voici un aperçu de la grille tarifaire :
 			</p>
 			
 			<div class="row-fluid">
@@ -62,7 +62,7 @@
 				</div>
 			</div>
 			
-			<p class="comment">
+			<p style="margin-top: 10px;" class="comment">
 				Pour connaître les tarifs exacts, n'hésitez pas à nous contacter afin de vous renseigner au mieux.
 			</p>
 			
