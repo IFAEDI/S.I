@@ -8,7 +8,11 @@
  * ---------------------
  * Page présentant l'équipe actuelle.
  */
+ 
+ // In order to handle tabs, page reloads & browser forward/back history :
+ inclure_fichier('commun', 'jquery.ba-hashchange.min', 'js');
 ?>
+
 
 <div id="a-propos">
 	<div class="row" style="margin-top: 20px;">
@@ -202,7 +206,7 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 												<div class="span4">
 													<div>
 														<h4>Rencontres IF</h4>
-														<p class="justify">XXXXXXXXXX XXXXXXXXXX TO DO : Revoir le discours une fois la cible (publique/limitée ?) du form. d'inscription définie XXXXXXXXXXXXXXX XXXXXXXXXXX</p>
+														<p class="justify">Vous trouverez sur la page indiquée ci-dessous l'ensemble des informations sur cet évènement, ainsi que l'adresse pour nous contacter et discuter des détails de votre candidature. N'hésitez pas à nous joindre le plus tôt possible, afin d'être sûr d'obtenir un stand !</p>
 														<p class="centre"><a class="btn btn-inverse" href="index.php?page=RIFs_Entreprise">Accéder</a></p>
 													</div>
 												</div>
@@ -230,16 +234,44 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 	</div>
 
 	<script>
-		// Image resizing :
-		$('.width5').attr('width', ($('#contact').width() / 12 * 5 - 30)+'px');
-		// Caroussels :
-		$('#photoCarousel').carousel({
-			interval: 10000
-		})
-		
-		$('#gmap').attr('height', ($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
-		
-		
+		$(document).ready(function() {
+
+			// Gist from chainer and lili262 : https://github.com/twitter/bootstrap/pull/581#issuecomment-4966967
+			// Allow to save the navigation with the tabs (reloads, back, fav, ...)
+			// -------
+			$(function(){
+				// Function to activate the tab
+				function activateTab() {
+					var activeTab = $('[href=' + window.location.hash.replace('/', '') + ']'); // The antislash added before the anchor's name prevents to scroll until the anchor's element. 
+					activeTab && activeTab.tab('show');
+				}
+
+				// Trigger when the page loads
+				activateTab();
+
+				// Trigger when the hash changes (forward / back)
+				$(window).hashchange(function(e) {
+					activateTab();
+				});
+
+				// Change hash when a tab changes
+				$('a[data-toggle="tab"], a[data-toggle="pill"]').on('shown', function () {
+					window.location.hash = '/' + $(this).attr('href').replace('#', '');
+				}); 
+			});
+			// -------
+
+			// Image resizing :
+			$('.width5').attr('width', ($('#contact').width() / 12 * 5 - 30)+'px');
+			// Caroussels :
+			$('#photoCarousel').carousel({
+				interval: 10000
+			})
+			
+			$('#gmap').attr('height', ($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
+
+		});
+
 	</script>
 
 </div>
