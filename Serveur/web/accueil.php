@@ -27,7 +27,7 @@
 				</p>
 				<div style="width:50%; float:left; display:inline-block;" >
 					<div style="position:relative; top:-3px; display:inline-block;" class="fb-like" data-href="http://www.facebook.com/AEDI.INSA.Lyon" data-send="false" data-layout="button_count" data-width="0" data-show-faces="false"></div>
-					<p style="margin-top:10px; display:inline-block;"><a href="https://twitter.com/AEDInsa" class="twitter-follow-button" data-show-count="false" data-lang="fr" data-show-screen-name="false">Suivre @AEDInsa</a></p>
+					<p style="margin-top:10px; margin-left: 5%; display:inline-block;"><a href="https://twitter.com/AEDInsa" class="twitter-follow-button" data-show-count="false" data-lang="fr" data-show-screen-name="false">Suivre @AEDInsa</a></p>
 				</div>
 				<p style="width:50%; text-align:right; display:inline-block;">
 					<a href="index.php?page=A_Propos" class="btn btn-primary btn-large"><i class="icon-search icon-white"></i> En savoir plus</a>
