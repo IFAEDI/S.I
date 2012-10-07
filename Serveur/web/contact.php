@@ -64,10 +64,10 @@
 		</div>
 	</div>
 	<div class="span5 columns">
-					<iframe style="border-radius:5px" id="gmap" class="width5" width="470" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.fr/maps?f=q&amp;source=s_q&amp;hl=fr&amp;geocode=&amp;q=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;aq=&amp;sll=45.781172,4.881234&amp;sspn=0.020202,0.052314&amp;ie=UTF8&amp;hq=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;t=m&amp;ll=45.781038,4.87278&amp;spn=0.004115,0.005032&amp;z=17&amp;output=embed"></iframe>
+					<iframe style="border-radius:5px" id="gmap" class="width5" width="470" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.fr/maps?ie=UTF8&cid=15394763513657611469&q=Association+des+Etudiants+Informatique+de+l%27INSA-Lyon&iwloc=A&gl=FR&hl=fr&amp;output=embed"></iframe>
 					
 					<p style="margin-top:10px; text-align:right;">
-						<a id="gmap-lien" class="btn-primary btn" href="https://maps.google.fr/maps?f=q&amp;source=embed&amp;hl=fr&amp;geocode=&amp;q=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;aq=&amp;sll=45.781172,4.881234&amp;sspn=0.020202,0.052314&amp;ie=UTF8&amp;hq=INSA+de+Lyon+-+d%C3%A9partement+Informatique&amp;t=m&amp;ll=45.781038,4.87278&amp;spn=0.004115,0.005032&amp;z=17">
+						<a id="gmap-lien" class="btn-primary btn" href="https://maps.google.fr/maps?ie=UTF8&cid=15394763513657611469&q=Association+des+Etudiants+Informatique+de+l%27INSA-Lyon&iwloc=A&gl=FR&hl=fr&amp;z=17">
 							<i class="icon-map-marker icon-white"></i> Agrandir le plan
 						</a>
 					</p>
