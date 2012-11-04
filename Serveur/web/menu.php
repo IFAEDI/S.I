@@ -65,8 +65,7 @@
 				</ul>
 			</li>
 			<?php
-			if( $authentification->isAuthentifie() && $utilisateur->getPersonne()->getRole() == Personne::ADMIN ) {
-
+			if( $authentification->isAuthentifie() && ($utilisateur->getPersonne()->getRole() == Personne::AEDI || $utilisateur->getPersonne()->getRole() == Personne::ADMIN) ) {
 				?>
 					<li class="divider-vertical"></li>
 					<li class="dropdown">
@@ -74,11 +73,21 @@
 						Administration <b class="caret"></b></a>
 
 						<ul class="dropdown-menu">
+
+						<?php
+						  /* Affichage des outils d'administration uniquement pour les... admins! */
+						  if( $utilisateur->getPersonne()->getRole() == Personne::ADMIN ) {
+						?>
+
 							<li class="nav-header"><i class="icon-user"></i> Utilisateurs</li>
 							<li><a href="index.php?page=Administration_Utilisateurs">Utilisateurs</a></li>
 							<li><a href="index.php?page=Administration_Journal">Journal</a></li>
 	
 							<li class="divider"></li>
+
+						<?php
+						  }
+						?>
 
 							<li class="nav-header"><i class="icon-cog"></i> Modules</li>
 							<li><a href="index.php?page=Administration_Annuaire">Annuaire Entreprises</a></li>
