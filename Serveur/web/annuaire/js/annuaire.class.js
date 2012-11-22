@@ -1031,12 +1031,6 @@ Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/*
  */
 Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ donnees) {
 
-	// Gestion des erreurs :
-	if (donnees.code != 'ok' ) {
-		Annuaire.afficherErreur( donnees.mesg );
-		return;
-	}
-
 	if (typeof donnees.entreprise === "undefined") { Annuaire.afficherErreur( "Désolé, cette entreprise n'est pas en BDD." ); return; }
 	Annuaire.infoEntrepriseCourante = donnees.entreprise;
 	donnees = donnees.entreprise;
