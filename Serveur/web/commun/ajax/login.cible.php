@@ -43,6 +43,7 @@ if( @isset( $_GET['action'] ) ) {
 					/* Authentification foirée */
 					case Authentification::ERR_ID_INVALIDE:
 						$val = genererReponseStdJSON( 'fail', 'Identifiants non valides.' );
+						$logger->warn( "Tentative d'authentification échouée. - ".$_SERVER['REMOTE_ADD'] );
 						break;
 					case Authentification::ERR_AMBIGUITE:
 						$val = genererReponseStdJSON( 'error', 'Une ambiguité est survenue lors de la procédure d\'authentification.' );
