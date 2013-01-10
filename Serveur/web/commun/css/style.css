@@ -218,6 +218,10 @@ table.tablesorter thead tr .headerSortDown {
 	padding:10px;
 }
 
+.categ-services {
+	margin-left: 20px;
+}
+
 #about-site .categ-services .span4 div {
 	background-color: #049cdb;
 	border-radius:5px;

@@ -261,14 +261,12 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 			});
 			// -------
 
-			// Image resizing :
-			$('.width5').attr('width', ($('#contact').width() / 12 * 5 - 30)+'px');
+			
 			// Caroussels :
 			$('#photoCarousel').carousel({
 				interval: 10000
 			})
 			
-			$('#gmap').attr('height', ($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
 
 		});
 

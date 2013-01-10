@@ -64,7 +64,7 @@
 		</div>
 	</div>
 	<div class="span5 columns">
-					<iframe style="border-radius:5px" id="gmap" class="width5" width="470" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.fr/maps?ie=UTF8&cid=15394763513657611469&q=Association+des+Etudiants+Informatique+de+l%27INSA-Lyon&iwloc=A&gl=FR&hl=fr&amp;output=embed"></iframe>
+					<iframe style="border-radius:5px" id="gmap" class="adapt-width" span=5 width="470" height="550" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://maps.google.fr/maps?ie=UTF8&cid=15394763513657611469&q=Association+des+Etudiants+Informatique+de+l%27INSA-Lyon&iwloc=A&gl=FR&hl=fr&amp;output=embed"></iframe>
 					
 					<p style="margin-top:10px; text-align:right;">
 						<a id="gmap-lien" class="btn-primary btn" href="https://maps.google.fr/maps?ie=UTF8&cid=15394763513657611469&q=Association+des+Etudiants+Informatique+de+l%27INSA-Lyon&iwloc=A&gl=FR&hl=fr&amp;z=17">
@@ -74,14 +74,12 @@
 	</div>
 	
 	<script>
-		// Image resizing :
-		$('.width5').attr('width', ($('#contact').width() / 12 * 5 - 30)+'px');
 		// Caroussels :
 		$('#photoCarousel').carousel({
 			interval: 10000
 		})
 		
-		$('#gmap').attr('height', ($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
+		$('#gmap')height(($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
 		
 		
 	</script>
