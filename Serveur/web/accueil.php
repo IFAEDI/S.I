@@ -94,7 +94,10 @@
 		</p>
 		<p class="span3">
 			<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="width2" src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
-		</p>
+        </p>
+        <p class="span12">
+            <embed src="./commun/img/societe_generale.swf" height="150" />
+        </p>
 	</div>
 
 </div>
