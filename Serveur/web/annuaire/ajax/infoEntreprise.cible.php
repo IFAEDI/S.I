@@ -6,25 +6,25 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
- * Cible pour la récupération d'informations sur une entreprise.
- * Est donc appelée par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sélectionnée dans la liste des noms.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Cible pour la rÃ©cupÃ©ration d'informations sur une entreprise.
+ * Est donc appelÃ©e par le moteur JS (Ajax) de la page Annuaire quand une entreprise est sÃ©lectionnÃ©e dans la liste des noms.
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ entreprise n'est pas présent
+			code : "ok", // ou "error" - si error, le champ entreprise n'est pas prÃ©sent
 			entreprise : {
 				description: {
 					nom: "Atos",
-					description: "Société française recrutant des tonnes de 4IF.",
+					description: "SociÃ©tÃ© franÃ§aise recrutant des tonnes de 4IF.",
 					secteur: "SSII",
 					commentaire: "",
 				},
 				contacts: [
 					{nom: "Chuck", prenom: "Noris", metier: "Dieu", email:"chuck@atos.com", tel:"06666666666", priorite:1, commentaire:""},
-					{nom: "Chucky", prenom: "Norissette", metier: "Déesse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vérifier"}
+					{nom: "Chucky", prenom: "Norissette", metier: "DÃ©esse", email:"chuckky@atos.com", tel:"06666666667", priorite:0, commentaire:"A vÃ©rifier"}
 				],
 				relation: {
 					parrainage : [
@@ -52,68 +52,70 @@
 		}
  */
  
+header( 'Content-Type: application/json' );
  
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
+inclure_fichier('modele', 'entreprise.class', 'php');
+inclure_fichier('modele', 'contact.class', 'php');
+inclure_fichier('modele', 'commentaire_entreprise.class', 'php');
 
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
-}
+$logger = Logger::getLogger("Annuaire.infoEntreprise");
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'entreprise.class', 'php');
-inclure_fichier('controleur', 'contact.class', 'php');
-inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancÃ© une requÃªte." );
 
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 /* int */ $id_entreprise = NULL;
 
 if (verifierPresent('id')) {
 	$id_entreprise = intval($_POST['id']);
-}
+	
+	/*
+	 * Appeler la couche du dessous
+	 */
+	/* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
+	if (gettype($entreprise) == "int" && $entreprise == Entreprise::getErreurExecRequete()) {
+		$logger->error( 'Une erreur est survenue.' );
+                $json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'interrogation de la BDD.' );
+	}
+	else {
+		/* objet */ $contacts = NULL;
+		/* objet */ $commentaires = NULL;
+		if ($entreprise != NULL) {
+			$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
+			$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
 
-/*
- * Appeler la couche du dessous
- */
-/* objet */ $entreprise = Entreprise::GetEntrepriseByID($id_entreprise);
-/* objet */ $contacts = NULL;
-/* objet */ $commentaires = NULL;
-if ($entreprise != NULL) {
-	$contacts = Contact::GetListeContactsParEntreprise($id_entreprise);
-	$commentaires = CommentaireEntreprise::GetListeCommentairesParEntreprise($id_entreprise);
+			$json['code'] = 'ok';
+			$json['entreprise']['description'] = $entreprise->toArrayObject();
+			if (gettype($contacts) == 'array') {
+				$json['entreprise']['contacts'] = Array();
+				foreach( $contacts as $contact ) {
+					array_push($json['entreprise']['contacts'], $contact->toArrayObject(false, true, true, true, false, false, false));
+				}
+			}
+			if (gettype($commentaires) == 'array') {
+				$json['entreprise']['commentaires'] = Array();
+				foreach( $commentaires as $commentaire ) {
+					array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
+				}
+			}
+		}
+		else {
+			$json = genererReponseStdJSON( 'noEntr', 'L\'entreprise n\'a pas Ã©tÃ© trouvÃ©e.' );
+		}
+	}
+}
+else {
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vÃ©rifier que tous les champs sont renseignÃ©s.' );
+
 }
 
 /*
  * Renvoyer le JSON
  */
-$json['code'] = ($entreprise != NULL) ? 'ok' : 'error';
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-if ($entreprise != NULL) {
-	$json['entreprise']['description'] = $entreprise->toArrayObject();
-	if (gettype($contacts) == 'array') {
-		$json['entreprise']['contacts'] = Array();
-		foreach( $contacts as $contact ) {
-			array_push($json['entreprise']['contacts'], $contact->toArrayObject(false, true, true, true, false, false, false));
-		}
-	}
-	if (gettype($commentaires) == 'array') {
-		$json['entreprise']['commentaires'] = Array();
-		foreach( $commentaires as $commentaire ) {
-			array_push($json['entreprise']['commentaires'], $commentaire->toArrayObject(false, false, false, true, false, true));
-		}
-	}
-}
 echo json_encode($json);
 
 

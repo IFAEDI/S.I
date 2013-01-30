@@ -50,18 +50,22 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
     $module = trim( $_module );
     $nom_fichier = trim( $_nom_fichier );
     $type = trim( $_type );
+	$path = "";
 
     if ($type == 'php') {
         if ($module == '') {
             $path = dirname(__FILE__) . "/../../$nom_fichier.$type";
         } elseif ($module == 'controleur'){
             $path = dirname(__FILE__) . "/../../$module/$nom_fichier.$type";
+	}
+	elseif( $module === 'modele' ) {
+		$path = dirname( __FILE__ ) . "/../../$module/$nom_fichier.$type";
         }else{
             $path = dirname(__FILE__) . "/../../$module/php/$nom_fichier.$type";
         }
 
         if (file_exists($path)) {
-            require_once($path);
+            require_once $path;
             return;
         }
     } else if ($type == 'css') {
@@ -88,8 +92,20 @@ function inclure_fichier($_module, $_nom_fichier, $_type) {
             echo "<script type=\"text/javascript\" src=\"$path\"></script>";
             return;
         }
+    } else if ($type == 'template') {
+        if ($module == '') {
+            $path = "$module/$nom_fichier.html";
+        } else {
+            $path = "$module/template/$nom_fichier.html";
+        }
+
+        if (file_exists(dirname(__FILE__) . "/../../" . $path)) {
+            require_once($path);
+            return;
+        }
     }
 
+	/* TODO : WTF */
     echo "<br>Fichier non trouvé :  $path<br>";
     echo "Parametres :<br>";
     echo "Module : $module<br>";
@@ -203,7 +219,55 @@ function verifierHoraire($horaire) {
 }
 
 
+/**
+ * Vérification d'un utilisateur est authentifié et autorisé à accèder à une ressource
+ * @param logger Instance log4php
+ * @param roles	Tableau des roles devant être vérifiés
+ * @return L'utilisateur actuellement authentifié
+ */
+inclure_fichier('commun', 'authentification.class', 'php');
+function controlerAuthentificationJSON($logger, $roles) {
 
+	$authentification = new Authentification();
+	/* Vérification que l'utilisateur est authentifié */
+	if( $authentification->isAuthentifie() == false ) {
+		$logger->error( "Utilisateur non authentifié." );
+		die( json_encode( array( 'code' => 'fail', 'mesg' => 'Vous n\'êtes pas authentifié.' ) ) );
+	}
 
+	/* Vérification des accréditations */
+	$user_role = $authentification->getUtilisateur()->getPersonne()->getRole();
+
+	/* bool */ $authorized = false;
+	foreach ($roles as $r) {
+		if( $user_role == $r ) {
+			$authorized = true;
+			break;
+		}
+	}
+
+	/* Non authorisé, on die */
+	if( !$authorized ) {
+		$logger->fatal( "Utilisateur non autorisé. [Login: ".$authentification->getUtilisateur()->getLogin()."]" );
+		die( json_encode( array( 'code' => 'critical', 'mesg' => 'Vous n\'êtes pas autorisé à effectuer cette action.' ) ) );
+	}
+
+	// Retour de l'utilisateur courant
+	return $authentification->getUtilisateur();
+}
+
+/**
+ * Permet de générer une réponse standardisée JSON
+ * @param code	Code de la réponse (ok, fail, ...)
+ * @param mesg 	Message associée à la réponse
+ * @return Un tableau contenant les données standardisées.
+ */
+function genererReponseStdJSON($code, $mesg) {
+
+	$json['code'] = $code;
+	$json['mesg'] = $mesg;
+
+	return $json;
+}
 
 ?>

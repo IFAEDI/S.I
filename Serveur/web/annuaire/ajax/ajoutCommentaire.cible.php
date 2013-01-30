@@ -7,38 +7,32 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour l'ajout d'un commentaire.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ id n'est pas présent
-			id : 1 		// ID de du commentaire ajouté
+			code : "ok", // ou "error" - si error, le champ id n'est pas prÃ©sent
+			id : 1 		// ID de du commentaire ajoutÃ©
 		}
  */
+
+
+header('Content-Type: application/json');
  
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
 
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || (($utilisateur->getPersonne()->getRole() != Personne::AEDI) && ($utilisateur->getPersonne()->getRole() != Personne::ADMIN))) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
-}
+inclure_fichier('modele', 'commentaire_entreprise.class', 'php');
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
+$logger = Logger::getLogger("Annuaire.ajoutCommentaire");
+
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancÃ© une requÃªte." );
 
 /*
- * Récupérer et transformer le JSON
+ * RÃ©cupÃ©rer et transformer le JSON
  */
 
 /* int */ $categorie = 0;
@@ -48,38 +42,36 @@ inclure_fichier('controleur', 'commentaire_entreprise.class', 'php');
 
 /* int */ $etatVerif = 0;
 
-if (verifierPresent('categorie')) {
-	$categorie = Protection_XSS($_POST['categorie']);
-}
-if (verifierPresent('contenu')) {
+/* VÃ©rification des champs indispensables */
+if (verifierPresent('contenu') && verifierPresent('id_entreprise')) {
 	$contenu = Protection_XSS(urldecode($_POST['contenu']));
-	$etatVerif++;
-}
-if (verifierPresent('id_entreprise')) {
+
 	$id_entreprise = Protection_XSS($_POST['id_entreprise']);
-	$etatVerif++;
-}
 
-if ($etatVerif == 2) {
-	/*
-	 * Appeler la couche du dessous
-	 */
-	 
-	/* int */ $id = CommentaireEntreprise::UpdateCommentaire(0, $id_personneCom, $id_entreprise, $contenu, $categorie, 0);
-
-	/*
-	 * Renvoyer le JSON
-	 */
-	$json['code'] = ($id != -1) ? 'ok' : 'error';
-	// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-	if ($id != -1) {
-		$json['id'] = $id;
+	/* VÃ©rification du champ optionnel */
+	if (verifierPresent('categorie')) {
+		$categorie = Protection_XSS($_POST['categorie']);
 	}
 
+	/* int */ $id = CommentaireEntreprise::UpdateCommentaire(0, $id_personneCom, $id_entreprise, $contenu, $categorie, 0);
+
+	if ($id === 0 || $id === CommentaireEntreprise::getErreurChampInconnu()) {
+		$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vÃ©rifier que tous les champs sont renseignÃ©s.' );
+	}
+	elseif ($id === CommentaireEntreprise::getErreurExecRequete()) {
+		$logger->error( 'Une erreur est survenue.' );
+		$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenue lors de l\'enregistrement des donnÃ©es.' );
+	}
+	else {
+		$logger->info( '"'.$utilisateur->getLogin().'" a ajoutÃ© un commentaire Ã  l\'entreprise #'.$id_entreprise.'.' );
+		$json['code'] = 'ok';
+		$json['id'] = $id;
+	}
 }
 else {
-	$json['code'] = 'Donnees_manquantes'.$etatVerif;
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vÃ©rifier que tous les champs sont renseignÃ©s.' );
 }
+
 echo json_encode($json);
 
 ?>

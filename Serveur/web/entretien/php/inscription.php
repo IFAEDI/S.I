@@ -10,7 +10,7 @@ if ($authentification->isAuthentifie() == false || (
     die;
 }
 
-inclure_fichier('controleur', 'entreprise.class', 'php');
+inclure_fichier('modele', 'entreprise.class', 'php');
 
 $entreprises = Entreprise::GetListeEntreprises();
 // On construit la liste de recherche des entreprises
@@ -38,7 +38,7 @@ $list_entreprises =  $list_entreprises."\"";
 		<div class="controls">
 		  <!-- On propose une liste d'entreprise deja connue -->
 		  <input class="input-medium" type="text" id="entreprise" data-provide="typeahead" data-items="4" data-source='[<?php echo $list_entreprises; ?>]'>
-		 <a data-toggle="modal" href="#entrepriseModal">Ajouter</a>
+		 <a data-toggle="modal" class="btn btn-primary" href="#entrepriseModal"><i class="icon-plus icon-white"></i></a>
 		</div>
 	</div>	  
 	  
@@ -49,19 +49,17 @@ $list_entreprises =  $list_entreprises."\"";
 		<div class="controls">
 		  <!-- On propose une liste d'entreprise deja connue -->
 		  <input class="input-medium" type="text" id="nomContact" data-provide="typeahead" data-items="4" data-source='[]'>
-		 <a data-toggle="modal" href="#contactModal">Ajouter</a>
+		 <a data-toggle="modal" class="btn btn-primary" href="#contactModal"><i class="icon-plus icon-white"></i></a>
 		</div>
 	</div>
-	  
-	  <br />
-	  <p>Rappel: les simulations d'entretiens ce déroulent les jeudi apres-midi hors vacances scolaires.</p>
-	  <br />
-	  
+
 	  
 	  <div class="control-group" id="control_date">
 		<label class="control-label">Date</label>
 		<div class="controls">
 		  <input name="date1" id="date" class="input-medium date-pick"/>
+		  <p class="comment">Rappel: les simulations d'entretiens ce déroulent les jeudi apres-midi hors vacances scolaires.</p>
+	  
 		</div>
 	  </div>
 	  

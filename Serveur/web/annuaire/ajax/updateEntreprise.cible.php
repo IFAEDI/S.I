@@ -7,38 +7,31 @@
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
  * Cible pour l'ajout/modification d'une entreprise.
- * Le principe (repris de Bnj Bouv) est très simple :
- * 1) On récupère l'ensemble des variables qui ont été insérées.
- * 2) On appelle le contrôleur 
- * 3) On renvoit les résultats en JSON
- * Le résultat sera de la forme :
+ * Le principe (repris de Bnj Bouv) est trÃ¨s simple :
+ * 1) On rÃ©cupÃ¨re l'ensemble des variables qui ont Ã©tÃ© insÃ©rÃ©es.
+ * 2) On appelle le contrÃ´leur 
+ * 3) On renvoit les rÃ©sultats en JSON
+ * Le rÃ©sultat sera de la forme :
  		{
-			code : "ok", // ou "error" - si error, le champ id n'est pas présent
-			id : 1 		// ID de l'entreprise ajoutée
+			code : "ok", // ou "error" - si error, le champ id n'est pas prÃ©sent
+			id : 1 		// ID de l'entreprise ajoutÃ©e
 		}
  */
+
+header( 'Content-Type: application/json' );
  
- // Vérification de l'authentification :
+ // VÃ©rification de l'authentification :
 require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('commun', 'authentification.class', 'php');
-$authentification = new Authentification();
-$utilisateur = null;
-if ($authentification->isAuthentifie()) {
+inclure_fichier('modele', 'entreprise.class', 'php');
 
-    /* On récupère l'objet utilisateur associé */
-    $utilisateur = $authentification->getUtilisateur();
-    if (($utilisateur == null) || ($utilisateur->getPersonne()->getRole() != Personne::ADMIN)) {
-        $authentification->forcerDeconnexion();
-		inclure_fichier('', '401', 'php');
-		die;
-    }
-}
+$logger = Logger::getLogger("Annuaire.updateEntreprise");
 
-require_once dirname(__FILE__) . '/../../commun/php/base.inc.php';
-inclure_fichier('controleur', 'entreprise.class', 'php');
+$utilisateur = controlerAuthentificationJSON( $logger, array( Personne::ADMIN, Personne::AEDI ) );
+$logger->debug( "\"".$utilisateur->getLogin()."\" a lancÃ© une requÃªte." );
+
 
 /*
- * Récupérer et transformer le JSON
+ * VÃ©rification que les champs requis sont bien renseignÃ©s
  */
 /* string */ $nom_entreprise = NULL;
 /* string */ $secteur_entreprise = NULL;
@@ -46,37 +39,40 @@ inclure_fichier('controleur', 'entreprise.class', 'php');
 /* string */ $com_entreprise = NULL;
 /* int */ $id_entreprise = 0;
 
-if (verifierPresent('nom')) {
+if (verifierPresent('nom') && verifierPresent('secteur') && verifierPresent('description')) {
 	$nom_entreprise = Protection_XSS(urldecode($_POST['nom']));
-}
-if (verifierPresent('secteur')) {
 	$secteur_entreprise = Protection_XSS(urldecode($_POST['secteur']));
-}
-if (verifierPresent('description')) {
 	$desc_entreprise = Protection_XSS(urldecode($_POST['description']));
+
+	/* VÃ©rification des champs optionnels */
+	if (verifierPresent('commentaire')) {
+		$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
+	}
+	if (verifierPresent('id_entreprise')) {
+		$id_entreprise = intval($_POST['id_entreprise']);
+	}
+
+	/* int */ $id = Entreprise::UpdateEntreprise($id_entreprise, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise);
+
+	/* VÃ©rification des erreurs */
+	if ($id === 0) {
+		$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vÃ©rifier que tous les champs sont renseignÃ©s.' );
+	}
+	elseif ($id === Entreprise::getErreurExecRequete()) {
+		$logger->error( 'Une erreur est survenue (Login: '.$utilisateur->getLogin().').' );
+		$json = genererReponseStdJSON( 'errorBDD', 'Une erreur est survenu lors de l\'enregistrement des donnÃ©es.' );
+	}
+	else {
+		$logger->info( '"'.$utilisateur->getLogin().'" a modifiÃ© l\'entreprise "'.$nom_entreprise.'" ('.$id.').' );
+
+		$json['code'] = 'ok';
+		$json['id'] = ($id_entreprise != 0) ? 0 : $id;
+	}
 }
-if (verifierPresent('commentaire')) {
-	$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
-}
-if (verifierPresent('id')) {
-	$id_entreprise = intval($_POST['id']);
+else {
+	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vÃ©rifier que tous les champs sont renseignÃ©s.' );
 }
 
-/*
- * Appeler la couche du dessous
- */
- 
-/* int */ $id = Entreprise::UpdateEntreprise($id_entreprise, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise);
-
-/*
- * Renvoyer le JSON
- */
-$json['code'] = ($id != -1) ? 'ok' : 'error';
-// FIXME comment distinguer s'il n'y a pas de résultats ou une erreur ?
-if ($id != -1) {
-	$json['id'] = $id;
-}
 echo json_encode($json);
-
 
 ?>

@@ -16,8 +16,7 @@ phpCAS::setNoCasServerValidation();
 
 /* Gère la demande de déconnexion */
 if( @isset( $_REQUEST['logout'] ) ) {
-	phpCAS::logoutWithUrl(  ); /* A améliorer */
-	die();
+	phpCAS::logout(); /* A améliorer */
 }
 
 /* Check si l'utilisateur est authentifié, si ce n'est pas le cas, on lui demande poliement */

@@ -70,9 +70,13 @@ if( @isset( $_GET['action'] ) ) {
 	/* Récupération des informations d'un utilisateur précis */
 	else if( $_GET['action'] == "get_user_info" ) {
 
+		$logger = Logger::getLogger("AdminUtilisateur.GetUserInfo");
+		$login  = $authentification->getUtilisateur()->getLogin();
+
 		/* On check que l'on a tous les paramètres */
 		if( ! (@isset( $_GET['id'] ) ) ) {
 			$val = array( 'code' => 'error', 'mesg' => 'Variable manquante.' );
+			$logger->warn( "Paramètre manquant (login: ".$login.")." );
 		}
 		else {
 
@@ -90,13 +94,16 @@ if( @isset( $_GET['action'] ) ) {
 							'mails' => $p->getMails(), 'telephones' => $p->getTelephones() );
 
 					$val = array( 'code' => 'ok', 'utilisateur' => $info );
+					$logger->info( $login." a obtenu les informations de l'utilisateur \"".$u->getLogin()."\" (id: ".$id.")." );
 				}
 				else {
 					$val = array( 'code' => 'fail', 'mesg' => 'Utilisateur introuvable.' );
+					$logger->error( $val['mesg']." (login: ".$login.")" );
 				}
 			}
 			catch( Exception $e ) {
 				$val = array( 'code' => 'error', 'mesg' => 'Une erreur s\'est produite en interrogeant la base : '.$e->getMessage() );
+				$logger->error( $val['mesg']." (login: ".$login.")" );
 			}
 		}
 	}

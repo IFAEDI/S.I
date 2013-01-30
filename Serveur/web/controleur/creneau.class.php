@@ -14,7 +14,7 @@ class Creneau {
 
 
     //****************  Fonctions statiques  ******************//
-    // RÈcuperation de l'objet Creneau par l'ID
+    // R√©cuperation de l'objet Creneau par l'ID
     public static function GetCreneauByID($_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM Creneau WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
@@ -22,7 +22,7 @@ class Creneau {
         return NULL;
     }
 
-	// RÈcuperation de l'ensemble des creneau d'une journÈe passÈe en paramËtre (ex: 27/03/2012) et etat = 1 valide
+	// R√©cuperation de l'ensemble des creneau d'une journ√©e pass√©e en param√®tre (ex: 27/03/2012) et etat = 1 valide
 	public static function GetListeCreneauxByDate($date) {
         return BD::Prepare('SELECT e.nom, cr.id_creneau, cr.debut, cr.fin, cr.id_etudiant
 							FROM Creneau cr, Entreprise e, Contact_entreprise c, Entretien et
@@ -33,7 +33,7 @@ class Creneau {
 							ORDER BY e.nom AND cr.debut', array('date'=>$date), BD::RECUPERER_TOUT);
     }
 
-	// Ajout ($_id <= 0) ou Èdition ($_id > 0) d'un creneau
+	// Ajout ($_id <= 0) ou √©dition ($_id > 0) d'un creneau
     public static function UpdateCreneau($_id, $_id_entretien, $_debut, $_fin, $_id_etudiant){
 
 		$info = array(
@@ -46,7 +46,7 @@ class Creneau {
 		
         if(is_numeric($_id) && $_id > 0) {
 
-            //Si l'etudiant ‡ dÈj‡ un CV
+            //Si l'etudiant √† d√©j√† un CV
             BD::Prepare('UPDATE Creneau SET 
                     ID_ENTRETIEN = :id_entretien,
                     DEBUT = :debut,

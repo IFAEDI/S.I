@@ -341,3 +341,17 @@ function resetForm($form) {
          .removeAttr('checked').removeAttr('selected');
 }
 
+// E-NoBot - Fonction expérimentale de protection des emails contre les bots spammeurs :
+$(document).ready(function() {
+	$('.e-noBot').click( function() {
+		$('.e-noBot').each( function(index) {
+			var em = $(this).attr('e-name')+String.fromCharCode(64)+$(this).attr('e-domain');
+			$(this).attr('href', 'ma'+'ilt'+'o:'+em);
+			$(this).html(em);
+		});
+		$('.e-noBot').removeClass('btn-mini btn btn-info');
+		$('.e-noBot').unbind('click');
+		return false;
+	});
+});
+

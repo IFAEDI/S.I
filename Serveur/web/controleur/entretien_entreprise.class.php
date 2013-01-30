@@ -16,7 +16,7 @@ class Entreprise {
 
 
     //****************  Fonctions statiques  ******************//
-    // RÈcuperation de l'objet Entreprise par l'ID
+    // R√©cuperation de l'objet Entreprise par l'ID
     public static function GetEntrepriseByID($_id) {
         if (is_numeric($_id)) {
             return BD::Prepare('SELECT * FROM Entretien_entreprise WHERE ID = :id', array('id' => $_id), BD::RECUPERER_UNE_LIGNE, PDO::FETCH_CLASS, __CLASS__);
@@ -24,7 +24,7 @@ class Entreprise {
         return NULL;
     }
 
-	// RÈcuperation des ids et noms de l'ensemble des entreprises, ordonnÈ alphabÈtiquement
+	// R√©cuperation des ids et noms de l'ensemble des entreprises, ordonn√© alphab√©tiquement
 	public static function GetListeEntreprises() {
         return BD::Prepare('SELECT ID, NOM FROM Entretien_entreprise ORDER BY NOM', array(), BD::RECUPERER_TOUT);
     }
@@ -36,7 +36,7 @@ class Entreprise {
         }
     }
 
-	// Ajout ($_id <= 0) ou Èdition ($_id > 0) d'une entreprise
+	// Ajout ($_id <= 0) ou √©dition ($_id > 0) d'une entreprise
     public static function UpdateEntreprise($_id, $_nom, $_desc, $_secteur, $_com, $_id_ville) {
 		$info = array(
 			'id' => $_id,
@@ -49,7 +49,7 @@ class Entreprise {
         if ($_id > 0 && is_numeric($_id)) {
             
 
-            //Si l'etudiant ‡ dÈj‡ un CV
+            //Si l'etudiant √† d√©j√† un CV
             BD::Prepare('UPDATE Entretien_entreprise SET 
                     NOM = :nom,
                     DESCRIPTION = :description,

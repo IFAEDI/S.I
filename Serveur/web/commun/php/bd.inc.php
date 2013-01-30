@@ -206,6 +206,14 @@ class BD {
 	}
 
 	/**
+	 * Retourne le dernier ID inséré
+	 * @return Le dernier ID inséré
+ 	 */
+	public static function getDernierID() {
+		return self::getConnection()->lastInsertId();
+	}
+
+	/**
 	* Retourne la dernière erreur qui est survenue lors d'une requête.
 	*/
 	public static function getDerniereErreur() {
@@ -230,5 +238,3 @@ print_r(self::GetConnection()->errorInfo());
 
 }
 ?>
-
-

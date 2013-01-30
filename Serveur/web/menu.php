@@ -25,12 +25,6 @@
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-user icon-white"></i> Etudiants <b class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li class="nav-header"><i class="icon-road"></i> Espace Pro.</li>
-					<li><a href="index.php?page=Entretiens_Etudiant">Simulations d'entretiens</a></li>
-					<li><a href="index.php?page=Stages_Etudiant">Stages</a></li>
-					<li><a href="index.php?page=CV_Etudiant">CV</a></li>
-
-					<li class="divider"></li>
 
 					<li class="nav-header"><i class="icon-pencil"></i> Outils</li>
 					<li><a href="http://shareif.insa-lyon.fr/redmine" target="_blank">Redmine</a></li>
@@ -38,36 +32,40 @@
 
 					<li class="divider"></li>
 
+					<li class="nav-header"><i class="icon-road"></i> Espace Pro.</li>
+					<li><a href="index.php?page=Entretiens_Etudiant">Simulations d'entretiens</a></li>
+					<li><a href="index.php?page=Stages_Etudiant">Stages</a></li>
+					<li><a href="index.php?page=CV_Etudiant">CV</a></li>
+
+					<li class="divider"></li>
+
 					<li class="nav-header"><i class="icon-glass"></i> Evènements</li>
-					<li><a href="#">Concert IF</a></li>
-					<li><a href="#">Conférence Métier</a></li>
-					<li><a href="#">Intégration</a></li>
-					<li><a href="#">Rencontres Anciens</a></li>
-					<li><a href="#">Rencontres-IF</a></li>
-					<li><a href="#">Salle détente</a></li>
-					<li><a href="#">Soirée de fin d'année</a></li>
-					<li><a href="#">Week-end Ski</a></li>
+					<li><a href="index.php?page=Evenements_Etudiant">Présentation</a></li>
 				</ul>
 			</li>
 			<li class="divider-vertical"></li>
 			<li class="dropdown">
 				<a href="#" class="dropdown-toggle" data-toggle="dropdown"><i class="icon-flag icon-white"></i> Entreprises <b class="caret"></b></a>
 				<ul class="dropdown-menu">
-					<li class="nav-header"><i class="icon-search"></i> Informations</li>
-					<li><a href="#">Nos offres</a></li>
-					<li><a href="#">Devenir parrain de promotion</a></li>
-					<li><a href="index.php?page=CV_Entreprise">CV des étudiants</a></li>
-
-					<li class="divider"></li>
-
 					<li class="nav-header"><i class="icon-star"></i> Evénements</li>
 					<li><a href="index.php?page=RIFs_Entreprise">Rencontres IF</a></li>
 					<li><a href="index.php?page=Entretiens_Entreprise">Simulations d'entretiens</a></li>
+					<li><a href="index.php?page=Conferences">Conférences</a></li>
+					
+					<li class="divider"></li>
+					
+					<li class="nav-header"><i class="icon-book"></i> CVthèque</li>
+					<li><a href="index.php?page=CV_Info">Offre</a></li>
+					<!-- <li><a href="index.php?page=CV_Entreprise">Consultation</a></li> -->
+					
+					<li class="divider"></li>
+					
+					<li class="nav-header"><i class="icon-search"></i> Informations</li>
+					<li><a href="index.php?page=Parrainage">Devenir parrain de promotion</a></li>
 				</ul>
 			</li>
 			<?php
-			if( $authentification->isAuthentifie() && $utilisateur->getPersonne()->getRole() == Personne::ADMIN ) {
-
+			if( $authentification->isAuthentifie() && ($utilisateur->getPersonne()->getRole() == Personne::AEDI || $utilisateur->getPersonne()->getRole() == Personne::ADMIN) ) {
 				?>
 					<li class="divider-vertical"></li>
 					<li class="dropdown">
@@ -75,11 +73,21 @@
 						Administration <b class="caret"></b></a>
 
 						<ul class="dropdown-menu">
+
+						<?php
+						  /* Affichage des outils d'administration uniquement pour les... admins! */
+						  if( $utilisateur->getPersonne()->getRole() == Personne::ADMIN ) {
+						?>
+
 							<li class="nav-header"><i class="icon-user"></i> Utilisateurs</li>
 							<li><a href="index.php?page=Administration_Utilisateurs">Utilisateurs</a></li>
 							<li><a href="index.php?page=Administration_Journal">Journal</a></li>
 	
 							<li class="divider"></li>
+
+						<?php
+						  }
+						?>
 
 							<li class="nav-header"><i class="icon-cog"></i> Modules</li>
 							<li><a href="index.php?page=Administration_Annuaire">Annuaire Entreprises</a></li>
