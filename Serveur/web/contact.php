@@ -11,11 +11,6 @@
 ?>
 
 <div id="contact" class="row" style="margin-top: 20px;">
-    <div class="span6 columns">
-        <div>
-            <h2>Comment nous contacter ?</h2>
-            <p style="text-align:justify; margin-top: 15px;">
-            Vous souhaitez avoir des informations sur les évènements que nous organisons, ou vous souhaitez entamer un partenariat avec nous? Nos 4 équipes disposent chacune d'une adresse mail commune pour les joindre et s'efforcera de vous répondre dans un délais raisonnable.</p>
 
 	<div id="contact-unit" class="span7 columns">
 		<div class="hero-unit">
