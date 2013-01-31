@@ -96,6 +96,11 @@
 			<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="adapt-width" span=3 scale=0.75 max=200 src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
 		</p>
 	</div>
+	<div class="row" style="text-align:center;">
+        <p class="span12">
+            <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
+        </p>
+	</div>
 
 </div>
 	<div id="fb-root"></div>
