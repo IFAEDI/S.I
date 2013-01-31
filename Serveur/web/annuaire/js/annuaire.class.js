@@ -273,7 +273,7 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 				}
 				// Si MAJ du nom, ca met à jour la liste ...
 				Annuaire.retirerEntrepriseDeListe(description.id_entreprise);
-				Annuaire.insererEntrepriseDansListe({id_entreprise: description.id, nom: nomEntr});
+				Annuaire.insererEntrepriseDansListe({id_entreprise: description.id_entreprise, nom: nomEntr});
 				Annuaire.afficherListeEntreprises(); // Si MAJ du nom, ca met à jour la liste ...
 			}
 			else {
