@@ -11,6 +11,7 @@
 ?>
 
 <div id="contact" class="row" style="margin-top: 20px;">
+
 	<div id="contact-unit" class="span7 columns">
 		<div class="hero-unit">
 			<h1>Contact</h1>
