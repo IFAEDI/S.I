@@ -329,10 +329,10 @@ Annuaire.updaterContact = function updaterContact() {
 		ville : {
 			code_postal : encodeURIComponent($('#formUpdateContactVilleCodePostal').val()),
 			libelle : encodeURIComponent($('#formUpdateContactVilleLibelle').val()),
-			pays : encodeURIComponent($('#formUpdateContactVillePays').val()),
+			pays : encodeURIComponent($('#formUpdateContactVillePays').val())
 		},
 		commentaire : encodeURIComponent($('#formUpdateContactCom').val()),
-		priorite : parseInt($('#formUpdateContactPriorite').val()),
+		priorite : parseInt($('#formUpdateContactPriorite').val())
 	};
 	var /* objet */ requete = $.ajax({
 		url: "./annuaire/ajax/updateContact.cible.php",
