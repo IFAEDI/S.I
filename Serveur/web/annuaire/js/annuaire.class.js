@@ -273,7 +273,7 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 				}
 				// Si MAJ du nom, ca met à jour la liste ...
 				Annuaire.retirerEntrepriseDeListe(description.id_entreprise);
-				Annuaire.insererEntrepriseDansListe({id_entreprise: description.id, nom: nomEntr});
+				Annuaire.insererEntrepriseDansListe({id_entreprise: description.id_entreprise, nom: nomEntr});
 				Annuaire.afficherListeEntreprises(); // Si MAJ du nom, ca met à jour la liste ...
 			}
 			else {
@@ -329,10 +329,10 @@ Annuaire.updaterContact = function updaterContact() {
 		ville : {
 			code_postal : encodeURIComponent($('#formUpdateContactVilleCodePostal').val()),
 			libelle : encodeURIComponent($('#formUpdateContactVilleLibelle').val()),
-			pays : encodeURIComponent($('#formUpdateContactVillePays').val()),
+			pays : encodeURIComponent($('#formUpdateContactVillePays').val())
 		},
 		commentaire : encodeURIComponent($('#formUpdateContactCom').val()),
-		priorite : parseInt($('#formUpdateContactPriorite').val()),
+		priorite : parseInt($('#formUpdateContactPriorite').val())
 	};
 	var /* objet */ requete = $.ajax({
 		url: "./annuaire/ajax/updateContact.cible.php",

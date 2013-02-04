@@ -355,3 +355,35 @@ $(document).ready(function() {
 	});
 });
 
+// Image resizing :
+
+// Ajuste la largeur (resp. hauteur) des images ou iframes de classe .adapt-width (resp. adapt-height) avec la largeur de la class .spanX, où X est donné par l'attribut "span" de l'image.
+// Attributs optionnels pouvant être donnés à l'image :
+//		- scale : 	Pour définir un coef (entre 0 et 1) à apppliquer à la largeur du span.
+//		- max : 	Pour définir une limite supérieure à la dimension appliquée.
+function adaptWidthToSpan() {
+	$('.adapt-width').each(function (i) {
+		var span = '.span'+$(this).attr('span');
+		var scale = $(this).attr('scale') || 1;
+		var newWidth = $(span).width()*scale;
+		var max = $(this).attr('max');
+		if (max && newWidth > max) { newWidth = max; }
+		$(this).attr('width', newWidth+'px');
+	});
+}
+function adaptHeightToSpan() {
+	$('.adapt-height').each(function (i) {
+		var span = '.span'+$(this).attr('span');
+		var scale = $(this).attr('scale') || 1;
+		var newHeight = $(span).width()*scale;
+		var max = $(this).attr('max');
+		if (max && newHeight > max) { newHeight = max; }
+		$(this).attr('height', newHeight+'px');
+	});
+}
+
+$(window).resize(adaptWidthToSpan);
+$(window).resize(adaptHeightToSpan);
+adaptWidthToSpan();
+adaptHeightToSpan();
+
