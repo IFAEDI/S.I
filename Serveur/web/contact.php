@@ -74,14 +74,12 @@
 	</div>
 	
 	<script>
-		// Caroussels :
-		$('#photoCarousel').carousel({
-			interval: 10000
-		})
+		$(document).ready(function() {
+			adaptWidthToSpan();
+			adaptHeightToSpan();
+		});
 		
-		$('#gmap')height(($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));
-		
-		
+		$('#gmap')height(($('#contact-unit .hero-unit').height() - $('#gmap-lien').height()));	
 	</script>
 
 </div>
