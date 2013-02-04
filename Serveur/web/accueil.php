@@ -15,8 +15,8 @@
 		<div class="span4">
 			<div class="row">
 				<p class="span4">
-					<img id="logo" style="float:left; margin-left:10%;" src="commun/img/logo_aedi.png" width="120px" alt="AEDI">
-					<img style="float:right; margin-right:10%;" id="nom_aedi" src="commun/img/nom_aedi.png" alt="AEDI" class="width1-5" >
+					<img id="logo" style="float:left; margin-left:10%;" src="commun/img/logo_aedi.png" width="120px" alt="AEDI" />
+					<img style="float:right; margin-right:10%;" id="nom_aedi" src="commun/img/nom_aedi.png" alt="AEDI" class="adapt-width" span=2 scale=0.85 max=150 />
 				</p>
 			</div>
 			<div class="well">
@@ -38,35 +38,35 @@
 		  <div id="photoCarousel" class="carousel slide">
 			<div class="carousel-inner">
 			   <div class="item active">
-				<img class="width8" src="./commun/img/photo_caroussel/conference.jpg" width="770px" alt="Conférence AEDI">
+				<img class="adapt-width" span=8 src="./commun/img/photo_caroussel/conference.jpg" width="770px" alt="Conférence AEDI">
 				<div class="carousel-caption">
 				  <h4>Une association qui relie Etudiants et Entreprises</h4>
 				  <p>A travers les évènements qu'elle organise, l'AEDI a pour but de renforcer la cohésion entre les étudiants du Département, tout en leur offrant des contacts privilégiés avec les entreprises.</p>
 				</div>
 			  </div>
 			  <div class="item">
-				<img class="width8" src="./commun/img/photo_caroussel/equipe.jpg" width="770px" alt="Equipe AEDI">
+				<img class="adapt-width" span=8 src="./commun/img/photo_caroussel/equipe.jpg" width="770px" alt="Equipe AEDI">
 				<div class="carousel-caption">
 				  <h4>Une équipe dynamique prête à vous accueillir</h4>
 				  <p>L'AEDI est gérée par une équipe d'étudiants bénévoles et actifs, aussi à l'aise pour les évènements étudiants que pour le dialogue avec les entreprises.</p>
 				</div>
 			  </div>
 			  <div class="item">
-				<img class="width8" src="./commun/img/photo_caroussel/rif.jpg" width="770px" alt="Rencontres IF">
+				<img class="adapt-width" span=8 src="./commun/img/photo_caroussel/rif.jpg" width="770px" alt="Rencontres IF">
 				<div class="carousel-caption">
 				  <h4>De multiples évènements professionnels</h4>
 				  <p>Tout au long de l'année, l'AEDI convie des entreprises à des conférences, déjeunes-métiers, etc, le but étant de créer des liens forts entre étudiants et sociétés. Le point fort de cette politique est la Journée de Rencontres IF, durant laquelle sont conviées une trentaine de grandes entreprises.</p>
 				</div>
 			  </div>
 			  <div class="item">
-				<img class="width8" src="./commun/img/photo_caroussel/integration.jpg"" width="770px" alt="Rencontres IF">
+				<img class="adapt-width" span=8 src="./commun/img/photo_caroussel/integration.jpg" width="770px" alt="Rencontres IF">
 				<div class="carousel-caption">
 				  <h4>Détente et Cohésion</h4>
 				  <p>Car il n'est pas facile de débarquer dans l'univers insalien, l'AEDI prévoit chaque année de multiples évènements pour intégrer les nouveaux venus et instaurer une ambiance chaleureuse.</p>
 				</div>
 			  </div>
 			  <div class="item">
-				<img class="width8" src="./commun/img/photo_caroussel/integration2.jpg" width="770px" alt="Equipe AEDI">
+				<img class="adapt-width" span=8 src="./commun/img/photo_caroussel/integration2.jpg" width="770px" alt="Equipe AEDI">
 				<div class="carousel-caption">
 				  <h4>... alors rejoignez-nous !</h4>
 				  <p>N'hésitez pas à nous contacter, au local, par mails, par téléphone, etc ... Nous nous ferons un plaisir de discuter avec vous !</p>
@@ -81,25 +81,30 @@
 	</div>
 	<div class="row" style="text-align:center;">
 		<p class="span2">
-			<a href="http://www.insa-lyon.fr/" title="INSA-Lyon"><img class="width1" src="./commun/img/insa_logo.png" alt="INSA-Lyon"></a>
+			<a href="http://www.insa-lyon.fr/" title="INSA-Lyon"><img class="adapt-width" span=2 scale=0.75 max=200 src="./commun/img/insa_logo.png" alt="INSA-Lyon"></a>
 		</p>
 		<p class="span2">
-			<a href="http://if.insa-lyon.fr/" title="Département Informatique"><img class="width1" src="./commun/img/if_logo.png" alt="Département Informatique"></a>
+			<a href="http://if.insa-lyon.fr/" title="Département Informatique"><img class="adapt-width" span=2 scale=0.75 max=200 src="./commun/img/if_logo.png" alt="Département Informatique"></a>
 		</p>
 		<p class="span3">
-			<a href="http://www.altran.fr/" title="Altran - Parrain Promo 2013"><img class="width2" src="./commun/img/parrains_caroussel/altran.png" alt="Altran"></a>
+			<a href="http://www.altran.fr/" title="Altran - Parrain Promo 2013"><img class="adapt-width" span=3 scale=0.75 max=200 src="./commun/img/parrains_caroussel/altran.png" alt="Altran"></a>
 		</p>
 		<p class="span2">
-			<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img class="width0-5 height1" src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
+			<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img class="adapt-height adapt-width" span=2 scale=0.35 max=75 src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
 		</p>
 		<p class="span3">
-			<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="width2" src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
+			<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="adapt-width" span=3 scale=0.75 max=200 src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
 		</p>
 	</div>
 
 </div>
 	<div id="fb-root"></div>
 	<script>
+		$(document).ready(function() {
+			adaptWidthToSpan();
+			adaptHeightToSpan();
+		});
+		
 		// Facebook :
 		(function(d, s, id) {
 			var js, fjs = d.getElementsByTagName(s)[0];
@@ -111,17 +116,7 @@
 		
 		// Tweeter :
 		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
-		
-		// Image resizing :
-		$('.width8').attr('width', ($('#accueil').width() / 12 * 8)+'px');
-		$('.width3').attr('width', ($('#accueil').width() / 4)+'px');
-		$('.width2').attr('width', ($('#accueil').width() / 6)+'px');
-		$('.width1-5').attr('width', ($('#accueil').width() / 8)+'px');
-		$('.width1').attr('width', ($('#accueil').width() / 10)+'px');
-		$('.width0-5').attr('width', ($('#accueil').width() / 20)+'px');
-		
-		$('.height2').attr('height', ($('#accueil').width() / 12)+'px');
-		$('.height1').attr('height', ($('#accueil').width() / 20)+'px');
+
 		// Caroussels :
 		$('#photoCarousel').carousel({
 			interval: 10000

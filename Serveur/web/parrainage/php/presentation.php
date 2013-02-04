@@ -43,7 +43,7 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 			
 		</div>
 		<div id="infoRif" class="span8">
-			<p class="centre" style="margin-left:-10px; margin-bottom:20px;"><img class="width8" src="parrainage/img/thales2011.jpg" title="Rencontre entre les différents acteurs du parrainage 2011." alt="Rencontre entre les différents acteurs du parrainage 2011."></p>
+			<p class="centre" style="margin-left:-10px; margin-bottom:20px;"><img class="adapt-width" span=8 src="parrainage/img/thales2011.jpg" title="Rencontre entre les différents acteurs du parrainage 2011." alt="Rencontre entre les différents acteurs du parrainage 2011."></p>
 			
 			
 			<h2><i class="icon icon-search icon-white"></i> Informations</h2>
@@ -60,29 +60,22 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 			<div id="infoRif" class="span8">
 				<div class="row">
 					<p class="span3">
-						<a href="http://www.altran.fr/" title="Altran - Parrain Promo 2013"><img class="width2" src="./commun/img/parrains_caroussel/altran.png" alt="Altran"></a>
+						<a href="http://www.altran.fr/" title="Altran - Parrain Promo 2013"><img class="adapt-width" span=3 scale=0.75 max=200 src="./commun/img/parrains_caroussel/altran.png" alt="Altran"></a>
 					</p>
 					<p class="span2">
-						<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img class="width0-5 height1" src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
+						<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img class="adapt-height adapt-width" span=2 scale=0.35 max=75 src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
 					</p>
 					<p class="span3">
-						<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="width2" src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
+						<a href="http://www.thalesgroup.com/" title="Thalès - Parrain Promo 2014"><img class="adapt-width" span=3 scale=0.75 max=200 src="./commun/img/parrains_caroussel/thales.png" alt="Thalès"></a>
 					</p>
 				</div>
 			</div>
 		</div>
 	</div>
-	
 	<script>
-		// Image resizing :
-		$('.width8').attr('width', ($('#parrainage').width() / 12 * 8 - 30)+'px');
-		$('.width3').attr('width', ($('#parrainage').width() / 4)+'px');
-		$('.width2').attr('width', ($('#parrainage').width() / 6)+'px');
-		$('.width1-5').attr('width', ($('#parrainage').width() / 8)+'px');
-		$('.width1').attr('width', ($('#parrainage').width() / 10)+'px');
-		$('.width0-5').attr('width', ($('#parrainage').width() / 20)+'px');
-		
-		$('.height2').attr('height', ($('#parrainage').width() / 12)+'px');
-		$('.height1').attr('height', ($('#parrainage').width() / 20)+'px');
+		$(document).ready(function() {
+			adaptWidthToSpan();
+			adaptHeightToSpan();
+		});
 	</script>
 </div>

@@ -1,4 +1,4 @@
-﻿<script id="templateInfoEntreprise" type="text/x-handlebars-template">
+<script id="templateInfoEntreprise" type="text/x-handlebars-template">
 	<h1>
 		{{description.nom}} 
 		<small>{{description.secteur}}&#09;
@@ -16,7 +16,14 @@
 		<div class="accordion-group">
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#contacts"> 
-					<h2>Contacts</h2> 
+					<h2>Contacts (
+						{{^contacts}}
+							0
+						{{/contacts}}
+						{{#if contacts}}
+							{{contacts.length}}
+						{{/if}}
+					)</h2> 
 				</a>
 			</div>
 			<div id="contacts" class="accordion-body collapse in"> 
@@ -97,7 +104,14 @@
 		<div class="accordion-group"> 
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#relations">
-					<h2>Relations</h2>
+					<h2>Relations (
+						{{^relations}}
+							0
+						{{/relations}}
+						{{#if relations}}
+							{{relations.length}}
+						{{/if}}
+					)</h2>
 				</a>
 			</div>
 			<div id="relations" class="accordion-body collapse">
@@ -225,7 +239,14 @@
 		<div class="accordion-group"> 
 			<div class="accordion-heading">
 				<a class="accordion-toggle" data-toggle="collapse" data-parent="#accordion2" href="#remarques">
-					<h2>Remarques</h2>
+					<h2>Remarques (
+						{{^commentaires}}
+							0
+						{{/commentaires}}
+						{{#if commentaires}}
+							{{commentaires.length}}
+						{{/if}}
+					)</h2>
 				</a>
 			</div>
 			<div id="remarques" class="accordion-body collapse">
