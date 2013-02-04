@@ -72,4 +72,10 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 			</div>
 		</div>
 	</div>
+	<script>
+		$(document).ready(function() {
+			adaptWidthToSpan();
+			adaptHeightToSpan();
+		});
+	</script>
 </div>
