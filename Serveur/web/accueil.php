@@ -100,6 +100,11 @@
 </div>
 	<div id="fb-root"></div>
 	<script>
+		$(document).ready(function() {
+			adaptWidthToSpan();
+			adaptHeightToSpan();
+		});
+		
 		// Facebook :
 		(function(d, s, id) {
 			var js, fjs = d.getElementsByTagName(s)[0];
