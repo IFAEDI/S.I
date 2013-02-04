@@ -6,7 +6,7 @@
  * Auteur : Benjamin (Bill) Planche - Aldream (4IF 2011/12)
  *          Contact - benjamin.planche@aldream.net
  * ---------------------
- * Page présentant du parrainage aux entreprises.
+ * Page présentant le parrainage aux entreprises.
  */
 ?>
 
