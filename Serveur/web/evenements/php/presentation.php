@@ -26,7 +26,7 @@
 				<div class="tab-pane active" id="divertissements">
 					<div class="hero-unit">
 						<h1>Divertissements</h1>
-						<p class="justify">Convivialité, camaraderie, épanouissement, ... Nous jugeons ces notions indissociable d'une scolarité réussie. C'est pourquoi l'AEDI prend à coeur de tisser des liens au sein des promotions et avec l'extérieur, en multipliant les évènements récréatifs, qu'ils soient de petite ou grosse envergure. Tu trouveras ci-dessous les exemples les plus emblématiques.</p>
+						<p class="justify">Convivialité, camaraderie, épanouissement, ... Nous jugeons ces notions indissociables d'une scolarité réussie. C'est pourquoi l'AEDI prend à cœur de tisser des liens au sein des promotions et avec l'extérieur, en multipliant les évènements récréatifs, qu'ils soient de petite ou grosse envergure. Tu trouveras ci-dessous les exemples les plus emblématiques.</p>
 					</div>
 					<div class="row">
 						<p class="span4"><img src="evenements/img/inte3.jpg" title="En IF, les musiciens sont à l'honneur !" /></p>
@@ -81,7 +81,7 @@
 					<div class="hero-unit">
 						<h1>Entreprises</h1>
 						<p class="justify">
-							L'AEDI est un acteur de premier plan dans le démarche professionnalisante menée par le Département Informatique au cours de votre formation. En proposant diverses occasions d'échanger de maniere privilegiée avec des ingenieurs et acteurs du monde informatique, nous espérons ainsi t'aider à acquérir les ressources professionnelles nécessaires à l'épanouissement de ta carrière.
+							L'AEDI est un acteur de premier plan dans le démarche professionnalisante menée par le Département Informatique durant la formation. En proposant diverses occasions d'échanger de maniere privilegiée avec des ingenieurs et acteurs du monde informatique, nous espérons ainsi t'aider à acquérir les ressources professionnelles nécessaires à l'épanouissement de ta carrière.
 						</p>
 					</div>
 					<div class="row">
@@ -96,7 +96,7 @@
 					<div class="row">
 						<div class="span6 presentation">
 							<h2><i class="icon icon-volume-up icon-white"></i> Les Conférences</h2>
-							<p class="justify">Durant une heure ou deux, des entreprises viennent vous présenter leurs métiers, ou des concepts qu'elles ont à cœur. C'est l'opportunité de découvrir ce qui fait actuellement bouger les entreprises.<br/>
+							<p class="justify">Durant une heure ou deux, des entreprises viennent vous présenter leurs métiers, ou des concepts qu'elles ont à cœur. C'est l'opportunité de découvrir les tendances actuelles qui agitent le monde professionnel.<br/>
 							<small>Date : Les Jeudis après-midi</small></p>
 						</div>
 						<p class="span4"><img src="evenements/img/conf.jpg" title="Nouvelles technologies ou orientations professionnelles ... Les conférences proposent des sujets au goût de chacun." /></p>
@@ -105,7 +105,7 @@
 						<p class="span4"><img src="evenements/img/simulation.jpg" title="Grâce au Département et à l'AEDI, vous aurez la chance de rencontrer de nombreux professionnels et bénéficier de leurs conseils." /></p>
 						<div class="span6 presentation">
 							<h2>Les Simulations d'entretiens <i class="icon icon-comment icon-white"></i></h2>
-							<p class="justify">Proposés par des sociétés partenaires, ces simulations te permettent de mettre ton argumentaire et ton charisme à l'épreuve de recruteurs expérimentés, qui te prodigueront remarques et conseils, et t'aideront peut-être même à mieux cibler ton propre profil.<br/>
+							<p class="justify">Proposées par des sociétés partenaires, ces simulations te permettent de mettre ton argumentaire et ton charisme à l'épreuve de recruteurs expérimentés, qui te prodigueront remarques et conseils, et t'aideront peut-être même à mieux cibler ton propre profil.<br/>
 							<small>Date : Les Jeudis après-midi</small></p>
 						</div>
 					</div>
