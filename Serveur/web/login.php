@@ -147,10 +147,10 @@ else {
                                   </div>
                                 </div>
                         </div>
-
+				
 			<p>Groupe</p>
 			<input class="input-medium disabled" disabled="disabled" value="<?php echo Personne::$ROLES[$utilisateur->getPersonne()->getRole()]; ?> " />
-		</fieldset>
+		</div></fieldset>
 
 	</form>
     </div>
