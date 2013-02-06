@@ -29,18 +29,20 @@
 					<div class="tab-pane active" id="about-asso">
 						<div class="hero-unit">
 							<h1>L'Association</h1>
-							<p class="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in erat a dui auctor eleifend bibendum et felis. Curabitur rhoncus scelerisque felis non vehicula. Suspendisse potenti. Maecenas velit dolor, porttitor sed tincidunt at, pharetra at lacus. Integer id sapien enim, interdum auctor ligula. In pulvinar nulla ut dolor ornare bibendum. Fusce et odio eleifend nisl placerat vehicula.</p>
+							<p class="justify">L'<span class="hero_motcle">AEDI</span>, l'Association des Etudiants du Département Informatique, est une figure incontournable de la vie du Département et de la faune associative de l'INSA-Lyon. Depuis 30 ans, celle-ci accompagne les étudiants en Informatique à travers leur parcours, prodiguant de multiples services et organisant des évènements variés.</p>
+							<p class="justify">Comme toute association Loi 1901, l'AEDI n'est pas à but lucratif. L'inscription est <em>gratuite</em> pour tous les étudiants IF, l'association vivant grâce aux actions qu'elle mène, ainsi qu'aux multiples partenariats tissés, notamment avec le Département et les <a title="En savoir plus sur le parrainage" href="index.php?page=Parrainage">parrains de promotion</a>.</p>
+							<p class="justify">Chaque année, une équipe d'étudiants volontaires est élue pour reprendre sa tête, apportant ainsi de nouvelles pierres à l'édifice.</p>
 						</div>
 						<div style="position:relative;">
 							<h2 class="bleuBur"><i class="icon icon-star icon-white"></i> Notre Mission</h2>
-							<p class="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in erat a dui auctor <strong>eleifend bibendum et felis</strong>. Curabitur rhoncus scelerisque felis non vehicula. Suspendisse potenti. Maecenas velit dolor, porttitor sed tincidunt at, pharetra at lacus. Integer id sapien enim, interdum auctor ligula. In pulvinar nulla ut dolor ornare bibendum. Fusce et odio eleifend nisl placerat vehicula.
-
-Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissim felis, et elementum tellus tellus nec nulla. Suspendisse faucibus nulla vitae tellus aliquam eget scelerisque neque ornare. Sed convallis lobortis mollis. Etiam in dolor vitae dolor molestie suscipit. Aliquam erat volutpat. Sed mi elit, egestas ut dignissim vulputate, eleifend quis massa. Sed a purus ipsum. Etiam pulvinar tincidunt eros, ultrices dapibus dolor gravida ac.</p>
+							<p class="justify">L'AEDI a pour rôle de <span class="hero_motcle">renforcer la cohésion entre les étudiants du Département Informatique, les aider dans leur cursus, et établir des contacts privilégiés avec les entreprises</span>.</p>
+							<p class="justify">Pour cela, l'AEDI profite aujourd'hui d'un riche reseau construit au cours des ans, regroupant anciens élèves investis, entreprises clés du monde informatique, et enseignants motivés. Ces ressources, mises à disposition à travers de nombreux évènements fédérateurs, comme les <a title="En savoir plus sur les RIF" href="index.php?page=RIFs_Entreprise">Rencontre IF</a> ou les <a title="En savoir plus sur les conférences" href="index.php?page=Conferences">conférences</a>, offrent des opportunités en or aux étudiants de découvrir les acteurs de l'Informatique, et leur futur employeur. Réciproquement, cela permet aux entreprises de renforcer leur présence et découvrir des profils intéressants.</p>
+							<p class="justify">S'il est primordial pour les élèves de profiter de ces occasions et de se projeter dans le futur, L'AEDI a aussi conscience de l'importance, parfois, de simplement profiter du présent, de ces années étudiantes qui passent bien trop vite. Dans cette optique sont régulierement organisés des évènements récréatifs. Intégration des nouveaux venus, sorties en ville, goûters, activités sportives, ... Toutes les occasions sont bonnes pour renforcer les liens au sein du Département, mais aussi avec l'exterieur, grâce aux bonnes relations développées avec d'autres associations étudiantes lyonnaises.</p>
+							<p class="justify">L'AEDI s'est donc donnée comme vocation d'être un <span class="hero_motcle">acteur clé</span> du Département, en aidant les étudiants dans tous les aspects de leurs etudes.</p>
 							
 							<h2 class="bleuEntr" ><i class="icon icon-heart icon-white"></i> Nos Valeurs</h2>
-							<p class="justify">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in erat a dui auctor eleifend bibendum et felis. Curabitur rhoncus scelerisque felis non vehicula. Suspendisse potenti. Maecenas velit dolor, porttitor sed tincidunt at, pharetra at lacus. Integer id sapien enim, interdum auctor ligula. In pulvinar nulla ut dolor ornare bibendum. Fusce et odio eleifend nisl placerat vehicula.
-
-Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissim felis, et elementum tellus tellus nec nulla. Suspendisse faucibus nulla vitae tellus aliquam eget scelerisque neque ornare. Sed convallis lobortis mollis. Etiam in dolor vitae dolor molestie suscipit. Aliquam erat volutpat. Sed mi elit, egestas ut <span class="hero_motcle">dignissim vulputate</span>, eleifend quis massa. Sed a purus ipsum. Etiam pulvinar tincidunt eros, ultrices dapibus dolor gravida ac.</p>
+							<p class="justify">L'AEDI a fait le voeu de croire profondément dans le potentiel des étudiants du Département Informatique. C'est pourquoi nous nous efforcons d'apporter le terreau, les opportunités, destinés à faire valoir ces talents. La diversité des profils au sein des promotions est également une caracteristique que nous chérissons et encourageons, afin de favoriser une atmosphere d'échanges et de camaraderie plûtot que de compétition.</p>
+							<p class="justify">Enfin, pur produit de l'esprit associatif de l'INSA-Lyon, l'AEDI a à cœur de faire prospérer celui-ci, en encourageant les initiatives étudiantes et les partenariats inter- et extra-campus.</p>
 						</div>
 					</div>
 					<div class="tab-pane" id="about-team">
@@ -151,9 +153,9 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 												<div class="span4">
 													<div>
 														<h4>Inscription aux simulations d'entretiens</h4>
-														<p class="justify">Ces simulations, proposées gracieusement par des entreprises partenaires, te permettent de t'entrainer à l'incontournable exercice de l'entretien professionnel, face à des RH expérimentés et là pour te conseiller.<br/>
+														<p class="justify">Ces simulations, proposées grâcieusement par des entreprises partenaires, te permettent de t'entrainer à l'incontournable exercice de l'entretien professionnel, face à des RH expérimentés et là pour te conseiller.<br/>
 														Inscris-toi rapidement aux différentes sessions proposées !</p>
-														<p class="centre"><a class="btn btn-inverse" href="index.php?page=Entretiens_Etudiant">Accéder</a></p>
+														<p class="centre"><a class="btn btn-inverse" href="index.php?page=Entretiens_Etudiant" disabled title="Service en cours de finition. Marie Rosain se charge des inscriptions en attendant, merci de la contacter.">Accéder</a></p>
 													</div>
 												</div>
 											</div>
@@ -195,12 +197,10 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 									<div class="accordion-inner">
 										<p>De nombreux contenus de ce site web sont à destination des entreprises, partenaires privilégiés.</p>
 										<h3>Nos offres</h3>
-										<p>Vous trouverez sur cette <a href="index.php?page=Offres_Entreprise">page web</a> la présentation des multiples offres de l'AEDI à destination des entreprises. <br/>
-										Si vous avez des questions par rapport à celles-ci, ou si vous souhaitez organiser un évènement particulier, <a href="index.php?page=Contact">contactez-nous</a> et nous nous ferons un plaisir d'échanger avec vous.</p>
-										<p class="centre"><a class="btn btn-primary btn-large" href="index.php?page=Offres_Entreprise">Accédez à nos offres</a></p>
+										<p>Suivant la politique du Département de mêler le professionnel à l'enseignement, l'AEDI n'a cessé de multiplier les relations avec les entreprises, étoffant au cours des années sont panel d'offres. Les <a class="hero_motcle" href="index.php?page=RIFs_Entreprise">Rencontres IF</a>, les <a class="hero_motcle" href="index.php?page=Conferences">conférences</a>, les <a class="hero_motcle" href="index.php?page=Entretiens_Entreprise">simulations d'entretiens</a> et le <a class="hero_motcle" href="index.php?page=Parrainage">parrainage</a> sont les quatre pilliers de cet engagement réciproque.</p>
 										
 										<h3>Inscription aux évènements</h3>
-										<p>Parmi les évènements proposés, deux nécéssitent une organisation particulière, de part leur logistique ou leur fréquentation importante : les <a href="index.php?page=Offres_Entreprise#simulations-entretiens">Simulations d'entretiens</a> et les <a href="index.php?page=Offres_Entreprise#rif">Rencontres IF</a>. Afin d'assurer, à vous et aux étudiants, un service optimal, nous mettons à votre disposition les outils d'inscription suivants :
+										<p>Parmi les évènements proposés, deux nécéssitent une organisation particulière, de part leur logistique ou leur fréquentation importante : les <a href="index.php?page=Entretiens_Entreprise">Simulations d'entretiens</a> et les <a href="index.php?page=RIFs_Entreprise">Rencontres IF</a>. Afin d'assurer, à vous et aux étudiants, un service optimal, nous mettons à votre disposition les outils d'inscription suivants :</p>
 										<div class="span8" style="width:100%;">
 											<div class="row categ-services">
 												<div class="span4">
@@ -214,15 +214,18 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 													<div>
 														<h4>Simulations d'entretiens</h4>
 														<p class="justify">En quelques clics, préinscrivez-vous pour organiser des simulations d'entretiens dans notre Département ! Votre demande sera traitée dans les délais les plus brefs, et transmise à l'administration du Département qui se chargera des détails logistiques.</p>
-														<p class="centre"><a class="btn btn-inverse" href="index.php?page=Entretiens_Entreprise">Accéder</a></p>
+														<p style="color: #500; font-size: 0.8em;text-align:center;">Service en cours de finition. Merci de consulter la <a title="IF - Simulations d'entretiens" href="http://if.insa-lyon.fr/entreprise/simulation-entretiens" style="color: #500; text-decoration:underline;">page du Département</a> pour vous inscrire en attendant. Merci de votre compréhension.</p>
+														<p class="centre"><a class="btn btn-small btn-inverse" href="index.php?page=Entretiens_Entreprise" disabled title="Service en cours de finition. Merci de consulter la page du Département pour vous inscrire en attendant : if.insa-lyon.fr/entreprise/simulation-entretiens. Merci de votre compréhension.">Accéder</a></p>
 													</div>
 												</div>
 											</div>
 										</div>
 										
-										<h3>CVthèque</h3>
+										<!--<h3>CVthèque</h3>
 										<p>Fiers de notre formation et des talents dont nos promos regorgent, nous proposons aux entreprises un <em>book</em> contenant les CV des étudiants actuels, offrant ainsi un point de vue unique sur l'ensemble de ces profils.</p>
-										<p class="centre"><a class="btn btn-primary btn-large" href="index.php?page=CV_Entreprise">Accédez à l'offre</a></p>
+										<p class="centre"><a class="btn btn-primary btn-large" href="index.php?page=CV_Entreprise">Accédez à l'offre</a></p>-->
+										<h3>Informations supplémentaires</h3>
+										<p>Si vous avez des questions par rapport à celles-ci, ou si vous souhaitez organiser un évènement particulier, <a href="index.php?page=Contact">contactez-nous</a> et nous nous ferons un plaisir d'échanger avec vous.</p>
 									</div>
 								</div>
 							</div>
@@ -260,14 +263,6 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 				}); 
 			});
 			// -------
-
-			
-			// Caroussels :
-			$('#photoCarousel').carousel({
-				interval: 10000
-			})
-			
-
 		});
 
 	</script>
