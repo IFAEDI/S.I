@@ -167,9 +167,9 @@ function raffraichirTable() {
 
 	var tbody = '';
 	var i = 0;
-	var index = 1;
 	/* Mon Dieu, un calcul scientifique ! */
 	var debut = (page_courante-1) * max_utilisateur_par_page;
+	var index = debut;
 
 	/* Parcourons les utilisateurs */
 	while( i < liste_utilisateurs.length ) {
@@ -196,7 +196,7 @@ function raffraichirTable() {
 		if( i == debut + max_utilisateur_par_page ) break; 
 
 		tbody += '<tr>';
-		tbody += '<td>' + (index++) + '</td>';
+		tbody += '<td>' + (++index) + '</td>';
 		tbody += '<td>' + liste_utilisateurs[i].login + '</td>';
 		tbody += '<td>' + liste_services[liste_utilisateurs[i].service] + '</td>';
 		tbody += '<td>' + liste_types[liste_utilisateurs[i].type] + '</td>';
