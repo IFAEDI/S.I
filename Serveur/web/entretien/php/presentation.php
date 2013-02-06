@@ -26,7 +26,7 @@
 			<p class="justify">
 				Les simulations d'entretiens ont lieu au département, hors temps scolaire. L'entreprise offre un certain nombre de créneaux durant lesquels les recruteurs dépêchés rencontreront les étudiants préalablement inscrits.</p>
 			<p class="justify">L'entretien se termine généralement par un échange entre l'étudiant et le professionnel, ce dernier pouvant revenir sur la prestation de l'élève, dresser son profil, prodiguer des conseils, ...</p>
-			<p class="justify">L'exercice est pris avec sérieux pour les étudiants, pour qui il représente un entrainement efficace à cet exercice subtil, et peu aussi parfois être l'occasion d'un premier échange avec une entreprise l'intéressant.</p>
+			<p class="justify">L'exercice est pris avec sérieux par les étudiants, pour qui il représente un entrainement efficace à cet épreuve subtile, et peu aussi parfois être l'occasion d'un premier échange avec une entreprise l'intéressant.</p>
 		</div>
 		<div id="infoRif" class="span8">
 			<h2><i class="icon icon-search icon-white"></i> Informations</h2>
