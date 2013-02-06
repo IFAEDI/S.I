@@ -19,22 +19,8 @@ global $authentification;
         <meta charset="utf-8" />
 		<link rel="shortcut icon" href="./favicon.ico" >
         <?php
-        inclure_fichier('commun', 'bootstrap.min', 'css');
-        inclure_fichier('commun', 'bootstrap-responsive.min', 'css');
-        inclure_fichier('commun', 'style', 'css');
-        inclure_fichier('commun', 'ui-lightness/jquery-ui', 'css');
-
-        inclure_fichier('commun', 'jquery.min', 'js');
-        inclure_fichier('commun', 'jquery-ui.min', 'js');
-        inclure_fichier('commun', 'bootstrap.min', 'js');
-        inclure_fichier('commun', 'datepicker.fr', 'js');
-        inclure_fichier('commun', 'json2', 'js');
-        inclure_fichier('commun', 'utils', 'js');
-	inclure_fichier('commun', 'jquery.tablesorter.min', 'js');
-		
-		
-	inclure_fichier('commun', 'login', 'js');
-	inclure_fichier('commun', 'SHA1', 'js');
+        inclure_fichier('commun', 'layout', 'css');
+        inclure_fichier('commun', 'layout', 'js');
         ?>
 
         <title>AEDI - <?php echo $titre_page; ?></title>
