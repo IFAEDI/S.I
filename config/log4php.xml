@@ -2,8 +2,7 @@
 <configuration xmlns="http://logging.apache.org/log4php/">
     <appender name="default" class="LoggerAppenderFile">
         <layout class="LoggerLayoutTTCC" />
-        <param name="file" value="/home/aedi/Documents/IFAEDI/S.I/Serveur/web/logs/my.log" />
-	<!-- <param name="file" vamue="my.log" /> -->
+        <param name="file" value="logs/my.log" />
         <param name="append" value="true" />
     </appender>
     <root>
