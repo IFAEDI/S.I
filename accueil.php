@@ -99,6 +99,11 @@
             <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
         </p>
 	</div>
+	<div class="row" style="text-align:center;">
+        <p class="span12">
+            <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
+        </p>
+	</div>
 
 </div>
 	<div id="fb-root"></div>
