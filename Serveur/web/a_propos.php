@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * -----------------------------------------------------------
  * Vue - A PROPOS
@@ -155,7 +155,7 @@
 														<h4>Inscription aux simulations d'entretiens</h4>
 														<p class="justify">Ces simulations, proposées grâcieusement par des entreprises partenaires, te permettent de t'entrainer à l'incontournable exercice de l'entretien professionnel, face à des RH expérimentés et là pour te conseiller.<br/>
 														Inscris-toi rapidement aux différentes sessions proposées !</p>
-														<p class="centre"><a class="btn btn-inverse" href="index.php?page=Entretiens_Etudiant" disabled title="Service en cours de finition. Marie Rosain se charge des inscriptions en attendant, merci de la contacter.">Accéder</a></p>
+														<p class="centre"><<?php /**a*/?>button class="btn btn-inverse" <?php /**href="index.php?page=Entretiens_Etudiant"*/?> disabled title="Service en cours de finition. Marie Rosain se charge des inscriptions en attendant, merci de la contacter.">Accéder</<?php /**a*/?>button></p>
 													</div>
 												</div>
 											</div>
