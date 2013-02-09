@@ -92,18 +92,15 @@
 		<p class="span2">
 			<a href="http://www.axa.fr/" title="Axa - Parrain Promo 2015"><img class="adapt-height adapt-width" span=2 scale=0.35 max=75 src="./commun/img/parrains_caroussel/axa2.png" alt="Axa"></a>
 		</p>
-		<p class="span3">
-			<a href="http://www.thalesgroup.com/" title="Thales - Parrain Promo 2014"><img class="width2" src="./commun/img/parrains_caroussel/thales.png" alt="Thales"></a>
+        <p class="span3">
+            <a href="http://www.thalesgroup.com/" title="Thales - Parrain Promo 2014"><img class="adapt-width" span=3 scale=0.75 max=200 src="./commun/img/parrains_caroussel/thales.png" alt="Thales"></a>
         </p>
-        <p class="span12">
-            <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
-        </p>
-	</div>
-	<div class="row" style="text-align:center;">
-        <p class="span12">
-            <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
-        </p>
-	</div>
+        </div>
+        <div class="row" style="text-align:center;">
+            <p class="span12">
+                <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
+            </p>
+        </div>
 
 </div>
 	<div id="fb-root"></div>
