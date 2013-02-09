@@ -164,9 +164,7 @@ class Authentification {
 		if( @$_SESSION[self::S_AUTH_METHOD] == self::AUTH_CAS ) {
 			$_SESSION[self::S_AUTH_METHOD]  = null;
 
-			/* On fixe l'adresse sur laquelle il faut être redirigé et on déconnecte l'utilisateur */
-			phpCAS::setServerLogoutURL( $_SERVER['REQUEST_URI'] );
-		        phpCAS::logout();
+            phpCAS::logout(array('url' => 'http://ifaedi.insa-lyon.fr'));
 		}
 
 		$_SESSION[self::S_AUTH_METHOD]  = null;
