@@ -11,6 +11,8 @@
 ?>
 
 <div id="conf" class="module_entr">
+	<p class="alert alert-block alert-warning">Désolé, cette page est encore en cours d'élaboration. Merci de votre compréhension.</p>
+	<?php /**	
 	<div class="row">
 		<div class="span12">
 			<div class="hero-unit">
@@ -93,4 +95,5 @@ Nulla et erat arcu. Ut vulputate, erat in blandit hendrerit, augue ante dignissi
 			
 		</div>
 	</div>
+	*/ ?>
 </div>
