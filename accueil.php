@@ -79,7 +79,7 @@
 		  </div>
 		</div>
 	</div>
-	<div class="row" style="text-align:center;; margin-top:20px;">
+	<div class="row" style="text-align:center;">
 		<p class="span2">
 			<a href="http://www.insa-lyon.fr/" title="INSA-Lyon"><img class="adapt-width" span=2 scale=0.75 max=200 src="./commun/img/insa_logo.png" alt="INSA-Lyon"></a>
 		</p>
