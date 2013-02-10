@@ -16,7 +16,7 @@ phpCAS::setNoCasServerValidation();
 
 /* Gère la demande de déconnexion */
 if( @isset( $_REQUEST['logout'] ) ) {
-	phpCAS::logout(); /* A améliorer */
+	phpCAS::logout(array('url' => 'http://ifaedi.insa-lyon.fr'));
 }
 
 /* Check si l'utilisateur est authentifié, si ce n'est pas le cas, on lui demande poliement */
