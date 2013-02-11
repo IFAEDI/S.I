@@ -26,6 +26,11 @@ else if($utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
 ?>
 <div id="entretiens">
 	<h1>Simulations d'entretiens</h1>
+	<p class="alert alert-block alert-warning">
+		Désolé, ce service est actuellement en cours de finition. Marie Rosain se charge des inscriptions en attendant, merci de la contacter.<br/>
+		Pour en savoir plus, consultez la page du Département : <a title="IF - Simulations d'entretiens" href="http://if.insa-lyon.fr/entreprise/simulation-entretiens">if.insa-lyon.fr/entreprise/simulation-entretiens</a>.
+	</p>
+	<?php /**
 	<div class="alert alert-block alert-info">
 					<h4 class="alert-heading">Inscription</h4>
 					Afin de faire votre demande d'inscription à des sessions de simulation d'entretiens, vous pouvez choisir la date souhaitée via le calendrier.<br/>
@@ -72,12 +77,15 @@ else if($utilisateur->getPersonne()->getRole() != Personne::ADMIN &&
 	});
 
 	</script>
+*/ ?>
 </div>
 
-
+<?php /**
 <?php
 inclure_fichier('entretien', 'inscription', 'js');
 inclure_fichier('entretien', 'jquery.datePicker', 'js');
 inclure_fichier('entretien', 'date', 'js');
 inclure_fichier('entretien', 'datePicker', 'css');
 ?>
+
+*/ ?>

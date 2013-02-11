@@ -4,3 +4,5 @@ commun/php/config.inc.php
 nbproject
 db_schema
 logs/*
+config/*
+Thumbs.db
