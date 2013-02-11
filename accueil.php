@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 /**
  * -----------------------------------------------------------
  * Vue - ACCUEIL
@@ -98,7 +98,7 @@
         </div>
         <div class="row" style="text-align:center;">
             <p class="span12">
-                <embed src="./commun/img/societe_generale.swf"  height="100" width="800" />
+                <embed style="margin-top:-20px;" src="./commun/img/societe_generale.swf" class="adapt-width" span=8 scale=0.60 max=800 />
             </p>
         </div>
 
