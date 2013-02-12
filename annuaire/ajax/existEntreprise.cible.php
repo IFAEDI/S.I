@@ -27,7 +27,7 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 /* int */ $nom_entreprise = NULL;
 
 if (verifierPresent('name')) {
-	$nom_entreprise = Protection_XSS(urldecode($_POST['name']));
+	$nom_entreprise = $_POST['name'];
 
 	/* booléen */ $existsName = Entreprise::ExistsName($nom_entreprise);
 	$json['code'] = 'ok';
@@ -38,6 +38,6 @@ else {
 }
 
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>

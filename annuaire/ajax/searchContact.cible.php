@@ -56,8 +56,8 @@ if (verifierPresentObjet('keywords')) {
 	else {
 		$nb = count($keywords);
 		for($i = 0; $i < $nb; $i++) {
-			$keywords[$i]['champ'] = Protection_XSS(urldecode($keywords[$i]['champ']));
-			$keywords[$i]['val'] = Protection_XSS(urldecode($keywords[$i]['val']));
+			$keywords[$i]['champ'] = $keywords[$i]['champ'];
+			$keywords[$i]['val'] = $keywords[$i]['val'];
 		}
 		
 		$contacts = Contact::Rechercher($keywords);
@@ -100,6 +100,6 @@ else {
 	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>

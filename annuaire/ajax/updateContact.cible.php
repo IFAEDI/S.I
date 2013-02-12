@@ -45,22 +45,22 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 /* Vérification de la présence des champs requis */
 if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifierPresentObjet( 'personne' ) && verifierPresentObjet( 'ville' )) {
 	/* Entreprise */
-	$id_entreprise = intval($_POST['id_entreprise']);
+	$id_entreprise = (int) $_POST['id_entreprise'];
 	/* Fonction */
-	$fonction = Protection_XSS(urldecode($_POST['fonction']));
+	$fonction = $_POST['fonction'];
 
 	/* Personne */
 	$personne = $_POST['personne'];
-	$personne['nom'] = Protection_XSS(urldecode($personne['nom']));
-	$personne['prenom'] = Protection_XSS(urldecode($personne['prenom']));
-	$personne['id'] = intval($personne['id']);
+	$personne['nom'] = $personne['nom'];
+	$personne['prenom'] = $personne['prenom'];
+	$personne['id'] = (int) $personne['id'];
 	$compteur = 0;
 	if (array_key_exists('telephones', $personne)) {
 		$compteur = count($personne['telephones']);
 
 		for($i = 0; $i < $compteur; $i++) {
-			$personne['telephones'][$i][0] = Protection_XSS(urldecode($personne['telephones'][$i][0]));
-			$personne['telephones'][$i][1] = Protection_XSS(urldecode($personne['telephones'][$i][1]));
+			$personne['telephones'][$i][0] = $personne['telephones'][$i][0];
+			$personne['telephones'][$i][1] = $personne['telephones'][$i][1];
 		}
 	}
 
@@ -69,26 +69,26 @@ if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifie
 		$compteur = count($personne['mails']);
 
 		for($i = 0; $i < $compteur; $i++) {
-			$personne['mails'][$i][0] = Protection_XSS(urldecode($personne['mails'][$i][0]));
-			$personne['mails'][$i][1] = Protection_XSS(urldecode($personne['mails'][$i][1]));
+			$personne['mails'][$i][0] = $personne['mails'][$i][0];
+			$personne['mails'][$i][1] = $personne['mails'][$i][1];
 		}
 	}
 
 	/* Ville */
 	$ville = $_POST['ville'];
-	$ville['code_postal'] = Protection_XSS(urldecode($ville['code_postal']));
-	$ville['libelle'] = Protection_XSS(urldecode($ville['libelle']));
-	$ville['pays'] = Protection_XSS(urldecode($ville['pays']));
+	$ville['code_postal'] = $ville['code_postal'];
+	$ville['libelle'] = $ville['libelle'];
+	$ville['pays'] = $ville['pays'];
 
 	/* Vérification des champs facultatifs et récupération de leurs valeurs */
 	if (verifierPresent('id_contact')) {
-		$id = intval($_POST['id_contact']);
+		$id = (int) $_POST['id_contact'];
 	}
 	if (verifierPresent('commentaire')) {
-		$commentaire = Protection_XSS(urldecode($_POST['commentaire']));
+		$commentaire = $_POST['commentaire'];
 	}
 	if (verifierPresent('priorite')) {
-		$priorite = intval($_POST['priorite']);
+		$priorite = (int) $_POST['priorite'];
 	}
 
 	/*
@@ -153,6 +153,6 @@ else {
 }
 
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>

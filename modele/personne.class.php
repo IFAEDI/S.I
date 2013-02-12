@@ -426,7 +426,7 @@ class Personne {
 
 	public function toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
 		$arrayPer = array();
-		$arrayPer['id'] = intval($this->id);
+		$arrayPer['id'] = (int) $this->id;
 		$arrayPer['nom'] = $this->nom;
 		$arrayPer['prenom'] = $this->prenom;
 		if ($avecMails) { $arrayPer['mails'] = $this->mails; }

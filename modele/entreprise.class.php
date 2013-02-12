@@ -215,7 +215,7 @@ class Entreprise {
 	*/
 	public function toArrayObject() {
 		$arrayEntr = array();
-		$arrayEntr['id_entreprise'] = intval($this->ID_ENTREPRISE);
+		$arrayEntr['id_entreprise'] = (int) $this->ID_ENTREPRISE;
 		$arrayEntr['nom'] = $this->NOM;
 		$arrayEntr['description'] = $this->DESCRIPTION;
 		$arrayEntr['secteur'] = $this->SECTEUR;

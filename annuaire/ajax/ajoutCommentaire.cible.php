@@ -44,13 +44,13 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 
 /* Vérification des champs indispensables */
 if (verifierPresent('contenu') && verifierPresent('id_entreprise')) {
-	$contenu = Protection_XSS(urldecode($_POST['contenu']));
+	$contenu = $_POST['contenu'];
 
-	$id_entreprise = Protection_XSS($_POST['id_entreprise']);
+	$id_entreprise = $_POST['id_entreprise'];
 
 	/* Vérification du champ optionnel */
 	if (verifierPresent('categorie')) {
-		$categorie = Protection_XSS($_POST['categorie']);
+		$categorie = $_POST['categorie'];
 	}
 
 	/* int */ $id = CommentaireEntreprise::UpdateCommentaire(0, $id_personneCom, $id_entreprise, $contenu, $categorie, 0);
@@ -72,6 +72,6 @@ else {
 	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>

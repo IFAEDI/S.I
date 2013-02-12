@@ -57,16 +57,16 @@ inclure_fichier('controleur', 'creneau.class', 'php');
 	// On enregistre l'entretien
 	$id_entretien = Entretien::UpdateEntretien(0, $_id_contact, $_date, $_etat);
 	
-	//On créer les créneaux associés
+	//On cr?er les cr?neaux associ?s
 	if( $id_entretien > 0 ){
 		// Analyser les heures debut et fin
 		$temp = explode("h",$heureDeb);
-		$heureDebut = intval($temp[0]);
-		$minuteDebut = intval($temp[1]);
+		$heureDebut = (int) $temp[0];
+		$minuteDebut = (int) $temp[1];
 		
 		$temp = explode("h",$heureFin);
-		$heureFin = intval($temp[0]);
-		$minuteFin = intval($temp[1]);
+		$heureFin = (int) $temp[0];
+		$minuteFin = (int) $temp[1];
 
 		while( true ){
 			
