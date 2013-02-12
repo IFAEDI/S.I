@@ -226,7 +226,7 @@ class CommentaireEntreprise {
 	
 	public function toArrayObject($avecEntreprise, $avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecPersonne) {
 		$arrayCommentaire = array();
-		$arrayCommentaire['id_commentaire'] = intval($this->ID_COMMENTAIRE);
+		$arrayCommentaire['id_commentaire'] = (int) $this->ID_COMMENTAIRE;
 		$arrayCommentaire['contenu'] = $this->CONTENU;
 		$arrayCommentaire['categorie'] = $this->CATEGORIE;
 		$arrayCommentaire['timestamp'] = $this->DATE;

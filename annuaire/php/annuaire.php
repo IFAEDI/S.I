@@ -47,22 +47,22 @@ $listePostes = Contact::GetListeFonctions();
 			// Génération de la liste des noms d'entreprises :								
 			/* int */ $nb_entreprises = count($listeEntreprises);	
 			for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
-				echo 'Annuaire.listeEntreprises['.$i.'] = ['.$listeEntreprises[$i]->getId().', "'.$listeEntreprises[$i]->getNom().'"];';
+				echo 'Annuaire.listeEntreprises['.$i.'] = ['.Protection_XSS($listeEntreprises[$i]->getId()).', "'.Protection_XSS($listeEntreprises[$i]->getNom()).'"];';
 			}
 
 			// On en profite pour passer au JS des info sur l'utilisateur :
-			echo 'Annuaire.utilisateur = {personne:{prenom:"'.$utilisateur->getPersonne()->getPrenom().'", nom:"'.$utilisateur->getPersonne()->getNom().'", role:'.$utilisateur->getPersonne()->getRole().'}};';
+			echo 'Annuaire.utilisateur = {personne:{prenom:"'.Protection_XSS($utilisateur->getPersonne()->getPrenom()).'", nom:"'.Protection_XSS($utilisateur->getPersonne()->getNom()).'", role:'.Protection_XSS($utilisateur->getPersonne()->getRole()).'}};';
 							
 			// Génération de la liste des secteurs déja en BDD :
 			/* int */ $nb_secteurs = count($listeSecteurs);
 			for (/* int */ $i = 0; $i < $nb_secteurs; $i++) {
-				echo 'Annuaire.listeSecteurs['.$i.'] = "'.$listeSecteurs[$i].'";';
+				echo 'Annuaire.listeSecteurs['.$i.'] = "'.Protection_XSS($listeSecteurs[$i]).'";';
 			}
 			
 			// Génération de la liste des fonctions déja en BDD :
 			/* int */ $nb_postes = count($listePostes);
 			for (/* int */ $i = 0; $i < $nb_postes; $i++) {
-				echo 'Annuaire.listePostes['.$i.'] = "'.$listePostes[$i].'";';
+				echo 'Annuaire.listePostes['.$i.'] = "'.Protection_XSS($listePostes[$i]).'";';
 			}
 		?>
 	</script>

@@ -33,7 +33,7 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
  */
 /* int */ $id = 0;
 if (verifierPresent('id')) {
-	$id = intval($_POST['id']);
+	$id = (int) $_POST['id'];
 
 	/* bool */ $codeRet = Contact::SupprimerContactByID($id);
 	if ($codeRet === Contact::getErreurExecRequete()) {
@@ -49,6 +49,6 @@ else {
 	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>

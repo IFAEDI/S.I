@@ -179,8 +179,8 @@ class Personne {
 		foreach( $mails as $mail ) {
 			if( strlen( $mail[1] ) > 0 ) {
 
-				$libelle  = strip_tags( mysql_escape_string( $mail[0] ) );
-				$cur_mail = strip_tags( mysql_escape_string( $mail[1] ) );
+				$libelle  = $mail[0];
+				$cur_mail = $mail[1];
 
 				$result = BD::executeModif( 'INSERT INTO MAIL VALUES( :id, :libelle, :mail, :priorite )', 
 					array( 'id' => $this->id, 'libelle' => $libelle, 'mail' => $cur_mail, 'priorite' => $i ) );
@@ -213,8 +213,8 @@ class Personne {
                 foreach( $telephones as $tel ) {
                         if( strlen( $tel[1] ) > 0 ) {
 
-                                $libelle  = strip_tags( mysql_escape_string( $tel[0] ) );
-                                $cur_tel  = strip_tags( mysql_escape_string( $tel[1] ) );
+                                $libelle  = $tel[0];
+                                $cur_tel  = $tel[1];
 
                                 $result = BD::executeModif( 'INSERT INTO TELEPHONE VALUES( :id, :libelle, :tel, :priorite )',
                                         array( 'id' => $this->id, 'libelle' => $libelle, 'tel' => $cur_tel, 'priorite' => $i ) );
@@ -426,7 +426,7 @@ class Personne {
 
 	public function toArrayObject($avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
 		$arrayPer = array();
-		$arrayPer['id'] = intval($this->id);
+		$arrayPer['id'] = (int) $this->id;
 		$arrayPer['nom'] = $this->nom;
 		$arrayPer['prenom'] = $this->prenom;
 		if ($avecMails) { $arrayPer['mails'] = $this->mails; }

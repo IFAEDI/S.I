@@ -24,12 +24,12 @@ class Entretien {
     }
 
 	// Récuperation de l'ensemble des creneau d'une journée passée en paramètre (ex: 27/03/2012)
-	public static function GetListeCreneauByDate(date) {
-        return BD::Prepare('SELECT * FROM Entretien_creneau WHERE id = (SELECT id FROM Entretien WHERE date ="'date'"'), array(), BD::RECUPERER_TOUT);
+	public static function GetListeCreneauByDate($date) {
+        return BD::Prepare('SELECT * FROM Entretien_creneau WHERE id = (SELECT id FROM Entretien WHERE date = :date)', array('date' => $date), BD::RECUPERER_TOUT);
     }
 
 	// Ajout ($_id <= 0) ou édition ($_id > 0) d'un creneau
-    public static function UpdateCreneau($_id, $_id_entretien $_id_intervenant, $_heure_debut, $_heure_fin, $_id_etudiant){
+    public static function UpdateCreneau($_id, $_id_entretien, $_id_intervenant, $_heure_debut, $_heure_fin, $_id_etudiant){
 
 		$info = array(
 			'id'=> $_id,

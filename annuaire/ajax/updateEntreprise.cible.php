@@ -40,16 +40,16 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 /* int */ $id_entreprise = 0;
 
 if (verifierPresent('nom') && verifierPresent('secteur') && verifierPresent('description')) {
-	$nom_entreprise = Protection_XSS(urldecode($_POST['nom']));
-	$secteur_entreprise = Protection_XSS(urldecode($_POST['secteur']));
-	$desc_entreprise = Protection_XSS(urldecode($_POST['description']));
+	$nom_entreprise = $_POST['nom'];
+	$secteur_entreprise = $_POST['secteur'];
+	$desc_entreprise = $_POST['description'];
 
 	/* Vérification des champs optionnels */
 	if (verifierPresent('commentaire')) {
-		$com_entreprise = Protection_XSS(urldecode($_POST['commentaire']));
+		$com_entreprise = $_POST['commentaire'];
 	}
 	if (verifierPresent('id_entreprise')) {
-		$id_entreprise = intval($_POST['id_entreprise']);
+		$id_entreprise = (int) $_POST['id_entreprise'];
 	}
 
 	/* int */ $id = Entreprise::UpdateEntreprise($id_entreprise, $nom_entreprise, $desc_entreprise, $secteur_entreprise, $com_entreprise);
@@ -73,6 +73,6 @@ else {
 	$json = genererReponseStdJSON( 'erreurChamp', 'Veuillez vérifier que tous les champs sont renseignés.' );
 }
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>

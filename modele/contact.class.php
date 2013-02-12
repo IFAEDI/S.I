@@ -396,7 +396,7 @@ class Contact {
 	
 	public function toArrayObject($avecEntreprise, $avecVille, $avecMails, $avecTels, $avecRole, $avec1ereConnexion, $avecUtilisateur) {
 		$arrayContact = array();
-		$arrayContact['id_contact'] = intval($this->ID_CONTACT);
+		$arrayContact['id_contact'] = (int) $this->ID_CONTACT;
 		$arrayContact['fonction'] = $this->FONCTION;
 		$arrayContact['priorite'] = $this->PRIORITE;
 		$arrayContact['commentaire'] = $this->COMMENTAIRE;
