@@ -122,6 +122,22 @@
 		// Tweeter :
 		!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");
 
+		var konami_keys = [38, 38, 40, 40, 37, 39, 37, 39, 66, 65];
+		var konami_index = 0;
+		$(document).keydown(function(e){
+			if(e.keyCode === konami_keys[konami_index++]){
+				if(konami_index === konami_keys.length){
+					$(document).unbind('keydown', arguments.callee);
+					$.getScript('http://www.cornify.com/js/cornify.js',function(){
+						cornify_add();
+						$(document).keydown(cornify_add);
+					}); 
+				}
+			}else{
+				konami_index = 0;
+			}
+		});
+		
 		// Caroussels :
 		$('#photoCarousel').carousel({
 			interval: 10000
