@@ -71,7 +71,7 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 /* int */ $id_entreprise = NULL;
 
 if (verifierPresent('id')) {
-	$id_entreprise = intval($_POST['id']);
+	$id_entreprise = (int) $_POST['id'];
 	
 	/*
 	 * Appeler la couche du dessous
@@ -116,7 +116,7 @@ else {
 /*
  * Renvoyer le JSON
  */
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 
 ?>

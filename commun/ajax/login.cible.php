@@ -27,8 +27,8 @@ if( @isset( $_GET['action'] ) ) {
 		else {
 			$logger = Logger::getLogger("Login.RegularAuth");
 
-			$login = mysql_escape_string( $_GET['username'] );
-			$mdp   = mysql_escape_string( $_GET['password'] );
+			$login = $_GET['username'];
+			$mdp   = $_GET['password'];
 
 			/* Recherche dans la base si le couple utilisateur/passwd existe */
 			try {
@@ -79,9 +79,9 @@ if( @isset( $_GET['action'] ) ) {
 				$utilisateur = $authentification->getUtilisateur();
 				$continue = true;
 	
-				$password = strip_tags( mysql_escape_string( $_GET['password'] ) );
-				$nom      = strip_tags( mysql_escape_string( $_GET['nom'] ) );
-				$prenom   = strip_tags( mysql_escape_string( $_GET['prenom'] ) );
+				$password = $_GET['password'];
+				$nom      = $_GET['nom'];
+				$prenom   = $_GET['prenom'];
 				
 				/* On regarde s'il faut mettre à jour le mot de passe */
 				if( @strlen( $_GET['password'] ) > 0 ) {

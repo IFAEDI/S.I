@@ -86,7 +86,7 @@ class Ville {
 
 	public function toArrayObject() {
 		$arrayVille = array();
-		$arrayVille['id'] = intval($this->id);
+		$arrayVille['id'] = (int) $this->id;
 		$arrayVille['code_postal'] = $this->code_postal;
 		$arrayVille['libelle'] = $this->libelle;
 		$arrayVille['pays'] = $this->pays;

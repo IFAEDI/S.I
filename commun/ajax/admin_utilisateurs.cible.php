@@ -80,7 +80,7 @@ if( @isset( $_GET['action'] ) ) {
 		}
 		else {
 
-			$id = mysql_escape_string( $_GET['id'] );
+			$id = (int)$_GET['id'];
 
 			try {
 				/* On fait dans les noms de variables cours car faire un tableau associatif, c'est chiant. */
@@ -117,8 +117,8 @@ if( @isset( $_GET['action'] ) ) {
 		}
 		else {
 		
-			$id	= mysql_escape_string( $_GET['id'] );
-			$delP   = mysql_escape_string( $_GET['delP'] );
+			$id	= (int)$_GET['id'];
+			$delP   = $_GET['delP'];
 
 			$utilisateur = Utilisateur::RecupererUtilisateur( $id );
 			if( $utilisateur == null ) {
@@ -145,12 +145,12 @@ if( @isset( $_GET['action'] ) ) {
 			$val = array( 'code' => 'error', 'mesg' => 'Variables manquantes.' );
 		}
 		else {
-			$id     = strip_tags( mysql_escape_string( $_GET['id'] ) );
-			$login  = strip_tags( mysql_escape_string( $_GET['login'] ) );
-			$pwd    = strip_tags( mysql_escape_string( $_GET['pwd'] ) );
-			$nom    = strip_tags( mysql_escape_string( $_GET['nom'] ) );
-			$prenom = strip_tags( mysql_escape_string( $_GET['prenom'] ) );
-			$role   = strip_tags( mysql_escape_string( $_GET['role'] ) );
+			$id     = (int)$_GET['id'];
+			$login  = $_GET['login'];
+			$pwd    = $_GET['pwd'];
+			$nom    = $_GET['nom'];
+			$prenom = $_GET['prenom'];
+			$role   = $_GET['role'];
 
 			try {
 				/* Si $id < 0 on ajoute un nouveau, sinon on édite */

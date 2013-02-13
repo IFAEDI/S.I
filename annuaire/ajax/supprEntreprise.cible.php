@@ -27,7 +27,7 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 /* int */ $id_entreprise = NULL;
 
 if (verifierPresent('id_entreprise')) {
-	$id_entreprise = intval($_POST['id_entreprise']);
+	$id_entreprise = (int) $_POST['id_entreprise'];
 
 
 	try {
@@ -47,6 +47,6 @@ else {
 }
 
 
-echo json_encode($json);
+echo json_encode(array_map('Protection_XSS', $json));
 
 ?>
