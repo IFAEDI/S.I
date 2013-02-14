@@ -30,7 +30,7 @@
 				En échange <span class="hero_motcle">d'une présence et d'une visibilité assurées</span> au sein du Département et des évènements de l'AEDI, l’entreprise parrainant s’engage à co-organiser des évènements particuliers pour les étudiants (conférence de présentation, weekend d’intégration, ...), et tenter au mieux de leur offrir certaines opportunités en son sein.
 			</p>
 			<p class="justify">
-				Cett démarche s'inscrit fortement dans la politique professionnalisante soutenue par le Département et l'AEDI. Ces trois années de collaboration entre acteurs de l'entreprise, étudiants et enseignants créent un lien fort, qui a su séduire les plus grands noms de l'informatique.
+				Cette démarche s'inscrit fortement dans la politique professionnalisante soutenue par le Département et l'AEDI. Ces trois années de collaboration entre acteurs de l'entreprise, étudiants et enseignants créent un lien fort, qui a su séduire les plus grands noms de l'informatique.
 			</p>
 		</div>
 		<div id="infoRif" class="span8">
