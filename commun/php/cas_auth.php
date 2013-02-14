@@ -5,7 +5,7 @@
  * Utilisation de phpCAS afin d'authentifier l'utilisateur sur le service
  */
 
-require_once( dirname( __FILE__ ) . '/config.inc.php' );
+require_once( dirname( __FILE__ ) . '/../../config/config.inc.php' );
 require_once( dirname( __FILE__ ) . '/base.inc.php' );
 inclure_fichier('commun', 'CAS.php', 'php');
 
