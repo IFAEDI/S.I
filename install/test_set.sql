@@ -102,7 +102,7 @@ CREATE TABLE `ENTREPRISE` (
 
 LOCK TABLES `ENTREPRISE` WRITE;
 /*!40000 ALTER TABLE `ENTREPRISE` DISABLE KEYS */;
-INSERT INTO `ENTREPRISE` VALUES (2,'SQLI','D&eacute;veloppement PHP / Java principalement.','SSII',NULL),(3,'Accenture','Conseil pour les grands comptes.','Conseil',NULL);
+INSERT INTO `ENTREPRISE` VALUES (2,'TRMJ','D&eacute;veloppement PHP / Java principalement.','SSII',NULL),(3,'Roxenture','Conseil pour les grands comptes.','Conseil',NULL);
 /*!40000 ALTER TABLE `ENTREPRISE` ENABLE KEYS */;
 UNLOCK TABLES;
 
