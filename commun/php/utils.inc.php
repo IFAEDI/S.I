@@ -44,6 +44,7 @@ function Racine_site() {
 }
 
 //Fonction qui gere l'inclusion de fichiers
+// TODO : Recoder  cette caca !
 function inclure_fichier($_module, $_nom_fichier, $_type) {
     $racine = Racine_site();
 
