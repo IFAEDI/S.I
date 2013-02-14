@@ -91,7 +91,7 @@
 						<p class="span4"><img src="evenements/img/rif.jpg" title="Les RIFs sont une occasion unique pour rencontrer de grandes entreprises." /></p>
 						<div class="span6 presentation">
 							<h2>Les Rencontres IF<i class="icon icon-retweet icon-white"></i></h2>
-							<p class="justify">Plus d'une vingtaine d'entreprises sont invitées au sein du Département afin de venir à votre rencontre ! La journée, banalisée pour l'évènement, te permettra de venir te renseigner, poser des questions, prendre des contacts, et peut-être obtenir ton futur stage ou emploi !<br/>
+							<p class="justify">Plus d'une vingtaine d'entreprises sont invitées au sein du Département afin de venir à la rencontre des étudiants ! La journée, banalisée pour l'évènement, te permettra de venir te renseigner, poser des questions, prendre des contacts, et peut-être obtenir ton futur stage ou emploi !<br/>
 							Il s'agit d'une chance unique pour cotoyer de grandes entreprises de l'informatique, alors prépare dès à présent tes CV et ton costume !<br/>
 							<small>Date : Mi Janvier</small></p>
 						</div>
@@ -99,7 +99,7 @@
 					<div class="row">
 						<div class="span6 presentation">
 							<h2><i class="icon icon-volume-up icon-white"></i> Les Conférences</h2>
-							<p class="justify">Durant une heure ou deux, des entreprises viennent vous présenter leurs métiers, ou des concepts qu'elles ont à cœur. C'est l'opportunité de découvrir les tendances actuelles qui agitent le monde professionnel, et peut-être d'échanger de manière conviviale, autour d'un toast, avec des experts dans leur domaine !<br/>
+							<p class="justify">Durant une heure ou deux, des entreprises viennent présenter leurs métiers, ou des concepts qu'elles ont à cœur. C'est l'opportunité de découvrir les tendances actuelles qui agitent le monde professionnel, et peut-être d'échanger de manière conviviale, autour d'un toast, avec des experts dans leur domaine !<br/>
 							<small>Date : Les Jeudis après-midi</small></p>
 						</div>
 						<p class="span4"><img src="evenements/img/conf.jpg" title="Nouvelles technologies ou orientations professionnelles ... Les conférences proposent des sujets au goût de chacun." /></p>

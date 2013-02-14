@@ -25,7 +25,7 @@
 		<div class="span4">
 			<h2><i class="icon icon-bookmark icon-white"></i> Concept</h2>
 			<p class="justify">
-				Chaque année, la nouvelle promotion entrante au Département Informatique (3 IF – Première année du cycle Ingénieur) à l’opportunité d’être parrainée par une entreprise, pour les trois années de ce second cycle.</p>
+				Chaque année, la nouvelle promotion entrante au Département Informatique (3 IF – Première année du cycle Ingénieur) a l’opportunité d’être parrainée par une entreprise, pour les trois années de ce second cycle.</p>
 			<p class="justify">
 				En échange <span class="hero_motcle">d'une présence et d'une visibilité assurées</span> au sein du Département et des évènements de l'AEDI, l’entreprise parrainant s’engage à co-organiser des évènements particuliers pour les étudiants (conférence de présentation, weekend d’intégration, ...), et tenter au mieux de leur offrir certaines opportunités en son sein.
 			</p>

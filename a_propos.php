@@ -30,7 +30,7 @@
 						<div class="hero-unit">
 							<h1>L'Association</h1>
 							<p class="justify">L'<span class="hero_motcle">AEDI</span>, l'Association des Etudiants du Département Informatique, est une figure incontournable de la vie du Département et de la faune associative de l'INSA-Lyon. Depuis 30 ans, celle-ci accompagne les étudiants en Informatique à travers leur parcours, prodiguant de multiples services et organisant des évènements variés.</p>
-							<p class="justify">Comme toute association Loi 1901, l'AEDI n'est pas à but lucratif. L'inscription est <em>gratuite</em> pour tous les étudiants IF, l'association vivant grâce aux actions qu'elle mène, ainsi qu'aux multiples partenariats tissés, notamment avec le Département et les <a title="En savoir plus sur le parrainage" href="index.php?page=Parrainage">parrains de promotion</a>.</p>
+							<p class="justify">Comme toute association Loi 1901, l'AEDI n'est pas à but lucratif. L'inscription est <em>gratuite</em> pour tous les étudiants IF, l'association vivant grâce aux actions qu'elle mène, ainsi qu'aux multiples partenariats tissés, notamment avec le <a title="Site Web du Département Informatique" href="if.insa-lyon.fr">Département</a> et les <a title="En savoir plus sur le parrainage" href="index.php?page=Parrainage">parrains de promotion</a>.</p>
 							<p class="justify">Chaque année, une équipe d'étudiants volontaires est élue pour reprendre sa tête, apportant ainsi de nouvelles pierres à l'édifice.</p>
 						</div>
 						<div style="position:relative;">
@@ -41,7 +41,7 @@
 							<p class="justify">L'AEDI s'est donc donnée comme vocation d'être un <span class="hero_motcle">acteur clé</span> du Département, en aidant les étudiants dans tous les aspects de leurs etudes.</p>
 							
 							<h2 class="bleuEntr" ><i class="icon icon-heart icon-white"></i> Nos Valeurs</h2>
-							<p class="justify">L'AEDI a fait le voeu de croire profondément dans <span class="hero_motcle">le potentiel des étudiants</span> du Département Informatique. C'est pourquoi nous nous efforcons d'apporter le terreau, les opportunités, destinés à faire valoir ces talents. La <strong>diversité</strong> des profils au sein des promotions est également une caracteristique que nous chérissons et encourageons, afin de favoriser une atmosphere d'échanges et de camaraderie plûtot que de compétition.</p>
+							<p class="justify">L'AEDI a fait le voeu de croire profondément dans <span class="hero_motcle">le potentiel des étudiants</span> du Département Informatique. C'est pourquoi nous nous efforcons d'apporter le terreau, les opportunités, destinés à faire valoir ces talents. La <strong>diversité</strong> des profils au sein des promotions est également une caracteristique que nous chérissons et encourageons, afin de favoriser une atmosphère d'échanges et de camaraderie plûtot que de compétition.</p>
 							<p class="justify">Enfin, pur produit de <strong>l'esprit associatif</strong> de l'INSA-Lyon, l'AEDI a à cœur de faire prospérer celui-ci, en encourageant les initiatives étudiantes et les partenariats inter- et extra-campus.</p>
 						</div>
 					</div>
