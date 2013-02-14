@@ -54,12 +54,6 @@ if (verifierPresentObjet('keywords')) {
 		$json['code'] = 'erreurRequete';
 	}
 	else {
-		$nb = count($keywords);
-		for($i = 0; $i < $nb; $i++) {
-			$keywords[$i]['champ'] = $keywords[$i]['champ'];
-			$keywords[$i]['val'] = $keywords[$i]['val'];
-		}
-		
 		$contacts = Contact::Rechercher($keywords);
 		if ($contacts == Contact::getErreurExecRequete()) {
 			$logger->error( 'Une erreur est survenue.' );
