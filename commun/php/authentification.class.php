@@ -8,7 +8,8 @@
 
 /* Considère que les sessions sont déjà initialisées */
 
-inclure_fichier( 'commun', 'config.inc', 'php' );
+#inclure_fichier( 'commun', 'config.inc', 'php' );
+require_once( dirname( __FILE__ ) . '/../../config/config.inc.php' );
 inclure_fichier( 'commun', 'CAS',    'php' );
 inclure_fichier( 'commun', 'bd.inc',     'php' );
 inclure_fichier( 'commun', 'utilisateur.class', 'php' );
