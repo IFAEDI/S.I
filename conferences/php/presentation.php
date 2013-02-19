@@ -23,10 +23,10 @@
                 il est nécessaire que les étudiants apprennent par d'autres sources que l'école.
                 </p>
                 <p>
-                Pour leur faciliter la tâche, l'AEDI propose des conférences aux étudiants. Ces conférences sont
-                proposées par des ingénieurs issus du monde de l'entreprise, qui présentent des technologies ou des
-                concepts. Ces rencontres sont à la fois profitables pour les entreprises qui améliorent leurs carnets
-                de contacts et les étudiants qui en apprennent plus sur l'entreprise.
+                Pour leur faciliter la tâche, l'AEDI propose des conférences aux étudiants. Ces séminaires sont
+                proposés par des ingénieurs issus du monde de l'entreprise, qui présentent des technologies ou des
+                concepts. Ces rencontres sont à la fois profitables pour les intervenants qui améliorent leurs carnets
+                de contacts et les étudiants qui en apprennent plus sur la société.
                 </p>
 			</div>
 		</div>
@@ -36,18 +36,18 @@
 			<h2><i class="icon icon-bookmark icon-white"></i> Concept</h2>
 			<p class="justify">
             Le concept des conférences est de faire se rencontrer les étudiants et les entreprises tout en permettant
-            futurs ingénieurs d'actualiser leurs connaissances du monde de l'entreprise. Pour cela, des employés d'une
-            entreprise viennent à l'INSA les jeudis après-midis, effectuent leurs présentations devant des étudiants,
-            inscrits de leur plein gré pour assister à la conférence. A la fin de la conférence, ingénieurs et étudiants
-            discutent de manière informelle, parfois autour d'un buffet. Suite à cette expérience, les parties prenantes
-            repartent avec de nouveaux contacts professionnels.
+            aux futurs ingénieurs d'actualiser leurs connaissances du monde de l'entreprise. Pour cela, des employés
+            d'une société viennent à l'INSA les jeudis après-midis, effectuent leurs présentations devant des
+            étudiants inscrits de leur plein gré pour assister à la conférence. A la fin de cette dernière, ingénieurs et
+            étudiants discutent de manière informelle, parfois autour d'un buffet. Suite à cette expérience, les parties
+            prenantes repartent avec de nouveaux contacts professionnels.
 			</p>
 		</div>
 		<div id="infoRif" class="span8">
 			<h2><i class="icon icon-search icon-white"></i> Informations</h2>
 
             <p>
-            Vous êtes une entreprise et vous êtes intéressés pour présenter votre entreprise, une méthode, un thème
+            Vous êtes une entreprise et vous êtes intéressés pour présenter cette dernière, ou une méthode, un thème
             ou une technologie que vous maîtrisez en interne? Voici les informations qui vous intéressent.
             </p>
 
@@ -59,16 +59,16 @@
 			<h3>Tarifs</h3>
             <p>
             Les tarifs pour présenter une conférence thématique dépendent du statut de votre entreprise par rapport
-            à l'AEDI: vous aurez ainsi accès à un tarif différent si votre entreprise parraine une des trois promotions
-            en cours, si votre entreprise paye la taxe d'apprentisssage au département IF ou si vous n'êtes dans aucune
+            à l'AEDI: vous aurez ainsi accès à un tarif différent si votre société parraine une des trois promotions
+            en cours, si celle-ci paye la taxe d'apprentisssage au département IF ou si vous n'êtes dans aucune
             de ces deux situations.
             </p>
             <p>
             Ces tarifs comprennent les prestations suivantes:
                 <ul>
-                    <li>Communication auprès des étudiants (affichage, mailing, etc.).</li>
-                    <li>Logistique liée à la conférence (mise à disposition de la salle, etc.)</li>
-                    <li>etc.</li>
+                    <li>Communication auprès des étudiants: campagnes d'affichage, mailing listes, etc.</li>
+                    <li>Logistique liée à la conférence: réservation / mise à disposition de la salle, accueil, etc.</li>
+                    <li>Réservation et mise en place d'un buffet (avec supplément).</li>
                 </ul>
             </p>
             <?php // TODO remplir les tarifs
