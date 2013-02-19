@@ -116,17 +116,6 @@
 			<h3>Questions</h3>
 			<p>Pour plus d'informations concernant l'organisation d'un tel évènement, n'hésitez pas à nous contacter à l'adresse suivante :</p>
 			<p class="centre"><a href="#" e-name="aedi.bureau" class="e-noBot btn btn-mini btn-info" e-domain="listes.insa-lyon.fr"><i class="icon-eye-open icon-white"></i> Afficher Email</a></p>
-
-            <?php // TODO partie en répétition de la partie précédente?
-            /*
-			<h2><i class="icon icon-pencil icon-white"></i>Inscription</h2>
-			<p>
-				Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vivamus in erat a dui auctor eleifend bibendum et felis. Curabitur rhoncus scelerisque felis non vehicula. Suspendisse potenti. Maecenas velit dolor, porttitor sed tincidunt at, pharetra at lacus. Integer id sapien enim, interdum auctor ligula. In pulvinar nulla ut dolor ornare bibendum. Fusce et odio eleifend nisl placerat vehicula.
-			</p>
-
-			<p class="centre"><a href="#" e-name="aedi.bureau" class="e-noBot btn btn-large btn-primary" e-domain="listes.insa-lyon.fr"><i class="icon-eye-open icon-white"></i>Afficher Email</a></p>
-             */ ?>
-			
 		</div>
 	</div>
 </div>
