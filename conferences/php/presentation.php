@@ -23,9 +23,9 @@
                 il est nécessaire que les étudiants apprennent par d'autres sources que l'école.
                 </p>
                 <p>
-                Pour leur faciliter la tâche, l'AEDI propose des conférences aux étudiants. Ces séminaires sont
-                proposés par des ingénieurs issus du monde de l'entreprise, qui présentent des technologies ou des
-                concepts. Ces rencontres sont à la fois profitables pour les intervenants qui améliorent leurs carnets
+                Pour leur faciliter la tâche, l'AEDI propose des conférences aux élèves. Ces séminaires sont
+                proposés par des <span class="hero_motcle">ingénieurs issus du monde de l'entreprise</span>, qui présentent des <span class="hero_motcle">technologies ou des
+                concepts</span>. Ces rencontres sont à la fois profitables pour les intervenants qui améliorent leurs carnets
                 de contacts et les étudiants qui en apprennent plus sur la société.
                 </p>
 			</div>
@@ -34,21 +34,17 @@
 	<div class="row">
 		<div class="span4">
 			<h2><i class="icon icon-bookmark icon-white"></i> Concept</h2>
-			<p class="justify">
-            Le concept des conférences est de faire se rencontrer les étudiants et les entreprises tout en permettant
-            aux futurs ingénieurs d'actualiser leurs connaissances du monde de l'entreprise. Pour cela, des employés
-            d'une société viennent à l'INSA les jeudis après-midis, effectuent leurs présentations devant des
-            étudiants inscrits de leur plein gré pour assister à la conférence. A la fin de cette dernière, ingénieurs et
-            étudiants discutent de manière informelle, parfois autour d'un buffet. Suite à cette expérience, les parties
-            prenantes repartent avec de nouveaux contacts professionnels.
-			</p>
+			<p>Le concept des conférences est de faire se rencontrer les étudiants et les entreprises tout en permettant
+            aux futurs ingénieurs d'<strong>actualiser leurs connaissances du monde de l'entreprise</strong>.</p>
+			<p>Pour cela, des employés d'une société viennent à l'INSA les jeudis après-midis, effectuent leurs présentations devant des
+            étudiants inscrits de leur plein gré pour assister à la conférence.</p> 
+			<p>A la fin de celle-ci, ingénieurs et étudiants discutent de manière informelle, parfois autour d'un buffet. Suite à cette expérience, les parties
+            prenantes repartent avec de <strong>nouveaux contacts</strong> professionnels.</p>
 		</div>
 		<div id="infoRif" class="span8">
 			<h2><i class="icon icon-search icon-white"></i> Informations</h2>
-
             <p>
-            Vous êtes une entreprise et vous êtes intéressés pour présenter cette dernière, ou une méthode, un thème
-            ou une technologie que vous maîtrisez en interne? Voici les informations qui vous intéressent.
+            Vous êtes une entreprise et vous êtes intéressés pour présenter cette dernière, ou une méthode, un thème ou une technologie que vous maîtrisez en interne? Voici les informations qui vous intéressent.
             </p>
 
 			<h3>Dates possibles</h3>
