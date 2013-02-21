@@ -20,9 +20,9 @@
 				</p>
 			</div>
 			<div class="well">
-				<p style="text-align:justify;"><span class="hero_motcle">AEDI</span> <small>(nf)</small> : <em>Association de l'INSA-Lyon créée pour renforcer la cohésion entre les étudiants du Département Informatique, les aider dans leur cursus, et établir des contacts privilégiés avec les entreprises.</em></p>
-				<p style="text-align:justify;">Cela fait plus de vingt-neuf ans que notre association étoffe son éventails d'évènements, de la Semaine d'Intégration des nouveaux élèves aux Rencontres IF, forum ouvert aux entreprises, en passant par le Week-End Ski, le Concert IF, le Voyage de fin d'étude, ...</p>
-				<p style="text-align:justify;">Avec à sa tête une équipe dynamique, l'AEDI s'épanouit et grandit, riche des liens qu'elle tisse avec les entreprises et anciens étudiants.</p>
+				<p><span class="hero_motcle">AEDI</span> <small>(nf)</small> : <em>Association de l'INSA-Lyon créée pour renforcer la cohésion entre les étudiants du Département Informatique, les aider dans leur cursus, et établir des contacts privilégiés avec les entreprises.</em></p>
+				<p>Cela fait plus de vingt-neuf ans que notre association étoffe son éventails d'évènements, de la Semaine d'Intégration des nouveaux élèves aux Rencontres IF, forum ouvert aux entreprises, en passant par le Week-End Ski, le Concert IF, le Voyage de fin d'étude, ...</p>
+				<p>Avec à sa tête une équipe dynamique, l'AEDI s'épanouit et grandit, riche des liens qu'elle tisse avec les entreprises et anciens étudiants.</p>
 				<p style="text-align:justify; margin-bottom:20px;"><strong>Soyez le ou la bienvenu(e) sur notre site !</strong>
 				</p>
 				<div style="width:50%; float:left; display:inline-block;" >
@@ -97,7 +97,7 @@
         </p>
         </div>
         <div class="row" style="text-align:center;">
-            <p class="span12">
+            <p class="span12 centre">
                 <embed style="margin-top:-20px;" src="./commun/img/societe_generale.swf" class="adapt-width" span=8 scale=0.60 max=800 />
             </p>
         </div>
