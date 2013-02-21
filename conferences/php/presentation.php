@@ -55,15 +55,15 @@
 			<h3>Tarifs</h3>
             <p>
             Les tarifs pour présenter une conférence thématique dépendent du statut de votre entreprise par rapport
-            à l'AEDI: vous aurez ainsi accès à un tarif différent si votre société parraine une des trois promotions
+            à l'AEDI : vous aurez ainsi accès à un tarif différent si votre société parraine une des trois promotions
             en cours, si celle-ci paye la taxe d'apprentisssage au département IF ou si vous n'êtes dans aucune
             de ces deux situations.
             </p>
             <p>
-            Ces tarifs comprennent les prestations suivantes:
+            Ces tarifs comprennent les prestations suivantes :
                 <ul>
-                    <li>Communication auprès des étudiants: campagnes d'affichage, mailing listes, etc.</li>
-                    <li>Logistique liée à la conférence: réservation / mise à disposition de la salle, accueil, etc.</li>
+                    <li>Communication auprès des étudiants : campagnes d'affichage, mailing listes, etc.</li>
+                    <li>Logistique liée à la conférence : réservation / mise à disposition de la salle, accueil, etc.</li>
                     <li>Réservation et mise en place d'un buffet (avec supplément).</li>
                 </ul>
             </p>
