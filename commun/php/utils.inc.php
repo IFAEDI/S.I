@@ -139,7 +139,7 @@ function Protection_XSS($_chaine) {
     if (is_array($_chaine))
         return array_map('Protection_XSS', $_chaine);
     else
-        return utf8_encode(htmlentities(utf8_decode($_chaine)));
+        return htmlspecialchars($_chaine);
 }
 
 

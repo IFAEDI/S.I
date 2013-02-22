@@ -90,7 +90,7 @@ $('document').ready(function() {
 				dataType: "json",
 				success : function(donnees) {
 					if( donnees.code == 'ok' ) {
-						nomNonPris = !donnees.answer;
+						nomNonPris = donnees.answer.length != 0 || donnees.answer != '0';
 					}
 					else {
 						Annuaire.afficherErreur( donnees.mesg );

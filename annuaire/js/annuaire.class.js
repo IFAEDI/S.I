@@ -217,7 +217,7 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 	}
 	
 	// Envoi :
-	var description = {id_entreprise: parseInt($('#formUpdateEntrepriseId').val()), nom : encodeURIComponent(nomEntr), secteur: encodeURIComponent($('#formUpdateEntrepriseSecteur').val()), description: encodeURIComponent($('#formUpdateEntrepriseDescription').val())};
+	var description = {id_entreprise: parseInt($('#formUpdateEntrepriseId').val()), nom : nomEntr, secteur: $('#formUpdateEntrepriseSecteur').val(), description: $('#formUpdateEntrepriseDescription').val()};
 	var /* objet */ requete = $.ajax({
 		url: "./annuaire/ajax/updateEntreprise.cible.php",
 		type: "POST",
@@ -244,9 +244,6 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 			if (donnees.id > 0) { // Ajout d'une entreprise :
 				Annuaire.insererEntrepriseDansListe({id_entreprise: donnees.id, nom: nomEntr});
 				Annuaire.afficherListeEntreprises();
-				description.nom = decodeURIComponent(description.nom );
-				description.secteur = decodeURIComponent(description.secteur );
-				description.description = decodeURIComponent(description.description );
 				container = {'description' : description};
 				Annuaire.infoEntrepriseCourante = container;
 				var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
@@ -264,9 +261,6 @@ Annuaire.updaterEntreprise = function updaterEntreprise() {
 				}, Annuaire.infoEntrepriseCourante.description.id_entreprise);
 				
 				if (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise) {
-					description.nom = decodeURIComponent(description.nom );
-					description.secteur = decodeURIComponent(description.secteur );
-					description.description = decodeURIComponent(description.description );
 					Annuaire.infoEntrepriseCourante.description = description;
 					var objSimulantReponseServeur = { entreprise : Annuaire.infoEntrepriseCourante};
 					Annuaire.afficherInfoEntreprise(objSimulantReponseServeur);
@@ -306,32 +300,32 @@ Annuaire.updaterContact = function updaterContact() {
 	$('#formUpdateContactTelGroup ul').children().each(function(){
 		tels.push([$(this).find('.labelVal').attr('title'), $(this).find('.val').text()]);
 	});
-	if ($('#formUpdateContactTel').val() != '') { tels.push([encodeURIComponent($('#formUpdateContactTelLabel option:selected').val()), encodeURIComponent($('#formUpdateContactTel').val())]); }
+	if ($('#formUpdateContactTel').val() != '') { tels.push([$('#formUpdateContactTelLabel option:selected').val(), $('#formUpdateContactTel').val()]); }
 	
 	var /* array */ emails = [];
 	$('#formUpdateContactEmailGroup ul').children().each(function(){
 		emails.push([$(this).find('.labelVal').attr('title'), $(this).find('.val').text()]);
 	});
-	if ($('#formUpdateContactEmail').val() != '') { emails.push([encodeURIComponent($('#formUpdateContactEmailLabel option:selected').val()), encodeURIComponent($('#formUpdateContactEmail').val())]); }
+	if ($('#formUpdateContactEmail').val() != '') { emails.push([$('#formUpdateContactEmailLabel option:selected').val(), $('#formUpdateContactEmail').val()]); }
 	
 	// Envoi :
 	var /* objet */ nouveauContact = {
 		id_contact: parseInt($('#formUpdateContactId').val()),
 		id_entreprise: parseInt($('#formUpdateContactEntrepriseId').val()),
-		fonction : encodeURIComponent($('#formUpdateContactPoste').val()),
+		fonction : $('#formUpdateContactPoste').val(),
 		personne : {
 			id : parseInt($('#formUpdateContactPersonneId').val()),
-			nom : encodeURIComponent($('#formUpdateContactNom').val()),
-			prenom : encodeURIComponent($('#formUpdateContactPrenom').val()),
+			nom : $('#formUpdateContactNom').val(),
+			prenom : $('#formUpdateContactPrenom').val(),
 			mails : emails,
 			telephones : tels
 		},
 		ville : {
-			code_postal : encodeURIComponent($('#formUpdateContactVilleCodePostal').val()),
-			libelle : encodeURIComponent($('#formUpdateContactVilleLibelle').val()),
-			pays : encodeURIComponent($('#formUpdateContactVillePays').val())
+			code_postal : $('#formUpdateContactVilleCodePostal').val(),
+			libelle : $('#formUpdateContactVilleLibelle').val(),
+			pays : $('#formUpdateContactVillePays').val()
 		},
-		commentaire : encodeURIComponent($('#formUpdateContactCom').val()),
+		commentaire : $('#formUpdateContactCom').val(),
 		priorite : parseInt($('#formUpdateContactPriorite').val())
 	};
 	var /* objet */ requete = $.ajax({
@@ -359,22 +353,6 @@ Annuaire.updaterContact = function updaterContact() {
 			
 				nouveauContact.personne.id = donnees.id_personne;
 				if (typeof Annuaire.infoEntrepriseCourante.contacts === "undefined") { Annuaire.infoEntrepriseCourante.contacts = []; }					
-				nouveauContact.fonction = decodeURIComponent(nouveauContact.fonction);
-				nouveauContact.personne.nom = decodeURIComponent(nouveauContact.personne.nom);
-				nouveauContact.personne.prenom = decodeURIComponent(nouveauContact.personne.prenom);
-				for (var i in nouveauContact.personne.mails) {
-					nouveauContact.personne.mails[i][0] = decodeURIComponent(nouveauContact.personne.mails[i][0]);
-					nouveauContact.personne.mails[i][1] = decodeURIComponent(nouveauContact.personne.mails[i][1]);
-				}
-				for (var i in nouveauContact.personne.telephones) {
-					nouveauContact.personne.telephones[i][0] = decodeURIComponent(nouveauContact.personne.telephones[i][0]);
-					nouveauContact.personne.telephones[i][1] = decodeURIComponent(nouveauContact.personne.telephones[i][1]);
-				}
-				nouveauContact.ville.code_postal = decodeURIComponent(nouveauContact.ville.code_postal);
-				nouveauContact.ville.libelle = decodeURIComponent(nouveauContact.ville.libelle);
-				nouveauContact.ville.pays = decodeURIComponent(nouveauContact.ville.pays);
-				nouveauContact.commentaire = decodeURIComponent(nouveauContact.commentaire);
-
 				// On met à jour l'ancien contact ou ajoute le nouveau :
 				if (idNouvContact == 0) {
 					for (var i in Annuaire.infoEntrepriseCourante.contacts) {
@@ -433,7 +411,7 @@ Annuaire.ajouterCommentaire = function ajouterCommentaire() {
 	var categorie = $('#formAjoutCommentaire .formAjoutCommentaireCateg:checked');
 	var /* objet */ nouveauCommentaire = {
 		'id_entreprise': idEntrepriseActuelle,
-		'contenu' : encodeURIComponent($('#formAjoutCommentaireContenu').val()),
+		'contenu' : $('#formAjoutCommentaireContenu').val(),
 		'categorie' : parseInt(categorie.val())
 	};
 	var /* objet */ requete = $.ajax({
@@ -455,7 +433,6 @@ Annuaire.ajouterCommentaire = function ajouterCommentaire() {
 				if (idEntrepriseActuelle == Annuaire.infoEntrepriseCourante.description.id_entreprise) { // Si l'utilisateur est toujours sur la même entreprise, on met à jour son affichage :
 					nouveauCommentaire.id_commentaire = donnees.id;
 					if (typeof Annuaire.infoEntrepriseCourante.commentaires === "undefined") { Annuaire.infoEntrepriseCourante.commentaires = []; }
-					nouveauCommentaire.contenu = decodeURIComponent(nouveauCommentaire.contenu);
 					nouveauCommentaire.personne = Annuaire.utilisateur.personne;
 					nouveauCommentaire.timestamp = new Date();
 					nouveauCommentaire.timestamp = nouveauCommentaire.timestamp.format('yyyy-mm-dd hh:mm:ss');
