@@ -46,7 +46,7 @@ $logger->debug( "\"".$utilisateur->getLogin()."\" a lancé une requête." );
 if (verifierPresent('contenu') && verifierPresent('id_entreprise')) {
 	$contenu = $_POST['contenu'];
 
-	$id_entreprise = $_POST['id_entreprise'];
+	$id_entreprise = (int)$_POST['id_entreprise'];
 
 	/* Vérification du champ optionnel */
 	if (verifierPresent('categorie')) {

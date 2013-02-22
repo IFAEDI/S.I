@@ -47,7 +47,7 @@ $listePostes = Contact::GetListeFonctions();
 			// Génération de la liste des noms d'entreprises :								
 			/* int */ $nb_entreprises = count($listeEntreprises);	
 			for (/* int */ $i = 0; $i < $nb_entreprises; $i++) {
-				echo 'Annuaire.listeEntreprises['.$i.'] = ['.Protection_XSS($listeEntreprises[$i]->getId()).', "'.Protection_XSS($listeEntreprises[$i]->getNom()).'"];';
+				echo 'Annuaire.listeEntreprises['.$i.'] = ['.(int)$listeEntreprises[$i]->getId().', "'.Protection_XSS($listeEntreprises[$i]->getNom()).'"];';
 			}
 
 			// On en profite pour passer au JS des info sur l'utilisateur :

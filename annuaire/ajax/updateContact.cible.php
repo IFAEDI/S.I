@@ -51,34 +51,10 @@ if (verifierPresent('id_entreprise') && verifierPresent( 'fonction' ) && verifie
 
 	/* Personne */
 	$personne = $_POST['personne'];
-	$personne['nom'] = $personne['nom'];
-	$personne['prenom'] = $personne['prenom'];
 	$personne['id'] = (int) $personne['id'];
-	$compteur = 0;
-	if (array_key_exists('telephones', $personne)) {
-		$compteur = count($personne['telephones']);
-
-		for($i = 0; $i < $compteur; $i++) {
-			$personne['telephones'][$i][0] = $personne['telephones'][$i][0];
-			$personne['telephones'][$i][1] = $personne['telephones'][$i][1];
-		}
-	}
-
-	$compteur = 0;
-	if (array_key_exists('mails', $personne)) {
-		$compteur = count($personne['mails']);
-
-		for($i = 0; $i < $compteur; $i++) {
-			$personne['mails'][$i][0] = $personne['mails'][$i][0];
-			$personne['mails'][$i][1] = $personne['mails'][$i][1];
-		}
-	}
 
 	/* Ville */
 	$ville = $_POST['ville'];
-	$ville['code_postal'] = $ville['code_postal'];
-	$ville['libelle'] = $ville['libelle'];
-	$ville['pays'] = $ville['pays'];
 
 	/* Vérification des champs facultatifs et récupération de leurs valeurs */
 	if (verifierPresent('id_contact')) {
