@@ -33,6 +33,7 @@ Stages.afficherResultats = function afficherResultats(json) {
 	var pluriel = (json.stages.length > 1) ? 's' : '';
 	$('#information').text(json.stages.length  + ' résultat' + pluriel + ' trouvé' + pluriel + '. Cliquez sur le bouton à gauche pour avoir plus d\'info sur le stage.');
 
+	json.stages.sort(function(s1,s2){ return s1.entreprise.localeCompare(s2.entreprise); }); // Tri des résultats avant affichage, par nom d'entreprise croissante.
 	$('#resultats').html(Stages.templatesResultatsRecherche(json));
 
 	/* Ajout de la gestion du clique permettant d'afficher plus d'infos */
@@ -71,7 +72,6 @@ Stages.afficherResultats = function afficherResultats(json) {
 		$(".temp").prev().attr('deploye', 0);
         $(".temp").remove(); 
 	});
-	$("#fenetre th:nth-child(2)").trigger('click');
 }
 
 
