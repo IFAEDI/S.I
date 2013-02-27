@@ -29,32 +29,32 @@
 					<div class="tab-pane active" id="about-asso">
 						<div class="hero-unit">
 							<h1>L'Association</h1>
-							<p class="justify">L'<span class="hero_motcle">AEDI</span>, l'Association des Etudiants du Département Informatique, est une figure incontournable de la vie du Département et de la faune associative de l'INSA-Lyon. Depuis 30 ans, celle-ci accompagne les étudiants en Informatique à travers leur parcours, prodiguant de multiples services et organisant des évènements variés.</p>
-							<p class="justify">Comme toute association Loi 1901, l'AEDI n'est pas à but lucratif. L'inscription est <em>gratuite</em> pour tous les étudiants IF, l'association vivant grâce aux actions qu'elle mène, ainsi qu'aux multiples partenariats tissés, notamment avec le <a title="Site Web du Département Informatique" href="if.insa-lyon.fr">Département</a> et les <a title="En savoir plus sur le parrainage" href="index.php?page=Parrainage">parrains de promotion</a>.</p>
-							<p class="justify">Chaque année, une équipe d'étudiants volontaires est élue pour reprendre sa tête, apportant ainsi de nouvelles pierres à l'édifice.</p>
+							<p>L'<span class="hero_motcle">AEDI</span>, l'Association des Etudiants du Département Informatique, est une figure incontournable de la vie du Département et de la faune associative de l'INSA-Lyon. Depuis 30 ans, celle-ci accompagne les étudiants en Informatique à travers leur parcours, prodiguant de multiples services et organisant des évènements variés.</p>
+							<p>Comme toute association Loi 1901, l'AEDI n'est pas à but lucratif. L'inscription est <em>gratuite</em> pour tous les étudiants IF, l'association vivant grâce aux actions qu'elle mène, ainsi qu'aux multiples partenariats tissés, notamment avec le <a title="Site Web du Département Informatique" href="if.insa-lyon.fr">Département</a> et les <a title="En savoir plus sur le parrainage" href="index.php?page=Parrainage">parrains de promotion</a>.</p>
+							<p>Chaque année, une équipe d'étudiants volontaires est élue pour reprendre sa tête, apportant ainsi de nouvelles pierres à l'édifice.</p>
 						</div>
 						<div style="position:relative;">
 							<h2 class="bleuBur"><i class="icon icon-star icon-white"></i> Notre Mission</h2>
-							<p class="justify">L'AEDI a pour rôle de <span class="hero_motcle">renforcer la cohésion entre les étudiants du Département Informatique, les aider dans leur cursus, et établir des contacts privilégiés avec les entreprises</span>.</p>
-							<p class="justify">Pour cela, l'AEDI profite aujourd'hui d'un riche <strong>réseau</strong> construit au cours des ans, regroupant anciens élèves investis, entreprises clés du monde informatique, et enseignants motivés. Ces ressources, mises à disposition à travers de nombreux évènements fédérateurs, comme les <a title="En savoir plus sur les RIF" href="index.php?page=RIFs_Entreprise">Rencontre IF</a> ou les <a title="En savoir plus sur les conférences" href="index.php?page=Conferences">conférences</a>, offrent des opportunités en or aux étudiants de découvrir les acteurs de l'Informatique, et leur futur employeur. Réciproquement, cela permet aux entreprises de renforcer leur présence et découvrir des profils intéressants.</p>
-							<p class="justify">S'il est primordial pour les élèves de profiter de ces occasions et de se projeter dans le futur, l'AEDI a aussi conscience de l'importance, parfois, de simplement profiter du présent, de ces années étudiantes qui passent bien trop vite. Dans cette optique sont régulierement organisés des <strong>évènements récréatifs</strong>. Intégration des nouveaux venus, sorties en ville, goûters, activités sportives, ... Toutes les occasions sont bonnes pour renforcer les liens au sein du Département, mais aussi avec l'exterieur, grâce aux bonnes relations développées avec d'autres associations étudiantes lyonnaises.</p>
-							<p class="justify">L'AEDI s'est donc donnée comme vocation d'être un <span class="hero_motcle">acteur clé</span> du Département, en aidant les étudiants dans tous les aspects de leurs etudes.</p>
+							<p>L'AEDI a pour rôle de <span class="hero_motcle">renforcer la cohésion entre les étudiants du Département Informatique, les aider dans leur cursus, et établir des contacts privilégiés avec les entreprises</span>.</p>
+							<p>Pour cela, l'AEDI profite aujourd'hui d'un riche <strong>réseau</strong> construit au cours des ans, regroupant anciens élèves investis, entreprises clés du monde informatique, et enseignants motivés. Ces ressources, mises à disposition à travers de nombreux évènements fédérateurs, comme les <a title="En savoir plus sur les RIF" href="index.php?page=RIFs_Entreprise">Rencontre IF</a> ou les <a title="En savoir plus sur les conférences" href="index.php?page=Conferences">conférences</a>, offrent des opportunités en or aux étudiants de découvrir les acteurs de l'Informatique, et leur futur employeur. Réciproquement, cela permet aux entreprises de renforcer leur présence et découvrir des profils intéressants.</p>
+							<p>S'il est primordial pour les élèves de profiter de ces occasions et de se projeter dans le futur, l'AEDI a aussi conscience de l'importance, parfois, de simplement profiter du présent, de ces années étudiantes qui passent bien trop vite. Dans cette optique sont régulierement organisés des <strong>évènements récréatifs</strong>. Intégration des nouveaux venus, sorties en ville, goûters, activités sportives, ... Toutes les occasions sont bonnes pour renforcer les liens au sein du Département, mais aussi avec l'exterieur, grâce aux bonnes relations développées avec d'autres associations étudiantes lyonnaises.</p>
+							<p>L'AEDI s'est donc donnée comme vocation d'être un <span class="hero_motcle">acteur clé</span> du Département, en aidant les étudiants dans tous les aspects de leurs etudes.</p>
 							
 							<h2 class="bleuEntr" ><i class="icon icon-heart icon-white"></i> Nos Valeurs</h2>
-							<p class="justify">L'AEDI a fait le voeu de croire profondément dans <span class="hero_motcle">le potentiel des étudiants</span> du Département Informatique. C'est pourquoi nous nous efforcons d'apporter le terreau, les opportunités, destinés à faire valoir ces talents. La <strong>diversité</strong> des profils au sein des promotions est également une caracteristique que nous chérissons et encourageons, afin de favoriser une atmosphère d'échanges et de camaraderie plûtot que de compétition.</p>
-							<p class="justify">Enfin, pur produit de <strong>l'esprit associatif</strong> de l'INSA-Lyon, l'AEDI a à cœur de faire prospérer celui-ci, en encourageant les initiatives étudiantes et les partenariats inter- et extra-campus.</p>
+							<p>L'AEDI a fait le voeu de croire profondément dans <span class="hero_motcle">le potentiel des étudiants</span> du Département Informatique. C'est pourquoi nous nous efforcons d'apporter le terreau, les opportunités, destinés à faire valoir ces talents. La <strong>diversité</strong> des profils au sein des promotions est également une caracteristique que nous chérissons et encourageons, afin de favoriser une atmosphère d'échanges et de camaraderie plûtot que de compétition.</p>
+							<p>Enfin, pur produit de <strong>l'esprit associatif</strong> de l'INSA-Lyon, l'AEDI a à cœur de faire prospérer celui-ci, en encourageant les initiatives étudiantes et les partenariats inter- et extra-campus.</p>
 						</div>
 					</div>
 					<div class="tab-pane" id="about-team">
 						<div class="hero-unit">
 							<h1>L'Equipe</h1>
-							<p class="justify">L'AEDI est gérée par une équipe d'étudiants bénévoles et actifs, élus pour un an. Chacun y apporte ses propres compétences, permettant ainsi à l'association de proposer un éventail riche et varié d'évènements et de services.</p>
+							<p>L'AEDI est gérée par une équipe d'étudiants bénévoles et actifs, élus pour un an. Chacun y apporte ses propres compétences, permettant ainsi à l'association de proposer un éventail riche et varié d'évènements et de services.</p>
 						</div>
 						<div class="row">
 							<p class="span4"><img src="commun/img/equipe/bureau.jpg" title="Le Bureau" width=350 /></p>
 							<div class="span6">
 								<h2 class="bleuBur" >Le Bureau <i class="icon icon-tag icon-white"></i></h2>
-								<p class="justify">A la tête de l'association, le Bureau coordonne les différentes équipes.<br/>
+								<p>A la tête de l'association, le Bureau coordonne les différentes équipes.<br/>
 								<small>De gauche à droite :</small></p>
 								<ul>
 									<li><span class="hero_motcle">Charlotte Pigeon</span> : Trésorière</li>
@@ -67,7 +67,7 @@
 						<div class="row">
 							<div class="span6">
 								<h2 class="bleuEntr" ><i class="icon icon-flag icon-white"></i>L'équipe Entreprise</h2>
-								<p class="justify">Chargée des relations Entreprises, l'équipe organise notamment les <a href="index.php?page=RIFs_Entreprise" title="Rencontres IF">RIFs</a>.<br/>
+								<p>Chargée des relations Entreprises, l'équipe organise notamment les <a href="index.php?page=RIFs_Entreprise" title="Rencontres IF">RIFs</a>.<br/>
 								<small>De gauche à droite :</small></p>
 								<ul>
 									<li><strong>Alina Ghermann</strong></li>
@@ -83,7 +83,7 @@
 							<p class="span4"><img src="commun/img/equipe/equipe_animation.jpg" title="L'équipe Animation" width=350 /></p>
 							<div class="span6">
 								<h2 class="bleuAnim" >L'équipe Animation <i class="icon icon-music icon-white"></i></h2>
-								<p class="justify">Cette équipe organise toute l'année des <a href="index.php?page=Evenements_Etudiant" title="Présentation des évènements">évènements</a> à destination des étudiants.<br/>
+								<p>Cette équipe organise toute l'année des <a href="index.php?page=Evenements_Etudiant" title="Présentation des évènements">évènements</a> à destination des étudiants.<br/>
 								<small>De gauche à droite :</small></p>
 								<ul>
 									<li><strong>Cédric Morin</strong></li>
@@ -96,7 +96,7 @@
 						<div class="row">
 							<div class="span6">
 								<h2 class="bleuCom" ><i class="icon icon-envelope icon-white"></i>L'équipe Communication</h2>
-								<p class="justify">Affiches, newsletters, réseaux sociaux, ... Cette équipe rend visible l'association et ses évènements sur le campus.<br/>
+								<p>Affiches, newsletters, réseaux sociaux, ... Cette équipe rend visible l'association et ses évènements sur le campus.<br/>
 								<small>De gauche à droite :</small></p>
 								<ul>
 									<li><strong>Benoit Delerue</strong></li>
@@ -110,7 +110,7 @@
 							<p class="span4"><img src="commun/img/equipe/equipe_admin.jpg" title="L'équipe Admin" width=350 /></p>
 							<div class="span6">
 								<h2 class="bleuAnim" >L'équipe Admin <i class="icon icon-eye-open icon-white"></i></h2>
-								<p class="justify">En charge du patrimoine informatique de l'AEDI, ils veillent sur le bon fonctionnement et l'amélioration des services.<br/>
+								<p>En charge du patrimoine informatique de l'AEDI, ils veillent sur le bon fonctionnement et l'amélioration des services.<br/>
 								<small>De gauche à droite :</small></p>
 								<ul>
 									<li><strong>Pierre-Henri Shoffit</strong></li>
@@ -125,7 +125,7 @@
 					<div class="tab-pane" id="about-site">
 						<div class="hero-unit">
 							<h1>Le Site-Web</h1>
-							<p class="justify">Ce site ne se résume pas à être une vitrine de notre Association et Département. Il propose l'ensemble des services informatiques de l'AEDI, à destination des étudiants et entreprises.</p>
+							<p>Ce site ne se résume pas à être une vitrine de notre Association et Département. Il propose l'ensemble des services informatiques de l'AEDI, à destination des étudiants et entreprises.</p>
 						</div>
 						
 						<div class="accordion" id="accordion-site">
@@ -145,7 +145,7 @@
 												<div class="span4">
 													<div>
 														<h4>Catalogue de stages</h4>
-														<p class="justify">Il contient les descriptions de l'ensemble des stages et PFE proposés par des entreprises au Département Informatique dans l'année.<br/>
+														<p>Il contient les descriptions de l'ensemble des stages et PFE proposés par des entreprises au Département Informatique dans l'année.<br/>
 														Grâce aux outils de recherche, tu ne pourras que trouver ton bonheur ...</p>
 														<p class="centre"><a class="btn btn-inverse" href="index.php?page=Stages_Etudiant">Accéder</a></p>
 													</div>
@@ -153,7 +153,7 @@
 												<div class="span4">
 													<div>
 														<h4>Inscription aux simulations d'entretiens</h4>
-														<p class="justify">Ces simulations, proposées grâcieusement par des entreprises partenaires, te permettent de t'entrainer à l'incontournable exercice de l'entretien professionnel, face à des RH expérimentés et là pour te conseiller.<br/>
+														<p>Ces simulations, proposées grâcieusement par des entreprises partenaires, te permettent de t'entrainer à l'incontournable exercice de l'entretien professionnel, face à des RH expérimentés et là pour te conseiller.<br/>
 														Inscris-toi rapidement aux différentes sessions proposées !</p>
 														<p class="centre"><<?php /**a*/?>button class="btn btn-inverse" <?php /**href="index.php?page=Entretiens_Etudiant"*/?> disabled title="Service en cours de finition. Marie Rosain se charge des inscriptions en attendant, merci de la contacter.">Accéder</<?php /**a*/?>button></p>
 													</div>
@@ -168,14 +168,14 @@
 												<div class="span4">
 													<div>
 														<h4>Redmine</h4>
-														<p class="justify">Cet outil de gestion permet un suivi en temps réel de l'avancement du projet. Permettant notamment d'identifier des tâches puis de logger le temps de travail, il offre un tableau de bord très utile aux chefs de projets.</p>
+														<p>Cet outil de gestion permet un suivi en temps réel de l'avancement du projet. Permettant notamment d'identifier des tâches puis de logger le temps de travail, il offre un tableau de bord très utile aux chefs de projets.</p>
 														<p class="centre"><a class="btn btn-inverse" href="http://shareif.insa-lyon.fr/redmine">Accéder</a></p>
 													</div>
 												</div>
 												<div class="span4">
 													<div>
 														<h4>Share'IF</h4>
-														<p class="justify">Il s'agit d'une plateforme Svn/Git mis à disposition par l'AEDI, permettant le travail collaboratif et le versionnage des évolutions de vos projets. La création et le partage de dépôts se font en quelques clics !</p>
+														<p>Il s'agit d'une plateforme Svn/Git mis à disposition par l'AEDI, permettant le travail collaboratif et le versionnage des évolutions de vos projets. La création et le partage de dépôts se font en quelques clics !</p>
 														<p class="centre"><a class="btn btn-inverse" href="https://shareif.insa-lyon.fr/">Accéder</a></p>
 													</div>
 												</div>
@@ -206,14 +206,14 @@
 												<div class="span4">
 													<div>
 														<h4>Rencontres IF</h4>
-														<p class="justify">Vous trouverez sur la page indiquée ci-dessous l'ensemble des informations sur cet évènement, ainsi que l'adresse pour nous contacter et discuter des détails de votre candidature. N'hésitez pas à nous joindre le plus tôt possible, afin d'être sûr d'obtenir un stand !</p>
+														<p>Vous trouverez sur la page indiquée ci-dessous l'ensemble des informations sur cet évènement, ainsi que l'adresse pour nous contacter et discuter des détails de votre candidature. N'hésitez pas à nous joindre le plus tôt possible, afin d'être sûr d'obtenir un stand !</p>
 														<p class="centre"><a class="btn btn-inverse" href="index.php?page=RIFs_Entreprise">Accéder</a></p>
 													</div>
 												</div>
 												<div class="span4">
 													<div>
 														<h4>Simulations d'entretiens</h4>
-														<p class="justify">En quelques clics, préinscrivez-vous pour organiser des simulations d'entretiens dans notre Département ! Votre demande sera traitée dans les délais les plus brefs, et transmise à l'administration du Département qui se chargera des détails logistiques.</p>
+														<p>En quelques clics, préinscrivez-vous pour organiser des simulations d'entretiens dans notre Département ! Votre demande sera traitée dans les délais les plus brefs, et transmise à l'administration du Département qui se chargera des détails logistiques.</p>
 														<p style="color: #500; font-size: 0.8em;text-align:center;">Service en cours de finition. Merci de consulter la <a title="IF - Simulations d'entretiens" href="http://if.insa-lyon.fr/entreprise/simulation-entretiens" style="color: #500; text-decoration:underline;">page du Département</a> pour vous inscrire en attendant. Merci de votre compréhension.</p>
 														<p class="centre"><a class="btn btn-small btn-inverse" href="index.php?page=Entretiens_Entreprise" disabled title="Service en cours de finition. Merci de consulter la page du Département pour vous inscrire en attendant : if.insa-lyon.fr/entreprise/simulation-entretiens. Merci de votre compréhension.">Accéder</a></p>
 													</div>
