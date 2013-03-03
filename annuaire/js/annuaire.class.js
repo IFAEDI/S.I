@@ -1043,8 +1043,11 @@ Annuaire.afficherLibelle = function afficherLibelle(/* string */ libelle, classe
  *		- STRING HTML - Icone (Badge Bootstrap + Icone JQ)
  */
 Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/* int */ num) {
-	if (num == -1) { return '<span class="badge badge-error"><i class="icon-warning-sign icon-white"></i></span>' }; 	// Alerte
-	if (num == 3) { return '<span class="badge badge-success"><i class="icon-heart icon-white"></i></span>' };			// Bonne nouvelle
+	num = parseInt(num);
+	if (num == -1) { return '<span class="badge badge-error"><i class="icon-remove icon-white"></i></span>' }; 	// Alerte
+	if (num == 1) { return '<span class="badge badge-warning"><i class="icon-warning-sign icon-white"></i></span>' }; 	// Warning
+	if (num == 2) { return '<span class="badge badge-info"><i class="icon-info-sign icon-white"></i></span>' }; 	// Info
+	if (num == 3) { return '<span class="badge badge-success"><i class="icon-ok icon-white"></i></span>' };			// Bonne nouvelle
 	return '<span class="badge"><i class="icon-asterisk icon-white"></i></span>'; 										// Défaut
 };
 
