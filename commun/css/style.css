@@ -11,20 +11,20 @@ p {
 /* tablesorter */
 
 
-table.tablesorter thead tr .header {
-	background-image: url(../img/symboles/bg.gif);
-	background-repeat: no-repeat;
-	background-position: center left;
-	cursor: pointer;
-	padding-left: 20px;
-}
 
-table.tablesorter thead tr .headerSortUp {
-	background-image: url(../img/symboles/asc.gif);
-}
-table.tablesorter thead tr .headerSortDown {
-	background-image: url(../img/symboles/desc.gif);
-}
+table thead .head {background:url(../img/symboles/bg.gif) left center no-repeat; cursor:pointer; padding-left:18px}
+table thead .desc {background:url(../img/symboles/desc.gif) left center no-repeat; cursor:pointer; padding-left:18px}
+
+table thead .asc {background:url(../img/symboles/asc.gif) left center no-repeat; cursor:pointer; padding-left:18px}
+
+
+
+
+
+
+
+
+
 
 .module h1 {
 	margin-bottom: 20px;

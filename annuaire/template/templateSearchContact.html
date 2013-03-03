@@ -4,7 +4,7 @@
 			Aucun contact correspondant.
 		{{/entreprises}}
 		{{#if entreprises}}
-			<table class="table table-stripped tablesorter"> 
+			<table id="search-contacts-table" class="table table-stripped tablesorter"> 
 				<thead>
 					<tr> 
 						<th>Entreprise</th>
@@ -14,14 +14,14 @@
 						<th>Email</th> 
 						<th>Tel</th>
 						<th class="first">Lieu</th>
-						<th>Priorité</th>
-						<th></th>
+						<th sorter-extract="Annuaire.extraireContenuPourTriParRemarques">Priorité</th>
+						<!--<th class="nosort"></th>-->
 				</thead>
 				<tbody>
 					{{#each entreprises}}
 						{{#each contacts}}
 							<tr>
-								<td class="entr"><a id-entreprise='{{../id}}' href="#{{../nom}}"><strong>{{../nom}}</strong></td>
+								<td class="entreprise"><a id-entreprise='{{../id}}' href="#{{../nom}}"><strong>{{../nom}}</strong></td>
 								<td class="nom"><strong>{{this.personne.nom}}</strong></td>
 								<td class="prénom">{{personne.prenom}}</td>
 								<td class="job"><em>{{fonction}}</em></td> 
@@ -45,14 +45,14 @@
 								</td>
 								<td class="rem prio">
 									{{#if commentaire}}
-										<span rel="popover" data-content="{{commentaire}}" data-placement="bottom" data-original-title="Remarque" class="btn btn-mini btn-{{traduireCouleur priorite}}">{{traduirePrioriteContactTexte priorite}}</span>
+										<span class="btn-{{traduireCouleur priorite}} btn btn-mini" rel="popover" data-content="{{commentaire}}" data-placement="bottom" data-original-title="Remarque">{{traduirePrioriteContactTexte priorite}}</span>
 									{{/if}}
 									{{#unless commentaire}}
-										<span class="btn btn-mini btn-{{traduireCouleur priorite}}">{{traduirePrioriteContactTexte priorite}}</span>
+										<span class="btn-{{traduireCouleur priorite}} btn btn-mini">{{traduirePrioriteContactTexte priorite}}</span>
 									{{/unless}}
 									
 								</td>
-								{{#if ../../droitModification}}
+								<!--{{#if ../../droitModification}}
 									<td>
 										<a title="Editer Contact" id-contact={{id_contact}} data-toggle="modal" href="#modalUpdateContact" class="btn  btn-mini btn-modifContact">
 											<i class="icon-pencil"></i>
@@ -61,7 +61,7 @@
 											<i class="icon-remove"></i>
 										</a>
 									</td>
-								{{/if}}
+								{{/if}} -->
 							</tr>
 						{{/each}}
 					{{/each}}
