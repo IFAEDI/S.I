@@ -35,7 +35,7 @@
 						{{/droitModification}}
 					{{/contacts}}
 					{{#if contacts}}
-						<table class="table table-stripped tablesorter"> 
+						<table id="contacts-table" class="table table-stripped"> 
 							<thead>
 								<tr> 
 									<th>Nom</th>
@@ -45,7 +45,7 @@
 									<th>Tel</th>
 									<th class="first">Lieu</th>
 									<th>Priorité</th>
-									<th>
+									<th class="nosort">
 										{{#droitModification}}
 											<a data-toggle="modal" href="#modalUpdateContact" title="Ajouter Contact" class="btn  btn-mini btn-ajoutContact"><i class="icon-plus"></i></a>
 										{{/droitModification}}
@@ -120,7 +120,7 @@
 						Aucune relation.
 					{{/relations}}
 					{{#if relations}}
-						<table class="table table-stripped tablesorter">
+						<table  id="relations-table" class="table table-stripped">
 							<tbody>
 								{{^parrainage}}
 									<tr>
@@ -255,15 +255,15 @@
 						Aucun commentaire. <a data-toggle="modal" href="#modalAjoutCommentaire" title="Ajouter Commentaire" class="btn  btn-mini"><i class="icon-plus"></i></a>
 					{{/commentaires}}
 					{{#if commentaires}}
-						<table class="table table-stripped tablesorter">
+						<table id="remarques-table" class="table table-stripped">
 							<thead>
 								<tr> 
-									<th class="first"></th>
+									<th sorter-extract="Annuaire.extraireContenuPourTriParBadge" class="first"></th>
 									<th>Auteur</th>
 									<th class="first">Poste</th>
 									<th>Date</th>
 									<th>Commentaires</th>
-									<th>
+									<th class="nosort">
 										{{#droitModification}}
 											<a data-toggle="modal" href="#modalAjoutCommentaire" title="Ajouter Commentaire" class="btn  btn-mini btn-ajoutCommentaire"><i class="icon-plus"></i></a>
 										{{/droitModification}}
@@ -274,7 +274,7 @@
 								{{#each commentaires}}
 										<tr>
 											<td class="first">
-												<span style="display: none;">{{categorie}}</span>{{traduireCategorieCommentaire categorie}}
+												{{traduireCategorieCommentaire categorie}}
 											</td> 
 											<td>{{personne.prenom}} {{personne.nom}}</td> 
 											<td><small>{{traduireRole personne.role}}</small></td> 

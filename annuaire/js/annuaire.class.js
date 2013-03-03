@@ -36,6 +36,9 @@ Annuaire.utilisateur = {};
 // Templates HTML (Handlebars) :
 Annuaire.templates = {};
 
+// Fonction de tri des tables :
+Annuaire.tableSorters = {};
+
 // -------------------------- CONSTANTES -------------------------- //
 Annuaire.Erreurs = {
 	AJAX_INVALIDE : 'erreurRequete',
@@ -841,6 +844,30 @@ Annuaire.preremplirFormulaireUpdateContact = function preremplirFormulaireUpdate
 	}
 };
 
+/** 
+ * ---- extraireContenuPourTriParRemarques
+ * Retourne la donnée à utiliser pour TINY.table.sorter pour trier les contacts selon leur priorité et remarque
+ * Paramètres :
+ *		- noeud : Elément DOM utilisé normalement par TINY.table.sorter
+ * Retour :
+ *		- donnée à utiliser pour le tri
+ */
+Annuaire.extraireContenuPourTriParRemarques = function extraireContenuPourTriParRemarques(noeud) {
+	return noeud.nextSibling.innerHTML + noeud.nextSibling.getAttribute('data-content');
+}
+
+/** 
+ * ---- extraireContenuPourTriParBadge
+ * Retourne la donnée à utiliser pour TINY.table.sorter pour trier les commentaires selon leur badge
+ * Paramètres :
+ *		- noeud : Elément DOM utilisé normalement par TINY.table.sorter
+ * Retour :
+ *		- donnée à utiliser pour le tri
+ */
+Annuaire.extraireContenuPourTriParBadge = function extraireContenuPourTriParBadge(noeud) {
+	return noeud.nextSibling.innerHTML;
+}
+
 // ------------------------ AFFICHAGE ------------------------ //
 
 /** 
@@ -1030,6 +1057,7 @@ Annuaire.traduireCategorieCommentaire = function traduireCategorieCommentaire(/*
  *		- RIEN (Page directement modifiée)
  */
 Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ donnees) {
+	Annuaire.afficherListeEntreprises();
 
 	if (typeof donnees.entreprise === "undefined") { Annuaire.afficherErreur( "Désolé, cette entreprise n'est pas en BDD." ); return; }
 	Annuaire.infoEntrepriseCourante = donnees.entreprise;
@@ -1041,45 +1069,54 @@ Annuaire.afficherInfoEntreprise = function afficherInfoEntreprise(/* objet */ do
 	$(".module .hero-unit").html( Annuaire.templates['InfoEntreprise'](donnees) );
 
 	// Possibilité de trier les tables :
-	$("#contacts table").tablesorter({ 
-        headers: { 
-            
-            7: { 
-                // On désactive le tri sur la dernière colonne (celle des boutons) 
-                sorter: false 
-            } 
-        } 
-    }); 
-	$("#remarques table").tablesorter({ 
-        headers: { 
-            
-            5: { 
-                // On désactive le tri sur la dernière colonne (celle des boutons) 
-                sorter: false 
-            } 
-        }, 
-		sortList: [[3,1]]
-    });
-	$("#relations table").tablesorter(); 
-	$("#commentaires table").tablesorter(); 
+	Annuaire.tableSorters =	[];
 	
-	// Ajout de l'étape de confirmation à certaines actions :
-	$('.btnSupprContact').click( function(event) {
-		if (event.target.children.length == 0)
-			{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
-		var idContact = parseInt(event.target.getAttribute('id-contact'));
-		Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce contact ?', '', function(id) { Annuaire.supprimerContact(id); }, idContact);
-	});
+	if (donnees.contacts && donnees.contacts.length > 0) {
+		Annuaire.tableSorters[0] = new TINY.table.sorter("Annuaire.tableSorters[0]");
+		Annuaire.tableSorters[0].head = "head";
+		Annuaire.tableSorters[0].asc = "asc";
+		Annuaire.tableSorters[0].desc = "desc";
+		Annuaire.tableSorters[0].afterSortCallback=function() { // Lors du tri, lescallbacks mis sur les clicks des boutons sont perdus, donc on les réinitialise :
+			$('.btnSupprContact').click( function(event) { // On récupère l'ID du contact à supprimer :
+				if (event.target.children.length == 0)
+					{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
+				var idContact = parseInt(event.target.getAttribute('id-contact'));
+				Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce contact ?', '', function(id) { Annuaire.supprimerContact(id); }, idContact);
+			});
+			// Préremplissage du formulaire de modification/ajout d'un contact :
+			$('.btn-modifContact').click(function(event){Annuaire.preremplirFormulaireUpdateContact(event)});
+			$('.btn-ajoutContact').click(Annuaire.preremplirFormulaireUpdateContactId);
+			// Popover pour afficher le comm' sur le contact :
+			$("a[rel=popover], span[rel=popover]").popover();
+		};
+		Annuaire.tableSorters[0].init("contacts-table",0);
+	}
+	if (donnees.relations && donnees.relations.length > 0) {
+		Annuaire.tableSorters[1] = new TINY.table.sorter("Annuaire.tableSorters[1]");
+		/*
+		Annuaire.tableSorters[1].head = "head";
+		Annuaire.tableSorters[1].asc = "asc";
+		Annuaire.tableSorters[1].desc = "desc";
+		Annuaire.tableSorters[1].init("relations-table",2);
+		*/
+	}
+	
+	if (donnees.commentaires && donnees.commentaires.length > 0) {
+		Annuaire.tableSorters[2] = new TINY.table.sorter("Annuaire.tableSorters[2]");
+		Annuaire.tableSorters[2].head = "head";
+		Annuaire.tableSorters[2].asc = "asc";
+		Annuaire.tableSorters[2].desc = "desc";
+		Annuaire.tableSorters[2].init("remarques-table",3);
+		Annuaire.tableSorters[2].afterSortCallback=function() { // Lors du tri, lescallbacks mis sur les clicks des boutons sont perdus, donc on les réinitialise :
+			$('.btnSupprCommentaire').click( function(event) { // On récupère l'ID du comm' à supprimer :
+				if (event.target.children.length == 0)
+					{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
+				var idCommentaire = parseInt(event.target.getAttribute('id-commentaire'));
+				Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce commentaire ?', '', function(id) { Annuaire.supprimerCommentaire(id); }, idCommentaire);
+			});	
+		};
+	}
 
-	$('.btnSupprCommentaire').click( function(event) {
-		if (event.target.children.length == 0)
-			{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
-		var idCommentaire = parseInt(event.target.getAttribute('id-commentaire'));
-		Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce commentaire ?', '', function(id) { Annuaire.supprimerCommentaire(id); }, idCommentaire);
-	});	
-	// Préremplissage du formulaire de modification/ajout d'un contact :
-	$('.btn-modifContact').click(function(event){Annuaire.preremplirFormulaireUpdateContact(event)});
-	$('.btn-ajoutContact').click(Annuaire.preremplirFormulaireUpdateContactId);
 	// Préremplissage du formulaire de modification de l'entreprise :
 	$('.btn-modifEntreprise').click(function(event){Annuaire.preremplirFormulaireModifEntreprise(event)});
 	
@@ -1109,29 +1146,38 @@ Annuaire.afficherResultatRechercheContacts = function afficherResultatRechercheC
 	$(".module .hero-unit").html( Annuaire.templates['SearchContact'](donnees) );
 
 	// Possibilité de trier les tables :
-	$("#search-contacts table").tablesorter({ 
-        headers: {         
-            8: { 
-                // On désactive le tri sur la dernière colonne (celle des boutons) 
-                sorter: false 
-            } 
-        } 
-    }); 
-	
-	// Ajout de l'étape de confirmation à certaines actions :
-	$('.btnSupprContact').click( function(event) {
-		if (event.target.children.length == 0)
-			{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
-		var idContact = parseInt(event.target.getAttribute('id-contact'));
-		Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce contact ?', '', function(id) { Annuaire.supprimerContact(id); }, idContact);
-	});
+	if (donnees.entreprises && donnees.entreprises.length > 0) {
+		Annuaire.tableSorters = new TINY.table.sorter("Annuaire.tableSorters");
+		Annuaire.tableSorters.head = "head";
+		Annuaire.tableSorters.asc = "asc";
+		Annuaire.tableSorters.desc = "desc";
+		Annuaire.tableSorters.afterSortCallback = function() {
+			/* TO DO - La suppression & modification de contacts sur la page de recherche a été désactivée car elle nécessitait au funal un traitement particulier.
+			// Ajout de l'étape de confirmation à certaines actions :
+			$('.btnSupprContact').click( function(event) {
+				if (event.target.children.length == 0)
+					{ event.target = event.target.parentNode; } // On a cliqué sur l'icone et non sur le bouton, du coup on remonte au bouton.
+				var idContact = parseInt(event.target.getAttribute('id-contact'));
+				Annuaire.confirmerAction('Êtes-vous sûr de vouloir supprimer ce contact ?', '', function(id) { Annuaire.supprimerContact(id); }, idContact);
+			});
 
-	// Préremplissage du formulaire de modification/ajout d'un contact :
-	$('.btn-modifContact').click(function(event){Annuaire.preremplirFormulaireUpdateContact(event)});
-	$('.btn-ajoutContact').click(Annuaire.preremplirFormulaireUpdateContactId);
-	
-	// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
-	$('.entreprise').click(function(event){Annuaire.chercherInfoEntreprise(parseInt(event.target.getAttribute('id-entreprise')), Annuaire.afficherInfoEntreprise)});
+			// Préremplissage du formulaire de modification/ajout d'un contact :
+			$('.btn-modifContact').click(function(event){Annuaire.preremplirFormulaireUpdateContact(event)});
+			$('.btn-ajoutContact').click(Annuaire.preremplirFormulaireUpdateContactId);
+			*/
+			// Pour chaque entreprise de la liste, on permet d'afficher leur détail par simple clic :
+			$('.entreprise a').click(function(event){
+				if (event.target.children.length == 0) { event.target = event.target.parentNode; } // On veut les données du lien, pas du noeud <strong>.
+				Annuaire.chercherInfoEntreprise(parseInt(event.target.getAttribute('id-entreprise')), Annuaire.afficherInfoEntreprise)
+			});
+
+			// Popover :
+			$("a[rel=popover], span[rel=popover]").popover();
+		}
+		Annuaire.tableSorters.init("search-contacts-table",0);
+	}
+
+
 	
 	// Surlignage des occurences des mots-clés :
 	for (var i = 0; i < processedKeywords.length; i++) {
@@ -1155,11 +1201,7 @@ Annuaire.afficherResultatRechercheContacts = function afficherResultatRechercheC
 	}
 	// Définition de la couleur de surlignage pour les résultats de la recherche :
 	$(".highlight").css({ backgroundColor: "#BED2FF" });
-	
-	// Popover :
-	$("a[rel=popover], span[rel=popover]").popover();
-	$("span[rel=popover]").popover();
-	
+
 	function highlightContentPopover(match, offset, string) {
 		return '<span class="highlight" style="background-color: '+Annuaire.Colors['SEARCH_RESULTS_BACKGROUND']+';">'+match+'</span>';
 	}

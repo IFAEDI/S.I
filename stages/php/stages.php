@@ -67,13 +67,13 @@ inclure_fichier('commun', 'handlebars-1.0.0.beta.6', 'js');
 			</ul>
 			-->
 
-	<table id="fenetre" class="table table-striped table-bordered tablesorter">
+	<table id="fenetre" class="table table-striped table-bordered">
 		<thead>
-			<th style="text-align:center;"><i class="icon-th-list"></th>
+			<th class="nosort" style="text-align:center;"><i class="icon-th-list"></th>
 			<th>Titre</th>
 			<th>Entreprise</th>
 			<th>Lieu</th>
-			<th>Année(s)</th>
+			<th sorter-extract="Stages.extraireContenuPourTriParAnnees">Année(s)</th>
 			<th style="display:none;">Description</th>
 		</thead>
 		<tbody id="resultats">
